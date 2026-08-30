@@ -52,11 +52,3 @@ export function Bullets({ items }: { items: ReactNode[] }) {
     </ul>
   );
 }
-
-/** Flags a spot where the operator must fill in real-world details before
- * these pages can be relied on. Deliberately visible rather than silent. */
-export function Placeholder({ children }: { children: ReactNode }) {
-  return (
-    <mark className="rounded bg-amber-100 px-1 py-0.5 font-medium text-amber-900">{children}</mark>
-  );
-}

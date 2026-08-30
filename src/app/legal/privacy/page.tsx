@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LegalPage, Section, Bullets, Placeholder } from "../legal-page";
+import { LegalPage, Section, Bullets } from "../legal-page";
 import { LEGAL } from "@/lib/legal";
 
 export const metadata: Metadata = {
@@ -20,7 +20,7 @@ export default function PrivacyPage() {
     >
       <Section heading="1. Who we are">
         <p>
-          NumberSmith is operated by <Placeholder>[LEGAL ENTITY NAME]</Placeholder>. For any
+          NumberSmith is operated by {LEGAL.entityName}. For any
           privacy question or request, contact{" "}
           <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 underline">
             {LEGAL.contactEmail}

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LegalPage, Section, Bullets, Placeholder } from "../legal-page";
+import { LegalPage, Section, Bullets } from "../legal-page";
 import { PRO_PRICING, TRIAL_DAYS } from "@/lib/pricing";
 import { LEGAL } from "@/lib/legal";
 import {
@@ -26,7 +26,7 @@ export default function TermsPage() {
       <Section heading="1. Who we are">
         <p>
           NumberSmith is an online platform for practising competition mathematics, operated by{" "}
-          <Placeholder>[LEGAL ENTITY NAME]</Placeholder>. You can reach us at{" "}
+          {LEGAL.entityName}. You can reach us at{" "}
           <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 underline">
             {LEGAL.contactEmail}
           </a>
@@ -180,7 +180,7 @@ export default function TermsPage() {
       <Section heading="12. Governing law">
         <p>
           These terms are governed by the laws of{" "}
-          <Placeholder>[STATE/JURISDICTION]</Placeholder>, without regard to conflict-of-law rules.
+          {LEGAL.jurisdiction}, without regard to conflict-of-law rules.
         </p>
       </Section>
 

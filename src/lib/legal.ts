@@ -3,6 +3,14 @@
  * mean hunting through three documents for stale copies. */
 
 export const LEGAL = {
+  /** The operating entity. Currently a sole proprietorship, so this is the
+   * owner's legal name with NumberSmith as the trading name. If an LLC is
+   * formed later, replace this with the registered company name. */
+  entityName: "Aarit Chakraborty, doing business as NumberSmith",
+
+  /** Governing law for the Terms of Service. */
+  jurisdiction: "the State of California, United States",
+
   /** Support and privacy requests both route here. */
   contactEmail: "supportnumbersmith@gmail.com",
 
