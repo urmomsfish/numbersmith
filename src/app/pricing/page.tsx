@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button, LinkButton } from "@/components/ui/button";
 import { activateProAction } from "@/lib/actions/subscription-actions";
 import { PRO_PRICING, yearlySavingsPercent } from "@/lib/pricing";
+import { paymentsAreLive } from "@/lib/stripe";
+import { PaymentsNotice } from "@/components/marketing/payments-notice";
 
 const COMPARISON: { feature: string; free: string; pro: string }[] = [
   { feature: "Placement Test", free: "✓", pro: "✓" },
@@ -86,7 +88,7 @@ const FAQ = [
   },
   {
     q: "How do subscriptions work?",
-    a: "Pro is $7.99/month or $59.99/year (about 37% off). This MVP does not process live payments — the subscription system is fully built and structured for Stripe, so upgrading here activates Pro immediately for demonstration purposes. There is also an optional 7-day trial that ends automatically without charging you.",
+    a: "Pro will be $7.99/month or $59.99/year (about 37% off), billed through Stripe and cancellable anytime. Payments aren't open yet while we finish setting them up, so Pro can't be purchased today — the free plan is fully available in the meantime. Cancelling always keeps your access through the period you already paid for.",
   },
 ];
 
@@ -99,6 +101,9 @@ export default async function PricingPage({
   const params = await searchParams;
   const subscription = user ? await getSubscription(user.id) : null;
   const isPro = subscription?.status === "PRO" || subscription?.status === "TRIAL";
+  // False while only a test key is configured, so we never present checkout
+  // buttons that would decline a real card.
+  const canBuy = paymentsAreLive();
 
   const contextMessage =
     params.from === "simulation-limit"
@@ -126,6 +131,12 @@ export default async function PricingPage({
               </p>
             )}
           </div>
+
+          {!canBuy && (
+            <div className="mx-auto mt-8 max-w-2xl">
+              <PaymentsNotice />
+            </div>
+          )}
 
           <div className="mx-auto mt-10 grid max-w-4xl gap-6 lg:grid-cols-2">
             {/* Free */}
@@ -209,6 +220,15 @@ export default async function PricingPage({
                 <LinkButton href="/settings" variant="outline" size="lg" className="mt-7 w-full">
                   Manage Subscription
                 </LinkButton>
+              ) : !canBuy ? (
+                <div className="mt-7 space-y-2">
+                  <Button size="lg" className="w-full" disabled>
+                    Coming soon
+                  </Button>
+                  <p className="pt-1 text-center text-xs text-slate-400">
+                    Payments aren&apos;t open yet. The free plan is fully available in the meantime.
+                  </p>
+                </div>
               ) : user ? (
                 <div className="mt-7 space-y-2">
                   <form action={activateProAction}>

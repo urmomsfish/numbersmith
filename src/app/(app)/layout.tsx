@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { Sidebar } from "@/components/app/sidebar";
 import { Topbar } from "@/components/app/topbar";
 import { isProUser } from "@/lib/subscription";
+import { paymentsAreLive } from "@/lib/stripe";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();
@@ -27,6 +28,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           xp={stats?.totalXp ?? 0}
           rating={rating?.value ?? 1000}
           isPro={isPro}
+          canBuy={paymentsAreLive()}
         />
         <div className="flex-1 overflow-x-hidden">{children}</div>
       </div>

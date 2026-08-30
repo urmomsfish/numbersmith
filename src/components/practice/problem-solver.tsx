@@ -27,11 +27,13 @@ export function ProblemSolver({
   mode = "PRACTICE",
   onContinue,
   continueLabel = "Next Problem →",
+  canBuy = false,
 }: {
   problem: SolverProblem;
   mode?: "PRACTICE" | "DAILY_CHALLENGE";
   onContinue?: (result: SubmitResult) => void;
   continueLabel?: string;
+  canBuy?: boolean;
 }) {
   const [selected, setSelected] = useState("");
   const [textAnswer, setTextAnswer] = useState("");
@@ -71,7 +73,7 @@ export function ProblemSolver({
   }
 
   if (result?.capped) {
-    return <DailyCapUpsell />;
+    return <DailyCapUpsell canBuy={canBuy} />;
   }
 
   return (
@@ -217,19 +219,21 @@ export function ProblemSolver({
   );
 }
 
-export function DailyCapUpsell() {
+export function DailyCapUpsell({ canBuy = false }: { canBuy?: boolean }) {
   return (
     <div className="rounded-2xl border border-brand-100 bg-white p-8 text-center">
       <p className="text-3xl">🎉</p>
       <h2 className="mt-3 text-xl font-bold text-slate-900">You&apos;ve completed today&apos;s training!</h2>
       <p className="mt-2 text-sm text-slate-500">
-        Come back tomorrow, or unlock unlimited practice right now with NumberSmith Pro.
+        {canBuy
+          ? "Come back tomorrow, or unlock unlimited practice right now with NumberSmith Pro."
+          : "Come back tomorrow for another 15 problems. Unlimited practice is coming with NumberSmith Pro."}
       </p>
       <div className="mt-6 flex flex-wrap justify-center gap-3">
-        <LinkButton href="/dashboard" variant="outline">
+        <LinkButton href="/dashboard" variant={canBuy ? "outline" : "primary"}>
           Continue Tomorrow
         </LinkButton>
-        <LinkButton href="/pricing">Try NumberSmith Pro</LinkButton>
+        {canBuy && <LinkButton href="/pricing">Try NumberSmith Pro</LinkButton>}
       </div>
     </div>
   );

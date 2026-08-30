@@ -11,6 +11,7 @@ export function Topbar({
   xp,
   rating,
   isPro,
+  canBuy,
 }: {
   name: string;
   email: string;
@@ -18,6 +19,7 @@ export function Topbar({
   xp: number;
   rating: number;
   isPro: boolean;
+  canBuy: boolean;
 }) {
   return (
     <header className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 sm:px-6">
@@ -36,7 +38,7 @@ export function Topbar({
         <Badge tone="brand" className="hidden sm:inline-flex">
           Rating {rating}
         </Badge>
-        {!isPro && (
+        {!isPro && canBuy && (
           <LinkButton href="/pricing" size="sm" variant="secondary">
             Upgrade
           </LinkButton>

@@ -12,6 +12,14 @@ export function isStripeConfigured(): boolean {
   return stripe !== null;
 }
 
+/** True only when a live-mode key is configured. A test key means Checkout
+ * would decline a real card, so the UI must not offer paid plans as if they
+ * were purchasable. Derived from the key itself rather than a manual flag, so
+ * it flips on its own the moment live keys are set — nothing to remember. */
+export function paymentsAreLive(): boolean {
+  return (process.env.STRIPE_SECRET_KEY ?? "").startsWith("sk_live_");
+}
+
 /** Price ids come from the Stripe dashboard (Products → your product → Pricing).
  * They differ between test and live mode, so they live in env rather than code. */
 export const STRIPE_PRICE_IDS: Record<SubscriptionPlan, string | undefined> = {
