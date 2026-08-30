@@ -1,0 +1,641 @@
+// NumberSmith database schema
+//
+// NOTE ON STRING "ENUMS": fields that would be enums (role, status,
+// difficulty tier, competition format, etc.) are modeled as `String` with
+// the allowed values documented in a comment above each field, plus a
+// matching TypeScript union type in src/lib/types.ts and Zod validation at
+// every write boundary. Upgrading these to real Postgres `enum` blocks is a
+// mechanical, low-risk change if ever wanted — no relational shape changes
+// required. Left as String for now since nothing requires the stricter
+// guarantee yet.
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+// ---------------------------------------------------------------------------
+// Users & profiles
+// ---------------------------------------------------------------------------
+
+/// role: STUDENT | PARENT | TEACHER | ADMIN
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         String   @default("STUDENT")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  profile          Profile?
+  subscription     Subscription?
+  stats            UserStats?
+  parentLinks      ParentLink[]      @relation("ParentToChild")
+  childLinks       ParentLink[]      @relation("ChildToParent")
+  taughtClasses    ClassRoom[]       @relation("TeacherClasses")
+  classMemberships ClassMembership[]
+
+  userCompetitions       UserCompetition[]
+  attempts               Attempt[]
+  mistakes               Mistake[]
+  bookmarks              Bookmark[]
+  competitionAttempts    CompetitionAttempt[]
+  ratings                Rating[]
+  ratingHistory          RatingHistory[]
+  topicMastery           TopicMastery[]
+  userAchievements       UserAchievement[]
+  studyPlans             StudyPlan[]
+  placementTests         PlacementTest[]
+  dailyChallengeAttempts DailyChallengeAttempt[]
+  lessonProgress         LessonProgress[]
+
+  @@index([role])
+}
+
+/// ageRange: e.g. "5-7" | "8-10" | "11-13" | "14-15" | "16-18"
+/// priorExperience: NONE | SOME | EXPERIENCED | ADVANCED
+/// approxLevel (self-reported): BEGINNER | INTERMEDIATE | ADVANCED | NOT_SURE
+model Profile {
+  id                    String    @id @default(cuid())
+  userId                String    @unique
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  grade                 Int // 0 = Kindergarten, 1-12
+  ageRange              String?
+  priorExperience       String    @default("NONE")
+  priorCompetitions     String    @default("[]") // JSON array of competition slugs the student has done before
+  approxLevel           String    @default("NOT_SURE")
+  dailyPracticeMinutes  Int       @default(20)
+  targetScore           String?
+  onboardingStep        String    @default("PROFILE") // PROFILE | PLACEMENT | RESULTS | COMPETITIONS | PLAN | DONE
+  onboardingCompletedAt DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
+
+model ParentLink {
+  id        String   @id @default(cuid())
+  parentId  String
+  parent    User     @relation("ParentToChild", fields: [parentId], references: [id], onDelete: Cascade)
+  childId   String
+  child     User     @relation("ChildToParent", fields: [childId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([parentId, childId])
+}
+
+model ClassRoom {
+  id        String   @id @default(cuid())
+  name      String
+  joinCode  String   @unique
+  teacherId String
+  teacher   User     @relation("TeacherClasses", fields: [teacherId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  members     ClassMembership[]
+  assignments TeacherAssignment[]
+}
+
+model ClassMembership {
+  id        String    @id @default(cuid())
+  classId   String
+  classRoom ClassRoom @relation(fields: [classId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  joinedAt  DateTime  @default(now())
+
+  @@unique([classId, userId])
+}
+
+/// taskType: PROBLEM_SET | SIMULATION | QUIZ
+model TeacherAssignment {
+  id         String    @id @default(cuid())
+  classId    String
+  classRoom  ClassRoom @relation(fields: [classId], references: [id], onDelete: Cascade)
+  title      String
+  taskType   String
+  problemIds String // JSON array of Problem ids
+  dueAt      DateTime?
+  createdAt  DateTime  @default(now())
+}
+
+// ---------------------------------------------------------------------------
+// Competitions
+// ---------------------------------------------------------------------------
+
+/// category: ELEMENTARY_MIDDLE | HIGH_SCHOOL | OLYMPIAD
+/// format: MULTIPLE_CHOICE | SHORT_ANSWER | INTEGER | PROOF
+/// individualOrTeam: INDIVIDUAL | TEAM | BOTH
+model Competition {
+  id               String   @id @default(cuid())
+  slug             String   @unique
+  name             String
+  shortName        String
+  category         String
+  format           String
+  individualOrTeam String
+  gradeMin         Int
+  gradeMax         Int
+  difficultyMin    Int // 1-10 scale
+  difficultyMax    Int
+  numQuestions     Int?
+  timeLimitMinutes Int?
+  region           String   @default("USA")
+  organization     String?
+  description      String
+  roadmap          String? // markdown roadmap text
+  order            Int      @default(0)
+  isPlaceholder    Boolean  @default(false)
+  createdAt        DateTime @default(now())
+
+  topics              CompetitionTopic[]
+  problems            Problem[]
+  userCompetitions    UserCompetition[]
+  competitionAttempts CompetitionAttempt[]
+  studyPlans          StudyPlan[]
+  dailyChallenges     DailyChallenge[]
+}
+
+model CompetitionTopic {
+  id            String      @id @default(cuid())
+  competitionId String
+  competition   Competition @relation(fields: [competitionId], references: [id], onDelete: Cascade)
+  topicId       String
+  topic         Topic       @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  weight        Int         @default(1) // relative emphasis, 1-5
+
+  @@unique([competitionId, topicId])
+}
+
+/// isPrimary marks the student's #1 priority competition
+model UserCompetition {
+  id            String      @id @default(cuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  competitionId String
+  competition   Competition @relation(fields: [competitionId], references: [id], onDelete: Cascade)
+  isPrimary     Boolean     @default(false)
+  addedAt       DateTime    @default(now())
+
+  @@unique([userId, competitionId])
+}
+
+// ---------------------------------------------------------------------------
+// Topics
+// ---------------------------------------------------------------------------
+
+/// domain-level topics have parentId = null (Arithmetic, Algebra, Geometry,
+/// Number Theory, Combinatorics, Probability, Logic, Advanced/Olympiad).
+/// subtopics reference their domain via parentId.
+model Topic {
+  id       String  @id @default(cuid())
+  slug     String  @unique
+  name     String
+  parentId String?
+  parent   Topic?  @relation("TopicHierarchy", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  children Topic[] @relation("TopicHierarchy")
+  order    Int     @default(0)
+
+  problems          Problem[]
+  competitionTopics CompetitionTopic[]
+  topicMastery      TopicMastery[]
+  lessons           Lesson[]
+  studyPlanDays     StudyPlanDay[]
+}
+
+// ---------------------------------------------------------------------------
+// Problems
+// ---------------------------------------------------------------------------
+
+/// format: MULTIPLE_CHOICE | SHORT_ANSWER | INTEGER
+/// difficulty: 1-10 (1-2 Beginner, 3-4 Intermediate-, 5-6 Intermediate+,
+///   7-8 Advanced, 9-10 Expert)
+model Problem {
+  id                   String       @id @default(cuid())
+  slug                 String       @unique
+  question             String
+  format               String
+  choices              String? // JSON string array, only for MULTIPLE_CHOICE
+  answer               String // canonical answer, e.g. "C" or "13" or "042"
+  solution             String
+  hints                String // JSON string array
+  difficulty           Int
+  topicId              String
+  topic                Topic        @relation(fields: [topicId], references: [id])
+  competitionId        String?
+  competition          Competition? @relation(fields: [competitionId], references: [id])
+  gradeMin             Int
+  gradeMax             Int
+  estimatedTimeSeconds Int          @default(120)
+  tags                 String       @default("[]") // JSON string array
+  source               String       @default("NumberSmith Original")
+  license              String       @default("NumberSmith Original")
+  year                 Int?
+  author               String       @default("NumberSmith Team")
+  isPlacement          Boolean      @default(false)
+  isPublished          Boolean      @default(true)
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+
+  attempts                Attempt[]
+  mistakes                Mistake[]
+  bookmarks               Bookmark[]
+  placementAttempts       PlacementAttempt[]
+  competitionAttemptItems CompetitionAttemptItem[]
+  dailyChallenges         DailyChallenge[]
+  lessonPractice          LessonProblem[]
+
+  @@index([topicId])
+  @@index([difficulty])
+  @@index([competitionId])
+  @@index([format])
+  @@index([isPlacement])
+}
+
+// ---------------------------------------------------------------------------
+// Lessons
+// ---------------------------------------------------------------------------
+
+model Lesson {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  title          String
+  topicId        String
+  topic          Topic    @relation(fields: [topicId], references: [id])
+  concept        String
+  explanation    String
+  workedExample  String
+  strategy       String
+  commonMistakes String
+  difficulty     Int      @default(1)
+  order          Int      @default(0)
+  isPremium      Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  practiceProblems LessonProblem[]
+  progress         LessonProgress[]
+  studyPlanDays    StudyPlanDay[]
+}
+
+/// role: PRACTICE | CHALLENGE
+model LessonProblem {
+  id        String  @id @default(cuid())
+  lessonId  String
+  lesson    Lesson  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  problemId String
+  problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  role      String  @default("PRACTICE")
+  order     Int     @default(0)
+
+  @@unique([lessonId, problemId])
+}
+
+model LessonProgress {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lessonId    String
+  lesson      Lesson    @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  completed   Boolean   @default(false)
+  masteryPct  Int       @default(0)
+  completedAt DateTime?
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([userId, lessonId])
+}
+
+// ---------------------------------------------------------------------------
+// Placement testing
+// ---------------------------------------------------------------------------
+
+/// status: IN_PROGRESS | COMPLETED
+/// level: BEGINNER | DEVELOPING | INTERMEDIATE | ADVANCED | EXPERT
+model PlacementTest {
+  id                       String    @id @default(cuid())
+  userId                   String
+  user                     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status                   String    @default("IN_PROGRESS")
+  startedAt                DateTime  @default(now())
+  completedAt              DateTime?
+  resultRating             Int?
+  resultLevel              String?
+  skillBreakdown           String? // JSON: { [topicSlug]: percent }
+  strengthTopicId          String?
+  opportunityTopicId       String?
+  recommendedCompetitionId String?
+  currentDifficulty        Int       @default(4)
+  consecutiveCorrect       Int       @default(0)
+  consecutiveIncorrect     Int       @default(0)
+
+  attempts PlacementAttempt[]
+}
+
+model PlacementAttempt {
+  id               String        @id @default(cuid())
+  placementTestId  String
+  placementTest    PlacementTest @relation(fields: [placementTestId], references: [id], onDelete: Cascade)
+  problemId        String
+  problem          Problem       @relation(fields: [problemId], references: [id])
+  order            Int
+  difficultyAtTime Int
+  answerGiven      String?
+  correct          Boolean
+  timeSeconds      Int
+  createdAt        DateTime      @default(now())
+
+  @@unique([placementTestId, order])
+}
+
+// ---------------------------------------------------------------------------
+// Practice attempts, mistakes, bookmarks
+// ---------------------------------------------------------------------------
+
+/// mode: PRACTICE | DAILY_CHALLENGE | SIMULATION | PLACEMENT | LESSON
+model Attempt {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problemId   String
+  problem     Problem  @relation(fields: [problemId], references: [id])
+  mode        String   @default("PRACTICE")
+  answerGiven String?
+  correct     Boolean
+  timeSeconds Int
+  hintsUsed   Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([problemId])
+}
+
+/// reason: INCORRECT | SKIPPED | SLOW | MULTI_HINT
+model Mistake {
+  id             String    @id @default(cuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problemId      String
+  problem        Problem   @relation(fields: [problemId], references: [id])
+  reason         String
+  reviewCount    Int       @default(0)
+  resolved       Boolean   @default(false)
+  lastReviewedAt DateTime?
+  nextReviewAt   DateTime  @default(now())
+  createdAt      DateTime  @default(now())
+
+  @@unique([userId, problemId])
+  @@index([userId, resolved, nextReviewAt])
+}
+
+model Bookmark {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problemId String
+  problem   Problem  @relation(fields: [problemId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, problemId])
+}
+
+// ---------------------------------------------------------------------------
+// Competition simulations
+// ---------------------------------------------------------------------------
+
+/// mode: OFFICIAL | CUSTOM
+/// status: IN_PROGRESS | SUBMITTED
+model CompetitionAttempt {
+  id               String      @id @default(cuid())
+  userId           String
+  user             User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  competitionId    String
+  competition      Competition @relation(fields: [competitionId], references: [id])
+  mode             String      @default("OFFICIAL")
+  status           String      @default("IN_PROGRESS")
+  startedAt        DateTime    @default(now())
+  submittedAt      DateTime?
+  timeLimitSeconds Int
+  totalQuestions   Int
+  correctCount     Int         @default(0)
+  score            Int         @default(0)
+  config           String? // JSON: custom config (topics, difficulty, count)
+
+  items CompetitionAttemptItem[]
+
+  @@index([userId, competitionId])
+}
+
+model CompetitionAttemptItem {
+  id                   String             @id @default(cuid())
+  competitionAttemptId String
+  competitionAttempt   CompetitionAttempt @relation(fields: [competitionAttemptId], references: [id], onDelete: Cascade)
+  problemId            String
+  problem              Problem            @relation(fields: [problemId], references: [id])
+  order                Int
+  answerGiven          String?
+  correct              Boolean?
+  flagged              Boolean            @default(false)
+  timeSeconds          Int                @default(0)
+
+  @@unique([competitionAttemptId, order])
+}
+
+// ---------------------------------------------------------------------------
+// Ratings, mastery, XP, streaks
+// ---------------------------------------------------------------------------
+
+/// category: OVERALL | AMC | MATHCOUNTS | OLYMPIAD | <topic-slug>
+model Rating {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category  String
+  value     Int      @default(1000)
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, category])
+}
+
+model RatingHistory {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category   String
+  value      Int
+  delta      Int      @default(0)
+  reason     String // e.g. "Placement Test", "AMC 8 Simulation", "Daily Practice"
+  recordedAt DateTime @default(now())
+
+  @@index([userId, category, recordedAt])
+}
+
+model TopicMastery {
+  id                String    @id @default(cuid())
+  userId            String
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topicId           String
+  topic             Topic     @relation(fields: [topicId], references: [id])
+  masteryPercent    Int       @default(0)
+  problemsAttempted Int       @default(0)
+  problemsCorrect   Int       @default(0)
+  lastPracticedAt   DateTime?
+  updatedAt         DateTime  @updatedAt
+
+  @@unique([userId, topicId])
+}
+
+model UserStats {
+  id              String    @id @default(cuid())
+  userId          String    @unique
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  totalXp         Int       @default(0)
+  level           Int       @default(1)
+  currentStreak   Int       @default(0)
+  longestStreak   Int       @default(0)
+  lastActiveDate  DateTime?
+  problemsSolved  Int       @default(0)
+  problemsCorrect Int       @default(0)
+  updatedAt       DateTime  @updatedAt
+}
+
+/// category: MILESTONE | ACCURACY | SPEED | MASTERY | STREAK | COMPETITION
+model Achievement {
+  id          String @id @default(cuid())
+  slug        String @unique
+  name        String
+  description String
+  icon        String
+  category    String
+  criteria    String // JSON: { type, threshold, ... }
+  xpReward    Int    @default(50)
+  order       Int    @default(0)
+
+  userAchievements UserAchievement[]
+}
+
+model UserAchievement {
+  id            String      @id @default(cuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievementId String
+  achievement   Achievement @relation(fields: [achievementId], references: [id])
+  unlockedAt    DateTime    @default(now())
+
+  @@unique([userId, achievementId])
+}
+
+// ---------------------------------------------------------------------------
+// Daily challenge
+// ---------------------------------------------------------------------------
+
+/// track: ELEMENTARY | MIDDLE_SCHOOL | AMC8 | AMC10 | AMC12 | AIME | OLYMPIAD
+model DailyChallenge {
+  id            String       @id @default(cuid())
+  date          DateTime // normalized to UTC midnight
+  track         String
+  problemId     String
+  problem       Problem      @relation(fields: [problemId], references: [id])
+  competitionId String?
+  competition   Competition? @relation(fields: [competitionId], references: [id])
+
+  attempts DailyChallengeAttempt[]
+
+  @@unique([date, track])
+}
+
+model DailyChallengeAttempt {
+  id               String         @id @default(cuid())
+  userId           String
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dailyChallengeId String
+  dailyChallenge   DailyChallenge @relation(fields: [dailyChallengeId], references: [id])
+  correct          Boolean
+  timeSeconds      Int
+  xpAwarded        Int            @default(0)
+  createdAt        DateTime       @default(now())
+
+  @@unique([userId, dailyChallengeId])
+}
+
+// ---------------------------------------------------------------------------
+// Study plans
+// ---------------------------------------------------------------------------
+
+model StudyPlan {
+  id                   String       @id @default(cuid())
+  userId               String
+  user                 User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  primaryCompetitionId String?
+  primaryCompetition   Competition? @relation(fields: [primaryCompetitionId], references: [id])
+  competitionDate      DateTime?
+  currentRating        Int
+  targetRating         Int?
+  minutesPerDay        Int          @default(30)
+  generatedAt          DateTime     @default(now())
+  active               Boolean      @default(true)
+
+  days StudyPlanDay[]
+}
+
+/// taskType: LESSON | PRACTICE | TIMED_SET | SIMULATION | REVIEW
+model StudyPlanDay {
+  id           String    @id @default(cuid())
+  studyPlanId  String
+  studyPlan    StudyPlan @relation(fields: [studyPlanId], references: [id], onDelete: Cascade)
+  weekNumber   Int
+  dayOfWeek    Int // 0=Sunday .. 6=Saturday
+  taskType     String
+  topicId      String?
+  topic        Topic?    @relation(fields: [topicId], references: [id])
+  lessonId     String?
+  lesson       Lesson?   @relation(fields: [lessonId], references: [id])
+  problemCount Int       @default(5)
+  label        String
+  completed    Boolean   @default(false)
+  completedAt  DateTime?
+
+  @@index([studyPlanId, weekNumber, dayOfWeek])
+}
+
+// ---------------------------------------------------------------------------
+// Subscriptions
+// ---------------------------------------------------------------------------
+
+/// status: FREE | PRO | TRIAL | CANCELED
+/// plan: MONTHLY | YEARLY | null
+/// paymentProvider: STRIPE | null (no live provider wired up in the MVP)
+model Subscription {
+  id                 String    @id @default(cuid())
+  userId             String    @unique
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status             String    @default("FREE")
+  plan               String?
+  startDate          DateTime?
+  renewalDate        DateTime?
+  trialEndsAt        DateTime?
+  paymentProvider    String?
+  externalCustomerId String? // Stripe customer id (cus_...)
+  /// Stripe subscription id (sub_...). Needed to correlate incoming
+  /// customer.subscription.* webhook events back to this row.
+  externalSubscriptionId String? @unique
+  canceledAt         DateTime?
+  updatedAt          DateTime  @updatedAt
+
+  @@index([externalCustomerId])
+}
+
+/// Stripe retries webhook deliveries, so every event id is recorded here the
+/// first time it is handled and skipped on redelivery. Without this, a retried
+/// invoice event could extend a subscription twice.
+model WebhookEvent {
+  id          String   @id // Stripe event id (evt_...)
+  type        String
+  processedAt DateTime @default(now())
+
+  @@index([processedAt])
+}
