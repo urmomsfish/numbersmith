@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { LegalPage, Section, Bullets, Placeholder } from "../legal-page";
 import { PRO_PRICING, TRIAL_DAYS } from "@/lib/pricing";
+import { LEGAL } from "@/lib/legal";
 import {
   FREE_DAILY_PROBLEM_LIMIT,
   FREE_SIMULATIONS_PER_WEEK,
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
   description: "The terms governing use of the NumberSmith math competition training platform.",
 };
 
-const LAST_UPDATED = "August 30, 2026";
+const LAST_UPDATED = LEGAL.lastUpdated;
 
 export default function TermsPage() {
   return (
@@ -25,9 +26,11 @@ export default function TermsPage() {
       <Section heading="1. Who we are">
         <p>
           NumberSmith is an online platform for practising competition mathematics, operated by{" "}
-          <Placeholder>[LEGAL ENTITY NAME]</Placeholder> of{" "}
-          <Placeholder>[BUSINESS ADDRESS]</Placeholder>. You can reach us at{" "}
-          <Placeholder>[SUPPORT EMAIL]</Placeholder>.
+          <Placeholder>[LEGAL ENTITY NAME]</Placeholder>. You can reach us at{" "}
+          <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 underline">
+            {LEGAL.contactEmail}
+          </a>
+          , and we aim to reply within {LEGAL.supportResponseTime}.
         </p>
       </Section>
 
@@ -191,7 +194,11 @@ export default function TermsPage() {
 
       <Section heading="14. Contact">
         <p>
-          Questions about these terms: <Placeholder>[SUPPORT EMAIL]</Placeholder>.
+          Questions about these terms:{" "}
+          <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 underline">
+            {LEGAL.contactEmail}
+          </a>
+          .
         </p>
       </Section>
     </LegalPage>

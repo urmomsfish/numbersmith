@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LegalPage, Section, Bullets, Placeholder } from "../legal-page";
+import { LegalPage, Section, Bullets } from "../legal-page";
 import { PRO_PRICING, TRIAL_DAYS } from "@/lib/pricing";
 import { FREE_DAILY_PROBLEM_LIMIT } from "@/lib/subscription";
+import { LEGAL } from "@/lib/legal";
 
 export const metadata: Metadata = {
   title: "Refund & Cancellation Policy — NumberSmith",
   description: "How to cancel a NumberSmith Pro subscription and when refunds are available.",
 };
 
-const LAST_UPDATED = "August 30, 2026";
+const LAST_UPDATED = LEGAL.lastUpdated;
 
 export default function RefundsPage() {
   return (
@@ -59,7 +60,7 @@ export default function RefundsPage() {
         <Bullets
           items={[
             <>
-              <strong>Within {<Placeholder>[e.g. 14]</Placeholder>} days of your first payment</strong> —
+              <strong>Within {LEGAL.refundWindowDays} days of your first payment</strong> —
               contact us and we will refund it in full, no questions asked.
             </>,
             <>
@@ -100,9 +101,12 @@ export default function RefundsPage() {
 
       <Section heading="How to request a refund">
         <p>
-          Email <Placeholder>[SUPPORT EMAIL]</Placeholder> from the address on the account, and tell
-          us roughly when you were charged. We aim to respond within{" "}
-          <Placeholder>[e.g. 2 business days]</Placeholder>. Approved refunds go back to the original
+          Email{" "}
+          <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 underline">
+            {LEGAL.contactEmail}
+          </a>{" "}
+          from the address on the account, and tell us roughly when you were charged. We aim to
+          respond within {LEGAL.supportResponseTime}. Approved refunds go back to the original
           payment method and typically take 5–10 business days to appear, depending on your bank.
         </p>
       </Section>

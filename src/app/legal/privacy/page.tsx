@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LegalPage, Section, Bullets, Placeholder } from "../legal-page";
+import { LEGAL } from "@/lib/legal";
 
 export const metadata: Metadata = {
   title: "Privacy Policy — NumberSmith",
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
     "What information NumberSmith collects, how it is used, and how children's data is handled.",
 };
 
-const LAST_UPDATED = "August 30, 2026";
+const LAST_UPDATED = LEGAL.lastUpdated;
 
 export default function PrivacyPage() {
   return (
@@ -19,9 +20,12 @@ export default function PrivacyPage() {
     >
       <Section heading="1. Who we are">
         <p>
-          NumberSmith is operated by <Placeholder>[LEGAL ENTITY NAME]</Placeholder> of{" "}
-          <Placeholder>[BUSINESS ADDRESS]</Placeholder>. For any privacy question or request,
-          contact <Placeholder>[PRIVACY EMAIL]</Placeholder>.
+          NumberSmith is operated by <Placeholder>[LEGAL ENTITY NAME]</Placeholder>. For any
+          privacy question or request, contact{" "}
+          <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 underline">
+            {LEGAL.contactEmail}
+          </a>
+          .
         </p>
       </Section>
 
@@ -97,8 +101,10 @@ export default function PrivacyPage() {
             <>
               A parent or guardian may review their child&apos;s information, ask us to delete it, or
               refuse further collection by contacting{" "}
-              <Placeholder>[PRIVACY EMAIL]</Placeholder>. We will verify the request before acting on
-              it.
+              <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 underline">
+                {LEGAL.contactEmail}
+              </a>
+              . We will verify the request before acting on it.
             </>,
           ]}
         />
@@ -137,7 +143,7 @@ export default function PrivacyPage() {
           We keep your account and learning history for as long as your account is open, because your
           progress and ratings depend on it. If you delete your account we remove your personal
           information within{" "}
-          <Placeholder>[e.g. 30]</Placeholder> days, except where we must retain records — such as
+          {LEGAL.dataRetentionDays} days, except where we must retain records — such as
           payment records for tax purposes.
         </p>
       </Section>
@@ -156,7 +162,11 @@ export default function PrivacyPage() {
             "You can view and edit your profile, competitions, and preferences in Settings at any time.",
             <>
               You can request a copy of your information, correction of it, or deletion of your
-              account by contacting <Placeholder>[PRIVACY EMAIL]</Placeholder>.
+              account by contacting{" "}
+              <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 underline">
+                {LEGAL.contactEmail}
+              </a>
+              .
             </>,
             "Depending on where you live, you may have additional rights under laws such as the CCPA or GDPR. We honour those requests regardless of location.",
             "We do not sell personal information, so there is nothing to opt out of in that respect.",
@@ -180,7 +190,11 @@ export default function PrivacyPage() {
 
       <Section heading="11. Contact">
         <p>
-          Privacy questions or requests: <Placeholder>[PRIVACY EMAIL]</Placeholder>. See also our{" "}
+          Privacy questions or requests:{" "}
+          <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 underline">
+            {LEGAL.contactEmail}
+          </a>
+          . See also our{" "}
           <Link href="/legal/terms" className="text-brand-600 underline">
             Terms of Service
           </Link>
