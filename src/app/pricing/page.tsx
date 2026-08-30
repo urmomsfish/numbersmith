@@ -224,7 +224,11 @@ export default async function PricingPage({
                     </Button>
                   </form>
                   <p className="pt-1 text-center text-xs text-slate-400">
-                    Demo MVP — no payment is collected. Stripe-ready architecture.
+                    Secure checkout by Stripe. Cancel anytime — see our{" "}
+                    <Link href="/legal/refunds" className="underline">
+                      refund policy
+                    </Link>
+                    .
                   </p>
                 </div>
               ) : (

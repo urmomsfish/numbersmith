@@ -49,6 +49,26 @@ export function SiteFooter() {
                 </li>
               </ul>
             </div>
+            <div>
+              <p className="font-semibold text-slate-900">Legal</p>
+              <ul className="mt-2 space-y-1.5 text-slate-500">
+                <li>
+                  <Link href="/legal/terms" className="hover:text-slate-900">
+                    Terms of Service
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/legal/privacy" className="hover:text-slate-900">
+                    Privacy Policy
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/legal/refunds" className="hover:text-slate-900">
+                    Refunds &amp; Cancellation
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 
@@ -59,7 +79,7 @@ export function SiteFooter() {
             is not affiliated with, endorsed by, or sponsored by MAA, MATHCOUNTS, Math Kangaroo, MOEMS,
             HMMT, PUMaC, ARML, or any other competition organization.
           </p>
-          <p className="mt-2">© {new Date().getFullYear()} NumberSmith. Demo educational project.</p>
+          <p className="mt-2">© {new Date().getFullYear()} NumberSmith. All rights reserved.</p>
         </div>
       </div>
     </footer>

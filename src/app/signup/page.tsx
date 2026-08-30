@@ -84,8 +84,16 @@ export default function SignupPage() {
             </Link>
           </p>
         </div>
-        <p className="mt-6 text-center text-xs text-slate-400">
-          By continuing you agree this is a demo educational product built for practice purposes.
+        <p className="mt-6 text-center text-xs leading-relaxed text-slate-400">
+          By creating an account you agree to our{" "}
+          <Link href="/legal/terms" className="underline hover:text-slate-600">
+            Terms of Service
+          </Link>{" "}
+          and{" "}
+          <Link href="/legal/privacy" className="underline hover:text-slate-600">
+            Privacy Policy
+          </Link>
+          . If you are under 18, please ask a parent or guardian before signing up.
         </p>
       </div>
     </div>
