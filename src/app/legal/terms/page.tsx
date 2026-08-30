@@ -159,32 +159,129 @@ export default function TermsPage() {
         </p>
       </Section>
 
-      <Section heading="10. Disclaimers and limitation of liability">
+      <Section heading="10. Disclaimers">
         <p>
-          The service is provided &ldquo;as is&rdquo; without warranties of any kind, to the fullest
-          extent permitted by law. To the extent permitted by law, our total liability arising from
-          your use of NumberSmith is limited to the amount you paid us in the twelve months before
-          the claim.
+          The service is provided &ldquo;as is&rdquo; and &ldquo;as available&rdquo;, without
+          warranties of any kind, whether express or implied, to the fullest extent permitted by law.
+          We specifically disclaim implied warranties of merchantability, fitness for a particular
+          purpose, and non-infringement.
         </p>
-        <p>Nothing in these terms limits liability that cannot be limited by law.</p>
+        <p>
+          We do not warrant that the service will be uninterrupted, error-free, or free of harmful
+          components, or that any problem, solution, or explanation is free of errors. If you find a
+          mistake in our material, please tell us and we will correct it.
+        </p>
       </Section>
 
-      <Section heading="11. Termination">
+      <Section heading="11. Limitation of liability">
+        <p>
+          To the fullest extent permitted by law, we are not liable for indirect, incidental,
+          special, consequential, exemplary, or punitive damages, or for lost profits, lost data, or
+          lost opportunities, arising from or relating to your use of NumberSmith — even if we have
+          been advised that such damages are possible.
+        </p>
+        <p>
+          To the fullest extent permitted by law, our total aggregate liability for all claims
+          relating to the service is limited to the greater of (a) the amount you paid us in the
+          twelve months before the event giving rise to the claim, or (b) one hundred US dollars
+          ($100).
+        </p>
+        <p>
+          This is a deliberate allocation of risk that is reflected in our pricing, and it applies
+          regardless of the legal theory on which a claim is based.
+        </p>
+        <p>
+          <strong>Important:</strong> nothing in these terms excludes or limits liability that cannot
+          lawfully be excluded or limited. This includes liability for fraud, fraudulent
+          misrepresentation, wilful injury, gross negligence, or violation of law, and any rights you
+          have as a consumer that cannot be waived. Some jurisdictions do not allow certain
+          exclusions, so parts of this section may not apply to you.
+        </p>
+      </Section>
+
+      <Section heading="12. Indemnification">
+        <p>
+          You agree to indemnify and hold harmless NumberSmith and its owner from claims, damages,
+          and reasonable legal costs arising out of (a) your misuse of the service, (b) your breach
+          of these terms, (c) your violation of any law or of another person&apos;s rights, or (d)
+          your unauthorised sharing or redistribution of our content.
+        </p>
+        <p>
+          If you are a parent or guardian whose child uses NumberSmith, this applies to their use of
+          the service under your account. This obligation does not apply to claims arising from our
+          own gross negligence, wilful misconduct, or violation of law.
+        </p>
+      </Section>
+
+      <Section heading="13. Resolving disputes">
+        <p>
+          <strong>Talk to us first.</strong> Most problems are resolved quickly by email. Before
+          starting any formal proceeding, please contact us at{" "}
+          <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 underline">
+            {LEGAL.contactEmail}
+          </a>{" "}
+          and give us 30 days to try to resolve it. We will do the same before bringing a claim
+          against you.
+        </p>
+        <p>
+          <strong>Arbitration.</strong> If we cannot resolve a dispute informally, you and we agree
+          that it will be settled by binding individual arbitration administered by a recognised
+          arbitration provider under its consumer rules, rather than in court. The Federal
+          Arbitration Act governs the interpretation and enforcement of this section.
+        </p>
+        <p>
+          <strong>Exceptions.</strong> Either of us may still bring a claim in small-claims court,
+          and either of us may seek an injunction in court to protect intellectual property or stop
+          unauthorised access. Nothing here prevents you from reporting a concern to a government
+          agency.
+        </p>
+        <p>
+          <strong>Individual claims only.</strong> To the extent permitted by law, disputes will be
+          brought only in an individual capacity, and not as a plaintiff or class member in any class
+          or representative action. If this restriction is found unenforceable as to a particular
+          claim, that claim proceeds in court and the rest of this section still applies to the
+          others.
+        </p>
+        <p>
+          <strong>You can opt out.</strong> You may reject this arbitration and class-waiver section
+          by emailing us within 30 days of first accepting these terms, stating your name and that
+          you opt out. Opting out will not affect your account or your use of NumberSmith in any way.
+        </p>
+        <p>
+          <strong>Where accounts are held by a parent or guardian</strong>, the adult account holder
+          agrees to this section on their own behalf. We do not seek to bind a minor to arbitration,
+          and this section does not waive any right a minor has that cannot lawfully be waived.
+        </p>
+      </Section>
+
+      <Section heading="14. Termination">
         <p>
           You may stop using NumberSmith and delete your account at any time. We may terminate or
           suspend access for violations of these terms. On termination your licence to our content
-          ends.
+          ends. Sections that by their nature should survive — including limitation of liability,
+          indemnification, and dispute resolution — continue to apply.
         </p>
       </Section>
 
-      <Section heading="12. Governing law">
+      <Section heading="15. Governing law">
         <p>
           These terms are governed by the laws of{" "}
-          {LEGAL.jurisdiction}, without regard to conflict-of-law rules.
+          {LEGAL.jurisdiction}, without regard to conflict-of-law rules. Where a dispute proceeds in
+          court rather than arbitration, it will be brought in the state or federal courts located in
+          California, and both of us consent to that jurisdiction. This does not deprive you of any
+          protection under the mandatory laws of the place where you live.
         </p>
       </Section>
 
-      <Section heading="13. Changes to these terms">
+      <Section heading="16. If part of these terms is unenforceable">
+        <p>
+          If any provision of these terms is found invalid or unenforceable, that provision will be
+          limited or removed to the minimum extent necessary, and the remaining provisions will stay
+          in full force.
+        </p>
+      </Section>
+
+      <Section heading="17. Changes to these terms">
         <p>
           We may update these terms. If we make material changes we will notify account holders and
           update the date at the top of this page. Continuing to use NumberSmith after a change means
@@ -192,7 +289,7 @@ export default function TermsPage() {
         </p>
       </Section>
 
-      <Section heading="14. Contact">
+      <Section heading="18. Contact">
         <p>
           Questions about these terms:{" "}
           <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 underline">
