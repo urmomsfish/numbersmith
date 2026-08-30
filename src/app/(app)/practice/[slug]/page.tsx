@@ -6,7 +6,6 @@ import { parseChoices, parseHints } from "@/lib/engine/scoring";
 import { isProUser } from "@/lib/subscription";
 import { hasReachedFreeDailyLimit } from "@/lib/actions/practice-actions";
 import { DailyCapUpsell } from "@/components/practice/problem-solver";
-import { paymentsAreLive } from "@/lib/stripe";
 import { SolverPageClient } from "./solver-client";
 
 export default async function ProblemPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -26,7 +25,7 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
   if (await hasReachedFreeDailyLimit(user.id)) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6">
-        <DailyCapUpsell canBuy={paymentsAreLive()} />
+        <DailyCapUpsell />
       </div>
     );
   }

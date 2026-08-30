@@ -1,5 +1,6 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
+import { paymentsAreLive } from "@/lib/stripe";
 import type { SubscriptionStatus } from "@/lib/types";
 import type { Subscription } from "@/generated/prisma";
 
@@ -51,7 +52,18 @@ export async function getSubscription(userId: string) {
   return sub;
 }
 
+/** Whether the user can reach Pro-gated features.
+ *
+ * While payments are not live, this is true for everyone. Withholding features
+ * behind a plan nobody is able to buy would just be a broken product — so the
+ * paywall lifts entirely until live Stripe keys are configured, and restores
+ * itself automatically once they are. Every gate in the app routes through
+ * here, so there is one switch rather than fourteen.
+ *
+ * Note this is deliberately separate from the *subscription status* shown in
+ * Settings, which keeps reporting the real stored plan. */
 export async function isProUser(userId: string): Promise<boolean> {
+  if (!paymentsAreLive()) return true;
   return grantsProAccess(await getSubscription(userId));
 }
 

@@ -9,11 +9,11 @@ export function PaymentsNotice({ className }: { className?: string }) {
     <div
       className={`rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 ${className ?? ""}`}
     >
-      <p className="font-semibold">NumberSmith Pro isn&apos;t available to buy yet.</p>
+      <p className="font-semibold">Everything is free while we&apos;re in early access.</p>
       <p className="mt-1 leading-relaxed text-amber-800">
-        We&apos;re still setting up payments. Everything on the free plan works today — the full
-        placement test, your rating and training plan, daily practice, and simulations. Pro will open
-        up soon.
+        We haven&apos;t opened payments yet, so every Pro feature below is unlocked for everyone —
+        unlimited problems and simulations, the full lesson library, and complete mistake review. No
+        card needed. The pricing here is what Pro will cost once it launches.
       </p>
     </div>
   );
@@ -25,8 +25,7 @@ export function PaymentsNoticeInline({ className }: { className?: string }) {
     <p
       className={`rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800 ${className ?? ""}`}
     >
-      Pro isn&apos;t purchasable yet — payments are still being set up. The free plan is fully
-      working in the meantime.
+      Early access — every Pro feature is unlocked for free while we finish setting up payments.
     </p>
   );
 }

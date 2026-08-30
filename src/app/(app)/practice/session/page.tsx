@@ -5,7 +5,6 @@ import { parseChoices, parseHints } from "@/lib/engine/scoring";
 import { hasReachedFreeDailyLimit, getTodayAttemptCount } from "@/lib/actions/practice-actions";
 import { isProUser, FREE_DAILY_PROBLEM_LIMIT } from "@/lib/subscription";
 import { DailyCapUpsell } from "@/components/practice/problem-solver";
-import { paymentsAreLive } from "@/lib/stripe";
 import { SessionRunner } from "./session-runner";
 
 const FOCUS_COPY: Record<string, string> = {
@@ -29,7 +28,7 @@ export default async function PracticeSessionPage({
   if (await hasReachedFreeDailyLimit(user.id)) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6">
-        <DailyCapUpsell canBuy={paymentsAreLive()} />
+        <DailyCapUpsell />
       </div>
     );
   }
