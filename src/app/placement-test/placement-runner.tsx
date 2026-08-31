@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Logo } from "@/components/logo";
+import { LogoutButton } from "@/components/app/logout-button";
 import { Badge } from "@/components/ui/badge";
 import { ProgressBar } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
@@ -107,6 +108,9 @@ function QuestionCard({
               {String(Math.floor(elapsed / 60)).padStart(2, "0")}:
               {String(elapsed % 60).padStart(2, "0")}
             </span>
+            {/* Safe to leave mid-test: every answer is written to
+                placementAttempt as it's submitted, so the test resumes here. */}
+            <LogoutButton />
           </div>
         </div>
         <div className="mx-auto max-w-3xl px-4 pb-3 sm:px-6">

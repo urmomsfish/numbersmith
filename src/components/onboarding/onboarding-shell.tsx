@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Logo } from "@/components/logo";
+import { LogoutButton } from "@/components/app/logout-button";
 import { cn } from "@/lib/cn";
 
 const STEPS = [
@@ -24,7 +25,10 @@ export function OnboardingShell({
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-4 sm:px-6">
           <Logo href="/" />
-          <ol className="hidden items-center gap-1 text-xs font-medium text-slate-400 sm:flex">
+          <div className="flex items-center gap-3">
+          {/* Only from lg: below that the logo, five steps, and the logout
+              button do not fit on one line without wrapping. */}
+          <ol className="hidden items-center gap-1 text-xs font-medium text-slate-400 lg:flex">
             {STEPS.map((step, i) => (
               <li key={step.key} className="flex items-center gap-1">
                 <span
@@ -55,6 +59,8 @@ export function OnboardingShell({
               </li>
             ))}
           </ol>
+          <LogoutButton />
+          </div>
         </div>
       </header>
       <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6">{children}</main>

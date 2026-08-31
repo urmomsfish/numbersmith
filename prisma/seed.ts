@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import { TOPICS } from "./seed-data/topics";
 import { COMPETITIONS } from "./seed-data/competitions";
 import { PROBLEMS } from "./seed-data/problems";
+import { GENERATED_PROBLEMS, GENERATION_ISSUES } from "./seed-data/generators";
+import { OLYMPIAD_PROBLEMS } from "./seed-data/problems-olympiad";
 import { LESSONS } from "./seed-data/lessons";
 import { ACHIEVEMENTS } from "./seed-data/achievements";
 
@@ -186,7 +188,56 @@ async function main() {
     });
     problemIdBySlug.set(p.slug, problem.id);
   }
-  console.log(`  Problems: ${problemIdBySlug.size}`);
+  console.log(`  Placement problems (hand-written): ${problemIdBySlug.size}`);
+
+  // ---------------------------------------------------------------------
+  // Generated practice bank
+  //
+  // These are held out of the placement pool (isPlacement: false) so students
+  // never train on the questions that set their rating. Inserted with
+  // createMany rather than upsert — at this volume, per-row round trips to a
+  // hosted Postgres take minutes instead of seconds.
+  // ---------------------------------------------------------------------
+  if (GENERATION_ISSUES.length > 0) {
+    const mismatches = GENERATION_ISSUES.filter((i) => i.detail.includes("independent check"));
+    if (mismatches.length > 0) {
+      throw new Error(
+        `Refusing to seed: ${mismatches.length} generated problem(s) disagree with their own verification.`
+      );
+    }
+    console.log(`  (${GENERATION_ISSUES.length} generation notes, no answer mismatches)`);
+  }
+
+  const generatedRows = [...GENERATED_PROBLEMS, ...OLYMPIAD_PROBLEMS].map((p) => {
+    const topicId = topicIdBySlug.get(p.topicSlug);
+    if (!topicId) throw new Error(`Unknown topic slug: ${p.topicSlug} (problem ${p.slug})`);
+    const [gradeMin, gradeMax] = gradesForDifficulty(p.difficulty);
+    return {
+      slug: p.slug,
+      question: p.question,
+      format: p.format,
+      choices: p.choices ? JSON.stringify(p.choices) : null,
+      answer: p.answer,
+      solution: p.solution,
+      hints: JSON.stringify(p.hints),
+      difficulty: p.difficulty,
+      topicId,
+      competitionId: p.competitionSlug ? competitionIdBySlug.get(p.competitionSlug) ?? null : null,
+      gradeMin,
+      gradeMax,
+      estimatedTimeSeconds: secondsForDifficulty(p.difficulty),
+      tags: JSON.stringify([p.topicSlug, ...(p.competitionSlug ? [p.competitionSlug] : [])]),
+      isPlacement: false,
+    };
+  });
+
+  for (let i = 0; i < generatedRows.length; i += 500) {
+    await prisma.problem.createMany({
+      data: generatedRows.slice(i, i + 500),
+      skipDuplicates: true,
+    });
+  }
+  console.log(`  Practice problems: ${generatedRows.length} (${GENERATED_PROBLEMS.length} generated + ${OLYMPIAD_PROBLEMS.length} hand-written olympiad)`);
 
   // ---------------------------------------------------------------------
   // Lessons

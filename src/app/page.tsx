@@ -46,7 +46,7 @@ const FAQ = [
   },
   {
     q: "Where do the problems come from?",
-    a: "Every problem on NumberSmith is original content written and mathematically verified by the NumberSmith team, with source and license recorded for each one. We do not scrape copyrighted competition archives.",
+    a: "Every problem is written specifically for NumberSmith, with its source and license recorded as data rather than assumed. We do not scrape copyrighted competition archives. Every answer key is also checked by an automated verifier that re-solves each problem from scratch and never reads the stored answer — see the About page for how that works.",
   },
   {
     q: "What ages is this for?",

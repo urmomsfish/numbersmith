@@ -128,6 +128,10 @@ export async function pickNextPracticeProblems(
 
   const where = {
     isPublished: true,
+    // The placement bank is held back from practice. Otherwise a student trains
+    // on the very questions that set their rating, which both inflates their
+    // measured mastery and wastes the only problems we know their level from.
+    isPlacement: false,
     id: { notIn: recentCorrectIds },
     topic: { OR: [{ id: domainTopic.id }, { parentId: domainTopic.id }] },
     difficulty: { gte: Math.max(1, difficulty - 1), lte: Math.min(10, difficulty + 1) },
@@ -140,6 +144,7 @@ export async function pickNextPracticeProblems(
     problems = await prisma.problem.findMany({
       where: {
         isPublished: true,
+        isPlacement: false,
         topic: { OR: [{ id: domainTopic.id }, { parentId: domainTopic.id }] },
       },
       take: count * 3,

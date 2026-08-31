@@ -20,6 +20,9 @@ export async function SiteHeader() {
           <Link href="/pricing" className="hover:text-slate-900">
             Pricing
           </Link>
+          <Link href="/about" className="hover:text-slate-900">
+            About
+          </Link>
           <Link href="/#faq" className="hover:text-slate-900">
             FAQ
           </Link>

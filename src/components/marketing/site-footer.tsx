@@ -32,6 +32,11 @@ export function SiteFooter() {
                     Competitions
                   </Link>
                 </li>
+                <li>
+                  <Link href="/about" className="hover:text-slate-900">
+                    About
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
@@ -74,8 +79,12 @@ export function SiteFooter() {
 
         <div className="mt-8 border-t border-slate-100 pt-6 text-xs leading-relaxed text-slate-400">
           <p>
-            All problems on NumberSmith are original content written and verified by the NumberSmith team.
-            NumberSmith provides independent practice tracks modeled on published competition formats and
+            All problems on NumberSmith are original content, and every answer key is checked by an
+            automated verifier that re-solves each problem independently —{" "}
+            <Link href="/about#verification" className="underline hover:text-slate-600">
+              how that works
+            </Link>
+            . NumberSmith provides independent practice tracks modeled on published competition formats and
             is not affiliated with, endorsed by, or sponsored by MAA, MATHCOUNTS, Math Kangaroo, MOEMS,
             HMMT, PUMaC, ARML, or any other competition organization.
           </p>

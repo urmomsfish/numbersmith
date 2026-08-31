@@ -5,6 +5,7 @@ import { LinkButton } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ProgressBar } from "@/components/ui/progress";
 import { Logo } from "@/components/logo";
+import { LogoutButton } from "@/components/app/logout-button";
 import { DOMAIN_TOPIC_SLUGS, ratingTier } from "@/lib/types";
 import { recommendCompetitionSlug } from "@/lib/engine/recommend";
 
@@ -66,8 +67,9 @@ export default async function PlacementResultsPage({
   return (
     <div className="min-h-screen bg-slate-50">
       <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto max-w-3xl px-4 py-4 sm:px-6">
+        <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4 sm:px-6">
           <Logo href="/" />
+          <LogoutButton />
         </div>
       </header>
 

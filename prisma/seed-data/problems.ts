@@ -1092,7 +1092,7 @@ export const PROBLEMS: ProblemSeed[] = [
     format: "SHORT_ANSWER",
     answer: "30",
     solution: "Sum of squares of side lengths: 4² + 3² + 2² + 1² = 16 + 9 + 4 + 1 = 30.",
-    hints: ["Count 1×1 squares, then 2×2, then 3×3, then 4×4 separately.", "There are k² squares of size k in a 4×4 grid, for k = 1, 2, 3, 4."],
+    hints: ["Count 1×1 squares, then 2×2, then 3×3, then 4×4 separately.", "A k×k square has (5−k)² possible positions in a 4×4 grid: 16, 9, 4, then 1."],
     difficulty: 4,
     topicSlug: "patterns",
   },

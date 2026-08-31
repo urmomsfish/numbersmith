@@ -237,7 +237,7 @@ model Problem {
   source               String       @default("NumberSmith Original")
   license              String       @default("NumberSmith Original")
   year                 Int?
-  author               String       @default("NumberSmith Team")
+  author               String       @default("Aarit Chakraborty")
   isPlacement          Boolean      @default(false)
   isPublished          Boolean      @default(true)
   createdAt            DateTime     @default(now())
