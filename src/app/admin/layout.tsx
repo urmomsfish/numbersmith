@@ -4,14 +4,11 @@ import { getCurrentUser } from "@/lib/auth";
 import { Logo } from "@/components/logo";
 import { Badge } from "@/components/ui/badge";
 import { logoutAction } from "@/lib/actions/auth-actions";
-import { prisma } from "@/lib/prisma";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
   if (user.role !== "ADMIN") redirect("/dashboard");
-
-  const openDisputeCount = await prisma.problemDispute.count({ where: { status: "OPEN" } });
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -30,10 +27,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </Link>
             <Link href="/admin/users" className="hover:text-slate-900">
               Users
-            </Link>
-            <Link href="/admin/disputes" className="flex items-center gap-1.5 hover:text-slate-900">
-              Disputes
-              {openDisputeCount > 0 && <Badge tone="warning">{openDisputeCount}</Badge>}
             </Link>
             <Link href="/dashboard" className="hover:text-slate-900">
               Student view
