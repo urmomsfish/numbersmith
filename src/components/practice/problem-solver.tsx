@@ -6,6 +6,7 @@ import { cn } from "@/lib/cn";
 import { Badge } from "@/components/ui/badge";
 import { Button, LinkButton } from "@/components/ui/button";
 import { submitPracticeAnswerAction } from "@/lib/actions/practice-actions";
+import { submitDisputeAction } from "@/lib/actions/dispute-actions";
 import { difficultyLabel } from "@/lib/types";
 
 const CHOICE_LETTERS = ["A", "B", "C", "D", "E", "F"];
@@ -21,6 +22,15 @@ export type SolverProblem = {
 };
 
 type SubmitResult = Awaited<ReturnType<typeof submitPracticeAnswerAction>>;
+
+type DisputeReason = "ANSWER_WRONG" | "SOLUTION_UNCLEAR" | "AMBIGUOUS_WORDING" | "OTHER";
+
+const DISPUTE_REASONS: { value: DisputeReason; label: string }[] = [
+  { value: "ANSWER_WRONG", label: "The answer key looks wrong" },
+  { value: "SOLUTION_UNCLEAR", label: "The solution doesn't make sense" },
+  { value: "AMBIGUOUS_WORDING", label: "The question is ambiguous or unclear" },
+  { value: "OTHER", label: "Something else" },
+];
 
 export function ProblemSolver({
   problem,
@@ -39,6 +49,11 @@ export function ProblemSolver({
   const [pending, setPending] = useState(false);
   const [result, setResult] = useState<SubmitResult | null>(null);
   const [elapsed, setElapsed] = useState(0);
+  const [reportOpen, setReportOpen] = useState(false);
+  const [reportReason, setReportReason] = useState<DisputeReason>("ANSWER_WRONG");
+  const [reportMessage, setReportMessage] = useState("");
+  const [reportStatus, setReportStatus] = useState<"idle" | "pending" | "sent" | "error">("idle");
+  const [reportError, setReportError] = useState("");
   // Seeded in the effect rather than during render — reading the clock while
   // rendering is impure and can drift across re-renders.
   const startedAtRef = useRef(0);
@@ -68,6 +83,24 @@ export function ProblemSolver({
     });
     setResult(res);
     setPending(false);
+  }
+
+  async function submitReport() {
+    if (!result || result.capped) return;
+    setReportStatus("pending");
+    const res = await submitDisputeAction({
+      problemId: problem.id,
+      theirAnswer: answerGiven,
+      storedAnswer: result.correctAnswer,
+      reason: reportReason,
+      message: reportMessage,
+    });
+    if (res?.error) {
+      setReportError(res.error);
+      setReportStatus("error");
+    } else {
+      setReportStatus("sent");
+    }
   }
 
   if (result?.capped) {
@@ -201,6 +234,81 @@ export function ProblemSolver({
               ))}
             </div>
           )}
+
+          <div className="pt-1">
+            {reportStatus === "sent" ? (
+              <p className="text-sm text-slate-500">
+                🚩 Thanks — this has been sent for review. We&apos;ll follow up by email if we need
+                more detail.
+              </p>
+            ) : !reportOpen ? (
+              <button
+                type="button"
+                onClick={() => setReportOpen(true)}
+                className="text-sm font-medium text-slate-400 hover:text-slate-600"
+              >
+                🚩 Something wrong with this problem?
+              </button>
+            ) : (
+              <div className="rounded-xl border border-slate-200 p-4">
+                <p className="text-sm font-semibold text-slate-800">Report a problem</p>
+                <p className="mt-0.5 text-xs text-slate-500">
+                  This goes to a real person, not another AI. Every answer on NumberSmith is meant
+                  to be independently verified — if you&apos;ve found one that isn&apos;t, telling
+                  us here fixes it for every future student.
+                </p>
+
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {DISPUTE_REASONS.map((r) => (
+                    <button
+                      key={r.value}
+                      type="button"
+                      onClick={() => setReportReason(r.value)}
+                      className={cn(
+                        "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
+                        reportReason === r.value
+                          ? "border-brand-500 bg-brand-50 text-brand-700"
+                          : "border-slate-200 text-slate-600 hover:border-slate-300"
+                      )}
+                    >
+                      {r.label}
+                    </button>
+                  ))}
+                </div>
+
+                <textarea
+                  value={reportMessage}
+                  onChange={(e) => setReportMessage(e.target.value)}
+                  placeholder="Explain what you think is wrong (optional, but it helps us fix it faster)"
+                  rows={3}
+                  maxLength={2000}
+                  className="mt-3 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                />
+
+                {reportStatus === "error" && (
+                  <p className="mt-2 text-sm text-danger-600">{reportError}</p>
+                )}
+
+                <div className="mt-3 flex items-center gap-3">
+                  <Button
+                    onClick={submitReport}
+                    disabled={reportStatus === "pending"}
+                    variant="outline"
+                    size="sm"
+                  >
+                    {reportStatus === "pending" ? "Sending…" : "Send report"}
+                  </Button>
+                  <button
+                    type="button"
+                    onClick={() => setReportOpen(false)}
+                    className="text-sm text-slate-400 hover:text-slate-600"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       )}
 

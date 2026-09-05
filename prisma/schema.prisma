@@ -54,6 +54,7 @@ model User {
   attempts               Attempt[]
   mistakes               Mistake[]
   bookmarks              Bookmark[]
+  problemDisputes        ProblemDispute[]
   competitionAttempts    CompetitionAttempt[]
   ratings                Rating[]
   ratingHistory          RatingHistory[]
@@ -258,6 +259,7 @@ model Problem {
   competitionAttemptItems CompetitionAttemptItem[]
   dailyChallenges         DailyChallenge[]
   lessonPractice          LessonProblem[]
+  disputes                ProblemDispute[]
 
   @@index([topicId])
   @@index([difficulty])
@@ -398,6 +400,36 @@ model Mistake {
 
   @@unique([userId, problemId])
   @@index([userId, resolved, nextReviewAt])
+}
+
+/// status: OPEN | UPHELD | REJECTED
+/// reason: ANSWER_WRONG | SOLUTION_UNCLEAR | AMBIGUOUS_WORDING | OTHER
+///
+/// Upholding a dispute does NOT itself change the problem — it just records
+/// that an admin agrees something is wrong. The actual fix still goes through
+/// the normal problem edit form, which keeps every correction subject to the
+/// same review a hand-authored problem would get, rather than letting a
+/// student's claimed answer overwrite a verified one automatically.
+model ProblemDispute {
+  id            String    @id @default(cuid())
+  problemId     String
+  problem       Problem   @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  theirAnswer   String
+  /// Snapshot of problem.answer at the time of the report, so a later edit to
+  /// the problem doesn't retroactively rewrite what this dispute was about.
+  storedAnswer  String
+  reason        String
+  message       String
+  status        String    @default("OPEN")
+  adminResponse String?
+  resolvedById  String?
+  resolvedAt    DateTime?
+  createdAt     DateTime  @default(now())
+
+  @@index([status, createdAt])
+  @@index([problemId])
 }
 
 model Bookmark {
