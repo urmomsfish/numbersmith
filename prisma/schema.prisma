@@ -422,6 +422,10 @@ model ProblemDispute {
   storedAnswer  String
   reason        String
   message       String
+  /// Explicit opt-in — never assume contact is welcome just because we have
+  /// an email on file. An admin can still resolve the dispute without it;
+  /// this only governs whether reaching out for more detail is appropriate.
+  wantsEmailFollowUp Boolean @default(false)
   status        String    @default("OPEN")
   adminResponse String?
   resolvedById  String?

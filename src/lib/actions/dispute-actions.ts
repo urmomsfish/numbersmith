@@ -19,6 +19,7 @@ const disputeSchema = z.object({
   storedAnswer: z.string().trim().min(1),
   reason: z.enum(REASONS),
   message: z.string().trim().max(2000).optional().default(""),
+  wantsEmailFollowUp: z.boolean().optional().default(false),
 });
 
 export type DisputeFormState = { error?: string; success?: boolean } | undefined;
@@ -31,7 +32,7 @@ export async function submitDisputeAction(
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? "Invalid report" };
   }
-  const { problemId, theirAnswer, storedAnswer, reason, message } = parsed.data;
+  const { problemId, theirAnswer, storedAnswer, reason, message, wantsEmailFollowUp } = parsed.data;
 
   const problem = await prisma.problem.findUnique({ where: { id: problemId } });
   if (!problem) return { error: "Problem not found" };
@@ -43,7 +44,7 @@ export async function submitDisputeAction(
     where: { problemId, userId: user.id, status: "OPEN" },
   });
   if (existingOpen) {
-    return { error: "You already have an open report for this problem. We'll follow up by email." };
+    return { error: "You already have an open report for this problem." };
   }
 
   await prisma.problemDispute.create({
@@ -54,6 +55,7 @@ export async function submitDisputeAction(
       storedAnswer,
       reason,
       message,
+      wantsEmailFollowUp,
     },
   });
 

@@ -52,6 +52,7 @@ export function ProblemSolver({
   const [reportOpen, setReportOpen] = useState(false);
   const [reportReason, setReportReason] = useState<DisputeReason>("ANSWER_WRONG");
   const [reportMessage, setReportMessage] = useState("");
+  const [reportWantsEmail, setReportWantsEmail] = useState(false);
   const [reportStatus, setReportStatus] = useState<"idle" | "pending" | "sent" | "error">("idle");
   const [reportError, setReportError] = useState("");
   // Seeded in the effect rather than during render — reading the clock while
@@ -94,6 +95,7 @@ export function ProblemSolver({
       storedAnswer: result.correctAnswer,
       reason: reportReason,
       message: reportMessage,
+      wantsEmailFollowUp: reportWantsEmail,
     });
     if (res?.error) {
       setReportError(res.error);
@@ -238,8 +240,8 @@ export function ProblemSolver({
           <div className="pt-1">
             {reportStatus === "sent" ? (
               <p className="text-sm text-slate-500">
-                🚩 Thanks — this has been sent for review. We&apos;ll follow up by email if we need
-                more detail.
+                🚩 Thanks — this has been sent for review.
+                {reportWantsEmail && " We'll email you if we need more detail."}
               </p>
             ) : !reportOpen ? (
               <button
@@ -284,6 +286,17 @@ export function ProblemSolver({
                   maxLength={2000}
                   className="mt-3 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
                 />
+
+                <label className="mt-3 flex items-start gap-2 text-xs text-slate-500">
+                  <input
+                    type="checkbox"
+                    checked={reportWantsEmail}
+                    onChange={(e) => setReportWantsEmail(e.target.checked)}
+                    className="mt-0.5 h-3.5 w-3.5 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+                  />
+                  It&apos;s OK to email me if you need more detail (optional — we won&apos;t
+                  otherwise).
+                </label>
 
                 {reportStatus === "error" && (
                   <p className="mt-2 text-sm text-danger-600">{reportError}</p>

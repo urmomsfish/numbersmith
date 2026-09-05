@@ -74,8 +74,10 @@ export default async function AdminDisputesPage({
                     {status === "resolved" && (
                       <Badge tone={d.status === "UPHELD" ? "success" : "slate"}>{d.status}</Badge>
                     )}
+                    {d.wantsEmailFollowUp && <Badge tone="brand">✉️ OK to email</Badge>}
                     <span className="text-xs text-slate-400">
-                      {d.createdAt.toLocaleDateString()} · {d.user.name} ({d.user.email})
+                      {d.createdAt.toLocaleDateString()} · {d.user.name}
+                      {d.wantsEmailFollowUp ? ` (${d.user.email})` : ""}
                     </span>
                   </div>
                   <p className="mt-2 text-sm font-medium text-slate-800">{d.problem.question}</p>
