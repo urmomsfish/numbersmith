@@ -66,6 +66,27 @@ export default function SignupPage() {
               />
             </div>
 
+            <div className="flex items-start gap-2.5">
+              <input
+                id="termsAccepted"
+                name="termsAccepted"
+                type="checkbox"
+                required
+                className="mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+              />
+              <label htmlFor="termsAccepted" className="text-sm leading-relaxed text-slate-600">
+                I agree to the{" "}
+                <Link href="/legal/terms" target="_blank" className="font-semibold text-brand-600 hover:text-brand-700">
+                  Terms of Service
+                </Link>{" "}
+                (including the limitation of liability in Section 11) and{" "}
+                <Link href="/legal/privacy" target="_blank" className="font-semibold text-brand-600 hover:text-brand-700">
+                  Privacy Policy
+                </Link>
+                . If I am under 18, a parent or guardian has reviewed this with me.
+              </label>
+            </div>
+
             {state?.error && (
               <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-danger-600">
                 {state.error}
@@ -84,17 +105,6 @@ export default function SignupPage() {
             </Link>
           </p>
         </div>
-        <p className="mt-6 text-center text-xs leading-relaxed text-slate-400">
-          By creating an account you agree to our{" "}
-          <Link href="/legal/terms" className="underline hover:text-slate-600">
-            Terms of Service
-          </Link>{" "}
-          and{" "}
-          <Link href="/legal/privacy" className="underline hover:text-slate-600">
-            Privacy Policy
-          </Link>
-          . If you are under 18, please ask a parent or guardian before signing up.
-        </p>
       </div>
     </div>
   );

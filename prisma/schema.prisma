@@ -31,6 +31,14 @@ model User {
   passwordHash String
   name         String
   role         String   @default("STUDENT")
+
+  /// Recorded at signup so consent to the Terms/Privacy Policy is evidenced by
+  /// a server-side timestamp and version, not just a checkbox that leaves no
+  /// trace. Nullable because accounts created before this field existed have
+  /// neither. See LEGAL.lastUpdated in src/lib/legal.ts for the version string.
+  termsAcceptedAt      DateTime?
+  termsAcceptedVersion String?
+
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 

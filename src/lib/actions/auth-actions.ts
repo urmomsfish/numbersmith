@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { createSession, destroySession, hashPassword, verifyPassword } from "@/lib/auth";
+import { LEGAL } from "@/lib/legal";
 
 export type AuthFormState = { error?: string } | undefined;
 
@@ -11,6 +12,11 @@ const signupSchema = z.object({
   name: z.string().trim().min(2, "Enter your full name").max(80),
   email: z.string().trim().toLowerCase().email("Enter a valid email"),
   password: z.string().min(8, "Password must be at least 8 characters"),
+  // A checkbox only submits a value when checked, so its mere presence in the
+  // form data is the signal — there's nothing to coerce from "on" vs missing.
+  termsAccepted: z.literal("on", {
+    message: "You must agree to the Terms of Service and Privacy Policy to create an account.",
+  }),
 });
 
 export async function signupAction(
@@ -21,6 +27,7 @@ export async function signupAction(
     name: formData.get("name"),
     email: formData.get("email"),
     password: formData.get("password"),
+    termsAccepted: formData.get("termsAccepted"),
   });
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
@@ -40,6 +47,8 @@ export async function signupAction(
       email,
       passwordHash,
       role: "STUDENT",
+      termsAcceptedAt: new Date(),
+      termsAcceptedVersion: LEGAL.lastUpdated,
       stats: { create: {} },
       subscription: { create: { status: "FREE" } },
       ratings: { create: { category: "OVERALL", value: 1000 } },
