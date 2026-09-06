@@ -2,13 +2,16 @@ import { prisma } from "@/lib/prisma";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { updateUserAction } from "@/lib/actions/admin-actions";
+import { DeleteUserForm } from "@/components/admin/delete-user-form";
+import { requireUser } from "@/lib/auth";
 
 export default async function AdminUsersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; deleted?: string }>;
 }) {
   const params = await searchParams;
+  const admin = await requireUser();
 
   const users = await prisma.user.findMany({
     include: {
@@ -32,6 +35,16 @@ export default async function AdminUsersPage({
           You cannot remove your own admin role.
         </p>
       )}
+      {params.error === "cannot-delete-self" && (
+        <p className="mt-4 rounded-lg bg-red-50 dark:bg-red-950 px-4 py-2 text-sm text-danger-600 dark:text-red-400">
+          You cannot delete your own account.
+        </p>
+      )}
+      {params.deleted && (
+        <p className="mt-4 rounded-lg bg-emerald-50 dark:bg-emerald-950 px-4 py-2 text-sm text-success-600 dark:text-emerald-400">
+          Account deleted.
+        </p>
+      )}
 
       <div className="mt-6 overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
         <table className="w-full text-sm">
@@ -44,6 +57,7 @@ export default async function AdminUsersPage({
               <th className="px-3 py-2.5">Streak</th>
               <th className="px-3 py-2.5">Plan</th>
               <th className="px-3 py-2.5">Manage</th>
+              <th className="px-3 py-2.5"></th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -97,6 +111,16 @@ export default async function AdminUsersPage({
                       Save
                     </Button>
                   </form>
+                </td>
+                <td className="px-3 py-2.5 text-right">
+                  {u.id !== admin.id && (
+                    <DeleteUserForm
+                      userId={u.id}
+                      name={u.name}
+                      email={u.email}
+                      attemptCount={u._count.attempts}
+                    />
+                  )}
                 </td>
               </tr>
             ))}

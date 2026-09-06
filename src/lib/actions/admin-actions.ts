@@ -207,3 +207,23 @@ export async function updateUserAction(formData: FormData) {
 
   revalidatePath("/admin/users");
 }
+
+export async function deleteUserAction(formData: FormData) {
+  const admin = await requireAdmin();
+  const userId = String(formData.get("userId") ?? "");
+  if (!userId) redirect("/admin/users");
+
+  if (userId === admin.id) {
+    redirect("/admin/users?error=cannot-delete-self");
+  }
+
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) redirect("/admin/users");
+
+  // Every relation to User is onDelete: Cascade, so this also removes their
+  // profile, attempts, mistakes, ratings, study plans, and everything else.
+  await prisma.user.delete({ where: { id: userId } });
+
+  revalidatePath("/admin/users");
+  redirect("/admin/users?deleted=1");
+}
