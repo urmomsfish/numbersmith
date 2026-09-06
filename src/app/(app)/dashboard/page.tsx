@@ -10,13 +10,6 @@ import { getActiveStudyPlan, todaysPlanDay } from "@/lib/engine/study-plan";
 import { pickPriorityTopic } from "@/lib/engine/practice";
 import { ratingTier } from "@/lib/types";
 
-function getGreeting() {
-  const hour = new Date().getHours();
-  if (hour < 12) return "Good morning";
-  if (hour < 18) return "Good afternoon";
-  return "Good evening";
-}
-
 export default async function DashboardPage() {
   const user = await getCurrentUser();
   if (!user) return null;
@@ -59,7 +52,7 @@ export default async function DashboardPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
       <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
-        {getGreeting()}, {user.name.split(" ")[0]}!
+        Welcome back, {user.name.split(" ")[0]}!
       </h1>
       <p className="mt-1 text-slate-500">Here&apos;s what NumberSmith recommends for today.</p>
 
