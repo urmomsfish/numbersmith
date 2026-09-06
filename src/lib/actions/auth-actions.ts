@@ -1,10 +1,15 @@
 "use server";
 
+import { randomBytes, createHash } from "crypto";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { createSession, destroySession, hashPassword, verifyPassword } from "@/lib/auth";
 import { LEGAL } from "@/lib/legal";
+import { sendPasswordResetEmail } from "@/lib/email";
+
+const RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
+const hashToken = (token: string) => createHash("sha256").update(token).digest("hex");
 
 export type AuthFormState = { error?: string } | undefined;
 
@@ -95,4 +100,94 @@ export async function loginAction(
 export async function logoutAction() {
   await destroySession();
   redirect("/");
+}
+
+export type RequestResetState = { message?: string; error?: string } | undefined;
+
+const requestResetSchema = z.object({
+  email: z.string().trim().toLowerCase().email("Enter a valid email"),
+});
+
+// Same wording whether or not the email exists — a different message here
+// would let anyone probe which addresses have accounts.
+const GENERIC_RESET_MESSAGE =
+  "If an account exists for that email, we've sent a link to reset the password.";
+
+export async function requestPasswordResetAction(
+  _prevState: RequestResetState,
+  formData: FormData
+): Promise<RequestResetState> {
+  const parsed = requestResetSchema.safeParse({ email: formData.get("email") });
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  }
+  const { email } = parsed.data;
+
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) {
+    return { message: GENERIC_RESET_MESSAGE };
+  }
+
+  // One live token per account. A stale unexpired one from a prior click is
+  // superseded rather than left valid alongside a new one.
+  await prisma.passwordResetToken.updateMany({
+    where: { userId: user.id, usedAt: null },
+    data: { usedAt: new Date() },
+  });
+
+  const rawToken = randomBytes(32).toString("hex");
+  await prisma.passwordResetToken.create({
+    data: {
+      userId: user.id,
+      tokenHash: hashToken(rawToken),
+      expiresAt: new Date(Date.now() + RESET_TOKEN_TTL_MS),
+    },
+  });
+
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  const resetUrl = `${baseUrl}/reset-password?token=${rawToken}`;
+  await sendPasswordResetEmail(email, resetUrl);
+
+  return { message: GENERIC_RESET_MESSAGE };
+}
+
+const resetPasswordSchema = z
+  .object({
+    token: z.string().min(1),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
+
+export async function resetPasswordAction(
+  _prevState: AuthFormState,
+  formData: FormData
+): Promise<AuthFormState> {
+  const parsed = resetPasswordSchema.safeParse({
+    token: formData.get("token"),
+    password: formData.get("password"),
+    confirmPassword: formData.get("confirmPassword"),
+  });
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  }
+  const { token, password } = parsed.data;
+
+  const record = await prisma.passwordResetToken.findUnique({
+    where: { tokenHash: hashToken(token) },
+  });
+  if (!record || record.usedAt || record.expiresAt < new Date()) {
+    return { error: "This reset link is invalid or has expired. Request a new one." };
+  }
+
+  const passwordHash = await hashPassword(password);
+  await prisma.$transaction([
+    prisma.user.update({ where: { id: record.userId }, data: { passwordHash } }),
+    prisma.passwordResetToken.update({ where: { id: record.id }, data: { usedAt: new Date() } }),
+  ]);
+
+  redirect("/login?reset=success");
 }

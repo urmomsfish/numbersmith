@@ -1,10 +1,21 @@
 "use client";
 
-import { useActionState } from "react";
+import { Suspense, useActionState } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { loginAction } from "@/lib/actions/auth-actions";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
+
+function ResetSuccessBanner() {
+  const searchParams = useSearchParams();
+  if (searchParams.get("reset") !== "success") return null;
+  return (
+    <p className="mt-4 rounded-lg bg-emerald-50 px-3 py-2 text-sm text-success-600">
+      Password updated. Log in with your new password.
+    </p>
+  );
+}
 
 export default function LoginPage() {
   const [state, formAction, pending] = useActionState(loginAction, undefined);
@@ -18,6 +29,10 @@ export default function LoginPage() {
         <div className="rounded-2xl border border-slate-200 bg-white p-8">
           <h1 className="text-xl font-bold text-slate-900">Welcome back</h1>
           <p className="mt-1 text-sm text-slate-500">Log in to continue your training.</p>
+
+          <Suspense fallback={null}>
+            <ResetSuccessBanner />
+          </Suspense>
 
           <form action={formAction} className="mt-6 space-y-4">
             <div>
@@ -35,9 +50,14 @@ export default function LoginPage() {
               />
             </div>
             <div>
-              <label htmlFor="password" className="mb-1 block text-sm font-medium text-slate-700">
-                Password
-              </label>
+              <div className="mb-1 flex items-center justify-between">
+                <label htmlFor="password" className="block text-sm font-medium text-slate-700">
+                  Password
+                </label>
+                <Link href="/forgot-password" className="text-xs font-medium text-brand-600 hover:text-brand-700">
+                  Forgot password?
+                </Link>
+              </div>
               <input
                 id="password"
                 name="password"
@@ -67,9 +87,6 @@ export default function LoginPage() {
             </Link>
           </p>
         </div>
-        <p className="mt-6 text-center text-xs text-slate-400">
-          Demo credentials: admin@numbersmith.app / password123 (seeded admin account)
-        </p>
       </div>
     </div>
   );

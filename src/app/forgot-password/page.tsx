@@ -1,0 +1,66 @@
+"use client";
+
+import { useActionState } from "react";
+import Link from "next/link";
+import { requestPasswordResetAction } from "@/lib/actions/auth-actions";
+import { Logo } from "@/components/logo";
+import { Button } from "@/components/ui/button";
+
+export default function ForgotPasswordPage() {
+  const [state, formAction, pending] = useActionState(requestPasswordResetAction, undefined);
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12">
+      <div className="w-full max-w-sm">
+        <div className="mb-8 flex justify-center">
+          <Logo />
+        </div>
+        <div className="rounded-2xl border border-slate-200 bg-white p-8">
+          <h1 className="text-xl font-bold text-slate-900">Reset your password</h1>
+          <p className="mt-1 text-sm text-slate-500">
+            Enter your account email and we&apos;ll send a link to reset it.
+          </p>
+
+          {state?.message ? (
+            <p className="mt-6 rounded-lg bg-emerald-50 px-3 py-2.5 text-sm text-success-600">
+              {state.message}
+            </p>
+          ) : (
+            <form action={formAction} className="mt-6 space-y-4">
+              <div>
+                <label htmlFor="email" className="mb-1 block text-sm font-medium text-slate-700">
+                  Email
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  autoComplete="email"
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                  placeholder="you@example.com"
+                />
+              </div>
+
+              {state?.error && (
+                <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-danger-600">
+                  {state.error}
+                </p>
+              )}
+
+              <Button type="submit" disabled={pending} className="w-full">
+                {pending ? "Sending…" : "Send reset link"}
+              </Button>
+            </form>
+          )}
+
+          <p className="mt-6 text-center text-sm text-slate-500">
+            <Link href="/login" className="font-semibold text-brand-600 hover:text-brand-700">
+              Back to login
+            </Link>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
