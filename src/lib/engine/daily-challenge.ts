@@ -44,8 +44,8 @@ export async function getOrCreateDailyChallenge(track: DailyChallengeTrack, date
   const [min, max] = TRACK_DIFFICULTY[track];
   const candidates = await prisma.problem.findMany({
     where: { isPublished: true, difficulty: { gte: min, lte: max } },
-    orderBy: { slug: "asc" },
-    select: { id: true },
+    orderBy: [{ topicId: "asc" }, { slug: "asc" }],
+    select: { id: true, topicId: true },
   });
 
   if (candidates.length === 0) {
@@ -58,10 +58,32 @@ export async function getOrCreateDailyChallenge(track: DailyChallengeTrack, date
   }
 
   const daysSinceEpoch = Math.floor(day.getTime() / (24 * 60 * 60 * 1000));
-  const chosen = candidates[daysSinceEpoch % candidates.length];
+
+  // Rotate the TOPIC day to day before picking a problem within it. Walking a
+  // flat alphabetical problem list one step per day looked like it changed —
+  // a different problem ID every day — but slugs cluster by generator, so a
+  // student could land on the same topic (different numbers) for weeks in a
+  // row. Grouping by topic first, then advancing the in-topic index once per
+  // full lap through all topics, guarantees the topic itself changes daily
+  // whenever more than one is available in the difficulty band.
+  const topicOrder: string[] = [];
+  const byTopic = new Map<string, string[]>();
+  for (const c of candidates) {
+    if (!byTopic.has(c.topicId)) {
+      byTopic.set(c.topicId, []);
+      topicOrder.push(c.topicId);
+    }
+    byTopic.get(c.topicId)!.push(c.id);
+  }
+
+  const topicIndex = daysSinceEpoch % topicOrder.length;
+  const topicId = topicOrder[topicIndex];
+  const withinTopic = byTopic.get(topicId)!;
+  const lap = Math.floor(daysSinceEpoch / topicOrder.length);
+  const chosenId = withinTopic[lap % withinTopic.length];
 
   return prisma.dailyChallenge.create({
-    data: { date: day, track, problemId: chosen.id },
+    data: { date: day, track, problemId: chosenId },
     include: { problem: { include: { topic: true } } },
   });
 }
