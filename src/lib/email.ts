@@ -14,23 +14,23 @@ export function isEmailConfigured(): boolean {
 const FROM = process.env.EMAIL_FROM || "NumberSmith <onboarding@resend.dev>";
 
 /** Returns whether the email was actually sent. When no provider is
- * configured, the link is logged server-side instead — visible to whoever
+ * configured, the code is logged server-side instead — visible to whoever
  * runs the server, never to the person who requested the reset — so nothing
  * in the UI can claim an email went out when it didn't. */
-export async function sendPasswordResetEmail(to: string, resetUrl: string): Promise<boolean> {
+export async function sendPasswordResetCodeEmail(to: string, code: string): Promise<boolean> {
   if (!resend) {
-    console.log(`[email not configured — RESEND_API_KEY unset] Password reset link for ${to}:`);
-    console.log(resetUrl);
+    console.log(`[email not configured — RESEND_API_KEY unset] Password reset code for ${to}: ${code}`);
     return false;
   }
 
   const { error } = await resend.emails.send({
     from: FROM,
     to,
-    subject: "Reset your NumberSmith password",
+    subject: `${code} is your NumberSmith password reset code`,
     html: `
       <p>Someone (hopefully you) asked to reset the password for your NumberSmith account.</p>
-      <p><a href="${resetUrl}">Click here to set a new password</a>. This link expires in 1 hour.</p>
+      <p style="font-size:28px;font-weight:700;letter-spacing:4px;margin:20px 0;">${code}</p>
+      <p>Enter this code on the reset page to choose a new password. It expires in 15 minutes.</p>
       <p>If you didn't request this, you can ignore this email — your password will not change.</p>
       <p style="color:#94a3b8;font-size:12px;margin-top:24px;">
         Questions? Reply to this email or write to ${LEGAL.contactEmail}.
@@ -39,7 +39,7 @@ export async function sendPasswordResetEmail(to: string, resetUrl: string): Prom
   });
 
   if (error) {
-    console.error("Resend failed to send password reset email:", error);
+    console.error("Resend failed to send password reset code email:", error);
     return false;
   }
   return true;

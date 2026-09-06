@@ -68,14 +68,18 @@ model User {
   @@index([role])
 }
 
-/// A reset link contains the raw token; only its SHA-256 hash is ever
-/// persisted, so a database leak alone can't be used to take over accounts.
-/// One-time use (usedAt) and short-lived (expiresAt ~1 hour).
+/// Only the SHA-256 hash of the 6-digit code is ever persisted. Not globally
+/// unique — two different users can coincidentally be issued the same code,
+/// which is fine, since verification is always scoped to one userId. A small
+/// numeric space is brute-forceable without extra limits, so this also
+/// tracks `attempts`: the code is invalidated after 5 wrong guesses rather
+/// than relying on hash strength or the short expiry alone.
 model PasswordResetToken {
   id        String    @id @default(cuid())
   userId    String
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tokenHash String    @unique
+  codeHash  String
+  attempts  Int       @default(0)
   expiresAt DateTime
   usedAt    DateTime?
   createdAt DateTime  @default(now())

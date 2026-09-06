@@ -1,15 +1,16 @@
 "use server";
 
-import { randomBytes, createHash } from "crypto";
+import { randomInt, createHash } from "crypto";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { createSession, destroySession, hashPassword, verifyPassword } from "@/lib/auth";
 import { LEGAL } from "@/lib/legal";
-import { sendPasswordResetEmail } from "@/lib/email";
+import { sendPasswordResetCodeEmail } from "@/lib/email";
 
-const RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
-const hashToken = (token: string) => createHash("sha256").update(token).digest("hex");
+const RESET_CODE_TTL_MS = 15 * 60 * 1000;
+const MAX_RESET_ATTEMPTS = 5;
+const hashCode = (code: string) => createHash("sha256").update(code).digest("hex");
 
 export type AuthFormState = { error?: string } | undefined;
 
@@ -102,7 +103,7 @@ export async function logoutAction() {
   redirect("/");
 }
 
-export type RequestResetState = { message?: string; error?: string } | undefined;
+export type RequestResetState = { message?: string; error?: string; email?: string } | undefined;
 
 const requestResetSchema = z.object({
   email: z.string().trim().toLowerCase().email("Enter a valid email"),
@@ -110,8 +111,7 @@ const requestResetSchema = z.object({
 
 // Same wording whether or not the email exists — a different message here
 // would let anyone probe which addresses have accounts.
-const GENERIC_RESET_MESSAGE =
-  "If an account exists for that email, we've sent a link to reset the password.";
+const GENERIC_RESET_MESSAGE = "If an account exists for that email, we've sent a code to reset the password.";
 
 export async function requestPasswordResetAction(
   _prevState: RequestResetState,
@@ -125,35 +125,38 @@ export async function requestPasswordResetAction(
 
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user) {
-    return { message: GENERIC_RESET_MESSAGE };
+    // No account — still say we sent a code, but skip generating one, and
+    // return the email anyway so the client moves to the code-entry step
+    // regardless. Otherwise the response timing/shape would itself leak
+    // whether the address is registered.
+    return { message: GENERIC_RESET_MESSAGE, email };
   }
 
-  // One live token per account. A stale unexpired one from a prior click is
+  // One live code per account. A stale unexpired one from a prior request is
   // superseded rather than left valid alongside a new one.
   await prisma.passwordResetToken.updateMany({
     where: { userId: user.id, usedAt: null },
     data: { usedAt: new Date() },
   });
 
-  const rawToken = randomBytes(32).toString("hex");
+  const code = String(randomInt(0, 1_000_000)).padStart(6, "0");
   await prisma.passwordResetToken.create({
     data: {
       userId: user.id,
-      tokenHash: hashToken(rawToken),
-      expiresAt: new Date(Date.now() + RESET_TOKEN_TTL_MS),
+      codeHash: hashCode(code),
+      expiresAt: new Date(Date.now() + RESET_CODE_TTL_MS),
     },
   });
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-  const resetUrl = `${baseUrl}/reset-password?token=${rawToken}`;
-  await sendPasswordResetEmail(email, resetUrl);
+  await sendPasswordResetCodeEmail(email, code);
 
-  return { message: GENERIC_RESET_MESSAGE };
+  return { message: GENERIC_RESET_MESSAGE, email };
 }
 
 const resetPasswordSchema = z
   .object({
-    token: z.string().min(1),
+    email: z.string().trim().toLowerCase().email("Enter a valid email"),
+    code: z.string().trim().regex(/^\d{6}$/, "Enter the 6-digit code from your email"),
     password: z.string().min(8, "Password must be at least 8 characters"),
     confirmPassword: z.string(),
   })
@@ -162,30 +165,54 @@ const resetPasswordSchema = z
     path: ["confirmPassword"],
   });
 
+// Same message for "wrong code", "expired code", and "no account" — telling
+// them apart would let an attacker learn which email addresses are
+// registered, or narrow down a code by trial and error more easily.
+const GENERIC_CODE_ERROR = "That code is incorrect or has expired. Request a new one.";
+
 export async function resetPasswordAction(
   _prevState: AuthFormState,
   formData: FormData
 ): Promise<AuthFormState> {
   const parsed = resetPasswordSchema.safeParse({
-    token: formData.get("token"),
+    email: formData.get("email"),
+    code: formData.get("code"),
     password: formData.get("password"),
     confirmPassword: formData.get("confirmPassword"),
   });
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   }
-  const { token, password } = parsed.data;
+  const { email, code, password } = parsed.data;
 
-  const record = await prisma.passwordResetToken.findUnique({
-    where: { tokenHash: hashToken(token) },
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) {
+    return { error: GENERIC_CODE_ERROR };
+  }
+
+  const record = await prisma.passwordResetToken.findFirst({
+    where: { userId: user.id, usedAt: null },
+    orderBy: { createdAt: "desc" },
   });
-  if (!record || record.usedAt || record.expiresAt < new Date()) {
-    return { error: "This reset link is invalid or has expired. Request a new one." };
+  if (!record || record.expiresAt < new Date()) {
+    return { error: GENERIC_CODE_ERROR };
+  }
+  if (record.attempts >= MAX_RESET_ATTEMPTS) {
+    await prisma.passwordResetToken.update({ where: { id: record.id }, data: { usedAt: new Date() } });
+    return { error: "Too many incorrect attempts. Request a new code." };
+  }
+
+  if (hashCode(code) !== record.codeHash) {
+    await prisma.passwordResetToken.update({
+      where: { id: record.id },
+      data: { attempts: { increment: 1 } },
+    });
+    return { error: GENERIC_CODE_ERROR };
   }
 
   const passwordHash = await hashPassword(password);
   await prisma.$transaction([
-    prisma.user.update({ where: { id: record.userId }, data: { passwordHash } }),
+    prisma.user.update({ where: { id: user.id }, data: { passwordHash } }),
     prisma.passwordResetToken.update({ where: { id: record.id }, data: { usedAt: new Date() } }),
   ]);
 
