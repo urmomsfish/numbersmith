@@ -87,7 +87,10 @@ export async function loginAction(
     where: { email },
     include: { profile: true },
   });
-  if (!user || !(await verifyPassword(password, user.passwordHash))) {
+  if (!user?.passwordHash) {
+    return { error: "Incorrect email or password" };
+  }
+  if (!(await verifyPassword(password, user.passwordHash))) {
     return { error: "Incorrect email or password" };
   }
 

@@ -1,10 +1,23 @@
 "use client";
 
-import { useActionState } from "react";
+import { Suspense, useActionState } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { signupAction } from "@/lib/actions/auth-actions";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
+import { GoogleButton, googleErrorMessage } from "@/components/auth/google-button";
+
+function GoogleErrorBanner() {
+  const searchParams = useSearchParams();
+  const message = googleErrorMessage(searchParams.get("error"));
+  if (!message) return null;
+  return (
+    <p className="mt-4 rounded-lg bg-red-50 dark:bg-red-950 px-3 py-2 text-sm text-danger-600 dark:text-red-400">
+      {message}
+    </p>
+  );
+}
 
 export default function SignupPage() {
   const [state, formAction, pending] = useActionState(signupAction, undefined);
@@ -21,7 +34,32 @@ export default function SignupPage() {
             Start with a free placement test — no credit card required.
           </p>
 
-          <form action={formAction} className="mt-6 space-y-4">
+          <Suspense fallback={null}>
+            <GoogleErrorBanner />
+          </Suspense>
+
+          <div className="mt-6">
+            <GoogleButton />
+          </div>
+          <p className="mt-2.5 text-center text-xs leading-relaxed text-slate-400 dark:text-slate-500">
+            By continuing with Google, you agree to the{" "}
+            <Link href="/legal/terms" target="_blank" className="font-medium underline hover:text-slate-600 dark:hover:text-slate-300">
+              Terms of Service
+            </Link>{" "}
+            and{" "}
+            <Link href="/legal/privacy" target="_blank" className="font-medium underline hover:text-slate-600 dark:hover:text-slate-300">
+              Privacy Policy
+            </Link>
+            .
+          </p>
+
+          <div className="my-5 flex items-center gap-3">
+            <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
+            <span className="text-xs font-medium text-slate-400 dark:text-slate-500">or</span>
+            <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
+          </div>
+
+          <form action={formAction} className="space-y-4">
             <div>
               <label htmlFor="name" className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-200">
                 Full name

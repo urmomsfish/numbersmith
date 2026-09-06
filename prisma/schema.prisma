@@ -28,7 +28,12 @@ datasource db {
 model User {
   id           String   @id @default(cuid())
   email        String   @unique
-  passwordHash String
+  /// Null for accounts created via Google sign-in that have never set a
+  /// password — login must check this before attempting bcrypt.compare.
+  passwordHash String?
+  /// Google's stable per-account subject id ("sub" claim), not their email —
+  /// emails can change on the Google side, this can't.
+  googleId     String?  @unique
   name         String
   role         String   @default("STUDENT")
 

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { loginAction } from "@/lib/actions/auth-actions";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
+import { GoogleButton, googleErrorMessage } from "@/components/auth/google-button";
 
 function ResetSuccessBanner() {
   const searchParams = useSearchParams();
@@ -13,6 +14,17 @@ function ResetSuccessBanner() {
   return (
     <p className="mt-4 rounded-lg bg-emerald-50 dark:bg-emerald-950 px-3 py-2 text-sm text-success-600 dark:text-emerald-400">
       Password updated. Log in with your new password.
+    </p>
+  );
+}
+
+function GoogleErrorBanner() {
+  const searchParams = useSearchParams();
+  const message = googleErrorMessage(searchParams.get("error"));
+  if (!message) return null;
+  return (
+    <p className="mt-4 rounded-lg bg-red-50 dark:bg-red-950 px-3 py-2 text-sm text-danger-600 dark:text-red-400">
+      {message}
     </p>
   );
 }
@@ -33,8 +45,21 @@ export default function LoginPage() {
           <Suspense fallback={null}>
             <ResetSuccessBanner />
           </Suspense>
+          <Suspense fallback={null}>
+            <GoogleErrorBanner />
+          </Suspense>
 
-          <form action={formAction} className="mt-6 space-y-4">
+          <div className="mt-6">
+            <GoogleButton />
+          </div>
+
+          <div className="my-5 flex items-center gap-3">
+            <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
+            <span className="text-xs font-medium text-slate-400 dark:text-slate-500">or</span>
+            <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
+          </div>
+
+          <form action={formAction} className="space-y-4">
             <div>
               <label htmlFor="email" className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-200">
                 Email
