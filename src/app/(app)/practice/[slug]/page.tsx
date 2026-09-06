@@ -37,7 +37,7 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10 sm:px-6">
-      <Link href="/practice" className="text-sm font-medium text-slate-400 hover:text-slate-600">
+      <Link href="/practice" className="text-sm font-medium text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300">
         ← Back to Problem Database
       </Link>
       <div className="mt-4">

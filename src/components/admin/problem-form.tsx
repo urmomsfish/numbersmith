@@ -27,7 +27,7 @@ export function ProblemForm({
     <form action={action} className="space-y-5">
       {problem && <input type="hidden" name="id" value={problem.id} />}
 
-      {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-danger-600">{error}</p>}
+      {error && <p className="rounded-lg bg-red-50 dark:bg-red-950 px-3 py-2 text-sm text-danger-600 dark:text-red-400">{error}</p>}
 
       <Field label="Slug" hint="Lowercase letters, numbers, and dashes.">
         <input
@@ -35,7 +35,7 @@ export function ProblemForm({
           required
           defaultValue={problem?.slug ?? ""}
           placeholder="alg-linear-05"
-          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm"
         />
       </Field>
 
@@ -45,7 +45,7 @@ export function ProblemForm({
           required
           rows={3}
           defaultValue={problem?.question ?? ""}
-          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm"
         />
       </Field>
 
@@ -54,7 +54,7 @@ export function ProblemForm({
           <select
             name="format"
             defaultValue={problem?.format ?? "MULTIPLE_CHOICE"}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm"
           >
             <option value="MULTIPLE_CHOICE">Multiple Choice</option>
             <option value="SHORT_ANSWER">Short Answer</option>
@@ -67,7 +67,7 @@ export function ProblemForm({
             name="answer"
             required
             defaultValue={problem?.answer ?? ""}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm"
           />
         </Field>
       </div>
@@ -78,7 +78,7 @@ export function ProblemForm({
           rows={5}
           defaultValue={choices}
           placeholder={"12\n15\n18\n21\n24"}
-          className="w-full rounded-lg border border-slate-300 px-3 py-2 font-mono text-sm"
+          className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2 font-mono text-sm"
         />
       </Field>
 
@@ -88,7 +88,7 @@ export function ProblemForm({
           required
           rows={4}
           defaultValue={problem?.solution ?? ""}
-          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm"
         />
       </Field>
 
@@ -97,7 +97,7 @@ export function ProblemForm({
           name="hints"
           rows={3}
           defaultValue={hints}
-          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm"
         />
       </Field>
 
@@ -110,7 +110,7 @@ export function ProblemForm({
             max={10}
             required
             defaultValue={problem?.difficulty ?? 3}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm"
           />
         </Field>
         <Field label="Grade min">
@@ -121,7 +121,7 @@ export function ProblemForm({
             max={12}
             required
             defaultValue={problem?.gradeMin ?? 5}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm"
           />
         </Field>
         <Field label="Grade max">
@@ -132,7 +132,7 @@ export function ProblemForm({
             max={12}
             required
             defaultValue={problem?.gradeMax ?? 9}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm"
           />
         </Field>
         <Field label="Est. time (seconds)">
@@ -143,7 +143,7 @@ export function ProblemForm({
             max={1800}
             required
             defaultValue={problem?.estimatedTimeSeconds ?? 120}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm"
           />
         </Field>
       </div>
@@ -154,7 +154,7 @@ export function ProblemForm({
             name="topicSlug"
             required
             defaultValue={topics.find((t) => t.id === problem?.topicId)?.slug ?? ""}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm"
           >
             <option value="">Select a topic</option>
             {domains.map((d) => (
@@ -176,7 +176,7 @@ export function ProblemForm({
           <select
             name="competitionSlug"
             defaultValue={competitions.find((c) => c.id === problem?.competitionId)?.slug ?? ""}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm"
           >
             <option value="">None</option>
             {competitions.map((c) => (
@@ -193,12 +193,12 @@ export function ProblemForm({
           name="tags"
           rows={2}
           defaultValue={tags}
-          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm"
         />
       </Field>
 
-      <fieldset className="rounded-xl border border-slate-200 p-4">
-        <legend className="px-2 text-xs font-bold uppercase tracking-wide text-slate-400">
+      <fieldset className="rounded-xl border border-slate-200 dark:border-slate-700 p-4">
+        <legend className="px-2 text-xs font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
           Source & Licensing
         </legend>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -207,7 +207,7 @@ export function ProblemForm({
               name="source"
               required
               defaultValue={problem?.source ?? "NumberSmith Original"}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm"
             />
           </Field>
           <Field label="License">
@@ -215,7 +215,7 @@ export function ProblemForm({
               name="license"
               required
               defaultValue={problem?.license ?? "NumberSmith Original"}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm"
             />
           </Field>
           <Field label="Year">
@@ -225,7 +225,7 @@ export function ProblemForm({
               min={1900}
               max={2200}
               defaultValue={problem?.year ?? ""}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm"
             />
           </Field>
           <Field label="Author">
@@ -233,18 +233,18 @@ export function ProblemForm({
               name="author"
               required
               defaultValue={problem?.author ?? "NumberSmith Team"}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+              className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm"
             />
           </Field>
         </div>
-        <p className="mt-3 text-xs text-slate-400">
+        <p className="mt-3 text-xs text-slate-400 dark:text-slate-500">
           Only add problems that are original, public domain, properly licensed, or used with
           permission. Never transcribe copyrighted competition archives.
         </p>
       </fieldset>
 
       <div className="flex flex-wrap gap-5">
-        <label className="flex items-center gap-2 text-sm text-slate-700">
+        <label className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
           <input
             type="checkbox"
             name="isPublished"
@@ -253,7 +253,7 @@ export function ProblemForm({
           />
           Published (visible to students)
         </label>
-        <label className="flex items-center gap-2 text-sm text-slate-700">
+        <label className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
           <input
             type="checkbox"
             name="isPlacement"
@@ -282,9 +282,9 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-xs font-semibold text-slate-600">{label}</span>
+      <span className="mb-1.5 block text-xs font-semibold text-slate-600 dark:text-slate-300">{label}</span>
       {children}
-      {hint && <span className="mt-1 block text-[11px] text-slate-400">{hint}</span>}
+      {hint && <span className="mt-1 block text-[11px] text-slate-400 dark:text-slate-500">{hint}</span>}
     </label>
   );
 }

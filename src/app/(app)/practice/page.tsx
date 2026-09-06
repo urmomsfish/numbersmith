@@ -70,8 +70,8 @@ export default async function PracticePage({
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Problem Database</h1>
-          <p className="mt-1 text-sm text-slate-500">{total} problems match your filters.</p>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Problem Database</h1>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{total} problems match your filters.</p>
         </div>
         <LinkButton href={`/practice/session${params.topic ? `?topic=${params.topic}` : ""}`}>
           Start Adaptive Session →
@@ -88,7 +88,7 @@ export default async function PracticePage({
           return (
             <div
               key={p.id}
-              className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-4"
+              className="flex flex-col justify-between rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4"
             >
               <div>
                 <div className="flex flex-wrap gap-1.5">
@@ -97,15 +97,15 @@ export default async function PracticePage({
                   {p.competition && <Badge tone="ember">{p.competition.shortName}</Badge>}
                   {locked && <Badge tone="warning">⭐ Pro</Badge>}
                 </div>
-                <p className="mt-3 line-clamp-3 text-sm text-slate-600">{p.question}</p>
+                <p className="mt-3 line-clamp-3 text-sm text-slate-600 dark:text-slate-300">{p.question}</p>
               </div>
               <div className="mt-4">
                 {locked ? (
-                  <Link href="/pricing" className="text-sm font-semibold text-ember-600 hover:text-ember-700">
+                  <Link href="/pricing" className="text-sm font-semibold text-ember-600 dark:text-ember-400 hover:text-ember-700">
                     Unlock with Pro →
                   </Link>
                 ) : (
-                  <Link href={`/practice/${p.slug}`} className="text-sm font-semibold text-brand-600 hover:text-brand-700">
+                  <Link href={`/practice/${p.slug}`} className="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300">
                     Solve →
                   </Link>
                 )}
@@ -114,7 +114,7 @@ export default async function PracticePage({
           );
         })}
         {problems.length === 0 && (
-          <p className="col-span-full py-12 text-center text-sm text-slate-400">
+          <p className="col-span-full py-12 text-center text-sm text-slate-400 dark:text-slate-500">
             No problems match these filters. Try broadening your search.
           </p>
         )}

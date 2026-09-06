@@ -38,12 +38,21 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
+// Runs before first paint (a plain inline <script>, not deferred) so the page
+// never flashes light-then-dark or vice versa. Respects a stored user choice
+// over the device's prefers-color-scheme; ThemeToggle writes that choice.
+const NO_FLASH_THEME_SCRIPT = `(function(){try{var t=localStorage.getItem('theme');var d=t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('dark',d);}catch(e){}})();`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: NO_FLASH_THEME_SCRIPT }} />
+      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">{children}</body>
     </html>
   );

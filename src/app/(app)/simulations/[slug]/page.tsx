@@ -22,29 +22,29 @@ export default async function StartSimulationPage({
 
   return (
     <div className="mx-auto max-w-lg px-4 py-16 sm:px-6">
-      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center">
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-8 text-center">
         <Badge tone="brand" className="mb-3">
           Simulation
         </Badge>
-        <h1 className="text-2xl font-bold text-slate-900">{competition.name}</h1>
-        <p className="mt-1 text-sm text-slate-500">{competition.shortName} full-length practice test</p>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">{competition.name}</h1>
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{competition.shortName} full-length practice test</p>
 
         <dl className="mt-6 grid grid-cols-3 gap-3 text-center">
-          <div className="rounded-xl bg-slate-50 p-3">
-            <dt className="text-[11px] uppercase text-slate-400">Questions</dt>
-            <dd className="text-lg font-bold text-slate-900">{competition.numQuestions ?? 20}</dd>
+          <div className="rounded-xl bg-slate-50 dark:bg-slate-800 p-3">
+            <dt className="text-[11px] uppercase text-slate-400 dark:text-slate-500">Questions</dt>
+            <dd className="text-lg font-bold text-slate-900 dark:text-slate-50">{competition.numQuestions ?? 20}</dd>
           </div>
-          <div className="rounded-xl bg-slate-50 p-3">
-            <dt className="text-[11px] uppercase text-slate-400">Time</dt>
-            <dd className="text-lg font-bold text-slate-900">{competition.timeLimitMinutes ?? 60}m</dd>
+          <div className="rounded-xl bg-slate-50 dark:bg-slate-800 p-3">
+            <dt className="text-[11px] uppercase text-slate-400 dark:text-slate-500">Time</dt>
+            <dd className="text-lg font-bold text-slate-900 dark:text-slate-50">{competition.timeLimitMinutes ?? 60}m</dd>
           </div>
-          <div className="rounded-xl bg-slate-50 p-3">
-            <dt className="text-[11px] uppercase text-slate-400">Format</dt>
-            <dd className="text-xs font-bold text-slate-900">{FORMAT_LABEL[competition.format]}</dd>
+          <div className="rounded-xl bg-slate-50 dark:bg-slate-800 p-3">
+            <dt className="text-[11px] uppercase text-slate-400 dark:text-slate-500">Format</dt>
+            <dd className="text-xs font-bold text-slate-900 dark:text-slate-50">{FORMAT_LABEL[competition.format]}</dd>
           </div>
         </dl>
 
-        <ul className="mt-6 space-y-1.5 text-left text-sm text-slate-500">
+        <ul className="mt-6 space-y-1.5 text-left text-sm text-slate-500 dark:text-slate-400">
           <li>• The timer starts as soon as you begin and cannot be paused.</li>
           <li>• You can flag questions and navigate freely between them.</li>
           <li>• Answers and solutions stay hidden until you submit.</li>
@@ -52,7 +52,7 @@ export default async function StartSimulationPage({
         </ul>
 
         {!gate.allowed && (
-          <p className="mt-5 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">
+          <p className="mt-5 rounded-lg bg-amber-50 dark:bg-amber-950 px-3 py-2 text-sm text-amber-800 dark:text-amber-400">
             You&apos;ve used your free simulations for this week.
           </p>
         )}

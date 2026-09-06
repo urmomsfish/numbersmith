@@ -48,7 +48,7 @@ export function PlacementRunner({
   const progressPct = Math.min(100, (question.questionNumber / question.minQuestions) * 100);
 
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50">
+    <div className="flex min-h-screen flex-col bg-slate-50 dark:bg-slate-950">
       {/* Keying on question.id remounts the card for each question, so its
           per-question state (answer, timer, feedback) resets on its own
           instead of being cleared from an effect. */}
@@ -100,10 +100,10 @@ function QuestionCard({
 
   return (
     <>
-      <header className="border-b border-slate-200 bg-white">
+      <header className="border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4 sm:px-6">
           <Logo href="/" />
-          <div className="flex items-center gap-3 text-sm text-slate-500">
+          <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
             <span className="tabular-nums">
               {String(Math.floor(elapsed / 60)).padStart(2, "0")}:
               {String(elapsed % 60).padStart(2, "0")}
@@ -114,7 +114,7 @@ function QuestionCard({
           </div>
         </div>
         <div className="mx-auto max-w-3xl px-4 pb-3 sm:px-6">
-          <div className="mb-1.5 flex items-center justify-between text-xs text-slate-400">
+          <div className="mb-1.5 flex items-center justify-between text-xs text-slate-400 dark:text-slate-500">
             <span>Question {question.questionNumber}</span>
             <span>Adaptive test — usually 20-30 questions</span>
           </div>
@@ -127,8 +127,8 @@ function QuestionCard({
           <Badge tone="brand">{question.topicName}</Badge>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
-          <p className="text-lg font-medium leading-relaxed text-slate-900 sm:text-xl">
+        <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 sm:p-8">
+          <p className="text-lg font-medium leading-relaxed text-slate-900 dark:text-slate-50 sm:text-xl">
             {question.question}
           </p>
 
@@ -147,14 +147,14 @@ function QuestionCard({
                       className={cn(
                         "flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm font-medium transition-colors",
                         isSelected
-                          ? "border-brand-500 bg-brand-50 text-brand-800"
-                          : "border-slate-200 text-slate-700 hover:border-slate-300"
+                          ? "border-brand-500 bg-brand-50 text-brand-800 dark:border-brand-400 dark:bg-brand-950 dark:text-brand-300"
+                          : "border-slate-200 text-slate-700 hover:border-slate-300 dark:border-slate-700 dark:text-slate-200 dark:hover:border-slate-600"
                       )}
                     >
                       <span
                         className={cn(
                           "flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold",
-                          isSelected ? "bg-brand-600 text-white" : "bg-slate-100 text-slate-500"
+                          isSelected ? "bg-brand-600 text-white" : "bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400"
                         )}
                       >
                         {letter}
@@ -166,7 +166,7 @@ function QuestionCard({
               </div>
             ) : (
               <div>
-                <label className="mb-2 block text-xs font-medium text-slate-500">
+                <label className="mb-2 block text-xs font-medium text-slate-500 dark:text-slate-400">
                   {question.format === "INTEGER" ? "Enter an integer answer" : "Enter your answer"}
                 </label>
                 <input
@@ -179,7 +179,7 @@ function QuestionCard({
                     if (e.key === "Enter" && canSubmit) submit(answerGiven);
                   }}
                   placeholder="Your answer"
-                  className="w-full max-w-xs rounded-lg border border-slate-300 px-3 py-2.5 text-base outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                  className="w-full max-w-xs rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2.5 text-base outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 dark:focus:ring-brand-900"
                 />
               </div>
             )}
@@ -190,8 +190,8 @@ function QuestionCard({
               className={cn(
                 "mt-6 rounded-lg px-4 py-2.5 text-sm font-semibold",
                 feedback === "correct"
-                  ? "bg-emerald-50 text-success-600"
-                  : "bg-slate-100 text-slate-500"
+                  ? "bg-emerald-50 text-success-600 dark:bg-emerald-950 dark:text-emerald-400"
+                  : "bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400"
               )}
             >
               {feedback === "correct" ? "Correct." : "Noted — moving on."}
@@ -203,7 +203,7 @@ function QuestionCard({
               type="button"
               disabled={pending || !!feedback}
               onClick={() => submit("")}
-              className="text-sm font-medium text-slate-400 hover:text-slate-600 disabled:opacity-50"
+              className="text-sm font-medium text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 disabled:opacity-50"
             >
               Skip question
             </button>

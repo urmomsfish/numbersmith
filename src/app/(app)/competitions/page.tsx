@@ -32,8 +32,8 @@ export default async function CompetitionsPage() {
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Competition Directory</h1>
-          <p className="mt-1 text-sm text-slate-500">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Competition Directory</h1>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
             {competitions.length} supported competitions with dedicated training tracks.
           </p>
         </div>
@@ -47,16 +47,16 @@ export default async function CompetitionsPage() {
         if (items.length === 0) return null;
         return (
           <section key={category} className="mt-8">
-            <h2 className="text-base font-bold text-slate-900">{CATEGORY_LABEL[category]}</h2>
+            <h2 className="text-base font-bold text-slate-900 dark:text-slate-50">{CATEGORY_LABEL[category]}</h2>
             <div className="mt-3 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {items.map((c) => (
                 <Link
                   key={c.id}
                   href={`/competitions/${c.slug}`}
-                  className="group flex flex-col rounded-2xl border border-slate-200 bg-white p-5 transition-colors hover:border-slate-300"
+                  className="group flex flex-col rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5 transition-colors hover:border-slate-300 dark:hover:border-slate-600"
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="text-base font-bold text-slate-900 group-hover:text-brand-700">
+                    <h3 className="text-base font-bold text-slate-900 dark:text-slate-50 group-hover:text-brand-700 dark:group-hover:text-brand-400">
                       {c.shortName}
                     </h3>
                     {selectedIds.has(c.id) && (
@@ -65,7 +65,7 @@ export default async function CompetitionsPage() {
                       </Badge>
                     )}
                   </div>
-                  <p className="mt-0.5 text-xs text-slate-400">{c.name}</p>
+                  <p className="mt-0.5 text-xs text-slate-400 dark:text-slate-500">{c.name}</p>
 
                   <div className="mt-3 flex flex-wrap gap-1.5">
                     <Badge tone="slate">{gradeRangeLabel(c.gradeMin, c.gradeMax)}</Badge>
@@ -73,36 +73,36 @@ export default async function CompetitionsPage() {
                     <Badge tone="slate">{TEAM_LABEL[c.individualOrTeam]}</Badge>
                   </div>
 
-                  <p className="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-slate-500">
+                  <p className="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
                     {c.description}
                   </p>
 
-                  <dl className="mt-4 grid grid-cols-2 gap-2 border-t border-slate-100 pt-3 text-xs">
+                  <dl className="mt-4 grid grid-cols-2 gap-2 border-t border-slate-100 dark:border-slate-800 pt-3 text-xs">
                     <div>
-                      <dt className="text-slate-400">Difficulty</dt>
-                      <dd className="font-semibold text-slate-700">
+                      <dt className="text-slate-400 dark:text-slate-500">Difficulty</dt>
+                      <dd className="font-semibold text-slate-700 dark:text-slate-200">
                         {difficultyRangeLabel(c.difficultyMin, c.difficultyMax)}
                       </dd>
                     </div>
                     <div>
-                      <dt className="text-slate-400">Questions</dt>
-                      <dd className="font-semibold text-slate-700">{c.numQuestions ?? "Varies"}</dd>
+                      <dt className="text-slate-400 dark:text-slate-500">Questions</dt>
+                      <dd className="font-semibold text-slate-700 dark:text-slate-200">{c.numQuestions ?? "Varies"}</dd>
                     </div>
                     <div>
-                      <dt className="text-slate-400">Time limit</dt>
-                      <dd className="font-semibold text-slate-700">
+                      <dt className="text-slate-400 dark:text-slate-500">Time limit</dt>
+                      <dd className="font-semibold text-slate-700 dark:text-slate-200">
                         {c.timeLimitMinutes ? `${c.timeLimitMinutes} min` : "Untimed"}
                       </dd>
                     </div>
                     <div>
-                      <dt className="text-slate-400">Region</dt>
-                      <dd className="font-semibold text-slate-700">{c.region}</dd>
+                      <dt className="text-slate-400 dark:text-slate-500">Region</dt>
+                      <dd className="font-semibold text-slate-700 dark:text-slate-200">{c.region}</dd>
                     </div>
                   </dl>
 
                   <div className="mt-3 flex flex-wrap gap-1">
                     {c.topics.slice(0, 3).map((ct) => (
-                      <span key={ct.id} className="text-[11px] text-slate-400">
+                      <span key={ct.id} className="text-[11px] text-slate-400 dark:text-slate-500">
                         {ct.topic.name}
                         {ct !== c.topics.slice(0, 3).at(-1) && " ·"}
                       </span>
@@ -115,7 +115,7 @@ export default async function CompetitionsPage() {
         );
       })}
 
-      <p className="mt-10 rounded-xl bg-slate-100 p-4 text-xs leading-relaxed text-slate-500">
+      <p className="mt-10 rounded-xl bg-slate-100 dark:bg-slate-800 p-4 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
         NumberSmith provides independent practice tracks modeled on the published formats of these
         competitions. All problems on NumberSmith are original content written by the NumberSmith team.
         NumberSmith is not affiliated with, endorsed by, or sponsored by any of the organizations that

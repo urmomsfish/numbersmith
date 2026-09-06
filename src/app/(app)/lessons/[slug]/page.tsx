@@ -33,7 +33,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
-      <Link href="/lessons" className="text-sm font-medium text-slate-400 hover:text-slate-600">
+      <Link href="/lessons" className="text-sm font-medium text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300">
         ← Lessons
       </Link>
 
@@ -42,7 +42,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
         <Badge tone="slate">{difficultyLabel(lesson.difficulty)}</Badge>
         {lesson.isPremium && <Badge tone="warning">⭐ Pro</Badge>}
       </div>
-      <h1 className="mt-3 text-2xl font-bold text-slate-900 sm:text-3xl">{lesson.title}</h1>
+      <h1 className="mt-3 text-2xl font-bold text-slate-900 dark:text-slate-50 sm:text-3xl">{lesson.title}</h1>
 
       <div className="mt-6 space-y-4">
         <Section step={1} title="Concept">
@@ -64,7 +64,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
 
       {practice.length > 0 && (
         <div className="mt-8">
-          <h2 className="text-base font-bold text-slate-900">
+          <h2 className="text-base font-bold text-slate-900 dark:text-slate-50">
             <span className="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-brand-600 text-xs font-bold text-white">
               6
             </span>
@@ -115,21 +115,21 @@ function Section({
   tone?: "slate" | "brand" | "warning";
 }) {
   const toneClass = {
-    slate: "border-slate-200 bg-white",
-    brand: "border-brand-200 bg-brand-50/60",
-    warning: "border-amber-200 bg-amber-50/60",
+    slate: "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900",
+    brand: "border-brand-200 bg-brand-50/60 dark:border-brand-800 dark:bg-brand-950/40",
+    warning: "border-amber-200 bg-amber-50/60 dark:border-amber-900 dark:bg-amber-950/40",
   }[tone];
 
   return (
     <Card className={toneClass}>
       <CardBody>
-        <h2 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-slate-500">
-          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-200 text-[10px] font-bold text-slate-600">
+        <h2 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700 text-[10px] font-bold text-slate-600 dark:text-slate-300">
             {step}
           </span>
           {title}
         </h2>
-        <p className="mt-2.5 text-sm leading-relaxed text-slate-700">{children}</p>
+        <p className="mt-2.5 text-sm leading-relaxed text-slate-700 dark:text-slate-200">{children}</p>
       </CardBody>
     </Card>
   );

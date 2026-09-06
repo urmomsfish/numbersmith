@@ -52,8 +52,8 @@ export default async function OnboardingPlanPage() {
   return (
     <OnboardingShell activeStep="PLAN">
       <div className="mx-auto max-w-3xl">
-        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">Your Training Profile</h1>
-        <p className="mt-2 text-slate-500">
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50 sm:text-3xl">Your Training Profile</h1>
+        <p className="mt-2 text-slate-500 dark:text-slate-400">
           Here&apos;s the personalized plan NumberSmith built from your placement results and goals.
         </p>
 
@@ -66,9 +66,9 @@ export default async function OnboardingPlanPage() {
           <ProfileStat label="Recommended Practice" value={`${plan.minutesPerDay} minutes/day`} />
         </div>
 
-        <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
-          <h2 className="text-lg font-bold text-slate-900">Week 1 Training Plan</h2>
-          <p className="mt-1 text-sm text-slate-500">
+        <div className="mt-8 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 sm:p-8">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">Week 1 Training Plan</h2>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
             This plan updates automatically as you practice — NumberSmith always tells you what to work on next.
           </p>
           <div className="mt-5">
@@ -88,9 +88,9 @@ export default async function OnboardingPlanPage() {
 
 function ProfileStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4">
-      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">{label}</p>
-      <p className="mt-1 text-sm font-bold text-slate-900">{value}</p>
+    <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4">
+      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">{label}</p>
+      <p className="mt-1 text-sm font-bold text-slate-900 dark:text-slate-50">{value}</p>
     </div>
   );
 }

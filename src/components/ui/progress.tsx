@@ -22,7 +22,7 @@ export function ProgressBar({
   }[tone];
 
   return (
-    <div className={cn("h-2 w-full overflow-hidden rounded-full bg-slate-100", className)}>
+    <div className={cn("h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800", className)}>
       <div
         className={cn("h-full rounded-full transition-all duration-500", toneClass, barClassName)}
         style={{ width: `${pct}%` }}

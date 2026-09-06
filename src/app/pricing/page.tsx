@@ -119,14 +119,14 @@ export default async function PricingPage({
       <main className="flex-1">
         <section className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
           <div className="text-center">
-            <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+            <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50 sm:text-4xl">
               Choose Your Training Level
             </h1>
-            <p className="mt-3 text-lg text-slate-500">
+            <p className="mt-3 text-lg text-slate-500 dark:text-slate-400">
               Start for free. Upgrade when you&apos;re ready to train without limits.
             </p>
             {contextMessage && (
-              <p className="mx-auto mt-4 max-w-md rounded-lg bg-amber-50 px-4 py-2 text-sm text-amber-800">
+              <p className="mx-auto mt-4 max-w-md rounded-lg bg-amber-50 dark:bg-amber-950 px-4 py-2 text-sm text-amber-800 dark:text-amber-400">
                 {contextMessage}
               </p>
             )}
@@ -140,24 +140,24 @@ export default async function PricingPage({
 
           <div className="mx-auto mt-10 grid max-w-4xl gap-6 lg:grid-cols-2">
             {/* Free */}
-            <div className="flex flex-col rounded-2xl border border-slate-200 bg-white p-7">
+            <div className="flex flex-col rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-7">
               <div className="flex items-center gap-2">
-                <h2 className="text-lg font-bold text-slate-900">🆓 NumberSmith Free</h2>
+                <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">🆓 NumberSmith Free</h2>
                 {!isPro && user && <Badge tone="slate">Current plan</Badge>}
               </div>
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                 Everything you need to find your level and start training.
               </p>
               <p className="mt-5">
-                <span className="text-4xl font-extrabold text-slate-900">$0</span>
-                <span className="ml-1 text-sm text-slate-400">forever</span>
+                <span className="text-4xl font-extrabold text-slate-900 dark:text-slate-50">$0</span>
+                <span className="ml-1 text-sm text-slate-400 dark:text-slate-500">forever</span>
               </p>
 
               {/* flex-1 pushes the CTA to the card's bottom edge so both plan
                   columns land their buttons on the same line. */}
               <ul className="mt-6 flex-1 space-y-2.5">
                 {FREE_FEATURES.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-slate-600">
+                  <li key={f} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-300">
                     <span className="mt-0.5 text-success-500">✓</span>
                     {f}
                   </li>
@@ -175,30 +175,30 @@ export default async function PricingPage({
             </div>
 
             {/* Pro */}
-            <div className="relative flex flex-col rounded-2xl border-2 border-brand-600 bg-white p-7">
+            <div className="relative flex flex-col rounded-2xl border-2 border-brand-600 bg-white dark:bg-slate-900 p-7">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                 <span className="rounded-full bg-brand-600 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
                   Best Value
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <h2 className="text-lg font-bold text-slate-900">⭐ NumberSmith Pro</h2>
+                <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">⭐ NumberSmith Pro</h2>
                 {isPro && <Badge tone="brand">Current plan</Badge>}
               </div>
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                 For students serious about competition results.
               </p>
 
               <div className="mt-5 flex items-baseline gap-2">
-                <span className="text-4xl font-extrabold text-slate-900">
+                <span className="text-4xl font-extrabold text-slate-900 dark:text-slate-50">
                   ${PRO_PRICING.YEARLY}
                 </span>
-                <span className="text-sm text-slate-400">/year</span>
-                <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-bold text-success-600">
+                <span className="text-sm text-slate-400 dark:text-slate-500">/year</span>
+                <span className="rounded-full bg-emerald-50 dark:bg-emerald-950 px-2 py-0.5 text-xs font-bold text-success-600 dark:text-emerald-400">
                   Save {yearlySavingsPercent()}%
                 </span>
               </div>
-              <p className="mt-1 text-sm text-slate-400">
+              <p className="mt-1 text-sm text-slate-400 dark:text-slate-500">
                 or ${PRO_PRICING.MONTHLY}/month billed monthly
               </p>
 
@@ -210,7 +210,7 @@ export default async function PricingPage({
                       i === 0 ? "font-semibold text-slate-800" : "text-slate-600"
                     }`}
                   >
-                    {i !== 0 && <span className="mt-0.5 text-brand-600">✓</span>}
+                    {i !== 0 && <span className="mt-0.5 text-brand-600 dark:text-brand-400">✓</span>}
                     {f}
                   </li>
                 ))}
@@ -225,7 +225,7 @@ export default async function PricingPage({
                   <Button size="lg" className="w-full" disabled>
                     Coming soon
                   </Button>
-                  <p className="pt-1 text-center text-xs text-slate-400">
+                  <p className="pt-1 text-center text-xs text-slate-400 dark:text-slate-500">
                     Payments aren&apos;t open yet. The free plan is fully available in the meantime.
                   </p>
                 </div>
@@ -243,7 +243,7 @@ export default async function PricingPage({
                       Get Pro Monthly — ${PRO_PRICING.MONTHLY}/mo
                     </Button>
                   </form>
-                  <p className="pt-1 text-center text-xs text-slate-400">
+                  <p className="pt-1 text-center text-xs text-slate-400 dark:text-slate-500">
                     Secure checkout by Stripe. Cancel anytime — see our{" "}
                     <Link href="/legal/refunds" className="underline">
                       refund policy
@@ -261,24 +261,24 @@ export default async function PricingPage({
         </section>
 
         {/* Comparison table */}
-        <section className="border-t border-slate-200 bg-white">
+        <section className="border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
           <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6">
-            <h2 className="text-center text-2xl font-bold text-slate-900">Free vs Pro</h2>
+            <h2 className="text-center text-2xl font-bold text-slate-900 dark:text-slate-50">Free vs Pro</h2>
             <div className="mt-8 overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-slate-200">
-                    <th className="py-3 text-left font-semibold text-slate-500">Feature</th>
-                    <th className="px-3 py-3 text-center font-semibold text-slate-500">Free</th>
-                    <th className="px-3 py-3 text-center font-semibold text-brand-700">Pro</th>
+                  <tr className="border-b border-slate-200 dark:border-slate-700">
+                    <th className="py-3 text-left font-semibold text-slate-500 dark:text-slate-400">Feature</th>
+                    <th className="px-3 py-3 text-center font-semibold text-slate-500 dark:text-slate-400">Free</th>
+                    <th className="px-3 py-3 text-center font-semibold text-brand-700 dark:text-brand-300">Pro</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   {COMPARISON.map((row) => (
                     <tr key={row.feature}>
-                      <td className="py-2.5 text-slate-700">{row.feature}</td>
-                      <td className="px-3 py-2.5 text-center text-slate-500">{row.free}</td>
-                      <td className="px-3 py-2.5 text-center font-semibold text-brand-700">
+                      <td className="py-2.5 text-slate-700 dark:text-slate-200">{row.feature}</td>
+                      <td className="px-3 py-2.5 text-center text-slate-500 dark:text-slate-400">{row.free}</td>
+                      <td className="px-3 py-2.5 text-center font-semibold text-brand-700 dark:text-brand-300">
                         {row.pro}
                       </td>
                     </tr>
@@ -291,34 +291,34 @@ export default async function PricingPage({
 
         {/* FAQ */}
         <section id="faq" className="mx-auto max-w-3xl px-4 py-14 sm:px-6">
-          <h2 className="text-center text-2xl font-bold text-slate-900">
+          <h2 className="text-center text-2xl font-bold text-slate-900 dark:text-slate-50">
             Frequently Asked Questions
           </h2>
           <div className="mt-8 space-y-3">
             {FAQ.map((item) => (
               <details
                 key={item.q}
-                className="group rounded-xl border border-slate-200 bg-white p-5"
+                className="group rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5"
               >
-                <summary className="cursor-pointer list-none text-sm font-semibold text-slate-900 marker:hidden">
+                <summary className="cursor-pointer list-none text-sm font-semibold text-slate-900 dark:text-slate-50 marker:hidden">
                   <span className="flex items-center justify-between gap-3">
                     {item.q}
-                    <span className="text-slate-300 transition-transform group-open:rotate-45">+</span>
+                    <span className="text-slate-300 dark:text-slate-600 transition-transform group-open:rotate-45">+</span>
                   </span>
                 </summary>
-                <p className="mt-3 text-sm leading-relaxed text-slate-600">{item.a}</p>
+                <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{item.a}</p>
               </details>
             ))}
           </div>
 
           <div className="mt-10 text-center">
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-slate-500 dark:text-slate-400">
               The placement test is always free. You never pay to find out where you stand.
             </p>
             <LinkButton href={user ? "/dashboard" : "/signup"} size="lg" className="mt-4">
               {user ? "Back to Training" : "Take the Free Assessment"}
             </LinkButton>
-            <p className="mt-4 text-xs text-slate-400">
+            <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">
               Questions?{" "}
               <Link href="/" className="underline">
                 Learn more about NumberSmith

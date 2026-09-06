@@ -36,7 +36,7 @@ export function WeekPlanTable({ days, highlightToday = true }: { days: PlanDay[]
   const byDay = new Map(days.map((d) => [d.dayOfWeek, d]));
 
   return (
-    <div className="divide-y divide-slate-100 overflow-hidden rounded-xl border border-slate-200">
+    <div className="divide-y divide-slate-100 dark:divide-slate-800 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700">
       {DAY_ORDER.map((dow) => {
         const day = byDay.get(dow);
         const meta = day ? TASK_META[day.taskType] : undefined;
@@ -46,12 +46,12 @@ export function WeekPlanTable({ days, highlightToday = true }: { days: PlanDay[]
             key={dow}
             className={cn(
               "flex items-center justify-between gap-4 px-4 py-3 sm:px-5",
-              isToday ? "bg-brand-50/60" : "bg-white"
+              isToday ? "bg-brand-50/60 dark:bg-brand-950/40" : "bg-white dark:bg-slate-900"
             )}
           >
             <div className="flex items-center gap-3">
               <div className="w-20 shrink-0">
-                <p className={cn("text-sm font-semibold", isToday ? "text-brand-700" : "text-slate-700")}>
+                <p className={cn("text-sm font-semibold", isToday ? "text-brand-700 dark:text-brand-300" : "text-slate-700 dark:text-slate-200")}>
                   {DAY_NAMES[dow]}
                 </p>
                 {isToday && <p className="text-[10px] font-semibold uppercase text-brand-500">Today</p>}
@@ -59,10 +59,10 @@ export function WeekPlanTable({ days, highlightToday = true }: { days: PlanDay[]
               {day ? (
                 <div className="flex items-center gap-2">
                   <span className="text-lg">{meta?.icon}</span>
-                  <span className="text-sm text-slate-600">{day.label}</span>
+                  <span className="text-sm text-slate-600 dark:text-slate-300">{day.label}</span>
                 </div>
               ) : (
-                <span className="text-sm text-slate-300">Rest day</span>
+                <span className="text-sm text-slate-300 dark:text-slate-600">Rest day</span>
               )}
             </div>
             {day && (

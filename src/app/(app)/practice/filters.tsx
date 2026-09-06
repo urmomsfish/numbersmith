@@ -38,11 +38,11 @@ export function PracticeFilters({
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-xl border border-slate-200 bg-white p-3">
+    <div className="flex flex-wrap items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-3">
       <select
         value={current.topic ?? ""}
         onChange={(e) => update({ topic: e.target.value || undefined })}
-        className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-600"
+        className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-sm text-slate-600 dark:text-slate-300"
       >
         <option value="">All Topics</option>
         {domains.map((d) => (
@@ -60,7 +60,7 @@ export function PracticeFilters({
       <select
         value={current.competition ?? ""}
         onChange={(e) => update({ competition: e.target.value || undefined })}
-        className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-600"
+        className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-sm text-slate-600 dark:text-slate-300"
       >
         <option value="">All Competitions</option>
         {competitions.map((c) => (
@@ -73,7 +73,7 @@ export function PracticeFilters({
       <select
         value={current.difficulty ?? ""}
         onChange={(e) => update({ difficulty: e.target.value || undefined })}
-        className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-600"
+        className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-sm text-slate-600 dark:text-slate-300"
       >
         <option value="">All Difficulties</option>
         {Array.from({ length: 10 }, (_, i) => i + 1).map((d) => (
@@ -86,7 +86,7 @@ export function PracticeFilters({
       <select
         value={current.format ?? ""}
         onChange={(e) => update({ format: e.target.value || undefined })}
-        className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-600"
+        className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-sm text-slate-600 dark:text-slate-300"
       >
         <option value="">All Formats</option>
         <option value="MULTIPLE_CHOICE">Multiple Choice</option>
@@ -105,14 +105,14 @@ export function PracticeFilters({
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Search problems…"
-          className="w-48 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-600"
+          className="w-48 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-sm text-slate-600 dark:text-slate-300"
         />
       </form>
 
       {(current.topic || current.competition || current.difficulty || current.format || current.q) && (
         <button
           onClick={() => router.push(pathname)}
-          className="text-sm font-medium text-slate-400 hover:text-slate-600"
+          className="text-sm font-medium text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
         >
           Clear
         </button>

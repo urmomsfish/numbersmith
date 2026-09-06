@@ -52,7 +52,7 @@ export function EditCompetitionsForm({
         if (items.length === 0) return null;
         return (
           <section key={category}>
-            <h2 className="text-base font-bold text-slate-900">{CATEGORY_LABEL[category]}</h2>
+            <h2 className="text-base font-bold text-slate-900 dark:text-slate-50">{CATEGORY_LABEL[category]}</h2>
             <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
               {items.map((c) => {
                 const isSelected = selected.has(c.slug);
@@ -69,7 +69,7 @@ export function EditCompetitionsForm({
                     <div
                       className={cn(
                         "flex items-start gap-3 rounded-xl border px-4 py-3",
-                        isSelected ? "border-brand-500 bg-brand-50" : "border-slate-200 hover:border-slate-300"
+                        isSelected ? "border-brand-500 bg-brand-50 dark:border-brand-400 dark:bg-brand-950" : "border-slate-200 hover:border-slate-300 dark:border-slate-700 dark:hover:border-slate-600"
                       )}
                     >
                       <div
@@ -81,7 +81,7 @@ export function EditCompetitionsForm({
                         {isSelected && "✓"}
                       </div>
                       <div className="min-w-0">
-                        <div className="text-sm font-semibold text-slate-800">{c.name}</div>
+                        <div className="text-sm font-semibold text-slate-800 dark:text-slate-100">{c.name}</div>
                         <div className="mt-1 flex flex-wrap gap-1">
                           <Badge tone="slate">{FORMAT_LABEL[c.format]}</Badge>
                           <Badge tone="slate">{TEAM_LABEL[c.individualOrTeam]}</Badge>
@@ -96,10 +96,10 @@ export function EditCompetitionsForm({
         );
       })}
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-6">
-        <h2 className="text-base font-bold text-slate-900">#1 Priority Competition</h2>
+      <section className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6">
+        <h2 className="text-base font-bold text-slate-900 dark:text-slate-50">#1 Priority Competition</h2>
         {selectedList.length === 0 ? (
-          <p className="mt-3 text-sm text-slate-400">Select at least one competition above.</p>
+          <p className="mt-3 text-sm text-slate-400 dark:text-slate-500">Select at least one competition above.</p>
         ) : (
           <div className="mt-3 flex flex-wrap gap-2">
             {selectedList.map((c) => (

@@ -102,7 +102,7 @@ export default function RefundsPage() {
       <Section heading="How to request a refund">
         <p>
           Email{" "}
-          <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 underline">
+          <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 dark:text-brand-400 underline">
             {LEGAL.contactEmail}
           </a>{" "}
           from the address on the account, and tell us roughly when you were charged. We aim to
@@ -114,11 +114,11 @@ export default function RefundsPage() {
       <Section heading="Related">
         <p>
           See our{" "}
-          <Link href="/legal/terms" className="text-brand-600 underline">
+          <Link href="/legal/terms" className="text-brand-600 dark:text-brand-400 underline">
             Terms of Service
           </Link>{" "}
           and{" "}
-          <Link href="/legal/privacy" className="text-brand-600 underline">
+          <Link href="/legal/privacy" className="text-brand-600 dark:text-brand-400 underline">
             Privacy Policy
           </Link>
           .

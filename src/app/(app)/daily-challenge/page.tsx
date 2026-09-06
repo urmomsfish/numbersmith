@@ -29,7 +29,7 @@ export default async function DailyChallengePage() {
   if (!data) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-16 text-center sm:px-6">
-        <p className="text-slate-500">No daily challenge is available right now.</p>
+        <p className="text-slate-500 dark:text-slate-400">No daily challenge is available right now.</p>
       </div>
     );
   }
@@ -40,8 +40,8 @@ export default async function DailyChallengePage() {
     <div className="mx-auto max-w-2xl px-4 py-10 sm:px-6">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Daily Challenge</h1>
-          <p className="mt-1 text-sm text-slate-500">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Daily Challenge</h1>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
             {new Date().toLocaleDateString(undefined, {
               weekday: "long",
               month: "long",
@@ -51,7 +51,7 @@ export default async function DailyChallengePage() {
         </div>
         <div className="flex items-center gap-2">
           <Badge tone="brand">{TRACK_LABEL[track]} track</Badge>
-          <span className="flex items-center gap-1.5 rounded-full bg-orange-50 px-3 py-1.5 text-sm font-semibold text-ember-600">
+          <span className="flex items-center gap-1.5 rounded-full bg-orange-50 dark:bg-orange-950 px-3 py-1.5 text-sm font-semibold text-ember-600 dark:text-ember-400">
             <IconFlame className="h-4 w-4" />
             {stats?.currentStreak ?? 0}
           </span>
@@ -81,7 +81,7 @@ export default async function DailyChallengePage() {
         }}
       />
 
-      <p className="mt-6 text-center text-xs text-slate-400">
+      <p className="mt-6 text-center text-xs text-slate-400 dark:text-slate-500">
         You&apos;ve completed {totalCompleted} daily challenge{totalCompleted === 1 ? "" : "s"}. A new
         one unlocks every day at midnight UTC.
       </p>

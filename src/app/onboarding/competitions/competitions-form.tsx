@@ -81,8 +81,8 @@ export function CompetitionsForm({
         if (items.length === 0) return null;
         return (
           <section key={category}>
-            <h2 className="text-base font-bold text-slate-900">{meta.title}</h2>
-            <p className="text-xs text-slate-400">{meta.description}</p>
+            <h2 className="text-base font-bold text-slate-900 dark:text-slate-50">{meta.title}</h2>
+            <p className="text-xs text-slate-400 dark:text-slate-500">{meta.description}</p>
             <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
               {items.map((c) => {
                 const isSelected = selected.has(c.slug);
@@ -99,7 +99,7 @@ export function CompetitionsForm({
                     <div
                       className={cn(
                         "flex items-start gap-3 rounded-xl border px-4 py-3 transition-colors",
-                        isSelected ? "border-brand-500 bg-brand-50" : "border-slate-200 hover:border-slate-300"
+                        isSelected ? "border-brand-500 bg-brand-50 dark:border-brand-400 dark:bg-brand-950" : "border-slate-200 hover:border-slate-300 dark:border-slate-700 dark:hover:border-slate-600"
                       )}
                     >
                       <div
@@ -111,7 +111,7 @@ export function CompetitionsForm({
                         {isSelected && "✓"}
                       </div>
                       <div className="min-w-0">
-                        <div className="text-sm font-semibold text-slate-800">{c.name}</div>
+                        <div className="text-sm font-semibold text-slate-800 dark:text-slate-100">{c.name}</div>
                         <div className="mt-1 flex flex-wrap gap-1">
                           <Badge tone="slate">{FORMAT_LABEL[c.format] ?? c.format}</Badge>
                           <Badge tone="slate">{TEAM_LABEL[c.individualOrTeam] ?? c.individualOrTeam}</Badge>
@@ -127,16 +127,16 @@ export function CompetitionsForm({
       })}
 
       {state?.error && (
-        <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-danger-600">{state.error}</p>
+        <p className="rounded-lg bg-red-50 dark:bg-red-950 px-3 py-2 text-sm text-danger-600 dark:text-red-400">{state.error}</p>
       )}
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-6">
-        <h2 className="text-base font-bold text-slate-900">Which competition is your #1 priority?</h2>
-        <p className="mt-1 text-xs text-slate-400">
+      <section className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6">
+        <h2 className="text-base font-bold text-slate-900 dark:text-slate-50">Which competition is your #1 priority?</h2>
+        <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
           We&apos;ll weight your training plan and dashboard toward this competition.
         </p>
         {selectedList.length === 0 ? (
-          <p className="mt-3 text-sm text-slate-400">Select at least one competition above first.</p>
+          <p className="mt-3 text-sm text-slate-400 dark:text-slate-500">Select at least one competition above first.</p>
         ) : (
           <div className="mt-3 flex flex-wrap gap-2">
             {selectedList.map((c) => (

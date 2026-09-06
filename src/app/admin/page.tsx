@@ -69,8 +69,8 @@ export default async function AdminOverviewPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-      <h1 className="text-2xl font-bold text-slate-900">Admin Overview</h1>
-      <p className="mt-1 text-sm text-slate-500">
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Admin Overview</h1>
+      <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
         All figures are computed live from the database — no placeholder statistics.
       </p>
 
@@ -86,7 +86,7 @@ export default async function AdminOverviewPage() {
       <div className="mt-5 grid gap-5 lg:grid-cols-3">
         <Card>
           <CardBody>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
               Subscriptions
             </h2>
             <div className="mt-4 space-y-3">
@@ -98,8 +98,8 @@ export default async function AdminOverviewPage() {
               ].map(([label, count, tone]) => (
                 <div key={label as string}>
                   <div className="mb-1 flex justify-between text-sm">
-                    <span className="text-slate-600">{label as string}</span>
-                    <span className="font-semibold text-slate-800">{count as number}</span>
+                    <span className="text-slate-600 dark:text-slate-300">{label as string}</span>
+                    <span className="font-semibold text-slate-800 dark:text-slate-100">{count as number}</span>
                   </div>
                   <ProgressBar
                     value={totalSubs > 0 ? ((count as number) / totalSubs) * 100 : 0}
@@ -113,24 +113,24 @@ export default async function AdminOverviewPage() {
 
         <Card>
           <CardBody>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400">Revenue</h2>
-            <p className="mt-3 text-3xl font-extrabold text-slate-900">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">Revenue</h2>
+            <p className="mt-3 text-3xl font-extrabold text-slate-900 dark:text-slate-50">
               ${mrr.toFixed(2)}
-              <span className="ml-1 text-sm font-normal text-slate-400">MRR</span>
+              <span className="ml-1 text-sm font-normal text-slate-400 dark:text-slate-500">MRR</span>
             </p>
-            <p className="mt-1 text-xs text-slate-400">
+            <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
               Derived from {proSubs.length} active Pro subscription
               {proSubs.length === 1 ? "" : "s"}. No live payment processing in this MVP — Stripe
               integration is architected but not enabled.
             </p>
             <dl className="mt-4 space-y-1.5 text-sm">
               <div className="flex justify-between">
-                <dt className="text-slate-500">Monthly plan</dt>
-                <dd className="font-semibold text-slate-800">${PRO_PRICING.MONTHLY}</dd>
+                <dt className="text-slate-500 dark:text-slate-400">Monthly plan</dt>
+                <dd className="font-semibold text-slate-800 dark:text-slate-100">${PRO_PRICING.MONTHLY}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-slate-500">Yearly plan</dt>
-                <dd className="font-semibold text-slate-800">${PRO_PRICING.YEARLY}</dd>
+                <dt className="text-slate-500 dark:text-slate-400">Yearly plan</dt>
+                <dd className="font-semibold text-slate-800 dark:text-slate-100">${PRO_PRICING.YEARLY}</dd>
               </div>
             </dl>
           </CardBody>
@@ -138,28 +138,28 @@ export default async function AdminOverviewPage() {
 
         <Card>
           <CardBody>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400">Content</h2>
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">Content</h2>
             <dl className="mt-3 space-y-2 text-sm">
               <div className="flex justify-between">
-                <dt className="text-slate-500">Problems</dt>
-                <dd className="font-semibold text-slate-800">{problemCount}</dd>
+                <dt className="text-slate-500 dark:text-slate-400">Problems</dt>
+                <dd className="font-semibold text-slate-800 dark:text-slate-100">{problemCount}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-slate-500">Lessons</dt>
-                <dd className="font-semibold text-slate-800">{lessonCount}</dd>
+                <dt className="text-slate-500 dark:text-slate-400">Lessons</dt>
+                <dd className="font-semibold text-slate-800 dark:text-slate-100">{lessonCount}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-slate-500">Placements completed</dt>
-                <dd className="font-semibold text-slate-800">{placementsCompleted}</dd>
+                <dt className="text-slate-500 dark:text-slate-400">Placements completed</dt>
+                <dd className="font-semibold text-slate-800 dark:text-slate-100">{placementsCompleted}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-slate-500">Simulations completed</dt>
-                <dd className="font-semibold text-slate-800">{simulationsCompleted}</dd>
+                <dt className="text-slate-500 dark:text-slate-400">Simulations completed</dt>
+                <dd className="font-semibold text-slate-800 dark:text-slate-100">{simulationsCompleted}</dd>
               </div>
             </dl>
             <Link
               href="/admin/problems"
-              className="mt-4 inline-block text-sm font-semibold text-brand-600 hover:text-brand-700"
+              className="mt-4 inline-block text-sm font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300"
             >
               Manage problems →
             </Link>
@@ -170,19 +170,19 @@ export default async function AdminOverviewPage() {
       <div className="mt-5 grid gap-5 sm:grid-cols-2">
         <Card>
           <CardBody>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
               Popular Competitions
             </h2>
             <div className="mt-3 space-y-2">
               {popularCompetitions.length === 0 && (
-                <p className="text-sm text-slate-400">No competition selections yet.</p>
+                <p className="text-sm text-slate-400 dark:text-slate-500">No competition selections yet.</p>
               )}
               {popularCompetitions.map((pc) => (
                 <div key={pc.competitionId} className="flex justify-between text-sm">
-                  <span className="text-slate-600">
+                  <span className="text-slate-600 dark:text-slate-300">
                     {competitionById.get(pc.competitionId)?.shortName ?? "—"}
                   </span>
-                  <span className="font-semibold text-slate-800">
+                  <span className="font-semibold text-slate-800 dark:text-slate-100">
                     {pc._count} student{pc._count === 1 ? "" : "s"}
                   </span>
                 </div>
@@ -193,21 +193,21 @@ export default async function AdminOverviewPage() {
 
         <Card>
           <CardBody>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
               Most-Attempted Problems
             </h2>
             <div className="mt-3 space-y-2">
               {popularTopics.length === 0 && (
-                <p className="text-sm text-slate-400">No attempts recorded yet.</p>
+                <p className="text-sm text-slate-400 dark:text-slate-500">No attempts recorded yet.</p>
               )}
               {popularTopics.map((pt) => {
                 const p = problemById.get(pt.problemId);
                 return (
                   <div key={pt.problemId} className="flex items-start justify-between gap-3 text-sm">
-                    <span className="line-clamp-1 text-slate-600">
+                    <span className="line-clamp-1 text-slate-600 dark:text-slate-300">
                       {p?.topic.name}: {p?.question.slice(0, 40)}…
                     </span>
-                    <span className="shrink-0 font-semibold text-slate-800">{pt._count}</span>
+                    <span className="shrink-0 font-semibold text-slate-800 dark:text-slate-100">{pt._count}</span>
                   </div>
                 );
               })}
@@ -221,9 +221,9 @@ export default async function AdminOverviewPage() {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 text-center">
-      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">{label}</p>
-      <p className="mt-1 text-xl font-extrabold text-slate-900">{value}</p>
+    <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4 text-center">
+      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">{label}</p>
+      <p className="mt-1 text-xl font-extrabold text-slate-900 dark:text-slate-50">{value}</p>
     </div>
   );
 }

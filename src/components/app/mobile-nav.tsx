@@ -16,7 +16,7 @@ export function MobileNav() {
       <button
         aria-label="Open menu"
         onClick={() => setOpen(true)}
-        className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500"
+        className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 dark:border-slate-700 dark:text-slate-400"
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5">
           <path d="M4 6h16M4 12h16M4 18h16" strokeLinecap="round" />
@@ -26,10 +26,10 @@ export function MobileNav() {
       {open && (
         <div className="fixed inset-0 z-50 flex">
           <div className="absolute inset-0 bg-black/30" onClick={() => setOpen(false)} />
-          <div className="relative flex h-full w-64 flex-col bg-white shadow-xl">
+          <div className="relative flex h-full w-64 flex-col bg-white shadow-xl dark:bg-slate-900">
             <div className="flex items-center justify-between px-4 py-4">
-              <span className="text-sm font-bold text-slate-900">Menu</span>
-              <button onClick={() => setOpen(false)} className="text-slate-400">
+              <span className="text-sm font-bold text-slate-900 dark:text-slate-50">Menu</span>
+              <button onClick={() => setOpen(false)} className="text-slate-400 dark:text-slate-500">
                 ✕
               </button>
             </div>
@@ -44,7 +44,9 @@ export function MobileNav() {
                     onClick={() => setOpen(false)}
                     className={cn(
                       "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium",
-                      active ? "bg-brand-50 text-brand-700" : "text-slate-600"
+                      active
+                        ? "bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300"
+                        : "text-slate-600 dark:text-slate-300"
                     )}
                   >
                     <Icon className="h-[18px] w-[18px]" />
@@ -55,7 +57,7 @@ export function MobileNav() {
               <Link
                 href="/settings"
                 onClick={() => setOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-300"
               >
                 <IconSettings className="h-[18px] w-[18px]" />
                 Settings

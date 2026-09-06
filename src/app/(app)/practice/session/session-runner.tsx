@@ -39,11 +39,11 @@ export function SessionRunner({
     const accuracy = Math.round((correctCount / problems.length) * 100);
     return (
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6">
-        <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center">
+        <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-8 text-center">
           <p className="text-3xl">✅</p>
-          <h2 className="mt-3 text-xl font-bold text-slate-900">Session complete</h2>
-          <p className="mt-2 text-slate-500">
-            You solved <span className="font-semibold text-slate-800">{correctCount}</span> of{" "}
+          <h2 className="mt-3 text-xl font-bold text-slate-900 dark:text-slate-50">Session complete</h2>
+          <p className="mt-2 text-slate-500 dark:text-slate-400">
+            You solved <span className="font-semibold text-slate-800 dark:text-slate-100">{correctCount}</span> of{" "}
             {problems.length} correctly — {accuracy}% accuracy.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
@@ -53,9 +53,9 @@ export function SessionRunner({
             <LinkButton href="/practice/session">Practice More</LinkButton>
           </div>
           {!isPro && (
-            <p className="mt-6 text-xs text-slate-400">
+            <p className="mt-6 text-xs text-slate-400 dark:text-slate-500">
               Free plan includes 15 problems per day.{" "}
-              <a href="/pricing" className="font-semibold text-brand-600">
+              <a href="/pricing" className="font-semibold text-brand-600 dark:text-brand-400">
                 See what Pro unlocks →
               </a>
             </p>
@@ -70,12 +70,12 @@ export function SessionRunner({
       <div className="mb-5">
         <div className="mb-2 flex items-center justify-between">
           <Badge tone="brand">Adaptive Session · {topicName}</Badge>
-          <span className="text-xs font-medium text-slate-400">
+          <span className="text-xs font-medium text-slate-400 dark:text-slate-500">
             {index + 1} of {problems.length}
           </span>
         </div>
         <ProgressBar value={((index) / problems.length) * 100} tone="brand" />
-        <p className="mt-2 text-xs text-slate-500">{focusMessage}</p>
+        <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">{focusMessage}</p>
       </div>
 
       <ProblemSolver

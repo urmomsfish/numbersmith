@@ -30,13 +30,13 @@ export default async function LessonsPage() {
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Lessons</h1>
-          <p className="mt-1 text-sm text-slate-500">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Lessons</h1>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
             Structured competition-math lessons: Learn → Example → Practice → Challenge.
           </p>
         </div>
         <div className="text-right">
-          <p className="text-sm font-semibold text-slate-800">
+          <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">
             {completedCount} / {isPro ? lessons.length : freeCount} completed
           </p>
           <ProgressBar
@@ -56,7 +56,7 @@ export default async function LessonsPage() {
 
         return (
           <section key={domain.id} className="mt-8">
-            <h2 className="text-base font-bold text-slate-900">{domain.name}</h2>
+            <h2 className="text-base font-bold text-slate-900 dark:text-slate-50">{domain.name}</h2>
             <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {domainLessons.map((lesson) => {
                 const locked = lesson.isPremium && !isPro;
@@ -65,17 +65,17 @@ export default async function LessonsPage() {
                   <Link
                     key={lesson.id}
                     href={locked ? "/pricing" : `/lessons/${lesson.slug}`}
-                    className="flex flex-col rounded-xl border border-slate-200 bg-white p-4 transition-colors hover:border-slate-300"
+                    className="flex flex-col rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4 transition-colors hover:border-slate-300 dark:hover:border-slate-600"
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <h3 className="text-sm font-bold text-slate-900">{lesson.title}</h3>
+                      <h3 className="text-sm font-bold text-slate-900 dark:text-slate-50">{lesson.title}</h3>
                       {locked ? (
                         <Badge tone="warning">⭐ Pro</Badge>
                       ) : p?.completed ? (
                         <Badge tone="success">Done</Badge>
                       ) : null}
                     </div>
-                    <p className="mt-1.5 line-clamp-2 flex-1 text-xs leading-relaxed text-slate-500">
+                    <p className="mt-1.5 line-clamp-2 flex-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
                       {lesson.concept}
                     </p>
                     <div className="mt-3 flex items-center gap-1.5">
@@ -91,9 +91,9 @@ export default async function LessonsPage() {
       })}
 
       {!isPro && (
-        <div className="mt-10 rounded-2xl border border-brand-200 bg-brand-50 p-6 text-center">
-          <h2 className="text-lg font-bold text-slate-900">Unlock the Full Lesson Library</h2>
-          <p className="mt-1.5 text-sm text-slate-600">
+        <div className="mt-10 rounded-2xl border border-brand-200 dark:border-brand-800 bg-brand-50 dark:bg-brand-950 p-6 text-center">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">Unlock the Full Lesson Library</h2>
+          <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-300">
             The free plan includes {freeCount} introductory lessons. Pro unlocks all{" "}
             {lessons.length} lessons, including advanced competition strategy and olympiad technique.
           </p>

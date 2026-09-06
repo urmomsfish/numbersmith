@@ -18,11 +18,11 @@ export default async function EditCompetitionsPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
-      <Link href="/settings" className="text-sm font-medium text-slate-400 hover:text-slate-600">
+      <Link href="/settings" className="text-sm font-medium text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300">
         ← Settings
       </Link>
-      <h1 className="mt-4 text-2xl font-bold text-slate-900">Edit My Competitions</h1>
-      <p className="mt-1 text-sm text-slate-500">
+      <h1 className="mt-4 text-2xl font-bold text-slate-900 dark:text-slate-50">Edit My Competitions</h1>
+      <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
         Changing your competitions rebuilds your training plan and dashboard recommendations.
       </p>
 

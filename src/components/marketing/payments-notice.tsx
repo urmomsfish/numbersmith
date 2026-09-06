@@ -7,10 +7,10 @@
 export function PaymentsNotice({ className }: { className?: string }) {
   return (
     <div
-      className={`rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 ${className ?? ""}`}
+      className={`rounded-xl border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950 px-4 py-3 text-sm text-amber-900 dark:text-amber-200 ${className ?? ""}`}
     >
       <p className="font-semibold">Everything is free while we&apos;re in early access.</p>
-      <p className="mt-1 leading-relaxed text-amber-800">
+      <p className="mt-1 leading-relaxed text-amber-800 dark:text-amber-400">
         We haven&apos;t opened payments yet, so every Pro feature below is unlocked for everyone —
         unlimited problems and simulations, the full lesson library, and complete mistake review. No
         card needed. The pricing here is what Pro will cost once it launches.
@@ -23,7 +23,7 @@ export function PaymentsNotice({ className }: { className?: string }) {
 export function PaymentsNoticeInline({ className }: { className?: string }) {
   return (
     <p
-      className={`rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800 ${className ?? ""}`}
+      className={`rounded-lg bg-amber-50 dark:bg-amber-950 px-3 py-2 text-xs text-amber-800 dark:text-amber-400 ${className ?? ""}`}
     >
       Early access — every Pro feature is unlocked for free while we finish setting up payments.
     </p>

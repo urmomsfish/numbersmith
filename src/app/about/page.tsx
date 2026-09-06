@@ -19,9 +19,9 @@ export const metadata: Metadata = {
 
 function Stat({ value, label }: { value: string | number; label: string }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5">
-      <p className="font-mono text-3xl font-bold tabular-nums text-slate-900">{value}</p>
-      <p className="mt-1 text-sm text-slate-500">{label}</p>
+    <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5">
+      <p className="font-mono text-3xl font-bold tabular-nums text-slate-900 dark:text-slate-50">{value}</p>
+      <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{label}</p>
     </div>
   );
 }
@@ -38,13 +38,13 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} className="border-t border-slate-200">
+    <section id={id} className="border-t border-slate-200 dark:border-slate-700">
       <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6 sm:py-16">
-        <p className="text-xs font-bold uppercase tracking-wide text-slate-400">{eyebrow}</p>
-        <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <p className="text-xs font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">{eyebrow}</p>
+        <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-3xl">
           {title}
         </h2>
-        <div className="mt-5 space-y-4 text-base leading-relaxed text-slate-600">{children}</div>
+        <div className="mt-5 space-y-4 text-base leading-relaxed text-slate-600 dark:text-slate-300">{children}</div>
       </div>
     </section>
   );
@@ -92,16 +92,16 @@ export default async function AboutPage() {
         {/* Hero */}
         <section>
           <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20">
-            <h1 className="text-balance text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+            <h1 className="text-balance text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-5xl">
               About NumberSmith
             </h1>
-            <p className="mt-5 text-lg leading-relaxed text-slate-600">
+            <p className="mt-5 text-lg leading-relaxed text-slate-600 dark:text-slate-300">
               NumberSmith is an adaptive training platform for competition mathematics. This page
               exists to explain exactly how it works and exactly what it does not claim — because a
               study tool that quietly guesses at your level, or quietly gets an answer wrong, is
               worse than no study tool at all.
             </p>
-            <p className="mt-4 leading-relaxed text-slate-500">
+            <p className="mt-4 leading-relaxed text-slate-500 dark:text-slate-400">
               It is early. There is no user testimonial section on this page, no success-rate
               statistic, and no score-improvement claim, because NumberSmith has not been running
               long enough for any of those to be true. What follows is only what can be verified
@@ -111,15 +111,15 @@ export default async function AboutPage() {
         </section>
 
         {/* What's actually in it — read live from the database */}
-        <section className="border-t border-slate-200 bg-slate-50">
+        <section className="border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
           <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6 sm:py-16">
-            <p className="text-xs font-bold uppercase tracking-wide text-slate-400">
+            <p className="text-xs font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
               What is actually in it
             </p>
-            <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+            <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-3xl">
               The real numbers, read from the live database
             </h2>
-            <p className="mt-5 leading-relaxed text-slate-600">
+            <p className="mt-5 leading-relaxed text-slate-600 dark:text-slate-300">
               These four figures are queried from the production database when you load this page.
               They are not typed into the design, so they cannot drift out of date or be rounded up.
             </p>
@@ -131,29 +131,29 @@ export default async function AboutPage() {
               <Stat value={lessonCount} label="Lessons" />
             </div>
 
-            <p className="mt-8 text-sm font-semibold text-slate-900">
+            <p className="mt-8 text-sm font-semibold text-slate-900 dark:text-slate-50">
               Topics are organized into {domains.length} domains:
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               {domains.map((d) => (
                 <span
                   key={d.name}
-                  className="rounded-full border border-slate-200 bg-white px-3.5 py-1.5 text-sm font-medium text-slate-700"
+                  className="rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-1.5 text-sm font-medium text-slate-700 dark:text-slate-200"
                 >
                   {d.name}
-                  <span className="ml-1.5 font-mono text-xs tabular-nums text-slate-400">
+                  <span className="ml-1.5 font-mono text-xs tabular-nums text-slate-400 dark:text-slate-500">
                     {d._count.children}
                   </span>
                 </span>
               ))}
             </div>
 
-            <div className="mt-8 space-y-3 text-sm leading-relaxed text-slate-500">
-              <p className="font-semibold text-slate-900">
+            <div className="mt-8 space-y-3 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+              <p className="font-semibold text-slate-900 dark:text-slate-50">
                 What that {problemCount.toLocaleString()} actually consists of:
               </p>
               <p>
-                <span className="font-semibold text-slate-700">
+                <span className="font-semibold text-slate-700 dark:text-slate-200">
                   {handWritten} are hand-written
                 </span>{" "}
                 and reserved for the placement test — they are never served as practice, so your
@@ -168,7 +168,7 @@ export default async function AboutPage() {
                 rather than a problem collection.
               </p>
               <p>
-                <span className="font-semibold text-slate-700">
+                <span className="font-semibold text-slate-700 dark:text-slate-200">
                   The difficulty spread is uneven and skews easy.
                 </span>{" "}
                 {advancedCount.toLocaleString()} problems sit at difficulty 7 or above out of{" "}
@@ -207,9 +207,9 @@ export default async function AboutPage() {
             instance where the two disagree is discarded rather than published. Both mechanisms run
             in the same command:
           </p>
-          <div className="overflow-x-auto rounded-xl border border-slate-200 bg-slate-50 p-5">
-            <pre className="font-mono text-sm leading-relaxed text-slate-700">
-              <span className="text-slate-400">$ npm run verify:answers</span>
+          <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-5">
+            <pre className="font-mono text-sm leading-relaxed text-slate-700 dark:text-slate-200">
+              <span className="text-slate-400 dark:text-slate-500">$ npm run verify:answers</span>
               {`\n\nverified:  ${handWritten}/${handWritten}\nmismatches: 0\n\n--- generated bank ---\ngenerators:        ${GENERATOR_COUNT}\ngenerated:         ${(problemCount - handWritten).toLocaleString()}\nanswer mismatches: 0\nstructural faults: 0`}
             </pre>
           </div>
@@ -219,13 +219,13 @@ export default async function AboutPage() {
             catches what a per-problem check cannot: duplicate options, an answer letter with no
             corresponding choice, missing hints, or a difficulty outside the scale.
           </p>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
             This catches mathematical errors in answer keys. It does not certify that every hint and
             worked solution is perfectly worded — those are reviewed by hand. If you find an error of
             any kind, please report it to{" "}
             <a
               href={`mailto:${LEGAL.contactEmail}`}
-              className="font-semibold text-brand-600 hover:text-brand-700"
+              className="font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300"
             >
               {LEGAL.contactEmail}
             </a>{" "}
@@ -246,7 +246,7 @@ export default async function AboutPage() {
             {allOriginal ? (
               <>
                 All {problemCount} currently published problems are recorded as{" "}
-                <span className="font-semibold text-slate-900">NumberSmith Original</span>.
+                <span className="font-semibold text-slate-900 dark:text-slate-50">NumberSmith Original</span>.
               </>
             ) : (
               <>
@@ -270,25 +270,25 @@ export default async function AboutPage() {
             model. Every one of those numbers comes from a fixed algorithm you could work out on
             paper, which means the same performance always produces the same result.
           </p>
-          <ul className="space-y-3 border-l-2 border-slate-200 pl-5">
+          <ul className="space-y-3 border-l-2 border-slate-200 dark:border-slate-700 pl-5">
             <li>
-              <span className="font-semibold text-slate-900">Placement</span> starts near the middle
+              <span className="font-semibold text-slate-900 dark:text-slate-50">Placement</span> starts near the middle
               of the difficulty range and steps up after correct answers and down after incorrect
               ones, accelerating on streaks. It stops once your recent difficulty range has settled,
               which is usually well before the maximum question count.
             </li>
             <li>
-              <span className="font-semibold text-slate-900">Your rating</span> is computed from the
+              <span className="font-semibold text-slate-900 dark:text-slate-50">Your rating</span> is computed from the
               average difficulty you settled at, adjusted by your accuracy — an Elo-inspired scale
               that then moves with every problem you solve afterward.
             </li>
             <li>
-              <span className="font-semibold text-slate-900">Topic mastery</span> uses an exponential
+              <span className="font-semibold text-slate-900 dark:text-slate-50">Topic mastery</span> uses an exponential
               moving average, so recent work counts for more than work from months ago without ever
               fully erasing your history.
             </li>
             <li>
-              <span className="font-semibold text-slate-900">Your training plan</span> ranks topics by
+              <span className="font-semibold text-slate-900 dark:text-slate-50">Your training plan</span> ranks topics by
               how weak you are in them weighted by how much they matter to the competitions you
               chose, with your top-priority contest weighted double. A student training for AMC 8 and
               a student training for AIME get genuinely different plans from identical mastery
@@ -340,7 +340,7 @@ export default async function AboutPage() {
             Questions, corrections, and mathematical disputes are all welcome at{" "}
             <a
               href={`mailto:${LEGAL.contactEmail}`}
-              className="font-semibold text-brand-600 hover:text-brand-700"
+              className="font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300"
             >
               {LEGAL.contactEmail}
             </a>
@@ -349,12 +349,12 @@ export default async function AboutPage() {
         </Section>
 
         {/* CTA */}
-        <section className="border-t border-slate-200 bg-slate-50">
+        <section className="border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
           <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6 sm:py-16">
-            <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+            <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-3xl">
               See whether the engine is any good on your own math.
             </h2>
-            <p className="mt-3 leading-relaxed text-slate-600">
+            <p className="mt-3 leading-relaxed text-slate-600 dark:text-slate-300">
               The placement test is free, takes about 15 minutes, and ends with a level, a skill
               breakdown, and a training plan you can read before deciding whether any of this is
               worth your time.
@@ -367,9 +367,9 @@ export default async function AboutPage() {
                 Read the Privacy Policy
               </LinkButton>
             </div>
-            <p className="mt-6 text-sm text-slate-500">
+            <p className="mt-6 text-sm text-slate-500 dark:text-slate-400">
               Still deciding?{" "}
-              <Link href="/#faq" className="font-semibold text-brand-600 hover:text-brand-700">
+              <Link href="/#faq" className="font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300">
                 Read the FAQ →
               </Link>
             </p>

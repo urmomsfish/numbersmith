@@ -51,37 +51,37 @@ export default async function DashboardPage() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
-      <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50 sm:text-3xl">
         Welcome back, {user.name.split(" ")[0]}!
       </h1>
-      <p className="mt-1 text-slate-500">Here&apos;s what NumberSmith recommends for today.</p>
+      <p className="mt-1 text-slate-500 dark:text-slate-400">Here&apos;s what NumberSmith recommends for today.</p>
 
       <div className="mt-6 grid gap-5 lg:grid-cols-3">
         <div className="space-y-5 lg:col-span-2">
           <Card>
             <CardBody>
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
                 Today&apos;s Goal
               </p>
               <div className="mt-3 grid grid-cols-3 gap-3 text-center">
                 <div>
-                  <p className="text-2xl font-extrabold text-slate-900">{problemCount}</p>
-                  <p className="text-xs text-slate-400">problems</p>
+                  <p className="text-2xl font-extrabold text-slate-900 dark:text-slate-50">{problemCount}</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-500">problems</p>
                 </div>
                 <div>
-                  <p className="text-2xl font-extrabold text-slate-900">
+                  <p className="text-2xl font-extrabold text-slate-900 dark:text-slate-50">
                     {profile?.dailyPracticeMinutes ?? 30}
                   </p>
-                  <p className="text-xs text-slate-400">minutes</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-500">minutes</p>
                 </div>
                 <div>
-                  <p className="text-2xl font-extrabold text-slate-900">80%+</p>
-                  <p className="text-xs text-slate-400">accuracy</p>
+                  <p className="text-2xl font-extrabold text-slate-900 dark:text-slate-50">80%+</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-500">accuracy</p>
                 </div>
               </div>
               {today && (
-                <p className="mt-4 rounded-lg bg-slate-50 px-3 py-2 text-center text-xs text-slate-500">
-                  Today&apos;s plan: <span className="font-semibold text-slate-700">{today.label}</span>
+                <p className="mt-4 rounded-lg bg-slate-50 dark:bg-slate-800 px-3 py-2 text-center text-xs text-slate-500 dark:text-slate-400">
+                  Today&apos;s plan: <span className="font-semibold text-slate-700 dark:text-slate-200">{today.label}</span>
                 </p>
               )}
             </CardBody>
@@ -89,13 +89,13 @@ export default async function DashboardPage() {
 
           <Card>
             <CardBody>
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
                 Continue Training
               </p>
-              <p className="mt-2 text-xl font-bold text-slate-900">{priorityTopic.name}</p>
+              <p className="mt-2 text-xl font-bold text-slate-900 dark:text-slate-50">{priorityTopic.name}</p>
               <div className="mt-2 flex items-center gap-2">
                 <ProgressBar value={priorityMastery} tone="brand" className="max-w-[200px]" />
-                <span className="text-xs font-medium text-slate-400">{priorityMastery}% mastered</span>
+                <span className="text-xs font-medium text-slate-400 dark:text-slate-500">{priorityMastery}% mastered</span>
               </div>
               <LinkButton href={`/practice?topic=${priorityTopic.slug}`} className="mt-4">
                 Continue →
@@ -105,14 +105,14 @@ export default async function DashboardPage() {
 
           <Card>
             <CardBody>
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
                 Competition Progress
               </p>
               <div className="mt-3 space-y-3">
                 {competitionProgress.length === 0 && (
-                  <p className="text-sm text-slate-400">
+                  <p className="text-sm text-slate-400 dark:text-slate-500">
                     You haven&apos;t selected any competitions yet.{" "}
-                    <Link href="/settings/competitions" className="text-brand-600 underline">
+                    <Link href="/settings/competitions" className="text-brand-600 dark:text-brand-400 underline">
                       Choose your competitions
                     </Link>
                   </p>
@@ -120,11 +120,11 @@ export default async function DashboardPage() {
                 {competitionProgress.map((cp) => (
                   <div key={cp.competition.id}>
                     <div className="mb-1 flex items-center justify-between text-sm">
-                      <span className="flex items-center gap-1.5 font-medium text-slate-700">
+                      <span className="flex items-center gap-1.5 font-medium text-slate-700 dark:text-slate-200">
                         {cp.competition.shortName}
                         {cp.isPrimary && <Badge tone="brand">Primary</Badge>}
                       </span>
-                      <span className="text-slate-500">{cp.pct}% mastered</span>
+                      <span className="text-slate-500 dark:text-slate-400">{cp.pct}% mastered</span>
                     </div>
                     <ProgressBar value={cp.pct} tone="success" />
                   </div>
@@ -137,10 +137,10 @@ export default async function DashboardPage() {
         <div className="space-y-5">
           <Card>
             <CardBody className="text-center">
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
                 Current Rating
               </p>
-              <p className="mt-2 text-4xl font-extrabold text-brand-700">{ratingValue}</p>
+              <p className="mt-2 text-4xl font-extrabold text-brand-700 dark:text-brand-300">{ratingValue}</p>
               <Badge tone="brand" className="mt-2">
                 {tier.label}
               </Badge>
@@ -149,14 +149,14 @@ export default async function DashboardPage() {
 
           <Card>
             <CardBody className="text-center">
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
                 Daily Streak
               </p>
-              <p className="mt-2 flex items-center justify-center gap-2 text-3xl font-extrabold text-ember-600">
+              <p className="mt-2 flex items-center justify-center gap-2 text-3xl font-extrabold text-ember-600 dark:text-ember-400">
                 <IconFlame className="h-7 w-7" />
                 {stats?.currentStreak ?? 0} days
               </p>
-              <p className="mt-1 text-xs text-slate-400">Longest: {stats?.longestStreak ?? 0} days</p>
+              <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">Longest: {stats?.longestStreak ?? 0} days</p>
             </CardBody>
           </Card>
 

@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* Class-based dark mode: toggled by adding/removing `dark` on <html> (see
+ * ThemeToggle and the inline script in the root layout), rather than only
+ * following prefers-color-scheme, so a user can override their device
+ * setting. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #f8fafc;
   --foreground: #0f172a;
@@ -28,6 +34,11 @@
   --warning-500: #f59e0b;
   --danger-500: #ef4444;
   --danger-600: #dc2626;
+}
+
+.dark {
+  --background: #0b1120;
+  --foreground: #f1f5f9;
 }
 
 @theme inline {
@@ -62,6 +73,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 @layer utilities {
@@ -78,4 +90,7 @@ body {
 .scrollbar-thin::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 9999px;
+}
+.dark .scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #475569;
 }

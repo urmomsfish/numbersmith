@@ -27,7 +27,7 @@ export default function TermsPage() {
         <p>
           NumberSmith is an online platform for practising competition mathematics, operated by{" "}
           {LEGAL.entityName}. You can reach us at{" "}
-          <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 underline">
+          <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 dark:text-brand-400 underline">
             {LEGAL.contactEmail}
           </a>
           , and we aim to reply within {LEGAL.supportResponseTime}.
@@ -47,7 +47,7 @@ export default function TermsPage() {
             </>,
             <>
               If you are <strong>under 13</strong>, a parent or guardian must create and consent to
-              the account. See our <Link href="/legal/privacy" className="text-brand-600 underline">Privacy Policy</Link> for how we handle children&apos;s information.
+              the account. See our <Link href="/legal/privacy" className="text-brand-600 dark:text-brand-400 underline">Privacy Policy</Link> for how we handle children&apos;s information.
             </>,
             <>
               Only a parent, guardian, or other adult may purchase a subscription. By subscribing you
@@ -99,7 +99,7 @@ export default function TermsPage() {
           You may cancel at any time from your account settings. Cancelling stops the next renewal
           and <strong>keeps your Pro access until the end of the period you have already paid
           for</strong>. Refunds are covered in our{" "}
-          <Link href="/legal/refunds" className="text-brand-600 underline">
+          <Link href="/legal/refunds" className="text-brand-600 dark:text-brand-400 underline">
             Refund and Cancellation Policy
           </Link>
           .
@@ -217,7 +217,7 @@ export default function TermsPage() {
         <p>
           <strong>Talk to us first.</strong> Most problems are resolved quickly by email. Before
           starting any formal proceeding, please contact us at{" "}
-          <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 underline">
+          <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 dark:text-brand-400 underline">
             {LEGAL.contactEmail}
           </a>{" "}
           and give us 30 days to try to resolve it. We will do the same before bringing a claim
@@ -292,7 +292,7 @@ export default function TermsPage() {
       <Section heading="18. Contact">
         <p>
           Questions about these terms:{" "}
-          <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 underline">
+          <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 dark:text-brand-400 underline">
             {LEGAL.contactEmail}
           </a>
           .

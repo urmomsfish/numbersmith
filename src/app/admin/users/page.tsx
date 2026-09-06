@@ -24,19 +24,19 @@ export default async function AdminUsersPage({
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-      <h1 className="text-2xl font-bold text-slate-900">User Management</h1>
-      <p className="mt-1 text-sm text-slate-500">{users.length} accounts.</p>
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">User Management</h1>
+      <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{users.length} accounts.</p>
 
       {params.error === "cannot-demote-self" && (
-        <p className="mt-4 rounded-lg bg-red-50 px-4 py-2 text-sm text-danger-600">
+        <p className="mt-4 rounded-lg bg-red-50 dark:bg-red-950 px-4 py-2 text-sm text-danger-600 dark:text-red-400">
           You cannot remove your own admin role.
         </p>
       )}
 
-      <div className="mt-6 overflow-x-auto rounded-xl border border-slate-200 bg-white">
+      <div className="mt-6 overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
         <table className="w-full text-sm">
-          <thead className="bg-slate-50">
-            <tr className="text-left text-xs font-semibold uppercase tracking-wide text-slate-400">
+          <thead className="bg-slate-50 dark:bg-slate-800">
+            <tr className="text-left text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
               <th className="px-4 py-2.5">User</th>
               <th className="px-3 py-2.5">Grade</th>
               <th className="px-3 py-2.5">Rating</th>
@@ -46,17 +46,17 @@ export default async function AdminUsersPage({
               <th className="px-3 py-2.5">Manage</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
             {users.map((u) => (
               <tr key={u.id}>
                 <td className="px-4 py-2.5">
-                  <p className="font-medium text-slate-800">{u.name}</p>
-                  <p className="text-[11px] text-slate-400">{u.email}</p>
+                  <p className="font-medium text-slate-800 dark:text-slate-100">{u.name}</p>
+                  <p className="text-[11px] text-slate-400 dark:text-slate-500">{u.email}</p>
                 </td>
-                <td className="px-3 py-2.5 text-slate-600">{u.profile?.grade ?? "—"}</td>
-                <td className="px-3 py-2.5 text-slate-600">{u.ratings[0]?.value ?? "—"}</td>
-                <td className="px-3 py-2.5 text-slate-600">{u._count.attempts}</td>
-                <td className="px-3 py-2.5 text-slate-600">{u.stats?.currentStreak ?? 0}d</td>
+                <td className="px-3 py-2.5 text-slate-600 dark:text-slate-300">{u.profile?.grade ?? "—"}</td>
+                <td className="px-3 py-2.5 text-slate-600 dark:text-slate-300">{u.ratings[0]?.value ?? "—"}</td>
+                <td className="px-3 py-2.5 text-slate-600 dark:text-slate-300">{u._count.attempts}</td>
+                <td className="px-3 py-2.5 text-slate-600 dark:text-slate-300">{u.stats?.currentStreak ?? 0}d</td>
                 <td className="px-3 py-2.5">
                   <Badge
                     tone={
@@ -74,7 +74,7 @@ export default async function AdminUsersPage({
                     <select
                       name="role"
                       defaultValue={u.role}
-                      className="rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-xs"
+                      className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-2 py-1 text-xs"
                     >
                       {["STUDENT", "PARENT", "TEACHER", "ADMIN"].map((r) => (
                         <option key={r} value={r}>
@@ -85,7 +85,7 @@ export default async function AdminUsersPage({
                     <select
                       name="subscriptionStatus"
                       defaultValue={u.subscription?.status ?? "FREE"}
-                      className="rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-xs"
+                      className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-2 py-1 text-xs"
                     >
                       {["FREE", "PRO", "TRIAL", "CANCELED"].map((s) => (
                         <option key={s} value={s}>

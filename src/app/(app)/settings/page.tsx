@@ -29,23 +29,23 @@ export default async function SettingsPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
-      <h1 className="text-2xl font-bold text-slate-900">Settings</h1>
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Settings</h1>
 
       <Card className="mt-6">
         <CardBody>
-          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400">Account</h2>
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">Account</h2>
           <dl className="mt-3 space-y-2 text-sm">
             <div className="flex justify-between">
-              <dt className="text-slate-500">Name</dt>
-              <dd className="font-medium text-slate-800">{user.name}</dd>
+              <dt className="text-slate-500 dark:text-slate-400">Name</dt>
+              <dd className="font-medium text-slate-800 dark:text-slate-100">{user.name}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-slate-500">Email</dt>
-              <dd className="font-medium text-slate-800">{user.email}</dd>
+              <dt className="text-slate-500 dark:text-slate-400">Email</dt>
+              <dd className="font-medium text-slate-800 dark:text-slate-100">{user.email}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-slate-500">Role</dt>
-              <dd className="font-medium text-slate-800">{user.role}</dd>
+              <dt className="text-slate-500 dark:text-slate-400">Role</dt>
+              <dd className="font-medium text-slate-800 dark:text-slate-100">{user.role}</dd>
             </div>
           </dl>
         </CardBody>
@@ -54,7 +54,7 @@ export default async function SettingsPage() {
       <Card className="mt-5">
         <CardBody>
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400">Subscription</h2>
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">Subscription</h2>
             <Badge tone={cancelPending ? "warning" : isPro ? "brand" : "slate"}>
               {cancelPending
                 ? "⭐ Pro — ending"
@@ -67,14 +67,14 @@ export default async function SettingsPage() {
           </div>
 
           {subscription.status === "TRIAL" && subscription.trialEndsAt && (
-            <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">
+            <p className="mt-3 rounded-lg bg-amber-50 dark:bg-amber-950 px-3 py-2 text-sm text-amber-800 dark:text-amber-400">
               Your free Pro trial ends on {subscription.trialEndsAt.toLocaleDateString()}. You will not
               be charged — the account simply returns to the Free plan unless you choose to subscribe.
             </p>
           )}
 
           {cancelPending && subscription.renewalDate && (
-            <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">
+            <p className="mt-3 rounded-lg bg-amber-50 dark:bg-amber-950 px-3 py-2 text-sm text-amber-800 dark:text-amber-400">
               Your subscription is cancelled and will not renew. You keep full Pro access until{" "}
               {subscription.renewalDate.toLocaleDateString()}, the end of the period you already
               paid for.
@@ -84,12 +84,12 @@ export default async function SettingsPage() {
           {(subscription.status === "PRO" || cancelPending) && (
             <dl className="mt-3 space-y-2 text-sm">
               <div className="flex justify-between">
-                <dt className="text-slate-500">Plan</dt>
-                <dd className="font-medium text-slate-800">{subscription.plan ?? "—"}</dd>
+                <dt className="text-slate-500 dark:text-slate-400">Plan</dt>
+                <dd className="font-medium text-slate-800 dark:text-slate-100">{subscription.plan ?? "—"}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-slate-500">{cancelPending ? "Access ends" : "Renews"}</dt>
-                <dd className="font-medium text-slate-800">
+                <dt className="text-slate-500 dark:text-slate-400">{cancelPending ? "Access ends" : "Renews"}</dt>
+                <dd className="font-medium text-slate-800 dark:text-slate-100">
                   {subscription.renewalDate?.toLocaleDateString() ?? "—"}
                 </dd>
               </div>
@@ -124,19 +124,19 @@ export default async function SettingsPage() {
       <Card className="mt-5">
         <CardBody>
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
               My Competitions
             </h2>
             <Link
               href="/settings/competitions"
-              className="text-sm font-semibold text-brand-600 hover:text-brand-700"
+              className="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300"
             >
               Edit →
             </Link>
           </div>
           <div className="mt-3 flex flex-wrap gap-2">
             {userCompetitions.length === 0 && (
-              <p className="text-sm text-slate-400">No competitions selected yet.</p>
+              <p className="text-sm text-slate-400 dark:text-slate-500">No competitions selected yet.</p>
             )}
             {userCompetitions.map((uc) => (
               <Badge key={uc.id} tone={uc.isPrimary ? "brand" : "slate"}>
@@ -150,16 +150,16 @@ export default async function SettingsPage() {
 
       <Card className="mt-5">
         <CardBody>
-          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
             Training Preferences
           </h2>
           <form action={updateProfileAction} className="mt-4 grid gap-3 sm:grid-cols-2">
             <label className="block">
-              <span className="mb-1.5 block text-xs font-semibold text-slate-600">Grade</span>
+              <span className="mb-1.5 block text-xs font-semibold text-slate-600 dark:text-slate-300">Grade</span>
               <select
                 name="grade"
                 defaultValue={String(profile?.grade ?? 7)}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm"
               >
                 <option value="0">Kindergarten</option>
                 {Array.from({ length: 12 }, (_, i) => i + 1).map((g) => (
@@ -170,13 +170,13 @@ export default async function SettingsPage() {
               </select>
             </label>
             <label className="block">
-              <span className="mb-1.5 block text-xs font-semibold text-slate-600">
+              <span className="mb-1.5 block text-xs font-semibold text-slate-600 dark:text-slate-300">
                 Practice per day
               </span>
               <select
                 name="dailyPracticeMinutes"
                 defaultValue={String(profile?.dailyPracticeMinutes ?? 30)}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm"
               >
                 {[15, 20, 30, 45, 60].map((m) => (
                   <option key={m} value={m}>
@@ -186,13 +186,13 @@ export default async function SettingsPage() {
               </select>
             </label>
             <label className="block sm:col-span-2">
-              <span className="mb-1.5 block text-xs font-semibold text-slate-600">Target score</span>
+              <span className="mb-1.5 block text-xs font-semibold text-slate-600 dark:text-slate-300">Target score</span>
               <input
                 type="text"
                 name="targetScore"
                 defaultValue={profile?.targetScore ?? ""}
                 placeholder="e.g. Qualify for AIME"
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm"
               />
             </label>
             <div className="sm:col-span-2">
@@ -204,10 +204,10 @@ export default async function SettingsPage() {
 
       <Card className="mt-5">
         <CardBody>
-          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
             Placement Test
           </h2>
-          <p className="mt-2 text-sm text-slate-500">
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
             Retaking the placement test recalibrates your rating, skill breakdown, and training plan.
             The placement test is always free.
           </p>

@@ -38,29 +38,29 @@ export default async function AdminProblemsPage({
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Problem Management</h1>
-          <p className="mt-1 text-sm text-slate-500">{total} problems in the database.</p>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Problem Management</h1>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{total} problems in the database.</p>
         </div>
         <LinkButton href="/admin/problems/new">+ New Problem</LinkButton>
       </div>
 
       {params.deleted && (
-        <p className="mt-4 rounded-lg bg-emerald-50 px-4 py-2 text-sm text-success-600">
+        <p className="mt-4 rounded-lg bg-emerald-50 dark:bg-emerald-950 px-4 py-2 text-sm text-success-600 dark:text-emerald-400">
           Problem deleted.
         </p>
       )}
 
-      <form className="mt-5 flex flex-wrap gap-2 rounded-xl border border-slate-200 bg-white p-3">
+      <form className="mt-5 flex flex-wrap gap-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-3">
         <input
           name="q"
           defaultValue={params.q ?? ""}
           placeholder="Search question text…"
-          className="min-w-[200px] flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm"
+          className="min-w-[200px] flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-sm"
         />
         <select
           name="topic"
           defaultValue={params.topic ?? ""}
-          className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm"
+          className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-sm"
         >
           <option value="">All topics</option>
           {topics.map((t) => (
@@ -74,10 +74,10 @@ export default async function AdminProblemsPage({
         </Button>
       </form>
 
-      <div className="mt-5 overflow-hidden rounded-xl border border-slate-200 bg-white">
+      <div className="mt-5 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
         <table className="w-full text-sm">
-          <thead className="bg-slate-50">
-            <tr className="text-left text-xs font-semibold uppercase tracking-wide text-slate-400">
+          <thead className="bg-slate-50 dark:bg-slate-800">
+            <tr className="text-left text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
               <th className="px-4 py-2.5">Question</th>
               <th className="px-3 py-2.5">Topic</th>
               <th className="px-3 py-2.5">Difficulty</th>
@@ -85,19 +85,19 @@ export default async function AdminProblemsPage({
               <th className="px-3 py-2.5"></th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
             {problems.map((p) => (
-              <tr key={p.id} className="hover:bg-slate-50">
+              <tr key={p.id} className="hover:bg-slate-50 dark:hover:bg-slate-800">
                 <td className="max-w-md px-4 py-2.5">
                   <Link
                     href={`/admin/problems/${p.id}`}
-                    className="line-clamp-1 font-medium text-slate-800 hover:text-brand-700"
+                    className="line-clamp-1 font-medium text-slate-800 dark:text-slate-100 hover:text-brand-700 dark:hover:text-brand-300"
                   >
                     {p.question}
                   </Link>
-                  <p className="text-[11px] text-slate-400">{p.slug}</p>
+                  <p className="text-[11px] text-slate-400 dark:text-slate-500">{p.slug}</p>
                 </td>
-                <td className="px-3 py-2.5 text-slate-600">{p.topic.name}</td>
+                <td className="px-3 py-2.5 text-slate-600 dark:text-slate-300">{p.topic.name}</td>
                 <td className="px-3 py-2.5">
                   <Badge tone="slate">
                     {p.difficulty} · {difficultyLabel(p.difficulty)}
@@ -113,7 +113,7 @@ export default async function AdminProblemsPage({
                     <input type="hidden" name="id" value={p.id} />
                     <button
                       type="submit"
-                      className="text-xs font-semibold text-brand-600 hover:text-brand-700"
+                      className="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300"
                     >
                       {p.isPublished ? "Unpublish" : "Publish"}
                     </button>
@@ -123,7 +123,7 @@ export default async function AdminProblemsPage({
             ))}
             {problems.length === 0 && (
               <tr>
-                <td colSpan={5} className="px-4 py-10 text-center text-slate-400">
+                <td colSpan={5} className="px-4 py-10 text-center text-slate-400 dark:text-slate-500">
                   No problems match these filters.
                 </td>
               </tr>

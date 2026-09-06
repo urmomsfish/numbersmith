@@ -48,8 +48,8 @@ export default async function PracticeSessionPage({
   if (problems.length === 0) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-16 text-center sm:px-6">
-        <p className="text-lg font-semibold text-slate-900">No problems available for this filter.</p>
-        <p className="mt-2 text-sm text-slate-500">Try a different topic from the problem database.</p>
+        <p className="text-lg font-semibold text-slate-900 dark:text-slate-50">No problems available for this filter.</p>
+        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Try a different topic from the problem database.</p>
       </div>
     );
   }

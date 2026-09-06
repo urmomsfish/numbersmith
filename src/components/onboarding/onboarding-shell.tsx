@@ -21,24 +21,24 @@ export function OnboardingShell({
   const activeIndex = STEPS.findIndex((s) => s.key === activeStep);
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="border-b border-slate-200 bg-white">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+      <header className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-4 sm:px-6">
           <Logo href="/" />
           <div className="flex items-center gap-3">
           {/* Only from lg: below that the logo, five steps, and the logout
               button do not fit on one line without wrapping. */}
-          <ol className="hidden items-center gap-1 text-xs font-medium text-slate-400 lg:flex">
+          <ol className="hidden items-center gap-1 text-xs font-medium text-slate-400 dark:text-slate-500 lg:flex">
             {STEPS.map((step, i) => (
               <li key={step.key} className="flex items-center gap-1">
                 <span
                   className={cn(
                     "flex items-center gap-1.5 rounded-full px-2.5 py-1",
                     i === activeIndex
-                      ? "bg-brand-50 text-brand-700"
+                      ? "bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300"
                       : i < activeIndex
-                        ? "text-success-600"
-                        : "text-slate-400"
+                        ? "text-success-600 dark:text-emerald-400"
+                        : "text-slate-400 dark:text-slate-500"
                   )}
                 >
                   <span
@@ -48,14 +48,14 @@ export function OnboardingShell({
                         ? "bg-brand-600 text-white"
                         : i < activeIndex
                           ? "bg-success-500 text-white"
-                          : "bg-slate-200 text-slate-500"
+                          : "bg-slate-200 text-slate-500 dark:bg-slate-700 dark:text-slate-400"
                     )}
                   >
                     {i < activeIndex ? "✓" : i + 1}
                   </span>
                   {step.label}
                 </span>
-                {i < STEPS.length - 1 && <span className="mx-0.5 h-px w-4 bg-slate-200" />}
+                {i < STEPS.length - 1 && <span className="mx-0.5 h-px w-4 bg-slate-200 dark:bg-slate-700" />}
               </li>
             ))}
           </ol>

@@ -20,9 +20,13 @@ export function LegalPage({
       <SiteHeader />
       <main className="flex-1">
         <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">{title}</h1>
-          <p className="mt-2 text-sm text-slate-400">Last updated: {lastUpdated}</p>
-          {intro && <p className="mt-6 text-lg leading-relaxed text-slate-600">{intro}</p>}
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-4xl">
+            {title}
+          </h1>
+          <p className="mt-2 text-sm text-slate-400 dark:text-slate-500">Last updated: {lastUpdated}</p>
+          {intro && (
+            <p className="mt-6 text-lg leading-relaxed text-slate-600 dark:text-slate-300">{intro}</p>
+          )}
           <div className="mt-10 space-y-8">{children}</div>
         </div>
       </main>
@@ -34,8 +38,10 @@ export function LegalPage({
 export function Section({ heading, children }: { heading: string; children: ReactNode }) {
   return (
     <section>
-      <h2 className="text-lg font-bold text-slate-900">{heading}</h2>
-      <div className="mt-3 space-y-3 text-sm leading-relaxed text-slate-600">{children}</div>
+      <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">{heading}</h2>
+      <div className="mt-3 space-y-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+        {children}
+      </div>
     </section>
   );
 }
@@ -45,7 +51,7 @@ export function Bullets({ items }: { items: ReactNode[] }) {
     <ul className="space-y-1.5">
       {items.map((item, i) => (
         <li key={i} className="flex gap-2">
-          <span className="text-slate-300">—</span>
+          <span className="text-slate-300 dark:text-slate-600">—</span>
           <span>{item}</span>
         </li>
       ))}

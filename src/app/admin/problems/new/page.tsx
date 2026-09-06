@@ -16,10 +16,10 @@ export default async function NewProblemPage({
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
-      <Link href="/admin/problems" className="text-sm font-medium text-slate-400 hover:text-slate-600">
+      <Link href="/admin/problems" className="text-sm font-medium text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300">
         ← Problems
       </Link>
-      <h1 className="mt-4 text-2xl font-bold text-slate-900">New Problem</h1>
+      <h1 className="mt-4 text-2xl font-bold text-slate-900 dark:text-slate-50">New Problem</h1>
 
       <div className="mt-6">
         <ProblemForm

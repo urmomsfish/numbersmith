@@ -2,6 +2,7 @@ import { MobileNav } from "@/components/app/mobile-nav";
 import { UserMenu } from "@/components/app/user-menu";
 import { Badge } from "@/components/ui/badge";
 import { LinkButton } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { IconFlame, IconBolt } from "@/components/app/icons";
 
 export function Topbar({
@@ -22,16 +23,16 @@ export function Topbar({
   canBuy: boolean;
 }) {
   return (
-    <header className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 sm:px-6">
+    <header className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-slate-900 sm:px-6">
       <div className="flex items-center gap-3">
         <MobileNav />
       </div>
       <div className="flex items-center gap-2 sm:gap-3">
-        <div className="hidden items-center gap-1.5 rounded-full bg-orange-50 px-3 py-1.5 text-sm font-semibold text-ember-600 sm:flex">
+        <div className="hidden items-center gap-1.5 rounded-full bg-orange-50 px-3 py-1.5 text-sm font-semibold text-ember-600 dark:bg-orange-950 dark:text-ember-400 sm:flex">
           <IconFlame className="h-4 w-4" />
           {streak}
         </div>
-        <div className="hidden items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1.5 text-sm font-semibold text-amber-700 sm:flex">
+        <div className="hidden items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1.5 text-sm font-semibold text-amber-700 dark:bg-amber-950 dark:text-amber-400 sm:flex">
           <IconBolt className="h-4 w-4" />
           {xp.toLocaleString()} XP
         </div>
@@ -43,6 +44,7 @@ export function Topbar({
             Upgrade
           </LinkButton>
         )}
+        <ThemeToggle />
         <UserMenu name={name} email={email} />
       </div>
     </header>

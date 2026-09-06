@@ -30,13 +30,13 @@ export default async function SimulationsPage() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
-      <h1 className="text-2xl font-bold text-slate-900">Competition Simulations</h1>
-      <p className="mt-1 text-sm text-slate-500">
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Competition Simulations</h1>
+      <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
         Full-length, realistically timed practice tests with question navigation and flagging.
       </p>
 
       {!isPro && (
-        <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2.5 text-sm text-amber-800">
+        <p className="mt-4 rounded-xl border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950 px-4 py-2.5 text-sm text-amber-800 dark:text-amber-400">
           Free plan: {gate.allowed ? `${gate.remaining} simulation${gate.remaining === 1 ? "" : "s"} left this week` : "Weekly simulation limit reached"}.{" "}
           <Link href="/pricing" className="font-semibold underline">
             Unlock unlimited with Pro
@@ -44,18 +44,18 @@ export default async function SimulationsPage() {
         </p>
       )}
 
-      <h2 className="mt-8 text-base font-bold text-slate-900">Official Formats</h2>
+      <h2 className="mt-8 text-base font-bold text-slate-900 dark:text-slate-50">Official Formats</h2>
       <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {competitions.map((c) => (
           <Card key={c.id}>
             <CardBody>
               <div className="flex items-start justify-between gap-2">
-                <h3 className="text-base font-bold text-slate-900">{c.shortName}</h3>
+                <h3 className="text-base font-bold text-slate-900 dark:text-slate-50">{c.shortName}</h3>
                 <Badge tone="slate">
                   {c.format === "INTEGER" ? "Integer" : c.format === "MULTIPLE_CHOICE" ? "MC" : "Short"}
                 </Badge>
               </div>
-              <p className="mt-1 text-xs text-slate-400">
+              <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
                 {c.numQuestions ?? 20} questions · {c.timeLimitMinutes ?? 60} minutes
               </p>
               <form action={startOfficialSimulationAction} className="mt-4">
@@ -69,8 +69,8 @@ export default async function SimulationsPage() {
         ))}
       </div>
 
-      <h2 className="mt-10 text-base font-bold text-slate-900">Custom Competition</h2>
-      <p className="mt-1 text-sm text-slate-500">
+      <h2 className="mt-10 text-base font-bold text-slate-900 dark:text-slate-50">Custom Competition</h2>
+      <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
         Build your own timed set: choose the number of problems, topics, difficulty, and time limit.
       </p>
       <div className="mt-3">
@@ -79,26 +79,26 @@ export default async function SimulationsPage() {
 
       {recent.length > 0 && (
         <>
-          <h2 className="mt-10 text-base font-bold text-slate-900">Recent Results</h2>
-          <div className="mt-3 divide-y divide-slate-100 overflow-hidden rounded-xl border border-slate-200 bg-white">
+          <h2 className="mt-10 text-base font-bold text-slate-900 dark:text-slate-50">Recent Results</h2>
+          <div className="mt-3 divide-y divide-slate-100 dark:divide-slate-800 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
             {recent.map((a) => (
               <Link
                 key={a.id}
                 href={`/simulations/results/${a.id}`}
-                className="flex items-center justify-between px-4 py-3 hover:bg-slate-50"
+                className="flex items-center justify-between px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800"
               >
                 <div>
-                  <p className="text-sm font-semibold text-slate-800">
+                  <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">
                     {a.competition.shortName}
-                    {a.mode === "CUSTOM" && <span className="ml-2 text-xs text-slate-400">Custom</span>}
+                    {a.mode === "CUSTOM" && <span className="ml-2 text-xs text-slate-400 dark:text-slate-500">Custom</span>}
                   </p>
-                  <p className="text-xs text-slate-400">{a.submittedAt?.toLocaleString() ?? "—"}</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-500">{a.submittedAt?.toLocaleString() ?? "—"}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-bold text-slate-900">
+                  <p className="text-sm font-bold text-slate-900 dark:text-slate-50">
                     {a.correctCount}/{a.totalQuestions}
                   </p>
-                  <p className="text-xs text-slate-400">{a.score}%</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-500">{a.score}%</p>
                 </div>
               </Link>
             ))}

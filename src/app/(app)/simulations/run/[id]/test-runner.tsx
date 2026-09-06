@@ -76,10 +76,10 @@ export function TestRunner({
 
   return (
     <div className="flex min-h-[calc(100vh-57px)] flex-col">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-white px-4 py-3 sm:px-6">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 sm:px-6">
         <div>
-          <p className="text-sm font-bold text-slate-900">{title}</p>
-          <p className="text-xs text-slate-400">
+          <p className="text-sm font-bold text-slate-900 dark:text-slate-50">{title}</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500">
             {answeredCount} of {items.length} answered
           </p>
         </div>
@@ -87,7 +87,7 @@ export function TestRunner({
           <div
             className={cn(
               "rounded-lg px-3 py-1.5 font-mono text-lg font-bold tabular-nums",
-              lowTime ? "bg-red-50 text-danger-600" : "bg-slate-100 text-slate-700"
+              lowTime ? "bg-red-50 text-danger-600 dark:bg-red-950 dark:text-red-400" : "bg-slate-100 text-slate-700"
             )}
           >
             {formatTime(remaining)}
@@ -100,11 +100,11 @@ export function TestRunner({
 
       <div className="flex flex-1 flex-col-reverse gap-5 px-4 py-6 sm:px-6 lg:flex-row">
         <div className="min-w-0 flex-1">
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 sm:p-8">
             <div className="mb-4 flex items-center justify-between">
-              <span className="text-sm font-bold text-slate-900">
+              <span className="text-sm font-bold text-slate-900 dark:text-slate-50">
                 Question {index + 1}
-                <span className="ml-1.5 font-normal text-slate-400">of {items.length}</span>
+                <span className="ml-1.5 font-normal text-slate-400 dark:text-slate-500">of {items.length}</span>
               </span>
               <button
                 type="button"
@@ -127,7 +127,7 @@ export function TestRunner({
               </button>
             </div>
 
-            <p className="text-lg font-medium leading-relaxed text-slate-900">{current.question}</p>
+            <p className="text-lg font-medium leading-relaxed text-slate-900 dark:text-slate-50">{current.question}</p>
 
             <div className="mt-7">
               {current.format === "MULTIPLE_CHOICE" ? (
@@ -143,14 +143,14 @@ export function TestRunner({
                         className={cn(
                           "flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm font-medium transition-colors",
                           isSelected
-                            ? "border-brand-500 bg-brand-50 text-brand-800"
-                            : "border-slate-200 text-slate-700 hover:border-slate-300"
+                            ? "border-brand-500 bg-brand-50 text-brand-800 dark:border-brand-400 dark:bg-brand-950 dark:text-brand-300"
+                            : "border-slate-200 text-slate-700 hover:border-slate-300 dark:border-slate-700 dark:text-slate-200 dark:hover:border-slate-600"
                         )}
                       >
                         <span
                           className={cn(
                             "flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold",
-                            isSelected ? "bg-brand-600 text-white" : "bg-slate-100 text-slate-500"
+                            isSelected ? "bg-brand-600 text-white" : "bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400"
                           )}
                         >
                           {letter}
@@ -162,7 +162,7 @@ export function TestRunner({
                 </div>
               ) : (
                 <div>
-                  <label className="mb-2 block text-xs font-medium text-slate-500">
+                  <label className="mb-2 block text-xs font-medium text-slate-500 dark:text-slate-400">
                     {current.format === "INTEGER" ? "Integer answer" : "Your answer"}
                   </label>
                   <input
@@ -170,20 +170,20 @@ export function TestRunner({
                     value={answers[current.id] ?? ""}
                     onChange={(e) => setAnswers((a) => ({ ...a, [current.id]: e.target.value }))}
                     placeholder="Type your answer"
-                    className="w-full max-w-xs rounded-lg border border-slate-300 px-3 py-2.5 text-base outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                    className="w-full max-w-xs rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2.5 text-base outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 dark:focus:ring-brand-900"
                   />
                 </div>
               )}
             </div>
 
             <div className="mt-6">
-              <label className="mb-1.5 block text-xs font-semibold text-slate-500">Scratch notes</label>
+              <label className="mb-1.5 block text-xs font-semibold text-slate-500 dark:text-slate-400">Scratch notes</label>
               <textarea
                 value={notes[current.id] ?? ""}
                 onChange={(e) => setNotes((n) => ({ ...n, [current.id]: e.target.value }))}
                 rows={3}
                 placeholder="Work through the problem here…"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 font-mono text-sm outline-none focus:border-brand-400"
+                className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 font-mono text-sm outline-none focus:border-brand-400"
               />
             </div>
 
@@ -207,8 +207,8 @@ export function TestRunner({
         </div>
 
         <aside className="w-full shrink-0 lg:w-56">
-          <div className="rounded-2xl border border-slate-200 bg-white p-4">
-            <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Navigator</p>
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4">
+            <p className="text-xs font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">Navigator</p>
             <div className="mt-3 grid grid-cols-6 gap-1.5 lg:grid-cols-5">
               {items.map((item, i) => {
                 const answered = !!answers[item.id];
@@ -235,12 +235,12 @@ export function TestRunner({
                 );
               })}
             </div>
-            <div className="mt-4 space-y-1.5 text-[11px] text-slate-400">
+            <div className="mt-4 space-y-1.5 text-[11px] text-slate-400 dark:text-slate-500">
               <p className="flex items-center gap-1.5">
                 <span className="h-2.5 w-2.5 rounded bg-emerald-100" /> Answered
               </p>
               <p className="flex items-center gap-1.5">
-                <span className="h-2.5 w-2.5 rounded bg-slate-100" /> Unanswered
+                <span className="h-2.5 w-2.5 rounded bg-slate-100 dark:bg-slate-800" /> Unanswered
               </p>
               <p className="flex items-center gap-1.5">
                 <span className="h-2 w-2 rounded-full bg-amber-500" /> Flagged
@@ -252,9 +252,9 @@ export function TestRunner({
 
       {confirmOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
-            <h2 className="text-lg font-bold text-slate-900">Submit {shortName}?</h2>
-            <p className="mt-2 text-sm text-slate-500">
+          <div className="w-full max-w-sm rounded-2xl bg-white dark:bg-slate-900 p-6 shadow-xl">
+            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">Submit {shortName}?</h2>
+            <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
               You&apos;ve answered {answeredCount} of {items.length} questions
               {items.length - answeredCount > 0 && `, leaving ${items.length - answeredCount} blank`}.
               Answers are revealed only after you submit.

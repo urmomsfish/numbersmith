@@ -39,8 +39,8 @@ export default async function MistakesPage() {
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Mistake Review</h1>
-          <p className="mt-1 text-sm text-slate-500">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Mistake Review</h1>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
             Every problem you missed, skipped, solved too slowly, or needed multiple hints on — brought
             back on a spaced schedule.
           </p>
@@ -60,8 +60,8 @@ export default async function MistakesPage() {
         <Card className="mt-6">
           <CardBody className="py-12 text-center">
             <p className="text-3xl">🎯</p>
-            <p className="mt-3 font-semibold text-slate-900">No open mistakes.</p>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-3 font-semibold text-slate-900 dark:text-slate-50">No open mistakes.</p>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
               Keep practicing — anything you miss will show up here for spaced review.
             </p>
             <LinkButton href="/practice/session" className="mt-5">
@@ -78,7 +78,7 @@ export default async function MistakesPage() {
               <Link
                 key={m.id}
                 href={`/practice/${m.problem.slug}`}
-                className="block rounded-xl border border-slate-200 bg-white p-4 transition-colors hover:border-slate-300"
+                className="block rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4 transition-colors hover:border-slate-300 dark:hover:border-slate-600"
               >
                 <div className="flex flex-wrap items-center gap-1.5">
                   <Badge tone={meta.tone}>{meta.label}</Badge>
@@ -87,23 +87,23 @@ export default async function MistakesPage() {
                   {due ? (
                     <Badge tone="ember">Due now</Badge>
                   ) : (
-                    <span className="text-[11px] text-slate-400">
+                    <span className="text-[11px] text-slate-400 dark:text-slate-500">
                       Next review {m.nextReviewAt.toLocaleDateString()}
                     </span>
                   )}
                 </div>
-                <p className="mt-2.5 line-clamp-2 text-sm text-slate-600">{m.problem.question}</p>
-                <p className="mt-2 text-xs font-semibold text-brand-600">Retry this problem →</p>
+                <p className="mt-2.5 line-clamp-2 text-sm text-slate-600 dark:text-slate-300">{m.problem.question}</p>
+                <p className="mt-2 text-xs font-semibold text-brand-600 dark:text-brand-400">Retry this problem →</p>
               </Link>
             );
           })}
 
           {hidden > 0 && (
-            <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-center">
+            <div className="rounded-xl border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950 p-5 text-center">
               <p className="font-semibold text-amber-900">
                 {hidden} more mistake{hidden === 1 ? "" : "s"} tracked
               </p>
-              <p className="mt-1 text-sm text-amber-800">
+              <p className="mt-1 text-sm text-amber-800 dark:text-amber-400">
                 The free plan shows your {FREE_MISTAKE_LIMIT} most urgent mistakes. Pro unlocks the full
                 mistake log with spaced repetition scheduling.
               </p>
@@ -120,9 +120,9 @@ export default async function MistakesPage() {
 
 function StatTile({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 text-center">
-      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">{label}</p>
-      <p className="mt-1 text-2xl font-extrabold text-slate-900">{value}</p>
+    <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4 text-center">
+      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">{label}</p>
+      <p className="mt-1 text-2xl font-extrabold text-slate-900 dark:text-slate-50">{value}</p>
     </div>
   );
 }

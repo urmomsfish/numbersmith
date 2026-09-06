@@ -75,12 +75,12 @@ export default async function LandingPage() {
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="border-b border-slate-200">
+        <section className="border-b border-slate-200 dark:border-slate-700">
           <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-            <h1 className="max-w-3xl text-balance text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+            <h1 className="max-w-3xl text-balance text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-5xl">
               Train Smarter. Compete Better.
             </h1>
-            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600">
+            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
               One personalized platform for competition mathematics — from Math Kangaroo and
               MathCounts to AMC, AIME, HMMT, and olympiad mathematics.
             </p>
@@ -98,11 +98,11 @@ export default async function LandingPage() {
         {/* How it works */}
         <section id="how-it-works" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
           <div>
-            <h2 className="text-3xl font-bold text-slate-900">
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-50">
               The whole product answers one question
             </h2>
-            <p className="mt-3 max-w-xl text-lg text-slate-500">
-              <span className="font-semibold text-slate-700">
+            <p className="mt-3 max-w-xl text-lg text-slate-500 dark:text-slate-400">
+              <span className="font-semibold text-slate-700 dark:text-slate-200">
                 &ldquo;What should this student practice next?&rdquo;
               </span>{" "}
               You should never have to wonder what to study today.
@@ -111,21 +111,21 @@ export default async function LandingPage() {
 
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {HOW_IT_WORKS.map((item) => (
-              <div key={item.step} className="rounded-2xl border border-slate-200 bg-white p-6">
-                <span className="text-xs font-bold text-slate-300">{item.step}</span>
-                <h3 className="mt-3 text-base font-bold text-slate-900">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-500">{item.body}</p>
+              <div key={item.step} className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6">
+                <span className="text-xs font-bold text-slate-300 dark:text-slate-600">{item.step}</span>
+                <h3 className="mt-3 text-base font-bold text-slate-900 dark:text-slate-50">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-500 dark:text-slate-400">{item.body}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* Competitions */}
-        <section id="competitions" className="border-y border-slate-200">
+        <section id="competitions" className="border-y border-slate-200 dark:border-slate-700">
           <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
             <div>
-              <h2 className="text-3xl font-bold text-slate-900">Choose Your Competition</h2>
-              <p className="mt-3 text-lg text-slate-500">
+              <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-50">Choose Your Competition</h2>
+              <p className="mt-3 text-lg text-slate-500 dark:text-slate-400">
                 Dedicated training tracks across every level of competition mathematics.
               </p>
             </div>
@@ -139,14 +139,14 @@ export default async function LandingPage() {
                 ] as const
               ).map(([category, label]) => (
                 <div key={category}>
-                  <p className="text-xs font-bold uppercase tracking-wide text-slate-400">{label}</p>
+                  <p className="text-xs font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">{label}</p>
                   <div className="mt-2.5 flex flex-wrap gap-2">
                     {competitions
                       .filter((c) => c.category === category)
                       .map((c) => (
                         <span
                           key={c.slug}
-                          className="rounded-full border border-slate-200 bg-slate-50 px-3.5 py-1.5 text-sm font-medium text-slate-700"
+                          className="rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3.5 py-1.5 text-sm font-medium text-slate-700 dark:text-slate-200"
                         >
                           {c.shortName}
                         </span>
@@ -162,15 +162,15 @@ export default async function LandingPage() {
         <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
           <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
             <div>
-              <h2 className="text-3xl font-bold text-slate-900">
+              <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-50">
                 Practice Real Competition Mathematics
               </h2>
-              <p className="mt-3 text-lg leading-relaxed text-slate-500">
+              <p className="mt-3 text-lg leading-relaxed text-slate-500 dark:text-slate-400">
                 Every problem comes with progressive hints, a full worked solution, difficulty and
                 topic tagging, and an estimated solve time. Miss one and it goes straight into your
                 mistake queue for spaced review.
               </p>
-              <ul className="mt-6 space-y-2.5 text-sm text-slate-600">
+              <ul className="mt-6 space-y-2.5 text-sm text-slate-600 dark:text-slate-300">
                 {[
                   "Adaptive difficulty that responds to your accuracy and speed",
                   "Progressive hints that guide without giving the answer away",
@@ -188,28 +188,28 @@ export default async function LandingPage() {
             {/* A real problem from the database, rendered by the same markup the
                 practice interface uses. Not a mockup. */}
             {sampleProblem && (
-              <div className="rounded-2xl border border-slate-200 bg-white p-6">
+              <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6">
                 <div className="flex items-center gap-2">
                   <Badge tone="brand">{sampleProblem.topic.name}</Badge>
                   <Badge tone="slate">{difficultyLabel(sampleProblem.difficulty)}</Badge>
                 </div>
-                <p className="mt-4 text-base font-medium leading-relaxed text-slate-900">
+                <p className="mt-4 text-base font-medium leading-relaxed text-slate-900 dark:text-slate-50">
                   {sampleProblem.question}
                 </p>
                 <div className="mt-5 space-y-2">
                   {parseChoices(sampleProblem.choices).map((choice, i) => (
                     <div
                       key={choice}
-                      className="flex items-center gap-3 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-medium text-slate-700"
+                      className="flex items-center gap-3 rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-200"
                     >
-                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-500">
+                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-500 dark:text-slate-400">
                         {["A", "B", "C", "D", "E"][i]}
                       </span>
                       {choice}
                     </div>
                   ))}
                 </div>
-                <p className="mt-5 text-xs text-slate-400">
+                <p className="mt-5 text-xs text-slate-400 dark:text-slate-500">
                   One of {problemCount} original problems. Hints and a full solution are available
                   once you attempt it.
                 </p>
@@ -219,35 +219,35 @@ export default async function LandingPage() {
         </section>
 
         {/* Track improvement */}
-        <section className="border-y border-slate-200">
+        <section className="border-y border-slate-200 dark:border-slate-700">
           <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
             <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
               {/* The real rating scale the product uses, not a sample student's
                   numbers. */}
-              <div className="order-2 rounded-2xl border border-slate-200 p-6 lg:order-1">
-                <p className="text-sm font-semibold text-slate-900">The NumberSmith rating scale</p>
-                <dl className="mt-4 divide-y divide-slate-100">
+              <div className="order-2 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 lg:order-1">
+                <p className="text-sm font-semibold text-slate-900 dark:text-slate-50">The NumberSmith rating scale</p>
+                <dl className="mt-4 divide-y divide-slate-100 dark:divide-slate-800">
                   {RATING_TIERS.filter((t) => t.min >= 1000).map((tier) => (
                     <div key={tier.label} className="flex items-baseline justify-between py-2">
-                      <dt className="text-sm text-slate-600">{tier.label}</dt>
-                      <dd className="font-mono text-sm tabular-nums text-slate-900">
+                      <dt className="text-sm text-slate-600 dark:text-slate-300">{tier.label}</dt>
+                      <dd className="font-mono text-sm tabular-nums text-slate-900 dark:text-slate-50">
                         {tier.max === Infinity ? `${tier.min}+` : `${tier.min}–${tier.max}`}
                       </dd>
                     </div>
                   ))}
                 </dl>
-                <p className="mt-4 text-xs text-slate-400">
+                <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">
                   Your placement test sets the starting number. Every problem after that moves it.
                 </p>
               </div>
 
               <div className="order-1 lg:order-2">
-                <h2 className="text-3xl font-bold text-slate-900">Track Your Improvement</h2>
-                <p className="mt-3 text-lg leading-relaxed text-slate-500">
+                <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-50">Track Your Improvement</h2>
+                <p className="mt-3 text-lg leading-relaxed text-slate-500 dark:text-slate-400">
                   A NumberSmith rating from Beginner to Elite, per-topic mastery, per-competition
                   readiness, and a full rating history going back to your first placement test.
                 </p>
-                <ul className="mt-6 space-y-2.5 text-sm text-slate-600">
+                <ul className="mt-6 space-y-2.5 text-sm text-slate-600 dark:text-slate-300">
                   {[
                     "Overall, competition-specific, and per-topic ratings",
                     "Topic mastery that updates with every problem",
@@ -268,19 +268,19 @@ export default async function LandingPage() {
         {/* Free vs Pro */}
         <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
           <div>
-            <h2 className="text-3xl font-bold text-slate-900">Free vs Pro</h2>
-            <p className="mt-3 text-lg text-slate-500">
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-50">Free vs Pro</h2>
+            <p className="mt-3 text-lg text-slate-500 dark:text-slate-400">
               The free plan is built for students who may never pay for it.
             </p>
           </div>
 
           <div className="mt-10 grid gap-5 lg:grid-cols-2">
-            <div className="flex flex-col rounded-2xl border border-slate-200 bg-white p-7">
-              <h3 className="text-lg font-bold text-slate-900">🆓 NumberSmith Free</h3>
-              <p className="mt-1 text-3xl font-extrabold text-slate-900">
-                $0 <span className="text-sm font-normal text-slate-400">forever</span>
+            <div className="flex flex-col rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-7">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50">🆓 NumberSmith Free</h3>
+              <p className="mt-1 text-3xl font-extrabold text-slate-900 dark:text-slate-50">
+                $0 <span className="text-sm font-normal text-slate-400 dark:text-slate-500">forever</span>
               </p>
-              <ul className="mt-5 flex-1 space-y-2 text-sm text-slate-600">
+              <ul className="mt-5 flex-1 space-y-2 text-sm text-slate-600 dark:text-slate-300">
                 {[
                   "Full adaptive placement test",
                   "Your level, rating & skill breakdown",
@@ -301,18 +301,18 @@ export default async function LandingPage() {
               </LinkButton>
             </div>
 
-            <div className="relative flex flex-col rounded-2xl border-2 border-brand-600 bg-white p-7">
+            <div className="relative flex flex-col rounded-2xl border-2 border-brand-600 bg-white dark:bg-slate-900 p-7">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                 <span className="rounded-full bg-brand-600 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
                   Best Value
                 </span>
               </div>
-              <h3 className="text-lg font-bold text-slate-900">⭐ NumberSmith Pro</h3>
-              <p className="mt-1 text-3xl font-extrabold text-slate-900">
-                ${PRO_PRICING.YEARLY} <span className="text-sm font-normal text-slate-400">/year</span>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50">⭐ NumberSmith Pro</h3>
+              <p className="mt-1 text-3xl font-extrabold text-slate-900 dark:text-slate-50">
+                ${PRO_PRICING.YEARLY} <span className="text-sm font-normal text-slate-400 dark:text-slate-500">/year</span>
               </p>
-              <p className="text-xs text-slate-400">or ${PRO_PRICING.MONTHLY}/month</p>
-              <ul className="mt-5 flex-1 space-y-2 text-sm text-slate-600">
+              <p className="text-xs text-slate-400 dark:text-slate-500">or ${PRO_PRICING.MONTHLY}/month</p>
+              <ul className="mt-5 flex-1 space-y-2 text-sm text-slate-600 dark:text-slate-300">
                 {[
                   "Unlimited daily problems",
                   "Full problem database & all difficulties",
@@ -323,7 +323,7 @@ export default async function LandingPage() {
                   "Advanced statistics & custom practice",
                 ].map((f) => (
                   <li key={f} className="flex items-start gap-2">
-                    <span className="mt-0.5 text-brand-600">✓</span>
+                    <span className="mt-0.5 text-brand-600 dark:text-brand-400">✓</span>
                     {f}
                   </li>
                 ))}
@@ -334,30 +334,30 @@ export default async function LandingPage() {
             </div>
           </div>
 
-          <p className="mt-6 text-sm text-slate-400">
-            <Link href="/pricing" className="font-semibold text-brand-600 hover:text-brand-700">
+          <p className="mt-6 text-sm text-slate-400 dark:text-slate-500">
+            <Link href="/pricing" className="font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300">
               See the full feature comparison →
             </Link>
           </p>
         </section>
 
         {/* FAQ */}
-        <section id="faq" className="border-t border-slate-200">
+        <section id="faq" className="border-t border-slate-200 dark:border-slate-700">
           <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-            <h2 className="text-3xl font-bold text-slate-900">Frequently Asked Questions</h2>
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-50">Frequently Asked Questions</h2>
             <div className="mt-8 space-y-3">
               {FAQ.map((item) => (
                 <details
                   key={item.q}
-                  className="group rounded-xl border border-slate-200 bg-white p-5"
+                  className="group rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5"
                 >
-                  <summary className="cursor-pointer list-none text-sm font-semibold text-slate-900">
+                  <summary className="cursor-pointer list-none text-sm font-semibold text-slate-900 dark:text-slate-50">
                     <span className="flex items-center justify-between gap-3">
                       {item.q}
-                      <span className="text-slate-300 transition-transform group-open:rotate-45">+</span>
+                      <span className="text-slate-300 dark:text-slate-600 transition-transform group-open:rotate-45">+</span>
                     </span>
                   </summary>
-                  <p className="mt-3 text-sm leading-relaxed text-slate-600">{item.a}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{item.a}</p>
                 </details>
               ))}
             </div>
@@ -365,10 +365,10 @@ export default async function LandingPage() {
         </section>
 
         {/* Final CTA */}
-        <section className="border-t border-slate-200">
+        <section className="border-t border-slate-200 dark:border-slate-700">
           <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-            <h2 className="text-3xl font-bold text-slate-900">Find out where you actually stand.</h2>
-            <p className="mt-3 max-w-xl text-lg text-slate-600">
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-50">Find out where you actually stand.</h2>
+            <p className="mt-3 max-w-xl text-lg text-slate-600 dark:text-slate-300">
               The placement test is free, takes about 15 minutes, and tells you exactly what to train
               next.
             </p>
