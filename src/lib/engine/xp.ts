@@ -1,5 +1,6 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
+import { streakDayIndex } from "@/lib/streak";
 
 const XP_PER_LEVEL = 250;
 
@@ -40,21 +41,17 @@ export async function touchDailyActivity(userId: string) {
   });
 
   const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const last = stats.lastActiveDate
-    ? new Date(
-        stats.lastActiveDate.getFullYear(),
-        stats.lastActiveDate.getMonth(),
-        stats.lastActiveDate.getDate()
-      )
-    : null;
+  // Day boundaries come from streakDayIndex (00:00 UTC-7) rather than the
+  // server's local calendar, so the rollover is the same for every user and
+  // doesn't move with the deploy environment's timezone.
+  const today = streakDayIndex(now);
+  const last = stats.lastActiveDate ? streakDayIndex(stats.lastActiveDate) : null;
 
-  if (last && last.getTime() === today.getTime()) {
+  if (last === today) {
     return stats; // already recorded today
   }
 
-  const oneDayMs = 24 * 60 * 60 * 1000;
-  const isConsecutive = last && today.getTime() - last.getTime() === oneDayMs;
+  const isConsecutive = last !== null && today - last === 1;
   const newStreak = isConsecutive ? stats.currentStreak + 1 : 1;
 
   return prisma.userStats.update({

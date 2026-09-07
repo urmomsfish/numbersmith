@@ -5,6 +5,7 @@ import { parseChoices, parseHints } from "@/lib/engine/scoring";
 import { Badge } from "@/components/ui/badge";
 import { IconFlame } from "@/components/app/icons";
 import { DailyChallengeRunner } from "./runner";
+import { effectiveStreak } from "@/lib/streak";
 
 const TRACK_LABEL: Record<string, string> = {
   ELEMENTARY: "Elementary",
@@ -53,7 +54,7 @@ export default async function DailyChallengePage() {
           <Badge tone="brand">{TRACK_LABEL[track]} track</Badge>
           <span className="flex items-center gap-1.5 rounded-full bg-orange-50 dark:bg-orange-950 px-3 py-1.5 text-sm font-semibold text-ember-600 dark:text-ember-400">
             <IconFlame className="h-4 w-4" />
-            {stats?.currentStreak ?? 0}
+            {effectiveStreak(stats?.currentStreak ?? 0, stats?.lastActiveDate)}
           </span>
         </div>
       </div>

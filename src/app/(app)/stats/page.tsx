@@ -8,6 +8,7 @@ import { isProUser } from "@/lib/subscription";
 import { difficultyLabel, ratingTier } from "@/lib/types";
 import { levelForXp, xpIntoLevel } from "@/lib/engine/xp";
 import { RatingChart } from "./rating-chart";
+import { effectiveStreak } from "@/lib/streak";
 
 export default async function StatsPage() {
   const user = await getCurrentUser();
@@ -77,7 +78,7 @@ export default async function StatsPage() {
         <StatTile label="Avg. Time" value={`${avgTime}s`} />
         <StatTile label="Rating" value={String(overall)} />
         <StatTile label="XP" value={xp.toLocaleString()} />
-        <StatTile label="Streak" value={`${stats?.currentStreak ?? 0}d`} />
+        <StatTile label="Streak" value={`${effectiveStreak(stats?.currentStreak ?? 0, stats?.lastActiveDate)}d`} />
       </div>
 
       <div className="mt-5 grid gap-5 lg:grid-cols-3">

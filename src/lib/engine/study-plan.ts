@@ -1,6 +1,7 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
 import { rankTopicsByPriority } from "@/lib/engine/practice";
+import { streakWeekday } from "@/lib/streak";
 
 /** Generates (or regenerates) a one-week recurring study plan template from
  * the student's current mastery, weak topics, primary competition, and
@@ -80,6 +81,9 @@ export async function getActiveStudyPlan(userId: string) {
 }
 
 export function todaysPlanDay<T extends { dayOfWeek: number }>(days: T[]): T | null {
-  const today = new Date().getDay(); // 0=Sunday..6=Saturday, matches our schema convention
+  // 0=Sunday..6=Saturday, matching our schema convention. Uses the same UTC-7
+  // boundary as streaks: getDay() would be the *server's* weekday, so on Vercel
+  // a user's plan flipped to tomorrow's at 5pm their time.
+  const today = streakWeekday();
   return days.find((d) => d.dayOfWeek === today) ?? null;
 }

@@ -5,6 +5,7 @@ import { Sidebar } from "@/components/app/sidebar";
 import { Topbar } from "@/components/app/topbar";
 import { isProUser } from "@/lib/subscription";
 import { paymentsAreLive } from "@/lib/stripe";
+import { effectiveStreak } from "@/lib/streak";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();
@@ -24,7 +25,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <Topbar
           name={user.name}
           email={user.email}
-          streak={stats?.currentStreak ?? 0}
+          streak={effectiveStreak(stats?.currentStreak ?? 0, stats?.lastActiveDate)}
           xp={stats?.totalXp ?? 0}
           rating={rating?.value ?? 1000}
           isPro={isPro}

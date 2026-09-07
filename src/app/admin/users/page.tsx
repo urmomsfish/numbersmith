@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { updateUserAction } from "@/lib/actions/admin-actions";
 import { DeleteUserForm } from "@/components/admin/delete-user-form";
 import { requireUser } from "@/lib/auth";
+import { effectiveStreak } from "@/lib/streak";
 
 export default async function AdminUsersPage({
   searchParams,
@@ -70,7 +71,7 @@ export default async function AdminUsersPage({
                 <td className="px-3 py-2.5 text-slate-600 dark:text-slate-300">{u.profile?.grade ?? "—"}</td>
                 <td className="px-3 py-2.5 text-slate-600 dark:text-slate-300">{u.ratings[0]?.value ?? "—"}</td>
                 <td className="px-3 py-2.5 text-slate-600 dark:text-slate-300">{u._count.attempts}</td>
-                <td className="px-3 py-2.5 text-slate-600 dark:text-slate-300">{u.stats?.currentStreak ?? 0}d</td>
+                <td className="px-3 py-2.5 text-slate-600 dark:text-slate-300">{effectiveStreak(u.stats?.currentStreak ?? 0, u.stats?.lastActiveDate)}d</td>
                 <td className="px-3 py-2.5">
                   <Badge
                     tone={

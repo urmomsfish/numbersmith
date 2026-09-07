@@ -9,7 +9,8 @@
     "lint": "eslint",
     "db:seed": "tsx prisma/seed.ts",
     "verify:answers": "tsx scripts/verify-answers.ts",
-    "verify:contrast": "node scripts/check-tint-contrast.mjs"
+    "verify:contrast": "node scripts/check-tint-contrast.mjs",
+    "verify:streak": "tsx scripts/check-streak-boundary.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

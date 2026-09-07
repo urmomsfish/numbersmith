@@ -9,6 +9,7 @@ import { IconFlame } from "@/components/app/icons";
 import { getActiveStudyPlan, todaysPlanDay } from "@/lib/engine/study-plan";
 import { pickPriorityTopic } from "@/lib/engine/practice";
 import { ratingTier } from "@/lib/types";
+import { effectiveStreak } from "@/lib/streak";
 
 export default async function DashboardPage() {
   const user = await getCurrentUser();
@@ -154,7 +155,7 @@ export default async function DashboardPage() {
               </p>
               <p className="mt-2 flex items-center justify-center gap-2 text-3xl font-extrabold text-ember-600 dark:text-ember-400">
                 <IconFlame className="h-7 w-7" />
-                {stats?.currentStreak ?? 0} days
+                {effectiveStreak(stats?.currentStreak ?? 0, stats?.lastActiveDate)} days
               </p>
               <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">Longest: {stats?.longestStreak ?? 0} days</p>
             </CardBody>
