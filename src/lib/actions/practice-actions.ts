@@ -9,6 +9,7 @@ import { touchDailyActivity, recordProblemOutcome, awardXp } from "@/lib/engine/
 import { checkAndUnlockAchievements } from "@/lib/engine/achievements";
 import { isProUser, FREE_DAILY_PROBLEM_LIMIT } from "@/lib/subscription";
 import { streakDayKey, STREAK_UTC_OFFSET_HOURS } from "@/lib/streak";
+import { earnsReward as shouldEarnReward } from "@/lib/engine/reward";
 import type { AttemptMode, MistakeReason } from "@/lib/types";
 
 export async function getTodayAttemptCount(userId: string) {
@@ -47,6 +48,15 @@ export async function submitPracticeAnswerAction(input: {
   const correct = checkAnswer(problem, input.answerGiven);
   const mode: AttemptMode = input.mode ?? "PRACTICE";
 
+  // Read prior history BEFORE recording this attempt, or the row we are about
+  // to write would count as its own precedent.
+  const prior = await prisma.attempt.findMany({
+    where: { userId: user.id, problemId: problem.id },
+    select: { correct: true },
+  });
+  const attemptedBefore = prior.length > 0;
+  const solvedBefore = prior.some((a) => a.correct);
+
   await prisma.attempt.create({
     data: {
       userId: user.id,
@@ -59,27 +69,26 @@ export async function submitPracticeAnswerAction(input: {
     },
   });
 
-  // Re-answering a problem you already missed must not pay out. Otherwise the
-  // mistake queue becomes the cheapest XP and rating in the app: the questions
-  // are ones you have already seen the solution to, and they can be cycled
-  // repeatedly. Mastery, streak, and the mistake bookkeeping still apply —
-  // review is real practice, it just isn't rewarded twice.
-  const isReview = mode === "MISTAKE_REVIEW";
+  // The payout rule lives in src/lib/engine/reward.ts so it can be tested
+  // exhaustively without a database. Mastery, streak, and mistake bookkeeping
+  // deliberately still run on repeats — re-practice is real practice, it just
+  // is not paid twice.
+  const earnsReward = shouldEarnReward({ mode, correct, attemptedBefore, solvedBefore });
 
   await updateTopicAndDomainMastery(user.id, problem.topicId, correct);
-  const ratingResult = isReview
-    ? { delta: 0, value: null as number | null }
-    : await applyRatingDelta(
+  const ratingResult = earnsReward
+    ? await applyRatingDelta(
         user.id,
         "OVERALL",
         problem.difficulty,
         correct,
         mode === "DAILY_CHALLENGE" ? "Daily Challenge" : "Practice session"
-      );
+      )
+    : { delta: 0, value: null as number | null };
   await touchDailyActivity(user.id);
   await recordProblemOutcome(user.id, correct);
 
-  const xp = isReview ? 0 : xpForDifficulty(problem.difficulty, correct);
+  const xp = earnsReward ? xpForDifficulty(problem.difficulty, correct) : 0;
   if (xp > 0) await awardXp(user.id, xp);
 
   if (!correct || input.hintsUsed >= 2 || input.timeSeconds > problem.estimatedTimeSeconds * 2) {
@@ -116,6 +125,12 @@ export async function submitPracticeAnswerAction(input: {
     ratingDelta: ratingResult.delta,
     newRating: ratingResult.value,
     xpAwarded: xp,
+    /** Why nothing was awarded, so the UI can say so instead of showing "+0". */
+    rewardSkipped: earnsReward
+      ? null
+      : mode === "MISTAKE_REVIEW"
+        ? ("review" as const)
+        : ("already-attempted" as const),
     newlyUnlocked: newlyUnlocked.map((a) => ({ name: a.name, icon: a.icon, xpReward: a.xpReward })),
   };
 }

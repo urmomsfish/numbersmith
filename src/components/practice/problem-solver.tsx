@@ -200,10 +200,12 @@ export function ProblemSolver({
           >
             {result.correct ? "Correct! " : "Not quite. "}
             <span className="font-normal text-slate-500 dark:text-slate-400">
-              {mode === "MISTAKE_REVIEW" ? (
-                // Review deliberately pays nothing, so showing "+0 rating · +0 XP"
+              {result.rewardSkipped ? (
+                // These paths deliberately pay nothing, so "+0 rating · +0 XP"
                 // would read as a bug rather than as the rule.
-                "Review — no XP or rating"
+                result.rewardSkipped === "review"
+                  ? "Review — no XP or rating"
+                  : "Already attempted — no XP or rating"
               ) : (
                 <>
                   {result.ratingDelta >= 0 ? "+" : ""}
