@@ -70,7 +70,7 @@ export default async function AdminOverviewPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
       <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Admin Overview</h1>
-      <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+      <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
         All figures are computed live from the database — no placeholder statistics.
       </p>
 

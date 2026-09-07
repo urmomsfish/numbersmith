@@ -22,7 +22,7 @@ export default async function EditCompetitionsPage() {
         ← Settings
       </Link>
       <h1 className="mt-4 text-2xl font-bold text-slate-900 dark:text-slate-50">Edit My Competitions</h1>
-      <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+      <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
         Changing your competitions rebuilds your training plan and dashboard recommendations.
       </p>
 

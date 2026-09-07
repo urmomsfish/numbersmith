@@ -40,7 +40,7 @@ export default async function MistakesPage() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Mistake Review</h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
             Every problem you missed, skipped, solved too slowly, or needed multiple hints on — brought
             back on a spaced schedule.
           </p>
@@ -61,7 +61,7 @@ export default async function MistakesPage() {
           <CardBody className="py-12 text-center">
             <p className="text-3xl">🎯</p>
             <p className="mt-3 font-semibold text-slate-900 dark:text-slate-50">No open mistakes.</p>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
               Keep practicing — anything you miss will show up here for spaced review.
             </p>
             <LinkButton href="/practice/session" className="mt-5">

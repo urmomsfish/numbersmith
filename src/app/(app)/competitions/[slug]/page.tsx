@@ -85,7 +85,7 @@ export default async function CompetitionDetailPage({
               </Badge>
             )}
           </div>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{competition.name}</p>
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{competition.name}</p>
         </div>
         <div className="flex gap-2">
           {!isProofBased && (

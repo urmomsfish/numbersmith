@@ -69,7 +69,7 @@ export default async function StatsPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
       <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Statistics</h1>
-      <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Your complete training record.</p>
+      <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">Your complete training record.</p>
 
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
         <StatTile label="Problems" value={String(stats?.problemsSolved ?? 0)} />

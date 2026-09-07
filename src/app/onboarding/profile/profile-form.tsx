@@ -197,7 +197,7 @@ export function ProfileForm() {
 
       <div className="rounded-2xl border border-brand-100 bg-brand-50/50 p-6 text-center dark:border-brand-900 dark:bg-brand-950/40">
         <p className="text-lg font-bold text-slate-900 dark:text-slate-50">Let&apos;s find your competition math level.</p>
-        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+        <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
           A short adaptive assessment — takes about 15-20 minutes.
         </p>
         <Button type="submit" size="lg" disabled={pending} className="mt-4">

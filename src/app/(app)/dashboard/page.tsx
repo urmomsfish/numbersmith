@@ -54,7 +54,7 @@ export default async function DashboardPage() {
       <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50 sm:text-3xl">
         Welcome back, {user.name.split(" ")[0]}!
       </h1>
-      <p className="mt-1 text-slate-500 dark:text-slate-400">Here&apos;s what NumberSmith recommends for today.</p>
+      <p className="mt-1 text-slate-600 dark:text-slate-300">Here&apos;s what NumberSmith recommends for today.</p>
 
       <div className="mt-6 grid gap-5 lg:grid-cols-3">
         <div className="space-y-5 lg:col-span-2">

@@ -70,8 +70,7 @@ const FG_LIGHT = base["--foreground"];
 const FG_DARK = baseDark["--foreground"];
 
 // Tailwind values used directly in component classNames, not via our CSS vars.
-const SLATE_500 = "#64748b"; // page subtitles, sit on --background
-const SLATE_600 = "#475569"; // sidebar nav labels, sit on --surface
+const SLATE_600 = "#475569"; // page subtitles and sidebar nav labels
 const CARD_LIGHT = "#ffffff"; // bg-white card
 const CARD_DARK = "#0f172a"; // dark:bg-slate-900 card
 
@@ -123,7 +122,7 @@ function chroma(hex) {
 }
 
 const AA = 4.5;
-const MIN_CHROMA_SHELL = 6;   // shell must stay bright, so it can only be subtle
+const MIN_CHROMA_SHELL = 20; // shell is the main canvas, so it must clearly read as coloured
 const MIN_CHROMA_SURFACE = 12; // chrome carries the theme, so it must be obvious
 
 let failures = 0;
@@ -143,7 +142,7 @@ for (const t of themes) {
   };
 
   // Light
-  const shellSubtitle = need("light shell: slate-500 subtitle", SLATE_500, t.light);
+  const shellSubtitle = need("light shell: slate-600 subtitle", SLATE_600, t.light);
   need("light shell: body text", FG_LIGHT, t.light);
   need("light shell: brand link", BRAND_600, t.light);
   const navText = need("light chrome: slate-600 nav", SLATE_600, t.lightSurface);

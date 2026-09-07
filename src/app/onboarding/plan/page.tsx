@@ -68,7 +68,7 @@ export default async function OnboardingPlanPage() {
 
         <div className="mt-8 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 sm:p-8">
           <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">Week 1 Training Plan</h2>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
             This plan updates automatically as you practice — NumberSmith always tells you what to work on next.
           </p>
           <div className="mt-5">

@@ -84,7 +84,7 @@ export default async function SimulationResultsPage({
           {attempt.mode === "CUSTOM" ? "Custom Competition" : attempt.competition.shortName}
         </Badge>
         <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50 sm:text-3xl">Simulation Results</h1>
-        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{attempt.submittedAt?.toLocaleString()}</p>
+        <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{attempt.submittedAt?.toLocaleString()}</p>
       </div>
 
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">

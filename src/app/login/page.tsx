@@ -40,7 +40,7 @@ export default function LoginPage() {
         </div>
         <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-8">
           <h1 className="text-xl font-bold text-slate-900 dark:text-slate-50">Welcome back</h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Log in to continue your training.</p>
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">Log in to continue your training.</p>
 
           <Suspense fallback={null}>
             <ResetSuccessBanner />

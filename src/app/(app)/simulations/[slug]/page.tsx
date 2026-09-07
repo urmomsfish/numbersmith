@@ -27,7 +27,7 @@ export default async function StartSimulationPage({
           Simulation
         </Badge>
         <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">{competition.name}</h1>
-        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{competition.shortName} full-length practice test</p>
+        <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{competition.shortName} full-length practice test</p>
 
         <dl className="mt-6 grid grid-cols-3 gap-3 text-center">
           <div className="rounded-xl bg-slate-50 dark:bg-slate-800 p-3">

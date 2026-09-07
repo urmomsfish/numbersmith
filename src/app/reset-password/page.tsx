@@ -97,7 +97,7 @@ export default function ResetPasswordPage() {
         </div>
         <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-8">
           <h1 className="text-xl font-bold text-slate-900 dark:text-slate-50">Enter your code</h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
             Enter the 6-digit code we emailed you, along with your new password.
           </p>
 

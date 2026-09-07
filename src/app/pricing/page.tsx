@@ -145,7 +145,7 @@ export default async function PricingPage({
                 <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">🆓 NumberSmith Free</h2>
                 {!isPro && user && <Badge tone="slate">Current plan</Badge>}
               </div>
-              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+              <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
                 Everything you need to find your level and start training.
               </p>
               <p className="mt-5">
@@ -185,7 +185,7 @@ export default async function PricingPage({
                 <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">⭐ NumberSmith Pro</h2>
                 {isPro && <Badge tone="brand">Current plan</Badge>}
               </div>
-              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+              <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
                 For students serious about competition results.
               </p>
 
