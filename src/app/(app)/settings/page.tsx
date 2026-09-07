@@ -7,6 +7,7 @@ import { Button, LinkButton } from "@/components/ui/button";
 import { getSubscription, grantsProAccess, isCancelPending } from "@/lib/subscription";
 import { cancelSubscriptionAction, startProTrialAction } from "@/lib/actions/subscription-actions";
 import { updateProfileAction } from "@/lib/actions/settings-actions";
+import { AccentPicker } from "@/components/accent-picker";
 
 export default async function SettingsPage() {
   const user = await getCurrentUser();
@@ -48,6 +49,22 @@ export default async function SettingsPage() {
               <dd className="font-medium text-slate-800 dark:text-slate-100">{user.role}</dd>
             </div>
           </dl>
+        </CardBody>
+      </Card>
+
+      <Card className="mt-5">
+        <CardBody>
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+            Appearance
+          </h2>
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+            Pick an accent colour. It themes buttons, links, and highlights, and gently tints the
+            background — in both light and dark mode. Saved on this device.
+          </p>
+          <AccentPicker className="mt-4" />
+          <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">
+            Use the sun/moon button in the top bar to switch between light and dark.
+          </p>
         </CardBody>
       </Card>
 

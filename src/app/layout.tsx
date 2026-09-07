@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ACCENT_IDS, DEFAULT_ACCENT } from "@/lib/accents";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -39,9 +40,21 @@ export const viewport: Viewport = {
 };
 
 // Runs before first paint (a plain inline <script>, not deferred) so the page
-// never flashes light-then-dark or vice versa. Respects a stored user choice
-// over the device's prefers-color-scheme; ThemeToggle writes that choice.
-const NO_FLASH_THEME_SCRIPT = `(function(){try{var t=localStorage.getItem('theme');var d=t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('dark',d);}catch(e){}})();`;
+// never flashes light-then-dark, or default-indigo-then-chosen-colour.
+// Respects a stored user choice over the device's prefers-color-scheme;
+// ThemeToggle and AccentPicker write those choices.
+//
+// The accent list is interpolated from ACCENT_IDS rather than hardcoded so it
+// can't drift from the CSS, and an unrecognised stored value falls back to the
+// default instead of setting an attribute no stylesheet matches.
+const NO_FLASH_THEME_SCRIPT = `(function(){try{
+var t=localStorage.getItem('theme');
+var d=t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches);
+document.documentElement.classList.toggle('dark',d);
+var a=localStorage.getItem('accent');
+var ok=${JSON.stringify(ACCENT_IDS)};
+document.documentElement.setAttribute('data-accent',ok.indexOf(a)>-1?a:${JSON.stringify(DEFAULT_ACCENT)});
+}catch(e){}})();`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
