@@ -50,7 +50,10 @@
  * Background tints
  *
  * `data-tint` on <html> (set by the inline script in the root layout, written
- * by TintPicker) swaps only the page background for a faintly coloured one.
+ * by TintPicker) recolours the page shell and the chrome (sidebar, topbar,
+ * marketing header) to a single shared shade, so the whole frame reads as one
+ * surface. Only the untinted default keeps the original two-tone look of a
+ * white sidebar over a slate-50 shell.
  * The --brand-* ramp above is deliberately NOT overridden: buttons, links, and
  * badges stay indigo under every tint, so choosing a colour can never change
  * the contrast of a control against its own background. "default" is the
@@ -73,64 +76,64 @@
 
 [data-tint="violet"] {
   --background: #ede9fe;
-  --surface: #f5f3ff;
+  --surface: #ede9fe;
 }
 .dark[data-tint="violet"] {
-  --background: #1a1033;
+  --background: #241748;
   --surface: #241748;
 }
 
 [data-tint="blue"] {
   --background: #dbeafe;
-  --surface: #eff6ff;
+  --surface: #dbeafe;
 }
 .dark[data-tint="blue"] {
-  --background: #0c1c3d;
+  --background: #12294f;
   --surface: #12294f;
 }
 
 [data-tint="cyan"] {
   --background: #cffafe;
-  --surface: #ecfeff;
+  --surface: #cffafe;
 }
 .dark[data-tint="cyan"] {
-  --background: #06252e;
+  --background: #092f3c;
   --surface: #092f3c;
 }
 
 [data-tint="emerald"] {
   --background: #d1fae5;
-  --surface: #ecfdf5;
+  --surface: #d1fae5;
 }
 .dark[data-tint="emerald"] {
-  --background: #06251a;
+  --background: #093022;
   --surface: #093022;
 }
 
 [data-tint="rose"] {
   --background: #ffe4e6;
-  --surface: #fff1f2;
+  --surface: #ffe4e6;
 }
 .dark[data-tint="rose"] {
-  --background: #2a0d16;
+  --background: #3d1421;
   --surface: #3d1421;
 }
 
 [data-tint="amber"] {
   --background: #fef3c7;
-  --surface: #fffbeb;
+  --surface: #fef3c7;
 }
 .dark[data-tint="amber"] {
-  --background: #2a1c05;
+  --background: #3d2908;
   --surface: #3d2908;
 }
 
 [data-tint="orange"] {
   --background: #ffedd5;
-  --surface: #fff7ed;
+  --surface: #ffedd5;
 }
 .dark[data-tint="orange"] {
-  --background: #2a1206;
+  --background: #3d1c0a;
   --surface: #3d1c0a;
 }
 
