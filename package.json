@@ -9,7 +9,7 @@
     "lint": "eslint",
     "db:seed": "tsx prisma/seed.ts",
     "verify:answers": "tsx scripts/verify-answers.ts",
-    "verify:contrast": "node scripts/check-accent-contrast.mjs"
+    "verify:contrast": "node scripts/check-tint-contrast.mjs"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

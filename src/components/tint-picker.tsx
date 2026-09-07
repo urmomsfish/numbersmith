@@ -1,19 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ACCENTS, DEFAULT_ACCENT, isAccentId, type AccentId } from "@/lib/accents";
+import { TINTS, DEFAULT_TINT, isTintId, type TintId } from "@/lib/tints";
 import { cn } from "@/lib/cn";
 
 /** Reads what the no-flash script already put on <html>, so the correct swatch
  * is ringed on first paint rather than flicking over from the default. */
-function currentAccent(): AccentId {
-  if (typeof document === "undefined") return DEFAULT_ACCENT;
-  const value = document.documentElement.getAttribute("data-accent");
-  return isAccentId(value) ? value : DEFAULT_ACCENT;
+function currentTint(): TintId {
+  if (typeof document === "undefined") return DEFAULT_TINT;
+  const value = document.documentElement.getAttribute("data-tint");
+  return isTintId(value) ? value : DEFAULT_TINT;
 }
 
-export function AccentPicker({ className }: { className?: string }) {
-  const [accent, setAccent] = useState<AccentId>(currentAccent);
+export function TintPicker({ className }: { className?: string }) {
+  const [tint, setTint] = useState<TintId>(currentTint);
   // The server can't know the stored preference, so the checked state is held
   // back until mount — otherwise hydration mismatches on the radio inputs.
   const [mounted, setMounted] = useState(false);
@@ -21,38 +21,34 @@ export function AccentPicker({ className }: { className?: string }) {
   // eslint-disable-next-line react-hooks/set-state-in-effect -- mount-detection guard, not state sync
   useEffect(() => setMounted(true), []);
 
-  function pick(id: AccentId) {
-    setAccent(id);
-    document.documentElement.setAttribute("data-accent", id);
+  function pick(id: TintId) {
+    setTint(id);
+    document.documentElement.setAttribute("data-tint", id);
     try {
-      localStorage.setItem("accent", id);
+      localStorage.setItem("tint", id);
     } catch {
-      // Private-mode / storage-disabled: the colour still applies for this
-      // page load, it just won't be remembered. Not worth surfacing.
+      // Private-mode / storage-disabled: the tint still applies for this page
+      // load, it just won't be remembered. Not worth surfacing.
     }
   }
 
   return (
     <div className={cn("flex flex-wrap gap-2.5", className)}>
-      {ACCENTS.map((a) => {
-        const selected = mounted && accent === a.id;
+      {TINTS.map((t) => {
+        const selected = mounted && tint === t.id;
         return (
-          <label
-            key={a.id}
-            title={a.label}
-            className="cursor-pointer"
-          >
+          <label key={t.id} title={t.label} className="cursor-pointer">
             <input
               type="radio"
-              name="accent"
-              value={a.id}
+              name="tint"
+              value={t.id}
               checked={selected}
-              onChange={() => pick(a.id)}
+              onChange={() => pick(t.id)}
               className="peer sr-only"
             />
             <span
               aria-hidden="true"
-              style={{ backgroundColor: a.swatch }}
+              style={{ backgroundColor: t.swatch }}
               className={cn(
                 "flex h-9 w-9 items-center justify-center rounded-full ring-offset-2 transition-all",
                 "ring-offset-white dark:ring-offset-slate-900",
@@ -74,7 +70,7 @@ export function AccentPicker({ className }: { className?: string }) {
                 </svg>
               )}
             </span>
-            <span className="sr-only">{a.label}</span>
+            <span className="sr-only">{t.label}</span>
           </label>
         );
       })}
