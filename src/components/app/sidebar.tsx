@@ -34,7 +34,7 @@ export function Sidebar({ isAdmin }: { isAdmin?: boolean }) {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden w-60 shrink-0 flex-col border-r border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 lg:flex">
+    <aside className="hidden w-60 shrink-0 flex-col border-r border-slate-200 bg-surface dark:border-slate-800 lg:flex">
       <div className="px-5 py-5">
         <Logo href="/dashboard" />
       </div>

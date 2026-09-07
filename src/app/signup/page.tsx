@@ -23,7 +23,7 @@ export default function SignupPage() {
   const [state, formAction, pending] = useActionState(signupAction, undefined);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-950 px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-12">
       <div className="w-full max-w-sm">
         <div className="mb-8 flex justify-center">
           <Logo />

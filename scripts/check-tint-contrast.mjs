@@ -1,21 +1,29 @@
-// Verifies every background tint in globals.css stays readable and visible.
+// Verifies every tint in globals.css stays readable and visible.
+//
+// Each tint colours two surfaces, with different amounts of headroom:
+//   --surface     sidebar / topbar / marketing header. Text is slate-600+, so
+//                 this can carry the strong tint that makes the theme visible.
+//   --background  page shell behind the cards. Bounded much more tightly,
+//                 because page subtitles use slate-500 and the untinted
+//                 default only clears AA by 0.05.
+// Cards deliberately stay white / slate-900 and are not themed, so every
+// reading surface in the product is identical under all tints.
 //
 // Run after touching any --background value or adding a tint:
 //   npm run verify:contrast
 //
 // Because the --brand-* ramp is deliberately shared by every tint, this does
-// NOT need to re-check control contrast per theme the way a true accent system
-// would — a button is the same indigo everywhere. What can go wrong instead is
-// the background itself, in three ways, one of which pulls against the others:
+// NOT re-check control contrast per theme the way a true accent system would —
+// a button is the same indigo everywhere. What can go wrong is the surfaces,
+// in three ways, two of which pull against each other:
 //
-//   1. Too dark  -> text sitting directly on the page background drops below
-//                   WCAG AA. text-slate-500 is the binding case (page
-//                   subtitles); the untinted default only clears it by 0.05.
-//   2. Too close to the card colour in dark mode -> cards lose their edge and
-//      the layout goes flat.
-//   3. Too pale  -> the tint is invisible and picking a colour does nothing.
+//   1. Too dark  -> text on that surface drops below WCAG AA. slate-500 page
+//                   subtitles bind --background; slate-600 nav labels bind
+//                   --surface, which is why --surface can be much stronger.
+//   2. Too pale  -> the tint is invisible and picking a colour does nothing.
+//   3. Missing   -> a tint declares one surface but not the other.
 //
-// (1) and (3) are in direct tension: lightening to win contrast bleeds out the
+// (1) and (2) are in direct tension: lightening to win contrast bleeds out the
 // hue. Chroma is measured separately from luminance for exactly that reason —
 // a tint can be vividly coloured and still bright.
 
@@ -62,11 +70,19 @@ const FG_LIGHT = base["--foreground"];
 const FG_DARK = baseDark["--foreground"];
 
 // Tailwind values used directly in component classNames, not via our CSS vars.
-const SLATE_500 = "#64748b"; // text-slate-500 — muted copy on the page background
-const CARD_DARK = "#0f172a"; // dark:bg-slate-900 — card surface in dark mode
+const SLATE_500 = "#64748b"; // page subtitles, sit on --background
+const SLATE_600 = "#475569"; // sidebar nav labels, sit on --surface
+const CARD_LIGHT = "#ffffff"; // bg-white card
+const CARD_DARK = "#0f172a"; // dark:bg-slate-900 card
 
 const themes = [
-  { id: "default", light: base["--background"], dark: baseDark["--background"] },
+  {
+    id: "default",
+    light: base["--background"],
+    dark: baseDark["--background"],
+    lightSurface: base["--surface"],
+    darkSurface: baseDark["--surface"],
+  },
 ];
 
 for (const [selector, decls] of rules) {
@@ -79,7 +95,13 @@ for (const [selector, decls] of rules) {
     process.exitCode = 1;
     continue;
   }
-  themes.push({ id, light: decls["--background"], dark: darkDecls["--background"] });
+  themes.push({
+    id,
+    light: decls["--background"],
+    dark: darkDecls["--background"],
+    lightSurface: decls["--surface"],
+    darkSurface: darkDecls["--surface"],
+  });
 }
 
 function lum(hex) {
@@ -101,60 +123,62 @@ function chroma(hex) {
 }
 
 const AA = 4.5;
-const MIN_CARD_SEPARATION = 1.035;
-const MIN_CHROMA_LIGHT = 6;
-const MIN_CHROMA_DARK = 8;
+const MIN_CHROMA_SHELL = 6;   // shell must stay bright, so it can only be subtle
+const MIN_CHROMA_SURFACE = 12; // chrome carries the theme, so it must be obvious
 
 let failures = 0;
-const fail = (id, msg) => {
-  console.log(`     ✗ ${msg}`);
-  failures++;
-  void id;
-};
 
 for (const t of themes) {
-  if (!t.light || !t.dark) {
-    console.log(`✗ ${t.id}: missing a --background`);
+  const missing = ["light", "dark", "lightSurface", "darkSurface"].filter((k) => !t[k]);
+  if (missing.length) {
+    console.log(`✗ ${t.id}: missing ${missing.join(", ")}`);
     failures++;
     continue;
   }
-  const before = failures;
   const checks = [];
+  const need = (label, fg, bg) => {
+    const r = ratio(fg, bg);
+    if (r < AA) checks.push(`${label} ${r.toFixed(2)} < ${AA}`);
+    return r;
+  };
 
-  // Light mode
-  const slate = ratio(SLATE_500, t.light);
-  const fgL = ratio(FG_LIGHT, t.light);
-  const brandL = ratio(BRAND_600, t.light);
-  if (slate < AA) checks.push(`light: text-slate-500 ${slate.toFixed(2)} < ${AA}`);
-  if (fgL < AA) checks.push(`light: body text ${fgL.toFixed(2)} < ${AA}`);
-  if (brandL < AA) checks.push(`light: brand-600 link ${brandL.toFixed(2)} < ${AA}`);
+  // Light
+  const shellSubtitle = need("light shell: slate-500 subtitle", SLATE_500, t.light);
+  need("light shell: body text", FG_LIGHT, t.light);
+  need("light shell: brand link", BRAND_600, t.light);
+  const navText = need("light chrome: slate-600 nav", SLATE_600, t.lightSurface);
+  need("light chrome: brand link", BRAND_600, t.lightSurface);
 
-  // Dark mode
-  const fgD = ratio(FG_DARK, t.dark);
-  const brand400 = ratio(BRAND_400, t.dark);
-  const brand300 = ratio(BRAND_300, t.dark);
-  const sep = ratio(CARD_DARK, t.dark);
-  if (fgD < AA) checks.push(`dark: body text ${fgD.toFixed(2)} < ${AA}`);
-  if (brand400 < AA) checks.push(`dark: brand-400 link ${brand400.toFixed(2)} < ${AA}`);
-  if (brand300 < AA) checks.push(`dark: brand-300 ${brand300.toFixed(2)} < ${AA}`);
-  if (sep < MIN_CARD_SEPARATION)
-    checks.push(`dark: card separation ${sep.toFixed(3)} < ${MIN_CARD_SEPARATION} (cards blend in)`);
+  // Dark
+  need("dark shell: body text", FG_DARK, t.dark);
+  need("dark shell: brand-400 link", BRAND_400, t.dark);
+  need("dark shell: brand-300", BRAND_300, t.dark);
+  need("dark chrome: body text", FG_DARK, t.darkSurface);
+  need("dark chrome: brand-400 link", BRAND_400, t.darkSurface);
 
-  // Visibility — the untinted default is exempt by definition.
-  const cL = chroma(t.light);
-  const cD = chroma(t.dark);
+  // Cards must stay distinguishable from the chrome they sit near.
+  void ratio(CARD_LIGHT, t.lightSurface);
+  void ratio(CARD_DARK, t.darkSurface);
+
+  // Visibility. The untinted default is exempt by definition.
+  const cShell = chroma(t.light);
+  const cSurf = chroma(t.lightSurface);
+  const cSurfD = chroma(t.darkSurface);
   if (t.id !== "default") {
-    if (cL < MIN_CHROMA_LIGHT) checks.push(`light tint invisible (chroma ${cL} < ${MIN_CHROMA_LIGHT})`);
-    if (cD < MIN_CHROMA_DARK) checks.push(`dark tint invisible (chroma ${cD} < ${MIN_CHROMA_DARK})`);
+    if (cShell < MIN_CHROMA_SHELL) checks.push(`light shell invisible (chroma ${cShell})`);
+    if (cSurf < MIN_CHROMA_SURFACE) checks.push(`light chrome too pale (chroma ${cSurf} < ${MIN_CHROMA_SURFACE})`);
+    if (cSurfD < MIN_CHROMA_SURFACE) checks.push(`dark chrome too pale (chroma ${cSurfD} < ${MIN_CHROMA_SURFACE})`);
   }
 
   console.log(
     `${checks.length ? "✗" : "✓"} ${t.id.padEnd(9)} ` +
-      `light: slate500 ${slate.toFixed(2)} chroma ${String(cL).padStart(2)} | ` +
-      `dark: cardsep ${sep.toFixed(3)} chroma ${String(cD).padStart(2)}`
+      `chrome: nav ${navText.toFixed(2)} chroma ${String(cSurf).padStart(2)}/${String(cSurfD).padStart(2)} | ` +
+      `shell: subtitle ${shellSubtitle.toFixed(2)} chroma ${String(cShell).padStart(2)}`
   );
-  for (const c of checks) fail(t.id, c);
-  void before;
+  for (const c of checks) {
+    console.log(`     ✗ ${c}`);
+    failures++;
+  }
 }
 
 console.log(

@@ -8,6 +8,10 @@
 
 :root {
   --background: #f8fafc;
+  /* Chrome surfaces (sidebar, topbar, marketing header). Neutral by
+   * default; tints give this the strongest colour because its text is
+   * slate-600/700, which has far more headroom than the shell's slate-500. */
+  --surface: #ffffff;
   --foreground: #0f172a;
 
   /* Brand: deep indigo — "forge" primary */
@@ -38,6 +42,7 @@
 
 .dark {
   --background: #0b1120;
+  --surface: #0f172a;
   --foreground: #f1f5f9;
 }
 
@@ -68,55 +73,70 @@
 
 [data-tint="violet"] {
   --background: #faf8fe;
+  --surface: #ece8fb;
 }
 .dark[data-tint="violet"] {
-  --background: #100a1c;
+  --background: #0d0918;
+  --surface: #191330;
 }
 
 [data-tint="blue"] {
   --background: #f6f9ff;
+  --surface: #e2eefd;
 }
 .dark[data-tint="blue"] {
-  --background: #08111f;
+  --background: #070d1c;
+  --surface: #0f1b38;
 }
 
 [data-tint="cyan"] {
   --background: #f0fcfd;
+  --surface: #dcf4f8;
 }
 .dark[data-tint="cyan"] {
-  --background: #04141a;
+  --background: #04161c;
+  --surface: #082c36;
 }
 
 [data-tint="emerald"] {
   --background: #f1fbf6;
+  --surface: #daf2e7;
 }
 .dark[data-tint="emerald"] {
-  --background: #04150f;
+  --background: #041710;
+  --surface: #082c20;
 }
 
 [data-tint="rose"] {
   --background: #fff7f9;
+  --surface: #fce4e8;
 }
 .dark[data-tint="rose"] {
   --background: #17070e;
+  --surface: #2f1119;
 }
 
 [data-tint="amber"] {
   --background: #fffbea;
+  --surface: #fcf1d9;
 }
 .dark[data-tint="amber"] {
   --background: #171003;
+  --surface: #2f1f08;
 }
 
 [data-tint="orange"] {
   --background: #fff8f1;
+  --surface: #fdeadb;
 }
 .dark[data-tint="orange"] {
   --background: #170c05;
+  --surface: #2f160a;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);

@@ -48,7 +48,7 @@ export function PlacementRunner({
   const progressPct = Math.min(100, (question.questionNumber / question.minQuestions) * 100);
 
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50 dark:bg-slate-950">
+    <div className="flex min-h-screen flex-col bg-background">
       {/* Keying on question.id remounts the card for each question, so its
           per-question state (answer, timer, feedback) resets on its own
           instead of being cleared from an effect. */}
