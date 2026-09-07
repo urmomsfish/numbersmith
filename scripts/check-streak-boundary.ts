@@ -13,6 +13,7 @@
 
 import {
   streakDayIndex,
+  streakDayKey,
   effectiveStreak,
   streakWeekday,
   STREAK_UTC_OFFSET_HOURS,
@@ -94,6 +95,28 @@ function runSuite(tz: string) {
   // 06:00Z is 23:00 UTC-7 the previous day — still Sunday, not yet Monday.
   check("23:00 UTC-7 Sun => still Sunday", streakWeekday(D("2026-09-07T06:00:00.000Z")), 0);
   check("00:00 UTC-7 Mon => Monday", streakWeekday(D("2026-09-07T07:00:00.000Z")), 1);
+
+  // The daily challenge keys its rows off streakDayKey and selects the problem
+  // from that key's epoch-day number. If this invariant ever broke, the
+  // challenge and the streak would disagree about what day it is, and existing
+  // rows would remap to different problems.
+  for (const iso of [
+    "2026-09-07T17:59:00.000Z",
+    "2026-09-07T06:59:59.000Z",
+    "2026-09-07T07:00:00.000Z",
+    "2026-01-15T03:20:00.000Z",
+  ]) {
+    check(
+      `challenge day key aligns with streak day at ${iso}`,
+      streakDayKey(D(iso)).getTime() / DAY_MS,
+      streakDayIndex(D(iso))
+    );
+  }
+  // The key must be a clean UTC midnight, or the unique [date, track] index
+  // would admit duplicate rows for one day.
+  check("day key is UTC midnight", streakDayKey(D("2026-09-07T17:59:00.000Z")).toISOString(), "2026-09-07T00:00:00.000Z");
+  // 06:59Z is still the previous UTC-7 day.
+  check("just before rollover keys to previous day", streakDayKey(D("2026-09-07T06:59:59.000Z")).toISOString(), "2026-09-06T00:00:00.000Z");
   // Clock skew must not punish the user.
   check(
     "future lastActiveDate => preserved",

@@ -31,6 +31,21 @@ export function isSameStreakDay(a: Date, b: Date): boolean {
   return streakDayIndex(a) === streakDayIndex(b);
 }
 
+/** The calendar day a moment belongs to, expressed as that day's UTC midnight.
+ *
+ * This is the storage key for date-only rows (DailyChallenge.date). Storing UTC
+ * midnight for a date is a normal convention and is unchanged; what this fixes
+ * is *which* date an instant maps to. It holds the invariant
+ * `streakDayKey(t).getTime() / 86400000 === streakDayIndex(t)`, which is what
+ * guarantees the daily challenge and the streak never disagree about the day —
+ * and that moving the boundary did not remap any existing row to a new problem.
+ */
+export function streakDayKey(at: Date = new Date()): Date {
+  const d = new Date(at.getTime() + OFFSET_MS);
+  d.setUTCHours(0, 0, 0, 0);
+  return d;
+}
+
 /** Day of week (0=Sunday) on the same UTC-7 boundary, for anything that has to
  * agree with the streak about what day it is — "today's plan" sits directly
  * beside the streak on the dashboard, so the two disagreeing would be visible. */

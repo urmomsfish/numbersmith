@@ -1,6 +1,7 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
 import type { DailyChallengeTrack } from "@/lib/types";
+import { streakDayKey } from "@/lib/streak";
 
 const TRACK_DIFFICULTY: Record<DailyChallengeTrack, [number, number]> = {
   ELEMENTARY: [1, 2],
@@ -24,16 +25,11 @@ export function trackForStudent(grade: number, rating: number): DailyChallengeTr
   return "ELEMENTARY";
 }
 
-function utcMidnight(date = new Date()) {
-  const d = new Date(date);
-  d.setUTCHours(0, 0, 0, 0);
-  return d;
-}
 
 /** Deterministically picks a problem for a track/date pair so every student on
  * the same track sees the same daily challenge, with no AI or randomness. */
 export async function getOrCreateDailyChallenge(track: DailyChallengeTrack, date = new Date()) {
-  const day = utcMidnight(date);
+  const day = streakDayKey(date);
 
   const existing = await prisma.dailyChallenge.findUnique({
     where: { date_track: { date: day, track } },
