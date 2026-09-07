@@ -6,7 +6,7 @@ import { cn } from "@/lib/cn";
 import { Badge } from "@/components/ui/badge";
 import { Button, LinkButton } from "@/components/ui/button";
 import { submitPracticeAnswerAction } from "@/lib/actions/practice-actions";
-import { difficultyLabel } from "@/lib/types";
+import { difficultyLabel, type AttemptMode } from "@/lib/types";
 import { LEGAL } from "@/lib/legal";
 
 const CHOICE_LETTERS = ["A", "B", "C", "D", "E", "F"];
@@ -45,7 +45,7 @@ export function ProblemSolver({
   continueLabel = "Next Problem →",
 }: {
   problem: SolverProblem;
-  mode?: "PRACTICE" | "DAILY_CHALLENGE";
+  mode?: AttemptMode;
   onContinue?: (result: SubmitResult) => void;
   continueLabel?: string;
 }) {
@@ -200,8 +200,16 @@ export function ProblemSolver({
           >
             {result.correct ? "Correct! " : "Not quite. "}
             <span className="font-normal text-slate-500 dark:text-slate-400">
-              {result.ratingDelta >= 0 ? "+" : ""}
-              {result.ratingDelta} rating · +{result.xpAwarded} XP
+              {mode === "MISTAKE_REVIEW" ? (
+                // Review deliberately pays nothing, so showing "+0 rating · +0 XP"
+                // would read as a bug rather than as the rule.
+                "Review — no XP or rating"
+              ) : (
+                <>
+                  {result.ratingDelta >= 0 ? "+" : ""}
+                  {result.ratingDelta} rating · +{result.xpAwarded} XP
+                </>
+              )}
             </span>
           </div>
           <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4">

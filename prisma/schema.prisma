@@ -389,7 +389,11 @@ model PlacementAttempt {
 // Practice attempts, mistakes, bookmarks
 // ---------------------------------------------------------------------------
 
-/// mode: PRACTICE | DAILY_CHALLENGE | SIMULATION | PLACEMENT | LESSON
+/// mode: PRACTICE | DAILY_CHALLENGE | SIMULATION | PLACEMENT | LESSON | MISTAKE_REVIEW
+/// MISTAKE_REVIEW attempts are recorded and scored like any other, but award no
+/// XP and no rating — the problems are ones the user has already seen the
+/// solution to, so paying out would make the review queue the cheapest points
+/// in the app. Enforced in submitPracticeAnswerAction.
 model Attempt {
   id          String   @id @default(cuid())
   userId      String

@@ -25,6 +25,7 @@ export default async function MistakeReviewPage() {
       topicName="Mistake Review"
       focusMessage="These are problems you previously missed — resolving them removes them from your review queue."
       isPro={isPro}
+      mode="MISTAKE_REVIEW"
       problems={mistakes.map((m) => ({
         id: m.problem.id,
         question: m.problem.question,

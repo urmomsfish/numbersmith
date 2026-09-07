@@ -29,7 +29,16 @@ export type PlacementLevel =
   | "MASTER"
   | "ELITE";
 
-export type AttemptMode = "PRACTICE" | "DAILY_CHALLENGE" | "SIMULATION" | "PLACEMENT" | "LESSON";
+export type AttemptMode =
+  | "PRACTICE"
+  | "DAILY_CHALLENGE"
+  | "SIMULATION"
+  | "PLACEMENT"
+  | "LESSON"
+  /** Re-attempting a problem already in the mistake queue. Scored and recorded
+   * like any other attempt, but awards no XP and no rating — see
+   * submitPracticeAnswerAction. */
+  | "MISTAKE_REVIEW";
 
 export type MistakeReason = "INCORRECT" | "SKIPPED" | "SLOW" | "MULTI_HINT";
 

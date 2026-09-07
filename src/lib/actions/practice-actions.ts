@@ -8,11 +8,14 @@ import { applyRatingDelta } from "@/lib/engine/rating";
 import { touchDailyActivity, recordProblemOutcome, awardXp } from "@/lib/engine/xp";
 import { checkAndUnlockAchievements } from "@/lib/engine/achievements";
 import { isProUser, FREE_DAILY_PROBLEM_LIMIT } from "@/lib/subscription";
+import { streakDayKey, STREAK_UTC_OFFSET_HOURS } from "@/lib/streak";
 import type { AttemptMode, MistakeReason } from "@/lib/types";
 
 export async function getTodayAttemptCount(userId: string) {
-  const start = new Date();
-  start.setHours(0, 0, 0, 0);
+  // The free cap resets on the same 00:00 UTC-7 boundary as streaks and the
+  // daily challenge. setHours() here was local time — midnight UTC on Vercel —
+  // so the cap reset at a different moment than everything else.
+  const start = new Date(streakDayKey().getTime() - STREAK_UTC_OFFSET_HOURS * 60 * 60 * 1000);
   return prisma.attempt.count({ where: { userId, createdAt: { gte: start } } });
 }
 
@@ -56,19 +59,28 @@ export async function submitPracticeAnswerAction(input: {
     },
   });
 
+  // Re-answering a problem you already missed must not pay out. Otherwise the
+  // mistake queue becomes the cheapest XP and rating in the app: the questions
+  // are ones you have already seen the solution to, and they can be cycled
+  // repeatedly. Mastery, streak, and the mistake bookkeeping still apply —
+  // review is real practice, it just isn't rewarded twice.
+  const isReview = mode === "MISTAKE_REVIEW";
+
   await updateTopicAndDomainMastery(user.id, problem.topicId, correct);
-  const ratingResult = await applyRatingDelta(
-    user.id,
-    "OVERALL",
-    problem.difficulty,
-    correct,
-    mode === "DAILY_CHALLENGE" ? "Daily Challenge" : "Practice session"
-  );
+  const ratingResult = isReview
+    ? { delta: 0, value: null as number | null }
+    : await applyRatingDelta(
+        user.id,
+        "OVERALL",
+        problem.difficulty,
+        correct,
+        mode === "DAILY_CHALLENGE" ? "Daily Challenge" : "Practice session"
+      );
   await touchDailyActivity(user.id);
   await recordProblemOutcome(user.id, correct);
 
-  const xp = xpForDifficulty(problem.difficulty, correct);
-  await awardXp(user.id, xp);
+  const xp = isReview ? 0 : xpForDifficulty(problem.difficulty, correct);
+  if (xp > 0) await awardXp(user.id, xp);
 
   if (!correct || input.hintsUsed >= 2 || input.timeSeconds > problem.estimatedTimeSeconds * 2) {
     const reason: MistakeReason = !correct ? "INCORRECT" : input.hintsUsed >= 2 ? "MULTI_HINT" : "SLOW";

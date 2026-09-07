@@ -1,42 +1,54 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { ProblemSolver, type SolverProblem } from "@/components/practice/problem-solver";
 import { ProgressBar } from "@/components/ui/progress";
 import { LinkButton } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import type { AttemptMode } from "@/lib/types";
 
 export function SessionRunner({
   problems,
   topicName,
   focusMessage,
   isPro,
+  mode,
 }: {
   problems: SolverProblem[];
   topicName: string;
   focusMessage: string;
   isPro: boolean;
+  mode?: AttemptMode;
 }) {
-  const router = useRouter();
   const [index, setIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [finished, setFinished] = useState(false);
+  // Frozen on mount, never read from the prop. handleContinue calls
+  // router.refresh(), which re-runs the server component — and in mistake
+  // review that query returns fewer rows, because the ones just answered
+  // correctly are now resolved and filtered out. Reading problems.length after
+  // that produced "solved 2 of 1".
+  const [total] = useState(problems.length);
 
   const current = problems[index];
 
   function handleContinue(result: { capped?: boolean; correct?: boolean }) {
     if (result.correct) setCorrectCount((c) => c + 1);
-    if (index + 1 >= problems.length) {
+    if (index + 1 >= total) {
+      // Deliberately no router.refresh() here. Refreshing re-runs the server
+      // component, and in mistake review that query now returns zero due rows
+      // (the ones just answered are resolved or rescheduled), which trips its
+      // `redirect("/mistakes")` — throwing the user off the summary they just
+      // earned. Both buttons below navigate, and those navigations fetch fresh
+      // server data anyway, so nothing goes stale.
       setFinished(true);
-      router.refresh();
     } else {
       setIndex((i) => i + 1);
     }
   }
 
   if (finished) {
-    const accuracy = Math.round((correctCount / problems.length) * 100);
+    const accuracy = total > 0 ? Math.round((correctCount / total) * 100) : 0;
     return (
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6">
         <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-8 text-center">
@@ -44,7 +56,7 @@ export function SessionRunner({
           <h2 className="mt-3 text-xl font-bold text-slate-900 dark:text-slate-50">Session complete</h2>
           <p className="mt-2 text-slate-500 dark:text-slate-400">
             You solved <span className="font-semibold text-slate-800 dark:text-slate-100">{correctCount}</span> of{" "}
-            {problems.length} correctly — {accuracy}% accuracy.
+            {total} correctly — {accuracy}% accuracy.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <LinkButton href="/dashboard" variant="outline">
@@ -71,10 +83,10 @@ export function SessionRunner({
         <div className="mb-2 flex items-center justify-between">
           <Badge tone="brand">Adaptive Session · {topicName}</Badge>
           <span className="text-xs font-medium text-slate-400 dark:text-slate-500">
-            {index + 1} of {problems.length}
+            {index + 1} of {total}
           </span>
         </div>
-        <ProgressBar value={((index) / problems.length) * 100} tone="brand" />
+        <ProgressBar value={(index / total) * 100} tone="brand" />
         <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">{focusMessage}</p>
       </div>
 
@@ -82,7 +94,8 @@ export function SessionRunner({
         key={current.id}
         problem={current}
         onContinue={handleContinue}
-        continueLabel={index + 1 >= problems.length ? "Finish Session →" : "Next Problem →"}
+        mode={mode}
+        continueLabel={index + 1 >= total ? "Finish Session →" : "Next Problem →"}
       />
     </div>
   );
