@@ -45,8 +45,8 @@ export default async function DailyChallengePage() {
           <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
             {/* The challenge's own date, formatted in UTC because that is how
                 the date-only value is stored. Using new Date() here printed the
-                *server's* day, which drifts from the challenge for the 7 hours
-                between 00:00 UTC and the 00:00 UTC-7 rollover. */}
+                *server's* day, which drifts from the challenge for the 7-8 hours
+                between 00:00 UTC and the midnight-Pacific rollover. */}
             {challenge.date.toLocaleDateString("en-US", {
               weekday: "long",
               month: "long",
@@ -89,7 +89,7 @@ export default async function DailyChallengePage() {
 
       <p className="mt-6 text-center text-xs text-slate-400 dark:text-slate-500">
         You&apos;ve completed {totalCompleted} daily challenge{totalCompleted === 1 ? "" : "s"}. A new
-        one unlocks every day at midnight UTC-7, the same time your streak rolls over.
+        one unlocks every day at midnight US Pacific, the same time your streak rolls over.
       </p>
     </div>
   );

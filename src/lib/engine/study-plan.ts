@@ -81,8 +81,9 @@ export async function getActiveStudyPlan(userId: string) {
 }
 
 export function todaysPlanDay<T extends { dayOfWeek: number }>(days: T[]): T | null {
-  // 0=Sunday..6=Saturday, matching our schema convention. Uses the same UTC-7
-  // boundary as streaks: getDay() would be the *server's* weekday, so on Vercel
+  // 0=Sunday..6=Saturday, matching our schema convention. Uses the same
+  // midnight-Pacific boundary as streaks: getDay() would be the *server's*
+  // weekday, so on Vercel
   // a user's plan flipped to tomorrow's at 5pm their time.
   const today = streakWeekday();
   return days.find((d) => d.dayOfWeek === today) ?? null;

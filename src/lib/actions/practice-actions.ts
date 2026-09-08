@@ -8,15 +8,19 @@ import { applyRatingDelta } from "@/lib/engine/rating";
 import { touchDailyActivity, recordProblemOutcome, awardXp } from "@/lib/engine/xp";
 import { checkAndUnlockAchievements } from "@/lib/engine/achievements";
 import { isProUser, FREE_DAILY_PROBLEM_LIMIT } from "@/lib/subscription";
-import { streakDayKey, STREAK_UTC_OFFSET_HOURS } from "@/lib/streak";
+import { streakDayStart } from "@/lib/streak";
 import { earnsReward as shouldEarnReward } from "@/lib/engine/reward";
 import type { AttemptMode, MistakeReason } from "@/lib/types";
 
 export async function getTodayAttemptCount(userId: string) {
-  // The free cap resets on the same 00:00 UTC-7 boundary as streaks and the
+  // The free cap resets at the same midnight-Pacific boundary as streaks and the
   // daily challenge. setHours() here was local time — midnight UTC on Vercel —
   // so the cap reset at a different moment than everything else.
-  const start = new Date(streakDayKey().getTime() - STREAK_UTC_OFFSET_HOURS * 60 * 60 * 1000);
+  //
+  // This needs streakDayStart, not streakDayKey: the key is a date label, and
+  // reconstructing the instant from it by subtracting a constant offset would go
+  // an hour wrong for half the year.
+  const start = streakDayStart();
   return prisma.attempt.count({ where: { userId, createdAt: { gte: start } } });
 }
 

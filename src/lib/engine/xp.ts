@@ -41,7 +41,7 @@ export async function touchDailyActivity(userId: string) {
   });
 
   const now = new Date();
-  // Day boundaries come from streakDayIndex (00:00 UTC-7) rather than the
+  // Day boundaries come from streakDayIndex (midnight US Pacific) rather than the
   // server's local calendar, so the rollover is the same for every user and
   // doesn't move with the deploy environment's timezone.
   const today = streakDayIndex(now);
