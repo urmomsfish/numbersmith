@@ -1,4 +1,4 @@
-import { type Generator, int, intExcept, pick, gcd, frac } from "./framework";
+import { type Generator, int, intExcept, pick, gcd, frac, sgn } from "./framework";
 
 /**
  * Difficulty 6-9 generators.
@@ -730,6 +730,248 @@ export const ADVANCED: Generator[] = [
       }
       const g = gcd(sum, total) || 1;
       return total / g === 1 ? String(sum / g) : `${sum / g}/${total / g}`;
+    },
+  },
+
+  // =========================================================================
+  // Olympiad topics that had almost nothing.
+  //
+  // functional-equations held 3 problems and inequalities-olympiad held 5, so
+  // both appeared in the topic list without being practisable at all.
+  // =========================================================================
+
+  {
+    id: "gen-adv-amgm-minimum",
+    topicSlug: "inequalities-olympiad",
+    difficulty: 8,
+    competitionSlug: "amc12",
+    variants: 110,
+    params: (r) => {
+      // Choosing a = k·p² and b = k·q² makes ab a perfect square, so the
+      // minimum 2√(ab) is an integer.
+      const k = int(r, 1, 6);
+      const p = int(r, 1, 7);
+      const q = intExcept(r, 1, 7, [p]);
+      return { k, p, q };
+    },
+    build: ({ k, p, q }) => {
+      const a = k * p * p;
+      const b = k * q * q;
+      const answer = 2 * k * p * q;
+      return {
+        question: `For x > 0, what is the minimum value of ${a}x + ${b}/x?`,
+        format: "SHORT_ANSWER",
+        answer: String(answer),
+        solution: `By AM–GM, ${a}x + ${b}/x ≥ 2√(${a}x · ${b}/x) = 2√${a * b} = ${answer}, since the x cancels inside the radical. Equality holds when ${a}x = ${b}/x, that is at x = √(${b}/${a}) = ${frac(q, p)}, which is positive and therefore allowed. So the minimum is ${answer}.`,
+        hints: [
+          "The product of the two terms does not depend on x.",
+          "For two positive numbers with a fixed product, the sum is smallest when they are equal.",
+        ],
+      };
+    },
+    // Independent route: locate the minimum by scanning x on a fine grid and
+    // rounding, using no inequality at all. The scan is centred on the true
+    // critical point but never assumes the AM-GM value.
+    check: ({ k, p, q }) => {
+      const a = k * p * p;
+      const b = k * q * q;
+      let best = Infinity;
+      // 4000 samples across a window that certainly contains the minimum.
+      const hi = 4 * Math.sqrt(b / a);
+      for (let i = 1; i <= 4000; i++) {
+        const x = (hi * i) / 4000;
+        const value = a * x + b / x;
+        if (value < best) best = value;
+      }
+      return String(Math.round(best));
+    },
+  },
+
+  {
+    id: "gen-adv-functional-equation",
+    topicSlug: "functional-equations",
+    difficulty: 8,
+    competitionSlug: "amc12",
+    variants: 110,
+    params: (r) => {
+      const c = intExcept(r, -4, 4, [0, 1, -1]); // c = ±1 makes the system singular
+      const a = intExcept(r, -6, 6, [0]);
+      const b = int(r, -8, 8);
+      const t = int(r, -5, 6);
+      // Keep answers to whole numbers so the format stays unambiguous.
+      const numerator = a * t * (1 + c) + b * (1 - c) - c * a;
+      const denominator = 1 - c * c;
+      if (denominator === 0 || numerator % denominator !== 0) throw new Error("reject");
+      return { a, b, c, t };
+    },
+    build: ({ a, b, c, t }) => {
+      const answer = (a * t * (1 + c) + b * (1 - c) - c * a) / (1 - c * c);
+      return {
+        // Render ±1 coefficients as "x" and "-x" rather than "1x" and "-1x",
+        // matching the hyphen that `sgn` uses for the constant term.
+        question: `A function f satisfies f(x) ${c > 0 ? "+" : "−"} ${Math.abs(c)}f(1 − x) = ${a === 1 ? "" : a === -1 ? "-" : a}x ${sgn(b)} for every real number x. Find f(${t}).`,
+        format: "SHORT_ANSWER",
+        answer: String(answer),
+        solution: `Substitute x = ${t} to get f(${t}) ${c > 0 ? "+" : "−"} ${Math.abs(c)}f(${1 - t}) = ${a * t + b}. Then substitute x = ${1 - t}, which swaps the two unknowns: f(${1 - t}) ${c > 0 ? "+" : "−"} ${Math.abs(c)}f(${t}) = ${a * (1 - t) + b}. That is two linear equations in the two unknowns f(${t}) and f(${1 - t}); eliminating f(${1 - t}) gives f(${t}) = ${answer}.`,
+        hints: [
+          "Substituting x = 1 − x maps the equation to itself with the two function values swapped.",
+          "You now have two linear equations in two unknowns — eliminate the one you do not want.",
+        ],
+      };
+    },
+    // Independent route: solve the same 2×2 linear system by Cramer's rule
+    // rather than by the eliminated closed form.
+    check: ({ a, b, c, t }) => {
+      // [1 c][f(t)     ]   [a·t + b      ]
+      // [c 1][f(1 − t) ] = [a(1 − t) + b ]
+      const r1 = a * t + b;
+      const r2 = a * (1 - t) + b;
+      const det = 1 * 1 - c * c;
+      const detX = r1 * 1 - c * r2;
+      if (det === 0 || detX % det !== 0) throw new Error("not integral");
+      return String(detX / det);
+    },
+  },
+
+  {
+    id: "gen-adv-euler-phi",
+    topicSlug: "advanced-number-theory",
+    difficulty: 7,
+    competitionSlug: "amc12",
+    variants: 130,
+    params: (r) => ({ n: int(r, 20, 300) }),
+    build: ({ n }) => {
+      const factors = factorize(n);
+      let answer = n;
+      for (const p of factors.keys()) answer = (answer / p) * (p - 1);
+      const parts = [...factors.entries()].map(([p, e]) => (e === 1 ? `${p}` : `${p}^${e}`));
+      return {
+        question: `How many positive integers less than or equal to ${n} are relatively prime to ${n}?`,
+        format: "SHORT_ANSWER",
+        answer: String(answer),
+        solution: `This is Euler's totient φ(${n}). Factor ${n} = ${parts.join(" × ")}. Then φ(${n}) = ${n} × ${[...factors.keys()].map((p) => `(1 − 1/${p})`).join(" × ")} = ${answer}.`,
+        hints: [
+          "Only the distinct prime factors matter, not their exponents.",
+          "Start from n and remove the fraction sharing each prime factor in turn.",
+        ],
+      };
+    },
+    // Independent route: test every integer up to n for a common factor,
+    // using no product formula.
+    check: ({ n }) => {
+      let count = 0;
+      for (let i = 1; i <= n; i++) if (gcd(i, n) === 1) count++;
+      return String(count);
+    },
+  },
+
+  {
+    id: "gen-adv-legendre-exponent",
+    topicSlug: "advanced-number-theory",
+    difficulty: 8,
+    competitionSlug: "aime",
+    variants: 120,
+    params: (r) => ({ n: int(r, 20, 200), p: pick(r, [2, 3, 5, 7, 11, 13]) }),
+    build: ({ n, p }) => {
+      let answer = 0;
+      for (let power = p; power <= n; power *= p) answer += Math.floor(n / power);
+      if (answer > 999) throw new Error("reject"); // AIME answers are 0-999
+      const terms: string[] = [];
+      for (let power = p; power <= n; power *= p) terms.push(`⌊${n}/${power}⌋ = ${Math.floor(n / power)}`);
+      return {
+        question: `What is the largest integer k such that ${p}^k divides ${n}! ?`,
+        format: "SHORT_ANSWER",
+        answer: String(answer),
+        solution: `By Legendre's formula the exponent of ${p} in ${n}! is ⌊${n}/${p}⌋ + ⌊${n}/${p}²⌋ + ⌊${n}/${p}³⌋ + … : ${terms.join(", ")}. These sum to ${answer}.`,
+        hints: [
+          `Count how many of 1, 2, …, ${n} are divisible by ${p}.`,
+          `Multiples of ${p}² contribute a second factor, multiples of ${p}³ a third, and so on.`,
+        ],
+      };
+    },
+    // Independent route: divide p out of every factor from 1 to n and tally,
+    // never using Legendre's formula.
+    check: ({ n, p }) => {
+      let total = 0;
+      for (let i = 2; i <= n; i++) {
+        let m = i;
+        while (m % p === 0) {
+          total++;
+          m /= p;
+        }
+      }
+      return String(total);
+    },
+  },
+
+  {
+    id: "gen-adv-multiplicative-order",
+    topicSlug: "advanced-number-theory",
+    difficulty: 8,
+    competitionSlug: "hmmt",
+    variants: 140,
+    params: (r) => {
+      const p = pick(r, [7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43]);
+      const a = int(r, 2, p - 1);
+      return { p, a };
+    },
+    build: ({ p, a }) => {
+      let answer = 1;
+      let value = a % p;
+      while (value !== 1) {
+        value = (value * a) % p;
+        answer++;
+      }
+      return {
+        question: `What is the smallest positive integer k for which ${a}^k leaves a remainder of 1 when divided by ${p}?`,
+        format: "SHORT_ANSWER",
+        answer: String(answer),
+        solution: `This k is the multiplicative order of ${a} modulo ${p}. Since ${p} is prime, Fermat's little theorem gives ${a}^${p - 1} ≡ 1, so the order must divide ${p - 1}. Testing the divisors of ${p - 1} in increasing order, the smallest that works is ${answer}.`,
+        hints: [
+          `By Fermat's little theorem, ${a}^${p - 1} ≡ 1 (mod ${p}).`,
+          `The answer must be a divisor of ${p - 1}, so you only need to test those.`,
+        ],
+      };
+    },
+    // Independent route: test only the divisors of p − 1 using modular
+    // exponentiation, instead of stepping through every power in turn.
+    check: ({ p, a }) => {
+      const divisors: number[] = [];
+      for (let d = 1; d <= p - 1; d++) if ((p - 1) % d === 0) divisors.push(d);
+      for (const d of divisors) if (modpow(a, d, p) === 1) return String(d);
+      throw new Error("no order");
+    },
+  },
+
+  {
+    id: "gen-adv-catalan",
+    topicSlug: "advanced-combinatorics",
+    difficulty: 8,
+    competitionSlug: "amc12",
+    variants: 10,
+    params: (r) => ({ n: int(r, 3, 12) }),
+    build: ({ n }) => {
+      const answer = nCr(2 * n, n) / (n + 1);
+      return {
+        question: `In how many ways can ${n} pairs of parentheses be arranged in a valid sequence, so that reading left to right no closing parenthesis ever appears without a matching opening one before it?`,
+        format: "SHORT_ANSWER",
+        answer: String(answer),
+        solution: `This is the ${n}th Catalan number, C(2n, n)/(n + 1) = C(${2 * n}, ${n})/${n + 1} = ${nCr(2 * n, n)}/${n + 1} = ${answer}.`,
+        hints: [
+          "Think of each opening parenthesis as +1 and each closing one as −1; no partial sum may go negative.",
+          "Condition on where the first parenthesis finds its match — that splits the sequence into two smaller independent ones.",
+        ],
+      };
+    },
+    // Independent route: the Catalan recurrence, summing over where the first
+    // parenthesis closes, rather than the binomial formula.
+    check: ({ n }) => {
+      const c = [1];
+      for (let i = 1; i <= n; i++) {
+        c[i] = 0;
+        for (let j = 0; j < i; j++) c[i] += c[j] * c[i - 1 - j];
+      }
+      return String(c[n]);
     },
   },
 ];

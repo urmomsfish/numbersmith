@@ -4,6 +4,7 @@ import { ALGEBRA } from "./algebra";
 import { GEOMETRY } from "./geometry";
 import { NUMBER_THEORY, COMBINATORICS, PROBABILITY } from "./discrete";
 import { ADVANCED } from "./advanced";
+import { LOGIC } from "./logic";
 
 /** The generator list on its own. Kept separate from `index.ts` so that code
  * needing only the registry — the About page, which shows how many templates
@@ -17,4 +18,5 @@ export const GENERATORS: Generator[] = [
   ...COMBINATORICS,
   ...PROBABILITY,
   ...ADVANCED,
+  ...LOGIC,
 ];

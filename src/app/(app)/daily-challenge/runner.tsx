@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/cn";
+import { AnswerInput } from "@/components/practice/answer-input";
 import { Badge } from "@/components/ui/badge";
 import { Button, LinkButton } from "@/components/ui/button";
 import { submitDailyChallengeAction } from "@/lib/actions/daily-challenge-actions";
@@ -122,15 +123,12 @@ export function DailyChallengeRunner({
           </div>
         ) : (
           <div>
-            <label className="mb-2 block text-xs font-medium text-slate-500 dark:text-slate-400">Your answer</label>
-            <input
-              type="text"
+            <AnswerInput
               value={textAnswer}
+              onChange={setTextAnswer}
+              onEnter={() => answerGiven && !done && submit()}
               disabled={done || pending}
-              onChange={(e) => setTextAnswer(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && answerGiven && !done && submit()}
-              placeholder="Type your answer"
-              className="w-full max-w-xs rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2.5 text-base outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 dark:focus:ring-brand-900 disabled:bg-slate-50"
+              integerOnly={problem.format === "INTEGER"}
             />
             {done && (
               <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">

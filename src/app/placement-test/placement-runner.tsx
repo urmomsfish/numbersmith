@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { AnswerInput } from "@/components/practice/answer-input";
 import { Logo } from "@/components/logo";
 import { LogoutButton } from "@/components/app/logout-button";
 import { Badge } from "@/components/ui/badge";
@@ -165,23 +166,13 @@ function QuestionCard({
                 })}
               </div>
             ) : (
-              <div>
-                <label className="mb-2 block text-xs font-medium text-slate-500 dark:text-slate-400">
-                  {question.format === "INTEGER" ? "Enter an integer answer" : "Enter your answer"}
-                </label>
-                <input
-                  type="text"
-                  autoFocus
-                  value={textAnswer}
-                  disabled={pending || !!feedback}
-                  onChange={(e) => setTextAnswer(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && canSubmit) submit(answerGiven);
-                  }}
-                  placeholder="Your answer"
-                  className="w-full max-w-xs rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2.5 text-base outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 dark:focus:ring-brand-900"
-                />
-              </div>
+              <AnswerInput
+                value={textAnswer}
+                onChange={setTextAnswer}
+                onEnter={() => canSubmit && submit(answerGiven)}
+                disabled={pending || !!feedback}
+                integerOnly={question.format === "INTEGER"}
+              />
             )}
           </div>
 

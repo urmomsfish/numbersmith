@@ -8,23 +8,9 @@ import { OLYMPIAD_PROBLEMS } from "./seed-data/problems-olympiad";
 import { LESSONS } from "./seed-data/lessons";
 import { ACHIEVEMENTS } from "./seed-data/achievements";
 
+import { gradesForDifficulty, secondsForDifficulty, toProblemRow } from "./seed-data/problem-rows";
+
 const prisma = new PrismaClient();
-
-function gradesForDifficulty(difficulty: number): [number, number] {
-  if (difficulty <= 2) return [2, 6];
-  if (difficulty <= 4) return [5, 9];
-  if (difficulty <= 6) return [7, 11];
-  if (difficulty <= 8) return [9, 12];
-  return [10, 12];
-}
-
-function secondsForDifficulty(difficulty: number): number {
-  if (difficulty <= 2) return 60;
-  if (difficulty <= 4) return 90;
-  if (difficulty <= 6) return 150;
-  if (difficulty <= 8) return 240;
-  return 360;
-}
 
 // Default topic emphasis per competition category — used to populate each
 // competition's "main topics" without hand-authoring 20 separate lists.
@@ -211,24 +197,11 @@ async function main() {
   const generatedRows = [...GENERATED_PROBLEMS, ...OLYMPIAD_PROBLEMS].map((p) => {
     const topicId = topicIdBySlug.get(p.topicSlug);
     if (!topicId) throw new Error(`Unknown topic slug: ${p.topicSlug} (problem ${p.slug})`);
-    const [gradeMin, gradeMax] = gradesForDifficulty(p.difficulty);
-    return {
-      slug: p.slug,
-      question: p.question,
-      format: p.format,
-      choices: p.choices ? JSON.stringify(p.choices) : null,
-      answer: p.answer,
-      solution: p.solution,
-      hints: JSON.stringify(p.hints),
-      difficulty: p.difficulty,
+    return toProblemRow(p, {
       topicId,
       competitionId: p.competitionSlug ? competitionIdBySlug.get(p.competitionSlug) ?? null : null,
-      gradeMin,
-      gradeMax,
-      estimatedTimeSeconds: secondsForDifficulty(p.difficulty),
-      tags: JSON.stringify([p.topicSlug, ...(p.competitionSlug ? [p.competitionSlug] : [])]),
       isPlacement: false,
-    };
+    });
   });
 
   for (let i = 0; i < generatedRows.length; i += 500) {

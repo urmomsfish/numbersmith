@@ -1,5 +1,31 @@
 import { type Generator, int, intExcept, pick, sgn, frac } from "./framework";
 
+/** Renders c√r, collapsing the cases where the radical or coefficient is 1. */
+function radical(c: number, r: number): string {
+  if (r === 1) return String(c);
+  return c === 1 ? `√${r}` : `${c}√${r}`;
+}
+
+/** Largest k with k² dividing n, found by prime factorisation. Used only in
+ * `check` — the generators themselves pull the square factor out a different
+ * way, by scanning candidate squares downward. */
+function squarePartByFactoring(n: number): number {
+  let rest = n;
+  let k = 1;
+  for (let p = 2; p * p <= rest; p++) {
+    let e = 0;
+    while (rest % p === 0) {
+      rest /= p;
+      e++;
+    }
+    for (let i = 0; i < Math.floor(e / 2); i++) k *= p;
+  }
+  return k;
+}
+
+/** Radicands with no square factor, so the "simplified" form is unambiguous. */
+const SQUAREFREE = [2, 3, 5, 6, 7, 10, 11, 13, 14, 15, 17, 19, 21, 22, 23, 26, 29, 30, 31, 33, 34, 35, 37, 38];
+
 export const ALGEBRA: Generator[] = [
   {
     id: "gen-linear-two-step",
@@ -665,6 +691,282 @@ export const ALGEBRA: Generator[] = [
         if (u * v === prod && u >= v) return String(u);
       }
       throw new Error("no pair");
+    },
+  },
+
+  // =========================================================================
+  // Exponents and radicals.
+  //
+  // The thinnest algebra subtopic by a wide margin — 83 problems against 412
+  // for linear equations — despite being assumed knowledge for most of the
+  // AMC-level material elsewhere in the bank.
+  // =========================================================================
+
+  {
+    id: "gen-radical-simplify",
+    topicSlug: "exponents-radicals",
+    difficulty: 3,
+    competitionSlug: "amc8",
+    variants: 120,
+    params: (r) => ({ k: int(r, 2, 12), m: pick(r, SQUAREFREE) }),
+    build: ({ k, m }) => {
+      const n = k * k * m;
+      return {
+        question: `Simplify √${n} completely.`,
+        // Typed, not multiple choice. The answer carries a radical sign, which
+        // the symbol palette lets students enter and which `checkAnswer`
+        // accepts in any equivalent notation ("7 sqrt 11", "7√11", …). The
+        // radicand is deliberately NOT simplified during grading, so an
+        // unsimplified "√539" is still marked wrong — that is the whole point
+        // of the question.
+        format: "SHORT_ANSWER",
+        answer: radical(k, m),
+        solution: `${n} = ${k * k} × ${m}, and ${k * k} is a perfect square. So √${n} = √${k * k} × √${m} = ${radical(k, m)}, and ${m} has no square factor left to pull out.`,
+        hints: [
+          `Look for the largest perfect square that divides ${n}.`,
+          "Split the radical across that square and take its root.",
+        ],
+      };
+    },
+    // Independent route: find the square part by prime factorisation, halving
+    // each exponent, instead of reading it off the parameters.
+    check: ({ k, m }) => {
+      const n = k * k * m;
+      const c = squarePartByFactoring(n);
+      return radical(c, n / (c * c));
+    },
+  },
+
+  {
+    id: "gen-radical-product",
+    topicSlug: "exponents-radicals",
+    difficulty: 4,
+    competitionSlug: "amc10",
+    variants: 110,
+    params: (r) => {
+      const a = int(r, 2, 40);
+      const b = intExcept(r, 2, 40, [a]);
+      return { a, b };
+    },
+    build: ({ a, b }) => {
+      const n = a * b;
+      // Scan candidate squares downward for the largest one that divides n.
+      let c = 1;
+      for (let t = Math.floor(Math.sqrt(n)); t >= 2; t--) {
+        if (n % (t * t) === 0) {
+          c = t;
+          break;
+        }
+      }
+      const inside = n / (c * c);
+      return {
+        question: `Simplify √${a} × √${b} completely.`,
+        // Typed — see gen-radical-simplify for why this is not multiple choice.
+        format: "SHORT_ANSWER",
+        answer: radical(c, inside),
+        solution: `√${a} × √${b} = √(${a} × ${b}) = √${n}. The largest perfect square dividing ${n} is ${c * c}, so √${n} = ${radical(c, inside)}.`,
+        hints: [
+          "The product of two square roots is the square root of the product.",
+          "Then pull out the largest perfect square factor.",
+        ],
+      };
+    },
+    // Independent route: prime factorisation rather than a downward scan.
+    check: ({ a, b }) => {
+      const n = a * b;
+      const c = squarePartByFactoring(n);
+      return radical(c, n / (c * c));
+    },
+  },
+
+  {
+    id: "gen-exponent-fractional",
+    topicSlug: "exponents-radicals",
+    difficulty: 4,
+    competitionSlug: "amc10",
+    // Requiring m/n in lowest terms, plus the size caps, leaves 60 instances.
+    variants: 60,
+    params: (r) => {
+      const b = int(r, 2, 7);
+      const n = int(r, 2, 4);
+      const m = int(r, 1, 5);
+      // Present the exponent already in lowest terms — "256^(2/4)" is correct
+      // but reads like a typo in a problem about simplifying exponents.
+      let g = m;
+      let h = n;
+      while (h) [g, h] = [h, g % h];
+      if (g !== 1) throw new Error("reject");
+      if (Math.pow(b, n) > 4096 || Math.pow(b, m) > 100000) throw new Error("reject");
+      return { b, n, m };
+    },
+    build: ({ b, n, m }) => {
+      const base = Math.pow(b, n);
+      const answer = Math.pow(b, m);
+      return {
+        question: `Evaluate ${base}^(${m}/${n}).`,
+        format: "SHORT_ANSWER",
+        answer: String(answer),
+        solution: `${base} = ${b}^${n}, so ${base}^(${m}/${n}) = (${b}^${n})^(${m}/${n}) = ${b}^${m} = ${answer}. Equivalently, take the ${n === 2 ? "square" : n === 3 ? "cube" : `${n}th`} root of ${base} to get ${b}, then raise it to the power ${m}.`,
+        hints: [
+          `A fractional exponent m/n means the nth root raised to the mth power.`,
+          `Rewrite ${base} as a power of a smaller number first.`,
+        ],
+      };
+    },
+    // Independent route: search for the integer nth root, then multiply it out
+    // by hand instead of combining the exponents.
+    check: ({ b, n, m }) => {
+      const base = Math.pow(b, n);
+      let root = -1;
+      for (let t = 1; t <= base; t++) {
+        if (Math.pow(t, n) === base) {
+          root = t;
+          break;
+        }
+      }
+      if (root < 0) throw new Error("no root");
+      let value = 1;
+      for (let i = 0; i < m; i++) value *= root;
+      return String(value);
+    },
+  },
+
+  {
+    id: "gen-exponent-negative-fraction",
+    topicSlug: "exponents-radicals",
+    difficulty: 4,
+    competitionSlug: "amc10",
+    variants: 90,
+    params: (r) => {
+      const a = int(r, 2, 9);
+      const b = intExcept(r, 2, 9, [a]);
+      const n = int(r, 2, 4);
+      if (Math.pow(b, n) > 10000 || Math.pow(a, n) > 10000) throw new Error("reject");
+      return { a, b, n };
+    },
+    build: ({ a, b, n }) => {
+      const answer = frac(Math.pow(b, n), Math.pow(a, n));
+      return {
+        question: `Evaluate (${a}/${b})^(−${n}). Express your answer as a fraction in lowest terms if it is not a whole number.`,
+        format: "SHORT_ANSWER",
+        answer,
+        solution: `A negative exponent flips the fraction: (${a}/${b})^(−${n}) = (${b}/${a})^${n} = ${Math.pow(b, n)}/${Math.pow(a, n)} = ${answer}.`,
+        hints: ["A negative exponent means the reciprocal raised to the positive power.", "Flip the fraction first, then apply the exponent."],
+      };
+    },
+    // Independent route: take the reciprocal only at the end, after building
+    // the positive power by repeated multiplication.
+    check: ({ a, b, n }) => {
+      let num = 1;
+      let den = 1;
+      for (let i = 0; i < n; i++) {
+        num *= a;
+        den *= b;
+      }
+      return frac(den, num);
+    },
+  },
+
+  {
+    id: "gen-log-evaluate",
+    topicSlug: "exponents-radicals",
+    difficulty: 5,
+    competitionSlug: "amc12",
+    variants: 100,
+    params: (r) => {
+      const b = int(r, 2, 9);
+      const want = int(r, 0, 2);
+      const i = int(r, 1, 6);
+      const j = int(r, 1, 5);
+      if (Math.pow(b, i) > 100000 || Math.pow(b, i + j) > 1000000) throw new Error("reject");
+      return { b, want, i, j };
+    },
+    build: ({ b, want, i, j }) => {
+      if (want === 0) {
+        return {
+          question: `Evaluate log_${b}(${Math.pow(b, i)}).`,
+          format: "SHORT_ANSWER",
+          answer: String(i),
+          solution: `log_${b}(x) asks what power of ${b} gives x. Since ${b}^${i} = ${Math.pow(b, i)}, the answer is ${i}.`,
+          hints: [`Ask what power of ${b} produces ${Math.pow(b, i)}.`, `Try multiplying ${b} by itself and counting.`],
+        };
+      }
+      if (want === 1) {
+        return {
+          question: `If log_${b}(x) = ${i}, what is x?`,
+          format: "SHORT_ANSWER",
+          answer: String(Math.pow(b, i)),
+          solution: `The statement log_${b}(x) = ${i} means exactly that ${b}^${i} = x, so x = ${Math.pow(b, i)}.`,
+          hints: ["Rewrite the logarithm as an exponential statement.", `Compute ${b} raised to the power ${i}.`],
+        };
+      }
+      return {
+        question: `Evaluate log_${b}(${Math.pow(b, i)}) + log_${b}(${Math.pow(b, j)}).`,
+        format: "SHORT_ANSWER",
+        answer: String(i + j),
+        solution: `Logs of the same base add by multiplying their arguments: the sum is log_${b}(${Math.pow(b, i)} × ${Math.pow(b, j)}) = log_${b}(${Math.pow(b, i + j)}) = ${i + j}. Or evaluate each term separately as ${i} and ${j}.`,
+        hints: ["log(x) + log(y) = log(xy) when the bases match.", "You can also just evaluate each logarithm on its own."],
+      };
+    },
+    // Independent route: recover each exponent by repeated multiplication
+    // rather than reading it off the parameters.
+    check: ({ b, want, i, j }) => {
+      const exponentOf = (target: number) => {
+        let value = 1;
+        let e = 0;
+        while (value < target) {
+          value *= b;
+          e++;
+        }
+        if (value !== target) throw new Error("not a power");
+        return e;
+      };
+      if (want === 0) return String(exponentOf(Math.pow(b, i)));
+      if (want === 1) {
+        let value = 1;
+        for (let t = 0; t < i; t++) value *= b;
+        return String(value);
+      }
+      return String(exponentOf(Math.pow(b, i)) + exponentOf(Math.pow(b, j)));
+    },
+  },
+
+  {
+    id: "gen-exponent-equation",
+    topicSlug: "exponents-radicals",
+    difficulty: 5,
+    competitionSlug: "amc10",
+    variants: 100,
+    params: (r) => {
+      const b = int(r, 2, 6);
+      const a = int(r, 2, 6);
+      const c = int(r, -6, 6);
+      const x = int(r, 1, 6);
+      const d = a * x + c;
+      if (d < 1 || Math.pow(b, d) > 200000) throw new Error("reject");
+      return { b, a, c, d };
+    },
+    build: ({ b, a, c, d }) => {
+      const answer = (d - c) / a;
+      return {
+        question: `Solve for x: ${b}^(${a}x ${sgn(c)}) = ${Math.pow(b, d)}.`,
+        format: "SHORT_ANSWER",
+        answer: String(answer),
+        solution: `Write the right side as a power of ${b}: ${Math.pow(b, d)} = ${b}^${d}. Equal powers of the same base force equal exponents, so ${a}x ${sgn(c)} = ${d}, giving x = ${answer}.`,
+        hints: [
+          `Rewrite the right-hand side as a power of ${b}.`,
+          "With the same base on both sides, the exponents must match.",
+        ],
+      };
+    },
+    // Independent route: try candidate values of x until one satisfies the
+    // original equation, never manipulating the exponents.
+    check: ({ b, a, c, d }) => {
+      const target = Math.pow(b, d);
+      for (let x = -20; x <= 60; x++) {
+        if (a * x + c >= 0 && Math.pow(b, a * x + c) === target) return String(x);
+      }
+      throw new Error("no solution");
     },
   },
 ];

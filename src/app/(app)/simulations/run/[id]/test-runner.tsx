@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/cn";
+import { AnswerInput } from "@/components/practice/answer-input";
 import { Button } from "@/components/ui/button";
 import { submitSimulationAction } from "@/lib/actions/simulation-actions";
 
@@ -161,18 +162,15 @@ export function TestRunner({
                   })}
                 </div>
               ) : (
-                <div>
-                  <label className="mb-2 block text-xs font-medium text-slate-500 dark:text-slate-400">
-                    {current.format === "INTEGER" ? "Integer answer" : "Your answer"}
-                  </label>
-                  <input
-                    type="text"
-                    value={answers[current.id] ?? ""}
-                    onChange={(e) => setAnswers((a) => ({ ...a, [current.id]: e.target.value }))}
-                    placeholder="Type your answer"
-                    className="w-full max-w-xs rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2.5 text-base outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 dark:focus:ring-brand-900"
-                  />
-                </div>
+                <AnswerInput
+                  key={current.id}
+                  value={answers[current.id] ?? ""}
+                  onChange={(next) => setAnswers((a) => ({ ...a, [current.id]: next }))}
+                  // A simulation is a timed paper — Enter must not submit it.
+                  onEnter={() => {}}
+                  disabled={false}
+                  integerOnly={current.format === "INTEGER"}
+                />
               )}
             </div>
 
