@@ -5,7 +5,7 @@ import { Card, CardBody } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button, LinkButton } from "@/components/ui/button";
 import { CATEGORY_LABEL, difficultyRangeLabel } from "@/lib/competition-meta";
-import { streakDayIndex } from "@/lib/streak";
+import { dateKeyIndex, streakDayIndex } from "@/lib/streak";
 import {
   addScheduledCompetitionAction,
   setCompetitionDateAction,
@@ -47,7 +47,8 @@ export default async function SchedulePage() {
   const today = streakDayIndex(new Date());
   const withTiming = scheduled.map((s) => ({
     ...s,
-    daysAway: s.targetDate ? streakDayIndex(s.targetDate) - today : null,
+    // targetDate is a date-only value — dateKeyIndex, not streakDayIndex.
+    daysAway: s.targetDate ? dateKeyIndex(s.targetDate) - today : null,
   }));
   const upcoming = withTiming.filter((s) => s.daysAway !== null && s.daysAway >= 0);
   const past = withTiming.filter((s) => s.daysAway !== null && s.daysAway < 0);

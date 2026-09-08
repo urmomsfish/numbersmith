@@ -24,8 +24,12 @@ import {
   buildScheduleWeeks,
   phaseForTimeRemaining,
   difficultyBandFor,
+  monthGrid,
+  planDayForDate,
+  planDayForDayIndex,
   type ScheduledCompetition,
 } from "../src/lib/engine/plan-schedule";
+import { dateKeyIndex, streakDayIndex, streakDayKey } from "../src/lib/streak";
 
 let failures = 0;
 function check(label: string, actual: unknown, expected: unknown) {
@@ -188,6 +192,82 @@ expect(
   difficultyBandFor(aime, 0).min >= difficultyBandFor(aime, 12).min
 );
 expect("no contest gives a sane default", difficultyBandFor(null, null).min >= 1);
+
+console.log("8. date-only values are not confused with instants");
+// Contest dates and calendar cells are stored as that day's UTC midnight, which
+// is 5pm the *previous* day in Pacific. Running one through streakDayIndex
+// therefore lands it a day early — which showed up as a countdown one day short
+// and a calendar highlighting tomorrow as today.
+const oct13 = new Date(Date.UTC(2026, 9, 13));
+check(
+  "a date key and an instant during that Pacific day agree",
+  dateKeyIndex(oct13),
+  streakDayIndex(new Date("2026-10-13T18:00:00.000Z")) // 11am Pacific on Oct 13
+);
+expect(
+  "streakDayIndex on a date key would be a day early",
+  streakDayIndex(oct13) === dateKeyIndex(oct13) - 1
+);
+check(
+  "streakDayKey round-trips through dateKeyIndex",
+  dateKeyIndex(streakDayKey(new Date("2026-10-13T18:00:00.000Z"))),
+  streakDayIndex(new Date("2026-10-13T18:00:00.000Z"))
+);
+// The countdown the study plan page shows.
+const sep8 = new Date("2026-09-08T18:00:00.000Z");
+check("Sep 8 to Oct 13 is 35 days", dateKeyIndex(oct13) - streakDayIndex(sep8), 35);
+// And the plan built from it must span the right number of weeks.
+const fiveWeeks = buildScheduleWeeks([comp("MATHCOUNTS", oct13)], sep8);
+check("that runway is 5 plan weeks", fiveWeeks.length, 6);
+check("the contest week is the last one", fiveWeeks[fiveWeeks.length - 1].isTaper, true);
+
+console.log("9. the month grid lines up with the weekly view");
+// Every calendar cell must resolve to the same task the weekly view shows for
+// that date, or the two views of one plan would disagree.
+const planStart = new Date("2026-09-08T18:00:00.000Z");
+const fakePlan = {
+  generatedAt: planStart,
+  days: Array.from({ length: 5 * 7 }, (_, i) => ({
+    weekNumber: Math.floor(i / 7) + 1,
+    dayOfWeek: i % 7,
+    id: String(i),
+  })),
+};
+const grid = monthGrid(2026, 9);
+expect("the grid is whole weeks", grid.length % 7 === 0);
+expect("the grid starts on a Sunday", grid[0].getUTCDay() === 0);
+expect("the grid covers the whole month", grid.some((d) => d.getUTCDate() === 30 && d.getUTCMonth() === 8));
+// No trailing row that belongs entirely to the next month.
+for (const [y, m] of [[2026, 9], [2026, 10], [2026, 2], [2027, 5], [2026, 8]] as const) {
+  const g = monthGrid(y, m);
+  const lastRow = g.slice(-7);
+  expect(
+    `${y}-${m}: the final row contains a day of the month`,
+    lastRow.some((d) => d.getUTCMonth() + 1 === m && d.getUTCFullYear() === y)
+  );
+  expect(`${y}-${m}: grid is whole weeks`, g.length % 7 === 0);
+  const daysInMonth = new Date(Date.UTC(y, m, 0)).getUTCDate();
+  expect(
+    `${y}-${m}: every day of the month is present`,
+    Array.from({ length: daysInMonth }, (_, i) => i + 1).every((day) =>
+      g.some((d) => d.getUTCDate() === day && d.getUTCMonth() + 1 === m && d.getUTCFullYear() === y)
+    )
+  );
+}
+let mismatches = 0;
+for (const cell of grid) {
+  const viaIndex = planDayForDayIndex(fakePlan, dateKeyIndex(cell), cell.getUTCDay());
+  // The equivalent instant: midday Pacific on that same calendar date.
+  const instant = new Date(cell.getTime() + 19 * 3_600_000);
+  const viaInstant = planDayForDate(fakePlan, instant);
+  if (viaIndex?.id !== viaInstant?.id) mismatches++;
+}
+check("calendar cells and instants resolve to the same task", mismatches, 0);
+expect("dates before the plan started have no task", planDayForDayIndex(fakePlan, dateKeyIndex(new Date(Date.UTC(2026, 8, 1))), 2) === null);
+expect(
+  "dates past the end of the plan have no task",
+  planDayForDayIndex(fakePlan, dateKeyIndex(new Date(Date.UTC(2026, 10, 30))), 1) === null
+);
 
 console.log(failures === 0 ? "\nProgress model OK.\n" : `\n${failures} failure(s).\n`);
 process.exit(failures === 0 ? 0 : 1);

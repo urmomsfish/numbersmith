@@ -112,6 +112,22 @@ export function streakDayKey(at: Date = new Date()): Date {
   return new Date(Date.UTC(year, month - 1, day));
 }
 
+/** Day index for a *date-only* value — one stored as that day's UTC midnight,
+ * the convention used by `DailyChallenge.date` and `UserCompetition.targetDate`,
+ * and produced by `streakDayKey`.
+ *
+ * These are labels, not instants, and must not go through `streakDayIndex`.
+ * That converts to Pacific first, and UTC midnight is 5pm the *previous* day in
+ * Pacific — so a contest stored as "Oct 13" would come back as Oct 12, making
+ * every countdown a day short and every calendar cell a day out.
+ *
+ * Holds `dateKeyIndex(streakDayKey(t)) === streakDayIndex(t)`, which is what
+ * lets labels and instants be compared once both are indices.
+ */
+export function dateKeyIndex(date: Date): number {
+  return Math.floor(date.getTime() / DAY_MS);
+}
+
 /** The real UTC instant at which the current streak day began — midnight
  * Pacific, which is 07:00Z in summer and 08:00Z in winter.
  *

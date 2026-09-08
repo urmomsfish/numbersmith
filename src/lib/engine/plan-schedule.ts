@@ -6,7 +6,7 @@
  * `scripts/check-progress-model.ts` without a request context. Same split as
  * `reward.ts` and `progress.ts`: the rules are pure, the persistence is not.
  */
-import { streakDayIndex, streakWeekday } from "@/lib/streak";
+import { dateKeyIndex, streakDayIndex, streakWeekday } from "@/lib/streak";
 
 /** How many weeks a generated plan covers.
  *
@@ -105,6 +105,71 @@ export function weekDays<T extends { dayOfWeek: number; weekNumber: number }>(
     .sort((a, b) => order.indexOf(a.dayOfWeek) - order.indexOf(b.dayOfWeek));
 }
 
+/** The plan task falling on a specific calendar date, or null.
+ *
+ * Generalises todaysPlanDay to any date so the plan can be laid out on a month
+ * grid. A plan "week" is a 7-day block counted from generatedAt, not a
+ * Monday-aligned calendar week — a plan generated on a Tuesday has its week 1
+ * running Tuesday to Monday. That is already how todaysPlanDay behaves, and
+ * every date still maps to exactly one task, so the calendar and the weekly view
+ * cannot disagree.
+ */
+export function planDayForDate<T extends { dayOfWeek: number; weekNumber: number }>(
+  plan: { generatedAt: Date; days: T[] },
+  date: Date
+): T | null {
+  return planDayForDayIndex(plan, streakDayIndex(date), streakWeekday(date));
+}
+
+/** As planDayForDate, but taking an already-resolved day index and weekday.
+ *
+ * Calendar cells are date-only values (UTC midnight), so their index comes from
+ * dateKeyIndex, not streakDayIndex — see the note on dateKeyIndex. Taking the
+ * index directly stops the two conventions being mixed at this boundary.
+ */
+export function planDayForDayIndex<T extends { dayOfWeek: number; weekNumber: number }>(
+  plan: { generatedAt: Date; days: T[] },
+  dayIndex: number,
+  weekday: number
+): T | null {
+  const elapsedDays = dayIndex - streakDayIndex(plan.generatedAt);
+  if (elapsedDays < 0) return null; // before the plan started
+  const week = Math.floor(elapsedDays / 7) + 1;
+  if (week > planTotalWeeks(plan)) return null; // past the end of the plan
+  return plan.days.find((d) => d.weekNumber === week && d.dayOfWeek === weekday) ?? null;
+}
+
+/** The dates of a month's calendar grid, padded to whole Sunday-start weeks.
+ *
+ * Returns UTC-midnight dates, matching the date-only convention used elsewhere,
+ * so rendering them never shifts by a timezone. */
+export function monthGrid(year: number, month: number): Date[] {
+  const first = new Date(Date.UTC(year, month - 1, 1));
+  const start = new Date(first.getTime() - first.getUTCDay() * 86_400_000);
+  // Day 0 of the next month is the last day of this one.
+  const lastOfMonth = Date.UTC(year, month, 0);
+  const dates: Date[] = [];
+  for (let i = 0; i < 42; i++) {
+    const d = new Date(start.getTime() + i * 86_400_000);
+    dates.push(d);
+    // Stop at the end of the week that contains the month's final day. Checking
+    // "past the month" instead would append a whole trailing row of empty
+    // next-month cells whenever the month ends on a Saturday.
+    if (i % 7 === 6 && d.getTime() >= lastOfMonth) break;
+  }
+  return dates;
+}
+
+/** Month containing a date, and the ones either side, as "YYYY-MM". */
+export function monthKey(year: number, month: number): string {
+  return `${year}-${String(month).padStart(2, "0")}`;
+}
+
+export function shiftMonth(year: number, month: number, delta: number): { year: number; month: number } {
+  const d = new Date(Date.UTC(year, month - 1 + delta, 1));
+  return { year: d.getUTCFullYear(), month: d.getUTCMonth() + 1 };
+}
+
 // ---------------------------------------------------------------------------
 // Building the plan around the student's actual competition calendar.
 // ---------------------------------------------------------------------------
@@ -134,9 +199,9 @@ export type ScheduledWeek = {
   isTaper: boolean;
 };
 
-/** Whole weeks from `from` to `to`, floored at 0. */
-export function weeksBetween(from: Date, to: Date): number {
-  return Math.max(0, Math.floor((streakDayIndex(to) - streakDayIndex(from)) / 7));
+/** Whole weeks from an instant to a date-only contest date, floored at 0. */
+export function weeksBetween(from: Date, contestDate: Date): number {
+  return Math.max(0, Math.floor((dateKeyIndex(contestDate) - streakDayIndex(from)) / 7));
 }
 
 /** Competitions with a date still in the future, soonest first. */
@@ -145,9 +210,10 @@ export function upcomingCompetitions(
   now: Date = new Date()
 ): ScheduledCompetition[] {
   const today = streakDayIndex(now);
+  // targetDate is a date-only value; dateKeyIndex, not streakDayIndex.
   return schedule
-    .filter((c) => c.targetDate !== null && streakDayIndex(c.targetDate) >= today)
-    .sort((a, b) => streakDayIndex(a.targetDate!) - streakDayIndex(b.targetDate!));
+    .filter((c) => c.targetDate !== null && dateKeyIndex(c.targetDate) >= today)
+    .sort((a, b) => dateKeyIndex(a.targetDate!) - dateKeyIndex(b.targetDate!));
 }
 
 /** Lays out the plan's weeks against the student's contest dates.
@@ -188,7 +254,7 @@ export function buildScheduleWeeks(
     const weekStart = new Date(now.getTime() + i * 7 * 86_400_000);
     const startIndex = streakDayIndex(weekStart);
     const target =
-      upcoming.find((c) => streakDayIndex(c.targetDate!) >= startIndex) ?? last;
+      upcoming.find((c) => dateKeyIndex(c.targetDate!) >= startIndex) ?? last;
     const weeksUntil = weeksBetween(weekStart, target.targetDate!);
     weeks.push({
       weekNumber: i + 1,

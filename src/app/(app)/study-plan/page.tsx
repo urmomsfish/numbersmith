@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button, LinkButton } from "@/components/ui/button";
 import { ProgressBar } from "@/components/ui/progress";
 import { WeekPlanTable } from "@/components/week-plan-table";
+import { MonthPlanCalendar } from "@/components/month-plan-calendar";
 import {
   getActiveStudyPlan,
   currentPlanWeek,
@@ -17,13 +18,20 @@ import {
 } from "@/lib/engine/study-plan";
 import { regenerateStudyPlanAction, saveGoalAction } from "@/lib/actions/study-plan-actions";
 import { ratingTier } from "@/lib/types";
-import { streakDayKey, streakDayIndex } from "@/lib/streak";
+import { streakDayKey, streakDayIndex, dateKeyIndex } from "@/lib/streak";
 
-export default async function StudyPlanPage() {
+export default async function StudyPlanPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ view?: string; month?: string }>;
+}) {
   const user = await getCurrentUser();
   if (!user) return null;
 
-  const [plan, competitions, rating, nextContest] = await Promise.all([
+  const params = await searchParams;
+  const isMonthView = params.view === "month";
+
+  const [plan, competitions, rating, nextContest, scheduledContests] = await Promise.all([
     getActiveStudyPlan(user.id),
     prisma.competition.findMany({ orderBy: { order: "asc" } }),
     prisma.rating.findUnique({ where: { userId_category: { userId: user.id, category: "OVERALL" } } }),
@@ -32,6 +40,11 @@ export default async function StudyPlanPage() {
       where: { userId: user.id, targetDate: { gte: streakDayKey() } },
       include: { competition: true },
       orderBy: { targetDate: "asc" },
+    }),
+    // Every dated contest, so the calendar can mark them.
+    prisma.userCompetition.findMany({
+      where: { userId: user.id, targetDate: { not: null } },
+      include: { competition: { select: { shortName: true } } },
     }),
   ]);
 
@@ -51,6 +64,19 @@ export default async function StudyPlanPage() {
   // Server component: renders once per request, so reading the clock is stable here.
   // eslint-disable-next-line react-hooks/purity
   const now = Date.now();
+  const nowDate = new Date(now);
+
+  // Month view defaults to the month containing today. `month` is "YYYY-MM";
+  // anything malformed falls back rather than rendering an invalid grid.
+  const monthMatch = /^(\d{4})-(\d{2})$/.exec(params.month ?? "");
+  const calendarYear = monthMatch ? Number(monthMatch[1]) : nowDate.getUTCFullYear();
+  const rawMonth = monthMatch ? Number(monthMatch[2]) : nowDate.getUTCMonth() + 1;
+  const calendarMonth = rawMonth >= 1 && rawMonth <= 12 ? rawMonth : nowDate.getUTCMonth() + 1;
+
+  const contestMarkers = scheduledContests
+    .filter((c) => c.targetDate !== null)
+    .map((c) => ({ date: c.targetDate!, shortName: c.competition.shortName }));
+
   const totalWeeks = planTotalWeeks(plan);
   const week = currentPlanWeek(plan, totalWeeks);
   // Must match how the plan was generated — see phaseForPlanWeek.
@@ -58,8 +84,10 @@ export default async function StudyPlanPage() {
   const planComplete = isPlanComplete(plan);
   // Whole days on the shared streak boundary, so this counts down in step with
   // everything else rather than at whatever hour the page happens to render.
+  // competitionDate is a date-only value, so it needs dateKeyIndex; `now` is an
+  // instant and needs streakDayIndex. Mixing them made this a day short.
   const daysUntilCompetition = plan.competitionDate
-    ? Math.max(0, streakDayIndex(plan.competitionDate) - streakDayIndex(new Date(now)))
+    ? Math.max(0, dateKeyIndex(plan.competitionDate) - streakDayIndex(nowDate))
     : null;
 
   const progressToTarget = plan.targetRating
@@ -137,25 +165,64 @@ export default async function StudyPlanPage() {
                   fresh one around where your mastery is now.
                 </p>
               )}
-              <div className="mt-4">
-                <WeekPlanTable days={weekDays(plan.days, week)} />
+              <div className="mt-4 inline-flex rounded-lg border border-slate-200 dark:border-slate-700 p-0.5">
+                <Link
+                  href="/study-plan"
+                  className={
+                    "rounded-md px-3 py-1 text-sm font-medium transition " +
+                    (!isMonthView
+                      ? "bg-brand-600 text-white"
+                      : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800")
+                  }
+                >
+                  Week
+                </Link>
+                <Link
+                  href="/study-plan?view=month"
+                  className={
+                    "rounded-md px-3 py-1 text-sm font-medium transition " +
+                    (isMonthView
+                      ? "bg-brand-600 text-white"
+                      : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800")
+                  }
+                >
+                  Month
+                </Link>
               </div>
-              <div className="mt-4 flex flex-wrap gap-1.5">
-                {Array.from({ length: totalWeeks }, (_, i) => i + 1).map((w) => (
-                  <span
-                    key={w}
-                    title={`Week ${w} — ${phaseForPlanWeek(plan, w).name}`}
-                    className={
-                      "h-1.5 flex-1 min-w-[10px] rounded-full " +
-                      (w < week
-                        ? "bg-brand-400 dark:bg-brand-500"
-                        : w === week
-                          ? "bg-brand-600 dark:bg-brand-400"
-                          : "bg-slate-200 dark:bg-slate-700")
-                    }
+
+              {isMonthView ? (
+                <div className="mt-4">
+                  <MonthPlanCalendar
+                    plan={plan}
+                    year={calendarYear}
+                    month={calendarMonth}
+                    contests={contestMarkers}
+                    today={nowDate}
                   />
-                ))}
-              </div>
+                </div>
+              ) : (
+                <>
+                  <div className="mt-4">
+                    <WeekPlanTable days={weekDays(plan.days, week)} />
+                  </div>
+                  <div className="mt-4 flex flex-wrap gap-1.5">
+                    {Array.from({ length: totalWeeks }, (_, i) => i + 1).map((w) => (
+                      <span
+                        key={w}
+                        title={`Week ${w} — ${phaseForPlanWeek(plan, w).name}`}
+                        className={
+                          "h-1.5 flex-1 min-w-[10px] rounded-full " +
+                          (w < week
+                            ? "bg-brand-400 dark:bg-brand-500"
+                            : w === week
+                              ? "bg-brand-600 dark:bg-brand-400"
+                              : "bg-slate-200 dark:bg-slate-700")
+                        }
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
             </CardBody>
           </Card>
 
