@@ -7,6 +7,7 @@ import { LinkButton } from "@/components/ui/button";
 import { isProUser } from "@/lib/subscription";
 import { difficultyLabel, ratingTier } from "@/lib/types";
 import { levelForXp, xpIntoLevel } from "@/lib/engine/xp";
+import { topicProgress, evidenceLabel } from "@/lib/engine/progress";
 import { RatingChart } from "./rating-chart";
 import { effectiveStreak } from "@/lib/streak";
 
@@ -133,18 +134,29 @@ export default async function StatsPage() {
               {mastery.length === 0 && (
                 <p className="text-sm text-slate-400 dark:text-slate-500">Practice a few problems to build your mastery map.</p>
               )}
-              {mastery.map((m) => (
-                <div key={m.id}>
-                  <div className="mb-1 flex justify-between text-sm">
-                    <span className="font-medium text-slate-700 dark:text-slate-200">{m.topic.name}</span>
-                    <span className="text-slate-500 dark:text-slate-400">{m.masteryPercent}%</span>
+              {mastery.map((m) => {
+                // The bar is progress (accuracy discounted by evidence); the
+                // caption shows the accuracy and the sample behind it, so a low
+                // bar reads as "not enough practice yet" rather than "you are
+                // bad at this".
+                const progress = topicProgress(m.masteryPercent, m.problemsAttempted);
+                return (
+                  <div key={m.id}>
+                    <div className="mb-1 flex justify-between text-sm">
+                      <span className="font-medium text-slate-700 dark:text-slate-200">{m.topic.name}</span>
+                      <span className="text-slate-500 dark:text-slate-400">{progress}%</span>
+                    </div>
+                    <ProgressBar
+                      value={progress}
+                      tone={progress >= 70 ? "success" : progress >= 40 ? "brand" : "ember"}
+                    />
+                    <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
+                      {m.masteryPercent}% accuracy over {m.problemsAttempted}{" "}
+                      {m.problemsAttempted === 1 ? "problem" : "problems"} · {evidenceLabel(m.problemsAttempted)}
+                    </p>
                   </div>
-                  <ProgressBar
-                    value={m.masteryPercent}
-                    tone={m.masteryPercent >= 70 ? "success" : m.masteryPercent >= 40 ? "brand" : "ember"}
-                  />
-                </div>
-              ))}
+                );
+              })}
             </div>
           </CardBody>
         </Card>

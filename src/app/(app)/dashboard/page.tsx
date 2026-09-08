@@ -8,6 +8,7 @@ import { LinkButton } from "@/components/ui/button";
 import { IconFlame } from "@/components/app/icons";
 import { getActiveStudyPlan, todaysPlanDay } from "@/lib/engine/study-plan";
 import { pickPriorityTopic } from "@/lib/engine/practice";
+import { topicProgress, competitionProgress as competitionProgressPct } from "@/lib/engine/progress";
 import { ratingTier } from "@/lib/types";
 import { effectiveStreak } from "@/lib/streak";
 
@@ -29,23 +30,30 @@ export default async function DashboardPage() {
   ]);
 
   const allMastery = await prisma.topicMastery.findMany({ where: { userId: user.id } });
-  const masteryByTopicId = new Map(allMastery.map((m) => [m.topicId, m.masteryPercent]));
-  const priorityMastery = masteryByTopicId.get(priorityTopic.id) ?? 40;
+  const masteryByTopicId = new Map(
+    allMastery.map((m) => [
+      m.topicId,
+      { masteryPercent: m.masteryPercent, problemsAttempted: m.problemsAttempted },
+    ])
+  );
+  // Progress is the accuracy estimate discounted by how much practice backs it —
+  // see src/lib/engine/progress.ts. Reading masteryPercent raw here is what made
+  // a twelve-question placement test read as "86% mastered".
+  const priorityRow = masteryByTopicId.get(priorityTopic.id);
+  const priorityMastery = priorityRow
+    ? topicProgress(priorityRow.masteryPercent, priorityRow.problemsAttempted)
+    : 0;
 
-  const competitionProgress = userCompetitions.map((uc) => {
-    const topics = uc.competition.topics;
-    let weightedSum = 0;
-    let weightTotal = 0;
-    for (const ct of topics) {
-      const m = masteryByTopicId.get(ct.topicId) ?? 35;
-      weightedSum += m * ct.weight;
-      weightTotal += ct.weight;
-    }
-    const pct = weightTotal > 0 ? Math.round(weightedSum / weightTotal) : 35;
-    return { competition: uc.competition, pct, isPrimary: uc.isPrimary };
-  });
+  const competitionProgress = userCompetitions.map((uc) => ({
+    competition: uc.competition,
+    pct: competitionProgressPct(
+      uc.competition.topics.map((ct) => ({ topicId: ct.topicId, weight: ct.weight })),
+      masteryByTopicId
+    ),
+    isPrimary: uc.isPrimary,
+  }));
 
-  const today = plan ? todaysPlanDay(plan.days) : null;
+  const today = plan ? todaysPlanDay(plan) : null;
   const ratingValue = rating?.value ?? 1000;
   const tier = ratingTier(ratingValue);
   const problemCount = today?.problemCount ?? Math.max(3, Math.round((profile?.dailyPracticeMinutes ?? 30) / 6));

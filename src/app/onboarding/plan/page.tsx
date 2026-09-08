@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { OnboardingShell } from "@/components/onboarding/onboarding-shell";
-import { getActiveStudyPlan } from "@/lib/engine/study-plan";
+import { getActiveStudyPlan, planTotalWeeks, weekDays } from "@/lib/engine/study-plan";
 import { Button } from "@/components/ui/button";
 import { completeOnboardingAction } from "@/lib/actions/onboarding-actions";
 import { WeekPlanTable } from "@/components/week-plan-table";
@@ -67,12 +67,15 @@ export default async function OnboardingPlanPage() {
         </div>
 
         <div className="mt-8 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 sm:p-8">
-          <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">Week 1 Training Plan</h2>
+          <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">
+            Your {planTotalWeeks(plan)}-week training plan
+          </h2>
           <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-            This plan updates automatically as you practice — NumberSmith always tells you what to work on next.
+            Week 1 of {planTotalWeeks(plan)} is below. The plan moves through foundations, then
+            heavier mixed practice, then contest simulation — and it updates as your mastery changes.
           </p>
           <div className="mt-5">
-            <WeekPlanTable days={plan.days} />
+            <WeekPlanTable days={weekDays(plan.days, 1)} />
           </div>
         </div>
 

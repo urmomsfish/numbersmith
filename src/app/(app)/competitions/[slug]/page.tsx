@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { LinkButton } from "@/components/ui/button";
 import { ProgressBar } from "@/components/ui/progress";
 import { Card, CardBody } from "@/components/ui/card";
+import { competitionProgress, topicProgress } from "@/lib/engine/progress";
 import {
   FORMAT_LABEL,
   TEAM_LABEL,
@@ -56,16 +57,17 @@ export default async function CompetitionDetailPage({
     }),
   ]);
 
-  const masteryByTopicId = new Map(mastery.map((m) => [m.topicId, m.masteryPercent]));
-  const overallMastery =
-    competition.topics.length > 0
-      ? Math.round(
-          competition.topics.reduce(
-            (sum, ct) => sum + (masteryByTopicId.get(ct.topicId) ?? 35) * ct.weight,
-            0
-          ) / competition.topics.reduce((sum, ct) => sum + ct.weight, 0)
-        )
-      : 0;
+  const masteryByTopicId = new Map(
+    mastery.map((m) => [
+      m.topicId,
+      { masteryPercent: m.masteryPercent, problemsAttempted: m.problemsAttempted },
+    ])
+  );
+  // Discounted by evidence — see src/lib/engine/progress.ts.
+  const overallMastery = competitionProgress(
+    competition.topics.map((ct) => ({ topicId: ct.topicId, weight: ct.weight })),
+    masteryByTopicId
+  );
 
   const isProofBased = competition.format === "PROOF";
 
@@ -136,7 +138,8 @@ export default async function CompetitionDetailPage({
               </h2>
               <div className="mt-4 space-y-3">
                 {competition.topics.map((ct) => {
-                  const pct = masteryByTopicId.get(ct.topicId) ?? 0;
+                  const row = masteryByTopicId.get(ct.topicId);
+                  const pct = row ? topicProgress(row.masteryPercent, row.problemsAttempted) : 0;
                   return (
                     <div key={ct.id}>
                       <div className="mb-1 flex items-center justify-between text-sm">

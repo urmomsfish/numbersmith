@@ -1,5 +1,6 @@
 import { cn } from "@/lib/cn";
 import { Badge } from "@/components/ui/badge";
+import { streakWeekday } from "@/lib/streak";
 import type { Topic } from "@/generated/prisma";
 
 const DAY_ORDER = [1, 2, 3, 4, 5, 6, 0];
@@ -31,8 +32,12 @@ type PlanDay = {
   topic: Topic | null;
 };
 
+/** Renders ONE week. Callers must pass a single week's days — a multi-week plan
+ * has seven rows per week, and they collide in the map below. */
 export function WeekPlanTable({ days, highlightToday = true }: { days: PlanDay[]; highlightToday?: boolean }) {
-  const today = new Date().getDay();
+  // streakWeekday, not getDay(): the latter is the *server's* weekday, so on
+  // Vercel the highlighted row jumped to tomorrow at 5pm Pacific.
+  const today = streakWeekday();
   const byDay = new Map(days.map((d) => [d.dayOfWeek, d]));
 
   return (

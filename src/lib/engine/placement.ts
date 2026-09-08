@@ -295,28 +295,34 @@ export async function finalizePlacementTest(placementTestId: string) {
     },
   });
 
-  // Side effects: seed the student's overall rating + topic mastery from
-  // the placement result, so their dashboard is populated immediately.
+  // Side effects: seed the student's overall rating and their per-domain skill
+  // estimate, so the dashboard is populated immediately.
   await setRating(test.userId, "OVERALL", resultRating, "Placement Test");
 
+  // The placement test estimates *how good the student is*. It deliberately
+  // does not count as practice.
+  //
+  // problemsAttempted/problemsCorrect are the evidence behind the estimate, and
+  // src/lib/engine/progress.ts uses them to decide how much of the accuracy
+  // number to show as progress. Incrementing them here let a twelve-question
+  // test stand in for real work: one account finished onboarding with zero
+  // practice attempts and a dashboard claiming 100% mastery across six domains.
+  // The test sets the estimate; only practice makes it count.
   for (const [slug, pct] of Object.entries(skillBreakdown)) {
     const topic = await prisma.topic.findUnique({ where: { slug } });
     if (!topic) continue;
-    const stats = domainStats.get(slug)!;
     await prisma.topicMastery.upsert({
       where: { userId_topicId: { userId: test.userId, topicId: topic.id } },
       update: {
         masteryPercent: pct,
-        problemsAttempted: { increment: stats.total },
-        problemsCorrect: { increment: stats.correct },
         lastPracticedAt: new Date(),
       },
       create: {
         userId: test.userId,
         topicId: topic.id,
         masteryPercent: pct,
-        problemsAttempted: stats.total,
-        problemsCorrect: stats.correct,
+        problemsAttempted: 0,
+        problemsCorrect: 0,
         lastPracticedAt: new Date(),
       },
     });
