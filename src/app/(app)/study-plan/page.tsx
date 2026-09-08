@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Card, CardBody } from "@/components/ui/card";
@@ -9,22 +10,29 @@ import {
   getActiveStudyPlan,
   currentPlanWeek,
   planTotalWeeks,
-  phaseForWeek,
+  phaseForPlanWeek,
   weekDays,
   todaysPlanDay,
   isPlanComplete,
 } from "@/lib/engine/study-plan";
 import { regenerateStudyPlanAction, saveGoalAction } from "@/lib/actions/study-plan-actions";
 import { ratingTier } from "@/lib/types";
+import { streakDayKey, streakDayIndex } from "@/lib/streak";
 
 export default async function StudyPlanPage() {
   const user = await getCurrentUser();
   if (!user) return null;
 
-  const [plan, competitions, rating] = await Promise.all([
+  const [plan, competitions, rating, nextContest] = await Promise.all([
     getActiveStudyPlan(user.id),
     prisma.competition.findMany({ orderBy: { order: "asc" } }),
     prisma.rating.findUnique({ where: { userId_category: { userId: user.id, category: "OVERALL" } } }),
+    // The soonest contest still ahead of the student — what the plan is aimed at.
+    prisma.userCompetition.findFirst({
+      where: { userId: user.id, targetDate: { gte: streakDayKey() } },
+      include: { competition: true },
+      orderBy: { targetDate: "asc" },
+    }),
   ]);
 
   const currentRating = rating?.value ?? 1000;
@@ -45,10 +53,13 @@ export default async function StudyPlanPage() {
   const now = Date.now();
   const totalWeeks = planTotalWeeks(plan);
   const week = currentPlanWeek(plan, totalWeeks);
-  const phase = phaseForWeek(week);
+  // Must match how the plan was generated — see phaseForPlanWeek.
+  const phase = phaseForPlanWeek(plan, week);
   const planComplete = isPlanComplete(plan);
+  // Whole days on the shared streak boundary, so this counts down in step with
+  // everything else rather than at whatever hour the page happens to render.
   const daysUntilCompetition = plan.competitionDate
-    ? Math.max(0, Math.ceil((plan.competitionDate.getTime() - now) / (24 * 60 * 60 * 1000)))
+    ? Math.max(0, streakDayIndex(plan.competitionDate) - streakDayIndex(new Date(now)))
     : null;
 
   const progressToTarget = plan.targetRating
@@ -85,11 +96,41 @@ export default async function StudyPlanPage() {
                 <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
                   Week {week} of {totalWeeks} · {phase.name}
                 </h2>
-                {plan.primaryCompetition && (
-                  <Badge tone="brand">{plan.primaryCompetition.shortName}</Badge>
+                {(nextContest?.competition ?? plan.primaryCompetition) && (
+                  <Badge tone="brand">
+                    {(nextContest?.competition ?? plan.primaryCompetition)!.shortName}
+                  </Badge>
                 )}
               </div>
               <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">{phase.description}</p>
+              {nextContest?.targetDate && (
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                  Built around{" "}
+                  <span className="font-semibold text-slate-700 dark:text-slate-200">
+                    {nextContest.competition.shortName}
+                  </span>{" "}
+                  on{" "}
+                  {nextContest.targetDate.toLocaleDateString("en-US", {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                    timeZone: "UTC",
+                  })}
+                  .{" "}
+                  <Link href="/schedule" className="text-brand-600 dark:text-brand-400 underline">
+                    Edit schedule
+                  </Link>
+                </p>
+              )}
+              {!nextContest?.targetDate && (
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                  No contest date set.{" "}
+                  <Link href="/schedule" className="text-brand-600 dark:text-brand-400 underline">
+                    Add one
+                  </Link>{" "}
+                  and the plan rebuilds around it.
+                </p>
+              )}
               {planComplete && (
                 <p className="mt-3 rounded-lg bg-amber-50 dark:bg-amber-950/40 px-3 py-2 text-xs text-amber-800 dark:text-amber-200">
                   You&apos;ve reached the end of this {totalWeeks}-week plan. Regenerate it to build a
@@ -103,7 +144,7 @@ export default async function StudyPlanPage() {
                 {Array.from({ length: totalWeeks }, (_, i) => i + 1).map((w) => (
                   <span
                     key={w}
-                    title={`Week ${w} — ${phaseForWeek(w).name}`}
+                    title={`Week ${w} — ${phaseForPlanWeek(plan, w).name}`}
                     className={
                       "h-1.5 flex-1 min-w-[10px] rounded-full " +
                       (w < week
@@ -230,7 +271,10 @@ export default async function StudyPlanPage() {
                 </p>
                 <p className="mt-2 text-4xl font-extrabold text-ember-600 dark:text-ember-400">{daysUntilCompetition}</p>
                 <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
-                  {plan.competitionDate?.toLocaleDateString()}
+                  {/* Stored as UTC midnight, so it must be read back in UTC —
+                      otherwise a contest on the 13th renders as the 12th for
+                      anyone west of Greenwich. */}
+                  {plan.competitionDate?.toLocaleDateString("en-US", { timeZone: "UTC" })}
                 </p>
               </CardBody>
             </Card>

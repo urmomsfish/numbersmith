@@ -207,6 +207,9 @@ model CompetitionTopic {
 }
 
 /// isPrimary marks the student's #1 priority competition
+/// A competition the student is training for, and — once they fill it in — when
+/// they are sitting it. The rows with a targetDate are the student's schedule,
+/// and generateStudyPlan builds the training arc backwards from those dates.
 model UserCompetition {
   id            String      @id @default(cuid())
   userId        String
@@ -214,6 +217,11 @@ model UserCompetition {
   competitionId String
   competition   Competition @relation(fields: [competitionId], references: [id], onDelete: Cascade)
   isPrimary     Boolean     @default(false)
+  /// Contest date. Nullable: a student can follow a competition without having
+  /// a date yet, and those still shape practice, they just do not anchor the
+  /// calendar. Stored as that day's UTC midnight, the same date-only convention
+  /// as DailyChallenge.date.
+  targetDate    DateTime?
   addedAt       DateTime    @default(now())
 
   @@unique([userId, competitionId])

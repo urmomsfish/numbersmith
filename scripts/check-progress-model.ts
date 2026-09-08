@@ -17,7 +17,15 @@ import {
 } from "../src/lib/engine/progress";
 // From plan-schedule, not study-plan: the latter carries the `server-only`
 // guard, which refuses to load outside a Next request context.
-import { PLAN_WEEKS, PLAN_PHASES, phaseForWeek } from "../src/lib/engine/plan-schedule";
+import {
+  PLAN_WEEKS,
+  PLAN_PHASES,
+  phaseForWeek,
+  buildScheduleWeeks,
+  phaseForTimeRemaining,
+  difficultyBandFor,
+  type ScheduledCompetition,
+} from "../src/lib/engine/plan-schedule";
 
 let failures = 0;
 function check(label: string, actual: unknown, expected: unknown) {
@@ -102,6 +110,84 @@ expect(
     (v, i, arr) => i === 0 || v >= arr[i - 1]
   )
 );
+
+console.log("6. the plan is built around the student's real contest dates");
+const NOW = new Date("2026-09-08T18:00:00.000Z");
+const at = (days: number) => new Date(NOW.getTime() + days * 86_400_000);
+const comp = (
+  shortName: string,
+  targetDate: Date | null,
+  difficultyMin = 3,
+  difficultyMax = 7
+): ScheduledCompetition => ({
+  competitionId: shortName,
+  shortName,
+  targetDate,
+  isPrimary: false,
+  difficultyMin,
+  difficultyMax,
+  format: "SHORT_ANSWER",
+  numQuestions: 25,
+  timeLimitMinutes: 40,
+});
+
+// With nothing dated, fall back to the generic arc rather than producing nothing.
+const noDates = buildScheduleWeeks([comp("AMC 8", null)], NOW);
+check("no dated contest falls back to the generic plan", noDates.length, PLAN_WEEKS);
+expect("fallback weeks have no target", noDates.every((w) => w.target === null));
+
+// A single contest: the plan runs to it and tapers on the contest week.
+const single = buildScheduleWeeks([comp("AMC 8", at(35))], NOW);
+check("plan runs to the contest week", single.length, 6);
+expect("every week targets the contest", single.every((w) => w.target?.shortName === "AMC 8"));
+check("only the final week tapers", single.filter((w) => w.isTaper).length, 1);
+check("the taper is the last week", single[single.length - 1].isTaper, true);
+expect(
+  "weeks until the contest count down",
+  single.every((w, i) => i === 0 || (w.weeksUntilTarget ?? 0) <= (single[i - 1].weeksUntilTarget ?? 0))
+);
+
+// Two contests: train for the nearer one, switch once it is behind you.
+const two = buildScheduleWeeks([comp("AMC 10", at(70)), comp("MATHCOUNTS", at(21))], NOW);
+check("first week targets the sooner contest", two[0].target?.shortName, "MATHCOUNTS");
+check("last week targets the later contest", two[two.length - 1].target?.shortName, "AMC 10");
+expect(
+  "the switch happens after the first contest, not before",
+  two.findIndex((w) => w.target?.shortName === "AMC 10") > two.findIndex((w) => w.isTaper)
+);
+check("each contest gets its own taper week", two.filter((w) => w.isTaper).length, 2);
+
+// A contest already past must not steer anything.
+const past = buildScheduleWeeks([comp("Old", at(-30)), comp("Next", at(28))], NOW);
+expect("past contests are ignored", past.every((w) => w.target?.shortName === "Next"));
+
+// Phase follows time remaining, not position in the plan. Someone signing up two
+// weeks out should not be starting on foundations.
+check("2 weeks out is competition prep", phaseForTimeRemaining(2).name, "Competition prep");
+check("6 weeks out is build", phaseForTimeRemaining(6).name, "Build");
+check("20 weeks out is foundations", phaseForTimeRemaining(20).name, "Foundations");
+const shortRunway = buildScheduleWeeks([comp("Soon", at(10))], NOW);
+expect(
+  "a short runway is all competition prep",
+  shortRunway.every((w) => w.phase.name === "Competition prep")
+);
+
+// A date years out must not generate an unbounded plan.
+const farOff = buildScheduleWeeks([comp("Far", at(365 * 3))], NOW);
+expect("the horizon is capped", farOff.length <= 52);
+
+console.log("7. difficulty tracks the contest's own range");
+const amc8 = comp("AMC 8", at(84), 2, 6);
+const aime = comp("AIME", at(84), 7, 10);
+expect("far out starts near the bottom of the range", difficultyBandFor(amc8, 12).min <= 3);
+expect("the ceiling is always the contest's own max", difficultyBandFor(amc8, 0).max === 6);
+expect("an AMC 8 student is never sent AIME-level work", difficultyBandFor(amc8, 0).max < aime.difficultyMin);
+expect("an AIME student is never sent arithmetic drills", difficultyBandFor(aime, 12).min >= 7);
+expect(
+  "the floor rises as the contest approaches",
+  difficultyBandFor(aime, 0).min >= difficultyBandFor(aime, 12).min
+);
+expect("no contest gives a sane default", difficultyBandFor(null, null).min >= 1);
 
 console.log(failures === 0 ? "\nProgress model OK.\n" : `\n${failures} failure(s).\n`);
 process.exit(failures === 0 ? 0 : 1);

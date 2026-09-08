@@ -28,6 +28,7 @@ export const NAV_ITEMS = [
   { href: "/mistakes", label: "Mistakes", icon: IconRefresh },
   { href: "/stats", label: "Statistics", icon: IconChart },
   { href: "/study-plan", label: "Study Plan", icon: IconMap },
+  { href: "/schedule", label: "Schedule", icon: IconTrophy },
 ];
 
 export function Sidebar({ isAdmin }: { isAdmin?: boolean }) {

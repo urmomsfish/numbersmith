@@ -89,6 +89,42 @@ export async function rankTopicsByPriority(userId: string) {
     .sort((a, b) => b.score - a.score);
 }
 
+/** Ranks domains by need *for one specific competition*.
+ *
+ * rankTopicsByPriority blends every competition the student follows, which is
+ * right for "what should I do next" but wrong when a plan week is aimed at a
+ * particular contest three weeks away. This weights purely by that contest's own
+ * topic emphasis, so a week of MATHCOUNTS prep is built from what MATHCOUNTS
+ * actually tests. */
+export async function rankTopicsForCompetition(userId: string, competitionId: string) {
+  const [competition, domainTopics, masteryRows] = await Promise.all([
+    prisma.competition.findUnique({
+      where: { id: competitionId },
+      include: { topics: { include: { topic: true } } },
+    }),
+    prisma.topic.findMany({ where: { parentId: null }, orderBy: { order: "asc" } }),
+    prisma.topicMastery.findMany({ where: { userId } }),
+  ]);
+  if (!competition) return rankTopicsByPriority(userId);
+
+  const weightBySlug = new Map<string, number>();
+  for (const ct of competition.topics) {
+    if (ct.topic.parentId) continue; // only domain-level topics carry weight
+    weightBySlug.set(ct.topic.slug, ct.weight);
+  }
+  const masteryByTopicId = new Map(masteryRows.map((m) => [m.topicId, m.masteryPercent]));
+
+  return domainTopics
+    .map((topic) => {
+      // Domains this contest does not test get a floor, not a zero — they can
+      // still surface once everything it does test is solid.
+      const weight = weightBySlug.get(topic.slug) ?? 0.25;
+      const mastery = masteryByTopicId.get(topic.id) ?? 40;
+      return { topic, mastery, weight, score: weight * (100 - mastery) };
+    })
+    .sort((a, b) => b.score - a.score);
+}
+
 /** Picks the single highest-priority topic to work on right now. */
 export async function pickPriorityTopic(userId: string) {
   const ranked = await rankTopicsByPriority(userId);

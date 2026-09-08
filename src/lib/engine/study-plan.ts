@@ -1,9 +1,12 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
-import { rankTopicsByPriority } from "@/lib/engine/practice";
+import { rankTopicsByPriority, rankTopicsForCompetition } from "@/lib/engine/practice";
 import {
   PLAN_WEEKS,
-  phaseForWeek,
+  buildScheduleWeeks,
+  upcomingCompetitions,
+  type ScheduledCompetition,
+  type ScheduledWeek,
 } from "@/lib/engine/plan-schedule";
 
 // Re-exported so callers have a single import site for "the study plan", while
@@ -12,24 +15,40 @@ export {
   PLAN_WEEKS,
   PLAN_PHASES,
   phaseForWeek,
+  phaseForPlanWeek,
   planTotalWeeks,
   currentPlanWeek,
   isPlanComplete,
   todaysPlanDay,
   weekDays,
+  buildScheduleWeeks,
+  upcomingCompetitions,
+  weeksBetween,
+  phaseForTimeRemaining,
+  difficultyBandFor,
 } from "@/lib/engine/plan-schedule";
-export type { PlanPhase } from "@/lib/engine/plan-schedule";
+export type { PlanPhase, ScheduledCompetition, ScheduledWeek } from "@/lib/engine/plan-schedule";
 
-/** Generates (or regenerates) a phased multi-week study plan from the student's
- * current mastery, weak topics, primary competition, and available practice
- * time. Called after onboarding completes and again whenever performance
- * materially changes (new placement, big rating swing). */
+/** Generates (or regenerates) the training plan from the student's competition
+ * schedule.
+ *
+ * The plan is built backwards from real contest dates. Each week is aimed at the
+ * next competition the student has not yet sat, its phase comes from how long is
+ * left rather than from a fixed week number, and its topics are ranked by what
+ * *that* contest emphasises. Timed sets and simulations quote the contest's own
+ * question count and time limit. With no dated competition it falls back to the
+ * generic PLAN_WEEKS progression.
+ *
+ * Called after onboarding, whenever the schedule is edited, and whenever
+ * performance materially changes (new placement, big rating swing).
+ */
 export async function generateStudyPlan(userId: string) {
-  const [profile, primaryUserCompetition, overallRating] = await Promise.all([
+  const [profile, userCompetitions, overallRating] = await Promise.all([
     prisma.profile.findUnique({ where: { userId } }),
-    prisma.userCompetition.findFirst({
-      where: { userId, isPrimary: true },
+    prisma.userCompetition.findMany({
+      where: { userId },
       include: { competition: true },
+      orderBy: [{ isPrimary: "desc" }, { addedAt: "asc" }],
     }),
     prisma.rating.findUnique({ where: { userId_category: { userId, category: "OVERALL" } } }),
   ]);
@@ -38,22 +57,49 @@ export async function generateStudyPlan(userId: string) {
   const baseProblemCount = Math.max(3, Math.round(minutesPerDay / 6));
   const currentRating = overallRating?.value ?? 1000;
 
-  // Ranked by competition-weighted need, not raw mastery — so an AMC 8 student's
-  // week is built from AMC 8 topics rather than whatever they happen to be worst at.
-  const ranked = await rankTopicsByPriority(userId);
-  const topics = ranked.map((r) => r.topic);
-  const competitionName = primaryUserCompetition?.competition.shortName ?? "Competition";
+  const schedule: ScheduledCompetition[] = userCompetitions.map((uc) => ({
+    competitionId: uc.competitionId,
+    shortName: uc.competition.shortName,
+    targetDate: uc.targetDate,
+    isPrimary: uc.isPrimary,
+    difficultyMin: uc.competition.difficultyMin,
+    difficultyMax: uc.competition.difficultyMax,
+    format: uc.competition.format,
+    numQuestions: uc.competition.numQuestions,
+    timeLimitMinutes: uc.competition.timeLimitMinutes,
+  }));
+
+  const weeks = buildScheduleWeeks(schedule);
+  const upcoming = upcomingCompetitions(schedule);
+  const primary =
+    userCompetitions.find((uc) => uc.isPrimary) ??
+    userCompetitions.find((uc) => uc.competitionId === upcoming[0]?.competitionId);
+
+  // Topic rankings are per competition and reused across that contest's weeks —
+  // one query per distinct target rather than one per week.
+  const rankingCache = new Map<string, { id: string; name: string }[]>();
+  async function topicsFor(competitionId: string | null) {
+    const key = competitionId ?? "__general__";
+    const cached = rankingCache.get(key);
+    if (cached) return cached;
+    const ranked = competitionId
+      ? await rankTopicsForCompetition(userId, competitionId)
+      : await rankTopicsByPriority(userId);
+    const topics = ranked.map((r) => ({ id: r.topic.id, name: r.topic.name }));
+    rankingCache.set(key, topics);
+    return topics;
+  }
 
   await prisma.studyPlan.updateMany({ where: { userId, active: true }, data: { active: false } });
 
   const studyPlan = await prisma.studyPlan.create({
     data: {
       userId,
-      primaryCompetitionId: primaryUserCompetition?.competitionId,
+      primaryCompetitionId: primary?.competitionId,
+      competitionDate: upcoming[0]?.targetDate ?? null,
       currentRating,
-      // A twelve-week target, so the goal is proportional to the runway rather
-      // than to a single week.
-      targetRating: currentRating + 300,
+      // Scaled to the length of the runway rather than to a fixed week count.
+      targetRating: currentRating + Math.round(25 * Math.min(weeks.length, 24)),
       minutesPerDay,
       active: true,
     },
@@ -67,55 +113,69 @@ export async function generateStudyPlan(userId: string) {
     problemCount: number;
     label: string;
   };
-
   const days: PlanDay[] = [];
-  /** Rotates through the ranked topics so later weeks widen coverage instead of
-   * drilling the same four topics for three months. Falls back gracefully when
-   * a student has fewer ranked topics than the rotation asks for. */
-  const topicAt = (offset: number) =>
-    topics.length > 0 ? topics[offset % topics.length] : undefined;
 
-  for (let week = 1; week <= PLAN_WEEKS; week++) {
-    const phase = phaseForWeek(week);
-    // Volume ramps ~40% across the twelve weeks.
-    const problemCount = Math.round(baseProblemCount * (1 + 0.4 * ((week - 1) / (PLAN_WEEKS - 1))));
-    const rotation = (week - 1) * 2;
-
+  for (const week of weeks) {
+    const topics = await topicsFor(week.target?.competitionId ?? null);
+    /** Rotates through the ranked topics so later weeks widen coverage instead
+     * of drilling the same few for months. */
+    const topicAt = (offset: number) =>
+      topics.length > 0 ? topics[offset % topics.length] : undefined;
+    const rotation = (week.weekNumber - 1) * 2;
     const a = topicAt(rotation);
     const b = topicAt(rotation + 1);
     const c = topicAt(rotation + 2);
     const d = topicAt(rotation + 3);
 
-    if (phase.name === "Foundations") {
-      days.push(
-        { weekNumber: week, dayOfWeek: 1, taskType: "LESSON", topicId: a?.id, problemCount, label: `${a?.name ?? "Algebra"} lesson + ${problemCount} problems` },
-        { weekNumber: week, dayOfWeek: 2, taskType: "PRACTICE", topicId: a?.id, problemCount, label: `${a?.name ?? "Algebra"} practice` },
-        { weekNumber: week, dayOfWeek: 3, taskType: "LESSON", topicId: b?.id, problemCount, label: `${b?.name ?? "Geometry"} lesson + ${problemCount} problems` },
-        { weekNumber: week, dayOfWeek: 4, taskType: "PRACTICE", topicId: b?.id, problemCount, label: `${b?.name ?? "Geometry"} practice` },
-        { weekNumber: week, dayOfWeek: 5, taskType: "PRACTICE", topicId: c?.id, problemCount, label: `${c?.name ?? "Number Theory"} practice` },
-        { weekNumber: week, dayOfWeek: 6, taskType: "TIMED_SET", problemCount, label: "Mixed timed set" },
-        { weekNumber: week, dayOfWeek: 0, taskType: "REVIEW", problemCount, label: "Mistake review" }
-      );
-    } else if (phase.name === "Build") {
-      days.push(
-        { weekNumber: week, dayOfWeek: 1, taskType: "PRACTICE", topicId: a?.id, problemCount, label: `${a?.name ?? "Algebra"} practice` },
-        { weekNumber: week, dayOfWeek: 2, taskType: "PRACTICE", topicId: b?.id, problemCount, label: `${b?.name ?? "Geometry"} practice` },
-        { weekNumber: week, dayOfWeek: 3, taskType: "LESSON", topicId: c?.id, problemCount, label: `${c?.name ?? "Combinatorics"} lesson + ${problemCount} problems` },
-        { weekNumber: week, dayOfWeek: 4, taskType: "TIMED_SET", problemCount, label: "Mixed timed set" },
-        { weekNumber: week, dayOfWeek: 5, taskType: "PRACTICE", topicId: d?.id, problemCount, label: `${d?.name ?? "Probability"} practice` },
-        { weekNumber: week, dayOfWeek: 6, taskType: "SIMULATION", problemCount, label: `${competitionName} simulation` },
-        { weekNumber: week, dayOfWeek: 0, taskType: "REVIEW", problemCount, label: "Mistake review" }
-      );
+    const name = week.target?.shortName ?? "Competition";
+    // A timed set that mirrors the real paper, when we know its shape.
+    const paper =
+      week.target?.numQuestions && week.target?.timeLimitMinutes
+        ? `${week.target.numQuestions} questions in ${week.target.timeLimitMinutes} min`
+        : "Mixed timed set";
+
+    const push = (
+      dayOfWeek: number,
+      taskType: string,
+      label: string,
+      topicId?: string,
+      count = problemCountFor(week, baseProblemCount)
+    ) => days.push({ weekNumber: week.weekNumber, dayOfWeek, taskType, topicId, problemCount: count, label });
+
+    if (week.isTaper) {
+      // Contest week: consolidate, do not cram. Light volume, review-heavy.
+      const light = Math.max(3, Math.round(baseProblemCount * 0.6));
+      push(1, "REVIEW", `${name} — review your mistake log`, undefined, light);
+      push(2, "PRACTICE", `${a?.name ?? "Mixed"} — light confidence set`, a?.id, light);
+      push(3, "TIMED_SET", `${name} pace check (${paper})`, undefined, light);
+      push(4, "REVIEW", "Final mistake review", undefined, light);
+      push(5, "PRACTICE", "Light mixed set — stay warm", undefined, light);
+      push(6, "SIMULATION", `${name} — good luck`, undefined, light);
+      push(0, "REVIEW", "Rest and review", undefined, light);
+    } else if (week.phase.name === "Foundations") {
+      push(1, "LESSON", `${a?.name ?? "Algebra"} lesson + practice`, a?.id);
+      push(2, "PRACTICE", `${a?.name ?? "Algebra"} practice`, a?.id);
+      push(3, "LESSON", `${b?.name ?? "Geometry"} lesson + practice`, b?.id);
+      push(4, "PRACTICE", `${b?.name ?? "Geometry"} practice`, b?.id);
+      push(5, "PRACTICE", `${c?.name ?? "Number Theory"} practice`, c?.id);
+      push(6, "TIMED_SET", `Mixed timed set`);
+      push(0, "REVIEW", "Mistake review");
+    } else if (week.phase.name === "Build") {
+      push(1, "PRACTICE", `${a?.name ?? "Algebra"} practice`, a?.id);
+      push(2, "PRACTICE", `${b?.name ?? "Geometry"} practice`, b?.id);
+      push(3, "LESSON", `${c?.name ?? "Combinatorics"} lesson + practice`, c?.id);
+      push(4, "TIMED_SET", `${name} timed set (${paper})`);
+      push(5, "PRACTICE", `${d?.name ?? "Probability"} practice`, d?.id);
+      push(6, "SIMULATION", `${name} simulation`);
+      push(0, "REVIEW", "Mistake review");
     } else {
-      days.push(
-        { weekNumber: week, dayOfWeek: 1, taskType: "TIMED_SET", problemCount, label: "Timed set at contest pace" },
-        { weekNumber: week, dayOfWeek: 2, taskType: "PRACTICE", topicId: a?.id, problemCount, label: `${a?.name ?? "Algebra"} — weak spot drill` },
-        { weekNumber: week, dayOfWeek: 3, taskType: "REVIEW", problemCount, label: "Mistake review" },
-        { weekNumber: week, dayOfWeek: 4, taskType: "PRACTICE", topicId: b?.id, problemCount, label: `${b?.name ?? "Geometry"} — weak spot drill` },
-        { weekNumber: week, dayOfWeek: 5, taskType: "TIMED_SET", problemCount, label: "Timed set at contest pace" },
-        { weekNumber: week, dayOfWeek: 6, taskType: "SIMULATION", problemCount, label: `Full ${competitionName} simulation` },
-        { weekNumber: week, dayOfWeek: 0, taskType: "REVIEW", problemCount, label: "Mistake review" }
-      );
+      push(1, "TIMED_SET", `${name} pace work (${paper})`);
+      push(2, "PRACTICE", `${a?.name ?? "Algebra"} — weak spot drill`, a?.id);
+      push(3, "REVIEW", "Mistake review");
+      push(4, "PRACTICE", `${b?.name ?? "Geometry"} — weak spot drill`, b?.id);
+      push(5, "TIMED_SET", `${name} pace work (${paper})`);
+      push(6, "SIMULATION", `Full ${name} simulation`);
+      push(0, "REVIEW", "Mistake review");
     }
   }
 
@@ -138,6 +198,16 @@ export async function generateStudyPlan(userId: string) {
       primaryCompetition: true,
     },
   });
+}
+
+/** Volume ramps as the contest approaches, then drops in the taper week. */
+function problemCountFor(week: ScheduledWeek, base: number): number {
+  if (week.isTaper) return Math.max(3, Math.round(base * 0.6));
+  if (week.weeksUntilTarget === null) {
+    return Math.round(base * (1 + 0.4 * ((week.weekNumber - 1) / Math.max(1, PLAN_WEEKS - 1))));
+  }
+  const closeness = Math.max(0, Math.min(1, 1 - week.weeksUntilTarget / 12));
+  return Math.round(base * (1 + 0.4 * closeness));
 }
 
 export async function getActiveStudyPlan(userId: string) {
