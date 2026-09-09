@@ -8,7 +8,6 @@ import { getSubscription, grantsProAccess, isCancelPending } from "@/lib/subscri
 import { cancelSubscriptionAction, startProTrialAction } from "@/lib/actions/subscription-actions";
 import { updateProfileAction } from "@/lib/actions/settings-actions";
 import { TintPicker } from "@/components/tint-picker";
-import { ThemeChoice } from "@/components/theme-choice";
 
 export default async function SettingsPage() {
   const user = await getCurrentUser();
@@ -35,7 +34,7 @@ export default async function SettingsPage() {
 
       <Card className="mt-6">
         <CardBody>
-          <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Account</h2>
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">Account</h2>
           <dl className="mt-3 space-y-2 text-sm">
             <div className="flex justify-between">
               <dt className="text-slate-500 dark:text-slate-400">Name</dt>
@@ -55,7 +54,7 @@ export default async function SettingsPage() {
 
       <Card className="mt-5">
         <CardBody>
-          <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
             Appearance
           </h2>
           <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
@@ -63,15 +62,16 @@ export default async function SettingsPage() {
             text are left alone so everything stays just as easy to read. Saved on this device.
           </p>
           <TintPicker className="mt-4" />
-          <p className="mt-6 text-sm font-medium text-slate-700 dark:text-slate-200">Light or dark</p>
-          <ThemeChoice className="mt-2" />
+          <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">
+            Use the sun/moon button in the top bar to switch between light and dark.
+          </p>
         </CardBody>
       </Card>
 
       <Card className="mt-5">
         <CardBody>
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Subscription</h2>
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">Subscription</h2>
             <Badge tone={cancelPending ? "warning" : isPro ? "brand" : "slate"}>
               {cancelPending
                 ? "⭐ Pro — ending"
@@ -141,7 +141,7 @@ export default async function SettingsPage() {
       <Card className="mt-5">
         <CardBody>
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
               My Competitions
             </h2>
             <Link
@@ -167,7 +167,7 @@ export default async function SettingsPage() {
 
       <Card className="mt-5">
         <CardBody>
-          <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
             Training Preferences
           </h2>
           <form action={updateProfileAction} className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -221,7 +221,7 @@ export default async function SettingsPage() {
 
       <Card className="mt-5">
         <CardBody>
-          <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
             Placement Test
           </h2>
           <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">

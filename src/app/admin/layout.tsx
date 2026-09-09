@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { Logo } from "@/components/logo";
 import { Badge } from "@/components/ui/badge";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { logoutAction } from "@/lib/actions/auth-actions";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -31,6 +32,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <Link href="/dashboard" className="hover:text-slate-900 dark:hover:text-slate-100">
               Student view
             </Link>
+            <ThemeToggle />
             <form action={logoutAction}>
               <button type="submit" className="text-danger-600 hover:text-danger-500 dark:text-red-400 dark:hover:text-red-300">
                 Log out

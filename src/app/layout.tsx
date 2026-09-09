@@ -41,7 +41,7 @@ export const viewport: Viewport = {
 
 // Runs before first paint (a plain inline <script>, not deferred) so the page
 // never flashes light-then-dark, or untinted-then-tinted. Respects a stored
-// user choice over the device's prefers-color-scheme; ThemeChoice and
+// user choice over the device's prefers-color-scheme; ThemeToggle and
 // TintPicker write those choices.
 //
 // The tint list is interpolated from TINT_IDS rather than hardcoded so it

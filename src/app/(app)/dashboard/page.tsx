@@ -56,58 +56,65 @@ export default async function DashboardPage() {
   const today = plan ? todaysPlanDay(plan) : null;
   const ratingValue = rating?.value ?? 1000;
   const tier = ratingTier(ratingValue);
-  const streak = effectiveStreak(stats?.currentStreak ?? 0, stats?.lastActiveDate);
-  const longestStreak = stats?.longestStreak ?? 0;
   const problemCount = today?.problemCount ?? Math.max(3, Math.round((profile?.dailyPracticeMinutes ?? 30) / 6));
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
       <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50 sm:text-3xl">
-        {user.name.split(" ")[0]}&apos;s training
+        Welcome back, {user.name.split(" ")[0]}!
       </h1>
+      <p className="mt-1 text-slate-600 dark:text-slate-300">Here&apos;s what NumberSmith recommends for today.</p>
 
       <div className="mt-6 grid gap-5 lg:grid-cols-3">
         <div className="space-y-5 lg:col-span-2">
           <Card>
             <CardBody>
-              {/* Leads with the task itself. The previous version showed three
-                  big numbers, one of which ("80%+ accuracy") was not derived
-                  from anything — it was a target nobody had set. */}
-              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Today</p>
-              <p className="mt-2 text-xl font-bold text-slate-900 dark:text-slate-50">
-                {today?.label ?? "Rest day"}
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+                Today&apos;s Goal
               </p>
-              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                {problemCount} problems · about {profile?.dailyPracticeMinutes ?? 30} minutes
-              </p>
-              <LinkButton href="/practice/session" className="mt-4">
-                Start
-              </LinkButton>
+              <div className="mt-3 grid grid-cols-3 gap-3 text-center">
+                <div>
+                  <p className="text-2xl font-extrabold text-slate-900 dark:text-slate-50">{problemCount}</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-500">problems</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-extrabold text-slate-900 dark:text-slate-50">
+                    {profile?.dailyPracticeMinutes ?? 30}
+                  </p>
+                  <p className="text-xs text-slate-400 dark:text-slate-500">minutes</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-extrabold text-slate-900 dark:text-slate-50">80%+</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-500">accuracy</p>
+                </div>
+              </div>
+              {today && (
+                <p className="mt-4 rounded-lg bg-slate-50 dark:bg-slate-800 px-3 py-2 text-center text-xs text-slate-500 dark:text-slate-400">
+                  Today&apos;s plan: <span className="font-semibold text-slate-700 dark:text-slate-200">{today.label}</span>
+                </p>
+              )}
             </CardBody>
           </Card>
 
           <Card>
             <CardBody>
-              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
                 Continue Training
               </p>
               <p className="mt-2 text-xl font-bold text-slate-900 dark:text-slate-50">{priorityTopic.name}</p>
-              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                Weakest against what your competitions weight most.
-              </p>
-              <div className="mt-3 flex items-center gap-3">
+              <div className="mt-2 flex items-center gap-2">
                 <ProgressBar value={priorityMastery} tone="brand" className="max-w-[200px]" />
                 <span className="text-xs font-medium text-slate-400 dark:text-slate-500">{priorityMastery}% mastered</span>
               </div>
-              <LinkButton href={`/practice?topic=${priorityTopic.slug}`} variant="secondary" className="mt-4">
-                Practice {priorityTopic.name}
+              <LinkButton href={`/practice?topic=${priorityTopic.slug}`} className="mt-4">
+                Continue →
               </LinkButton>
             </CardBody>
           </Card>
 
           <Card>
             <CardBody>
-              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
                 Competition Progress
               </p>
               <div className="mt-3 space-y-3">
@@ -139,7 +146,7 @@ export default async function DashboardPage() {
         <div className="space-y-5">
           <Card>
             <CardBody className="text-center">
-              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
                 Current Rating
               </p>
               <p className="mt-2 text-4xl font-extrabold text-brand-700 dark:text-brand-300">{ratingValue}</p>
@@ -151,19 +158,34 @@ export default async function DashboardPage() {
 
           <Card>
             <CardBody className="text-center">
-              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
                 Daily Streak
               </p>
               <p className="mt-2 flex items-center justify-center gap-2 text-3xl font-extrabold text-ember-600 dark:text-ember-400">
                 <IconFlame className="h-7 w-7" />
-                {streak} {streak === 1 ? "day" : "days"}
+                {effectiveStreak(stats?.currentStreak ?? 0, stats?.lastActiveDate)} days
               </p>
-              <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
-                Longest: {longestStreak} {longestStreak === 1 ? "day" : "days"}
-              </p>
+              <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">Longest: {stats?.longestStreak ?? 0} days</p>
             </CardBody>
           </Card>
 
+          <div className="rounded-2xl border border-brand-900 bg-brand-950 p-5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-brand-200">
+              Recommended
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-brand-50">
+              Your recent results show that{" "}
+              <span className="font-semibold text-white">{priorityTopic.name}</span> is holding
+              back your overall score.
+            </p>
+            <LinkButton
+              href={`/practice?topic=${priorityTopic.slug}`}
+              variant="secondary"
+              className="mt-4 !bg-white !text-brand-700 hover:!bg-brand-50"
+            >
+              Practice {priorityTopic.name} →
+            </LinkButton>
+          </div>
         </div>
       </div>
     </div>

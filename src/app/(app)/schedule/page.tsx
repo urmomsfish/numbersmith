@@ -75,7 +75,7 @@ export default async function SchedulePage() {
       {/* ---------------------------------------------------------------- */}
       <Card className="mt-6">
         <CardBody>
-          <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
             Upcoming
           </h2>
 
@@ -173,7 +173,7 @@ export default async function SchedulePage() {
       {past.length > 0 && (
         <Card className="mt-5">
           <CardBody>
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
               Past
             </h2>
             <div className="mt-3 space-y-2">
@@ -202,7 +202,7 @@ export default async function SchedulePage() {
       {/* ---------------------------------------------------------------- */}
       <Card className="mt-5">
         <CardBody>
-          <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
             Add a competition
           </h2>
           {addable.length === 0 ? (

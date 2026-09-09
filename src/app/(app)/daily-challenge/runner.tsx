@@ -147,7 +147,7 @@ export function DailyChallengeRunner({
               onClick={() => setHintsShown((h) => h + 1)}
               className="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300"
             >
-              Show hint ({hintsShown + 1}/{problem.hints.length})
+              💡 Show Hint ({hintsShown + 1}/{problem.hints.length})
             </button>
           )}
           {hintsShown > 0 && (
@@ -176,7 +176,7 @@ export function DailyChallengeRunner({
             )}
           </div>
           <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4">
-            <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Solution</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">Solution</p>
             <p className="mt-1.5 text-sm leading-relaxed text-slate-700 dark:text-slate-200">{result!.solution}</p>
           </div>
           {unlocked.map((a, i) => (

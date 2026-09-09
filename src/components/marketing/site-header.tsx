@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { LinkButton } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { getCurrentUser } from "@/lib/auth";
 
 export async function SiteHeader() {
@@ -28,6 +29,7 @@ export async function SiteHeader() {
           </Link>
         </nav>
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           {user ? (
             <LinkButton href="/dashboard" size="sm">
               Go to Dashboard

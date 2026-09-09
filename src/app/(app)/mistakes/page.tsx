@@ -59,6 +59,7 @@ export default async function MistakesPage() {
       {allMistakes.length === 0 ? (
         <Card className="mt-6">
           <CardBody className="py-12 text-center">
+            <p className="text-3xl">🎯</p>
             <p className="mt-3 font-semibold text-slate-900 dark:text-slate-50">No open mistakes.</p>
             <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
               Keep practicing — anything you miss will show up here for spaced review.

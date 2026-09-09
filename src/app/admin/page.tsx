@@ -86,7 +86,7 @@ export default async function AdminOverviewPage() {
       <div className="mt-5 grid gap-5 lg:grid-cols-3">
         <Card>
           <CardBody>
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
               Subscriptions
             </h2>
             <div className="mt-4 space-y-3">
@@ -113,7 +113,7 @@ export default async function AdminOverviewPage() {
 
         <Card>
           <CardBody>
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Revenue</h2>
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">Revenue</h2>
             <p className="mt-3 text-3xl font-extrabold text-slate-900 dark:text-slate-50">
               ${mrr.toFixed(2)}
               <span className="ml-1 text-sm font-normal text-slate-400 dark:text-slate-500">MRR</span>
@@ -138,7 +138,7 @@ export default async function AdminOverviewPage() {
 
         <Card>
           <CardBody>
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Content</h2>
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">Content</h2>
             <dl className="mt-3 space-y-2 text-sm">
               <div className="flex justify-between">
                 <dt className="text-slate-500 dark:text-slate-400">Problems</dt>
@@ -170,7 +170,7 @@ export default async function AdminOverviewPage() {
       <div className="mt-5 grid gap-5 sm:grid-cols-2">
         <Card>
           <CardBody>
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
               Popular Competitions
             </h2>
             <div className="mt-3 space-y-2">
@@ -193,7 +193,7 @@ export default async function AdminOverviewPage() {
 
         <Card>
           <CardBody>
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
               Most-Attempted Problems
             </h2>
             <div className="mt-3 space-y-2">

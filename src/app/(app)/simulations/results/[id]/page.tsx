@@ -109,7 +109,7 @@ export default async function SimulationResultsPage({
       <div className="mt-6 grid gap-5 sm:grid-cols-2">
         <Card>
           <CardBody>
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
               Topic Breakdown
             </h2>
             <div className="mt-4 space-y-3">
@@ -133,7 +133,7 @@ export default async function SimulationResultsPage({
 
         <Card>
           <CardBody>
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
               Difficulty Breakdown
             </h2>
             <div className="mt-4 space-y-3">
@@ -156,7 +156,7 @@ export default async function SimulationResultsPage({
 
       <Card className="mt-5">
         <CardBody>
-          <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
             Recommended Training
           </h2>
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
@@ -177,7 +177,7 @@ export default async function SimulationResultsPage({
       {missed.length > 0 && (
         <Card className="mt-5">
           <CardBody>
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
               Questions Missed ({missed.length})
             </h2>
             <div className="mt-3 divide-y divide-slate-100 dark:divide-slate-800">
