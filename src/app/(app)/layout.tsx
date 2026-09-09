@@ -20,7 +20,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="flex min-h-screen bg-background">
-      <Sidebar isAdmin={user.role === "ADMIN"} />
+      <Sidebar isAdmin={user.role === "ADMIN"} isPro={isPro} />
       <div className="flex min-w-0 flex-1 flex-col">
         <Topbar
           name={user.name}

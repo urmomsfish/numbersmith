@@ -101,6 +101,22 @@ export function IconBolt({ className }: IconProps) {
     </svg>
   );
 }
+export function IconVideo({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={className ?? base}>
+      <rect x="3" y="6" width="13" height="12" rx="2" strokeLinejoin="round" />
+      <path d="m16 10 5-3v10l-5-3" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+export function IconSparkles({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className ?? base}>
+      <path d="M11 3c.4 2.7 1.3 4.4 2.9 5.6 1.4 1 3.1 1.4 5.1 1.4-2 0-3.7.4-5.1 1.4C12.3 12.6 11.4 14.3 11 17c-.4-2.7-1.3-4.4-2.9-5.6C6.7 10.4 5 10 3 10c2 0 3.7-.4 5.1-1.4C9.7 7.4 10.6 5.7 11 3Z" />
+      <path d="M18.5 15c.2 1.4.7 2.3 1.6 2.9.7.5 1.6.7 2.4.7-.9 0-1.7.2-2.4.7-.9.6-1.4 1.5-1.6 2.9-.2-1.4-.7-2.3-1.6-2.9-.7-.5-1.6-.7-2.4-.7.9 0 1.7-.2 2.4-.7.9-.6 1.4-1.5 1.6-2.9Z" />
+    </svg>
+  );
+}
 export function IconShield({ className }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={className ?? base}>

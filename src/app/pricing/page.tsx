@@ -27,8 +27,8 @@ const COMPARISON: { feature: string; free: string; pro: string }[] = [
   { feature: "Statistics", free: "Basic", pro: "Advanced" },
   { feature: "Custom Practice Sets", free: "—", pro: "✓" },
   { feature: "Advanced Problems (Expert+)", free: "—", pro: "✓" },
-  { feature: "Premium Courses", free: "—", pro: "✓" },
-  { feature: "AI Features", free: "—", pro: "Future Pro Feature" },
+  { feature: "Video Lessons", free: "—", pro: "✓" },
+  { feature: "AI Math Assistant", free: "—", pro: "✓" },
 ];
 
 const FREE_FEATURES = [
@@ -57,8 +57,8 @@ const PRO_FEATURES = [
   "Competition-specific roadmaps",
   "Custom practice sets",
   "Detailed performance reports",
-  "Premium courses",
-  "Future AI tutoring features",
+  "Video lessons — animated, narration-free walkthroughs of key concepts",
+  "AI Math Assistant — step-by-step help that never just gives the answer",
 ];
 
 const FAQ = [
@@ -76,7 +76,7 @@ const FAQ = [
   },
   {
     q: "What does Pro include?",
-    a: "Unlimited daily problems and simulations, the full problem database and lesson library, advanced adaptive training, full mistake review with spaced repetition, advanced statistics, competition-specific roadmaps, custom practice sets, and premium courses.",
+    a: "Unlimited daily problems and simulations, the full problem database and lesson library, advanced adaptive training, full mistake review with spaced repetition, advanced statistics, competition-specific roadmaps, custom practice sets, a full library of animated video lessons, and the AI Math Assistant for step-by-step help on any problem or concept.",
   },
   {
     q: "How do ratings work?",
@@ -110,7 +110,11 @@ export default async function PricingPage({
       ? "You've used your free simulations for this week."
       : params.from === "lesson"
         ? "That lesson is part of the Pro library."
-        : null;
+        : params.from === "video-lessons" || params.from === "video-lesson"
+          ? "Video Lessons are a Pro feature."
+          : params.from === "ai-assistant"
+            ? "The AI Math Assistant is a Pro feature."
+            : null;
 
   return (
     <div className="flex min-h-screen flex-col">

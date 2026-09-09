@@ -69,6 +69,8 @@ model User {
   dailyChallengeAttempts DailyChallengeAttempt[]
   lessonProgress         LessonProgress[]
   passwordResetTokens    PasswordResetToken[]
+  videoLessonProgress    VideoLessonProgress[]
+  aiChatMessages         AiChatMessage[]
 
   @@index([role])
 }
@@ -247,6 +249,7 @@ model Topic {
   competitionTopics CompetitionTopic[]
   topicMastery      TopicMastery[]
   lessons           Lesson[]
+  videoLessons      VideoLesson[]
   studyPlanDays     StudyPlanDay[]
 }
 
@@ -349,6 +352,62 @@ model LessonProgress {
   updatedAt   DateTime  @updatedAt
 
   @@unique([userId, lessonId])
+}
+
+// ---------------------------------------------------------------------------
+// Video lessons (Pro-only). "Video" here is a narrated-free, animated visual
+// walkthrough rendered client-side from a scene script — not a media file —
+// so lessons are diffable, searchable, and never need re-encoding. `scenes`
+// is a JSON-encoded array of SceneSeed objects (see
+// src/lib/video-lessons/types.ts for the shape the player renders).
+// ---------------------------------------------------------------------------
+
+model VideoLesson {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  title           String
+  topicId         String
+  topic           Topic    @relation(fields: [topicId], references: [id])
+  difficulty      Int      @default(1)
+  order           Int      @default(0)
+  summary         String
+  durationMinutes Int      @default(6)
+  scenes          String
+  createdAt       DateTime @default(now())
+
+  progress VideoLessonProgress[]
+}
+
+model VideoLessonProgress {
+  id            String      @id @default(cuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  videoLessonId String
+  videoLesson   VideoLesson @relation(fields: [videoLessonId], references: [id], onDelete: Cascade)
+  completed     Boolean     @default(false)
+  completedAt   DateTime?
+  updatedAt     DateTime    @updatedAt
+
+  @@unique([userId, videoLessonId])
+}
+
+// ---------------------------------------------------------------------------
+// AI Math Assistant (Pro-only). One growing thread per user rather than
+// multiple named sessions — simplest model that still supports follow-up
+// questions, since the whole history threads by createdAt. "Clear" deletes
+// the user's rows outright rather than soft-archiving them.
+// ---------------------------------------------------------------------------
+
+model AiChatMessage {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// role: user | assistant
+  role      String
+  content   String
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
 }
 
 // ---------------------------------------------------------------------------

@@ -16,12 +16,16 @@ import {
   IconMap,
   IconSettings,
   IconShield,
+  IconVideo,
+  IconSparkles,
 } from "@/components/app/icons";
 
 export const NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard", icon: IconHome },
   { href: "/practice", label: "Practice", icon: IconTarget },
   { href: "/lessons", label: "Lessons", icon: IconBook },
+  { href: "/video-lessons", label: "Video Lessons", icon: IconVideo, pro: true },
+  { href: "/ai-assistant", label: "AI Assistant", icon: IconSparkles, pro: true },
   { href: "/competitions", label: "Competitions", icon: IconTrophy },
   { href: "/simulations", label: "Simulations", icon: IconTimer },
   { href: "/daily-challenge", label: "Daily Challenge", icon: IconCalendar },
@@ -31,7 +35,7 @@ export const NAV_ITEMS = [
   { href: "/schedule", label: "Schedule", icon: IconTrophy },
 ];
 
-export function Sidebar({ isAdmin }: { isAdmin?: boolean }) {
+export function Sidebar({ isAdmin, isPro }: { isAdmin?: boolean; isPro?: boolean }) {
   const pathname = usePathname();
 
   return (
@@ -60,7 +64,8 @@ export function Sidebar({ isAdmin }: { isAdmin?: boolean }) {
                   active ? "text-brand-600 dark:text-brand-400" : "text-slate-400 dark:text-slate-500"
                 )}
               />
-              {item.label}
+              <span className="flex-1">{item.label}</span>
+              {item.pro && !isPro && <span className="text-[11px]">⭐</span>}
             </Link>
           );
         })}

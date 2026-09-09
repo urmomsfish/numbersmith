@@ -7,7 +7,7 @@ import { cn } from "@/lib/cn";
 import { NAV_ITEMS } from "@/components/app/sidebar";
 import { IconSettings } from "@/components/app/icons";
 
-export function MobileNav() {
+export function MobileNav({ isPro }: { isPro?: boolean }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -50,7 +50,8 @@ export function MobileNav() {
                     )}
                   >
                     <Icon className="h-[18px] w-[18px]" />
-                    {item.label}
+                    <span className="flex-1">{item.label}</span>
+                    {item.pro && !isPro && <span className="text-[11px]">⭐</span>}
                   </Link>
                 );
               })}
