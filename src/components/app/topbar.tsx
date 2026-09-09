@@ -2,7 +2,6 @@ import { MobileNav } from "@/components/app/mobile-nav";
 import { UserMenu } from "@/components/app/user-menu";
 import { Badge } from "@/components/ui/badge";
 import { LinkButton } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { IconFlame, IconBolt } from "@/components/app/icons";
 
 export function Topbar({
@@ -44,7 +43,6 @@ export function Topbar({
             Upgrade
           </LinkButton>
         )}
-        <ThemeToggle />
         <UserMenu name={name} email={email} />
       </div>
     </header>

@@ -85,7 +85,7 @@ export default async function StatsPage() {
       <div className="mt-5 grid gap-5 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardBody>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
               Rating Over Time
             </h2>
             {chartData.length >= 2 ? (
@@ -102,7 +102,7 @@ export default async function StatsPage() {
 
         <Card>
           <CardBody>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">Level</h2>
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Level</h2>
             <p className="mt-2 text-4xl font-extrabold text-brand-700 dark:text-brand-300">{level}</p>
             <ProgressBar value={current} max={needed} tone="ember" className="mt-3" />
             <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-500">
@@ -129,7 +129,7 @@ export default async function StatsPage() {
       <div className="mt-5 grid gap-5 sm:grid-cols-2">
         <Card>
           <CardBody>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">Topic Mastery</h2>
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Topic Mastery</h2>
             <div className="mt-4 space-y-3">
               {mastery.length === 0 && (
                 <p className="text-sm text-slate-400 dark:text-slate-500">Practice a few problems to build your mastery map.</p>
@@ -163,7 +163,7 @@ export default async function StatsPage() {
 
         <Card>
           <CardBody>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
               Performance by Difficulty
             </h2>
             <div className="mt-4 space-y-3">

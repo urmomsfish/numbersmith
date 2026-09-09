@@ -139,7 +139,7 @@ export default async function LandingPage() {
                 ] as const
               ).map(([category, label]) => (
                 <div key={category}>
-                  <p className="text-xs font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">{label}</p>
+                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{label}</p>
                   <div className="mt-2.5 flex flex-wrap gap-2">
                     {competitions
                       .filter((c) => c.category === category)

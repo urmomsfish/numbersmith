@@ -124,7 +124,7 @@ export function TestRunner({
                     : "bg-slate-100 text-slate-500 hover:bg-slate-200"
                 )}
               >
-                {flagged.has(current.id) ? "🚩 Flagged" : "🏳️ Flag for review"}
+                {flagged.has(current.id) ? "Flagged" : "Flag for review"}
               </button>
             </div>
 
@@ -206,7 +206,7 @@ export function TestRunner({
 
         <aside className="w-full shrink-0 lg:w-56">
           <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4">
-            <p className="text-xs font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">Navigator</p>
+            <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Navigator</p>
             <div className="mt-3 grid grid-cols-6 gap-1.5 lg:grid-cols-5">
               {items.map((item, i) => {
                 const answered = !!answers[item.id];

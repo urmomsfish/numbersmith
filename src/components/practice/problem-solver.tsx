@@ -171,7 +171,7 @@ export function ProblemSolver({
               onClick={() => setHintsShown((h) => h + 1)}
               className="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300"
             >
-              💡 Show Hint ({hintsShown + 1}/{problem.hints.length})
+              Show hint ({hintsShown + 1}/{problem.hints.length})
             </button>
           ) : null}
           {hintsShown > 0 && (
@@ -211,7 +211,7 @@ export function ProblemSolver({
             </span>
           </div>
           <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">Solution</p>
+            <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Solution</p>
             <p className="mt-1.5 text-sm leading-relaxed text-slate-700 dark:text-slate-200">{result.solution}</p>
           </div>
           {result.newlyUnlocked.length > 0 && (
@@ -229,7 +229,7 @@ export function ProblemSolver({
               href={reportMailto(problem.question, answerGiven, result.correctAnswer)}
               className="text-sm font-medium text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
             >
-              🚩 Something wrong with this problem? Email {LEGAL.contactEmail}
+              Something wrong with this problem? Email {LEGAL.contactEmail}
             </a>
           </div>
         </div>

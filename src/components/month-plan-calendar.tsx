@@ -2,33 +2,19 @@ import Link from "next/link";
 import { cn } from "@/lib/cn";
 import { dateKeyIndex, streakDayIndex } from "@/lib/streak";
 import { monthGrid, planDayForDayIndex, shiftMonth } from "@/lib/engine/plan-schedule";
+import { TASK_ICON, TASK_LABEL } from "@/components/app/task-icon";
 import type { Topic } from "@/generated/prisma";
 
 const DAY_HEADERS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-/** Colour and glyph per task type. Kept in step with WeekPlanTable so the same
- * task reads the same way in both views. */
-const TASK_META: Record<string, { icon: string; chip: string }> = {
-  LESSON: {
-    icon: "📘",
-    chip: "bg-brand-50 text-brand-700 dark:bg-brand-950/60 dark:text-brand-300",
-  },
-  PRACTICE: {
-    icon: "✏️",
-    chip: "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300",
-  },
-  TIMED_SET: {
-    icon: "⏱️",
-    chip: "bg-amber-50 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300",
-  },
-  SIMULATION: {
-    icon: "🏆",
-    chip: "bg-orange-50 text-orange-800 dark:bg-orange-950/60 dark:text-orange-300",
-  },
-  REVIEW: {
-    icon: "🔁",
-    chip: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300",
-  },
+/** Chip colour per task type. The icons come from TASK_ICON so the calendar and
+ * the weekly table cannot show different marks for the same task. */
+const TASK_CHIP: Record<string, string> = {
+  LESSON: "bg-brand-50 text-brand-700 dark:bg-brand-950/60 dark:text-brand-300",
+  PRACTICE: "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300",
+  TIMED_SET: "bg-amber-50 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300",
+  SIMULATION: "bg-orange-50 text-orange-800 dark:bg-orange-950/60 dark:text-orange-300",
+  REVIEW: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300",
 };
 
 type PlanDay = {
@@ -111,7 +97,7 @@ export function MonthPlanCalendar({
           {DAY_HEADERS.map((d) => (
             <div
               key={d}
-              className="px-2 py-2 text-center text-[11px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500"
+              className="px-2 py-2 text-center text-[11px] font-medium text-slate-400 dark:text-slate-500"
             >
               {d}
             </div>
@@ -125,7 +111,7 @@ export function MonthPlanCalendar({
             const isToday = dayIndex === todayIndex;
             const isPast = dayIndex < todayIndex;
             const task = planDayForDayIndex(plan, dayIndex, date.getUTCDay());
-            const meta = task ? TASK_META[task.taskType] : undefined;
+            const Icon = task ? TASK_ICON[task.taskType] : undefined;
             const contest = contestByDay.get(dayIndex);
 
             return (
@@ -158,8 +144,8 @@ export function MonthPlanCalendar({
                 </div>
 
                 {contest && (
-                  <div className="mt-1 truncate rounded-md bg-rose-100 dark:bg-rose-950/60 px-1.5 py-0.5 text-[10px] font-bold text-rose-700 dark:text-rose-300">
-                    🎯 {contest.shortName}
+                  <div className="mt-1 truncate rounded-md bg-rose-600 px-1.5 py-0.5 text-[10px] font-semibold text-white dark:bg-rose-500">
+                    {contest.shortName}
                   </div>
                 )}
 
@@ -167,14 +153,16 @@ export function MonthPlanCalendar({
                   <div
                     className={cn(
                       "mt-1 rounded-md px-1.5 py-1 text-[11px] leading-tight",
-                      meta?.chip ?? "bg-slate-100 text-slate-600",
+                      TASK_CHIP[task.taskType] ?? "bg-slate-100 text-slate-600",
                       // Past days fade so the eye lands on what is still ahead.
                       isPast && !isToday && "opacity-45"
                     )}
                     title={`${task.label} · ${task.problemCount} problems`}
                   >
-                    <span className="mr-0.5">{meta?.icon}</span>
-                    <span className="line-clamp-2 align-middle">{task.label}</span>
+                    <span className="flex items-start gap-1">
+                      {Icon && <Icon className="mt-px h-3 w-3 shrink-0" />}
+                      <span className="line-clamp-2">{task.label}</span>
+                    </span>
                   </div>
                 )}
               </div>
@@ -184,15 +172,15 @@ export function MonthPlanCalendar({
       </div>
 
       <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] text-slate-500 dark:text-slate-400">
-        {Object.entries(TASK_META).map(([type, m]) => (
-          <span key={type} className="flex items-center gap-1">
-            <span>{m.icon}</span>
-            {type.replace("_", " ").toLowerCase()}
+        {Object.entries(TASK_ICON).map(([type, Glyph]) => (
+          <span key={type} className="flex items-center gap-1.5">
+            <Glyph className="h-3.5 w-3.5" />
+            {TASK_LABEL[type]}
           </span>
         ))}
-        <span className="flex items-center gap-1">
-          <span>🎯</span>
-          competition day
+        <span className="flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-sm bg-rose-600 dark:bg-rose-500" />
+          Competition day
         </span>
       </div>
     </div>

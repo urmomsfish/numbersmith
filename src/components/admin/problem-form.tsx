@@ -198,7 +198,7 @@ export function ProblemForm({
       </Field>
 
       <fieldset className="rounded-xl border border-slate-200 dark:border-slate-700 p-4">
-        <legend className="px-2 text-xs font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+        <legend className="px-2 text-sm font-semibold text-slate-900 dark:text-slate-100">
           Source & Licensing
         </legend>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

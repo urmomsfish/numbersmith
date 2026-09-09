@@ -121,7 +121,7 @@ export default async function StudyPlanPage({
           <Card>
             <CardBody>
               <div className="flex items-center justify-between">
-                <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+                <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                   Week {week} of {totalWeeks} · {phase.name}
                 </h2>
                 {(nextContest?.competition ?? plan.primaryCompetition) && (
@@ -228,7 +228,7 @@ export default async function StudyPlanPage({
 
           <Card>
             <CardBody>
-              <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">Set a Goal</h2>
+              <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Set a Goal</h2>
               <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
                 Add your competition date and target rating, and the plan rebuilds around it.
               </p>
@@ -302,7 +302,7 @@ export default async function StudyPlanPage({
         <div className="space-y-5">
           <Card>
             <CardBody className="text-center">
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                 Current Rating
               </p>
               <p className="mt-2 text-4xl font-extrabold text-brand-700 dark:text-brand-300">{currentRating}</p>
@@ -315,7 +315,7 @@ export default async function StudyPlanPage({
           {plan.targetRating && (
             <Card>
               <CardBody>
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                   Progress to Target
                 </p>
                 <div className="mt-2 flex items-baseline justify-between">
@@ -333,7 +333,7 @@ export default async function StudyPlanPage({
           {daysUntilCompetition !== null && (
             <Card>
               <CardBody className="text-center">
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                   Days Until Competition
                 </p>
                 <p className="mt-2 text-4xl font-extrabold text-ember-600 dark:text-ember-400">{daysUntilCompetition}</p>
@@ -349,7 +349,7 @@ export default async function StudyPlanPage({
 
           <Card>
             <CardBody>
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                 Today&apos;s Task
               </p>
               <p className="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">

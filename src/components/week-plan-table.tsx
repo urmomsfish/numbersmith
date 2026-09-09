@@ -1,6 +1,7 @@
 import { cn } from "@/lib/cn";
 import { Badge } from "@/components/ui/badge";
 import { streakWeekday } from "@/lib/streak";
+import { TASK_ICON, TASK_LABEL } from "@/components/app/task-icon";
 import type { Topic } from "@/generated/prisma";
 
 const DAY_ORDER = [1, 2, 3, 4, 5, 6, 0];
@@ -14,12 +15,12 @@ const DAY_NAMES: Record<number, string> = {
   6: "Saturday",
 };
 
-const TASK_META: Record<string, { icon: string; tone: "brand" | "ember" | "success" | "slate" | "warning" }> = {
-  LESSON: { icon: "📘", tone: "brand" },
-  PRACTICE: { icon: "✏️", tone: "success" },
-  TIMED_SET: { icon: "⏱️", tone: "warning" },
-  SIMULATION: { icon: "🏆", tone: "ember" },
-  REVIEW: { icon: "🔁", tone: "slate" },
+const TASK_TONE: Record<string, "brand" | "ember" | "success" | "slate" | "warning"> = {
+  LESSON: "brand",
+  PRACTICE: "success",
+  TIMED_SET: "warning",
+  SIMULATION: "ember",
+  REVIEW: "slate",
 };
 
 type PlanDay = {
@@ -44,7 +45,7 @@ export function WeekPlanTable({ days, highlightToday = true }: { days: PlanDay[]
     <div className="divide-y divide-slate-100 dark:divide-slate-800 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700">
       {DAY_ORDER.map((dow) => {
         const day = byDay.get(dow);
-        const meta = day ? TASK_META[day.taskType] : undefined;
+        const Icon = day ? TASK_ICON[day.taskType] : undefined;
         const isToday = highlightToday && dow === today;
         return (
           <div
@@ -62,8 +63,8 @@ export function WeekPlanTable({ days, highlightToday = true }: { days: PlanDay[]
                 {isToday && <p className="text-[10px] font-semibold uppercase text-brand-500">Today</p>}
               </div>
               {day ? (
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">{meta?.icon}</span>
+                <div className="flex items-center gap-2.5">
+                  {Icon && <Icon className="h-4 w-4 shrink-0 text-slate-400 dark:text-slate-500" />}
                   <span className="text-sm text-slate-600 dark:text-slate-300">{day.label}</span>
                 </div>
               ) : (
@@ -75,7 +76,7 @@ export function WeekPlanTable({ days, highlightToday = true }: { days: PlanDay[]
                 {day.completed ? (
                   <Badge tone="success">Done</Badge>
                 ) : (
-                  <Badge tone={meta?.tone ?? "slate"}>{day.taskType.replace("_", " ")}</Badge>
+                  <Badge tone={TASK_TONE[day.taskType] ?? "slate"}>{TASK_LABEL[day.taskType] ?? day.taskType}</Badge>
                 )}
               </div>
             )}

@@ -103,7 +103,7 @@ export default async function CompetitionDetailPage({
         <div className="space-y-5 lg:col-span-2">
           <Card>
             <CardBody>
-              <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">Overview</h2>
+              <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Overview</h2>
               <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{competition.description}</p>
               <p className="mt-3 text-xs text-slate-400 dark:text-slate-500">{competition.organization}</p>
             </CardBody>
@@ -111,7 +111,7 @@ export default async function CompetitionDetailPage({
 
           <Card>
             <CardBody>
-              <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">Format</h2>
+              <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Format</h2>
               <dl className="mt-3 grid grid-cols-2 gap-4 sm:grid-cols-3">
                 <Fact label="Category" value={CATEGORY_LABEL[competition.category]} />
                 <Fact label="Format" value={FORMAT_LABEL[competition.format]} />
@@ -133,7 +133,7 @@ export default async function CompetitionDetailPage({
 
           <Card>
             <CardBody>
-              <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+              <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                 Topics & Your Mastery
               </h2>
               <div className="mt-4 space-y-3">
@@ -159,7 +159,7 @@ export default async function CompetitionDetailPage({
 
           <Card>
             <CardBody>
-              <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+              <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                 Training Roadmap
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{competition.roadmap}</p>
@@ -169,7 +169,7 @@ export default async function CompetitionDetailPage({
           {problems.length > 0 && (
             <Card>
               <CardBody>
-                <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+                <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                   Practice Problems
                 </h2>
                 <div className="mt-3 divide-y divide-slate-100 dark:divide-slate-800">
@@ -191,7 +191,7 @@ export default async function CompetitionDetailPage({
           {lessons.length > 0 && (
             <Card>
               <CardBody>
-                <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+                <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                   Recommended Lessons
                 </h2>
                 <div className="mt-3 grid gap-2 sm:grid-cols-2">
@@ -214,7 +214,7 @@ export default async function CompetitionDetailPage({
         <div className="space-y-5">
           <Card>
             <CardBody className="text-center">
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                 Your Readiness
               </p>
               <p className="mt-2 text-4xl font-extrabold text-brand-700 dark:text-brand-300">{overallMastery}%</p>
@@ -225,7 +225,7 @@ export default async function CompetitionDetailPage({
 
           <Card>
             <CardBody>
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                 Simulations
               </p>
               {isProofBased ? (

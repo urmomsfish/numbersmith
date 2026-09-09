@@ -50,7 +50,7 @@ export default async function AdminUsersPage({
       <div className="mt-6 overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
         <table className="w-full text-sm">
           <thead className="bg-slate-50 dark:bg-slate-800">
-            <tr className="text-left text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+            <tr className="text-left text-sm font-semibold text-slate-900 dark:text-slate-100">
               <th className="px-4 py-2.5">User</th>
               <th className="px-3 py-2.5">Grade</th>
               <th className="px-3 py-2.5">Rating</th>

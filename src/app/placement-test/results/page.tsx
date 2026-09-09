@@ -78,7 +78,7 @@ export default async function PlacementResultsPage({
           <Badge tone="brand" className="mb-3">
             Placement Complete
           </Badge>
-          <h1 className="text-sm font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+          <h1 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
             Your NumberSmith Level
           </h1>
           <p className="mt-1 text-4xl font-extrabold text-slate-900 dark:text-slate-50 sm:text-5xl">{tier.label}</p>
@@ -86,14 +86,14 @@ export default async function PlacementResultsPage({
 
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 text-center">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+            <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
               NumberSmith Rating
             </p>
             <p className="mt-2 text-4xl font-extrabold text-brand-700 dark:text-brand-300">{rating}</p>
             <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">Tier: {tier.label}</p>
           </div>
           <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 text-center">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+            <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
               Recommended Starting Point
             </p>
             <p className="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-50">{recommendation.label}</p>

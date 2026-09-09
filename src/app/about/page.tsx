@@ -40,7 +40,7 @@ function Section({
   return (
     <section id={id} className="border-t border-slate-200 dark:border-slate-700">
       <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6 sm:py-16">
-        <p className="text-xs font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">{eyebrow}</p>
+        <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{eyebrow}</p>
         <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-3xl">
           {title}
         </h2>
@@ -113,7 +113,7 @@ export default async function AboutPage() {
         {/* What's actually in it — read live from the database */}
         <section className="border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
           <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6 sm:py-16">
-            <p className="text-xs font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+            <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
               What is actually in it
             </p>
             <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-3xl">
