@@ -24,8 +24,13 @@ const sizeClasses: Record<Size, string> = {
   lg: "px-6 py-3.5 text-base rounded-xl gap-2",
 };
 
+// `border border-transparent` is on the base so every variant has the same box
+// metrics. Without it, the bordered variants (outline, secondary) stand 2px
+// taller than the unbordered ones, which is visible whenever two buttons sit
+// side by side — the Free and Pro columns on the landing page rendered their
+// calls to action at 54px and 52px.
 const base =
-  "inline-flex items-center justify-center font-semibold transition-colors disabled:cursor-not-allowed whitespace-nowrap";
+  "inline-flex items-center justify-center border border-transparent font-semibold transition-colors disabled:cursor-not-allowed whitespace-nowrap";
 
 export function Button({
   variant = "primary",

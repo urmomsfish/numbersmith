@@ -10,22 +10,22 @@ import { parseChoices } from "@/lib/engine/scoring";
 
 const HOW_IT_WORKS = [
   {
-    step: "01",
+    step: "1.",
     title: "Find Your Level",
     body: "Take a short adaptive assessment that measures competition mathematics ability rather than grade level.",
   },
   {
-    step: "02",
+    step: "2.",
     title: "Choose Your Competition",
     body: "Pick every contest you're training for, from Math Kangaroo to the IMO, and set your #1 priority.",
   },
   {
-    step: "03",
+    step: "3.",
     title: "Get Your Training Plan",
     body: "Your practice adapts to you — not the other way around. A week-by-week plan built from your weakest topics and your goals.",
   },
   {
-    step: "04",
+    step: "4.",
     title: "Practice & Improve",
     body: "Solve real competition mathematics with hints, full solutions, and a rating that moves as you get better.",
   },
@@ -78,46 +78,46 @@ export default async function LandingPage() {
         <section className="border-b border-slate-200 dark:border-slate-700">
           <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
             <h1 className="max-w-3xl text-balance text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-5xl">
-              Train Smarter. Compete Better.
+              Know what to practice next.
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-              One personalized platform for competition mathematics — from Math Kangaroo and
-              MathCounts to AMC, AIME, HMMT, and olympiad mathematics.
+              Take a placement test, add the contests you&apos;re actually sitting, and NumberSmith
+              builds the practice backwards from those dates — {problemCount.toLocaleString()}{" "}
+              problems across {competitions.length} competitions, from Math Kangaroo to the IMO.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-wrap items-center gap-5">
               <LinkButton href="/signup" size="lg">
                 Take the Free Assessment
               </LinkButton>
-              <LinkButton href="#competitions" size="lg" variant="outline">
-                Explore Competitions
-              </LinkButton>
+              <Link
+                href="#competitions"
+                className="text-sm font-semibold text-slate-600 underline underline-offset-4 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-50"
+              >
+                See the competitions
+              </Link>
             </div>
           </div>
         </section>
 
         {/* How it works */}
         <section id="how-it-works" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-          <div>
-            <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-50">
-              The whole product answers one question
-            </h2>
-            <p className="mt-3 max-w-xl text-lg text-slate-500 dark:text-slate-400">
-              <span className="font-semibold text-slate-700 dark:text-slate-200">
-                &ldquo;What should this student practice next?&rdquo;
-              </span>{" "}
-              You should never have to wonder what to study today.
-            </p>
-          </div>
-
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-50">Getting started</h2>
+          {/* A real ordered list rather than four cards with decorative "01"
+              numerals — the steps are sequential, so the markup should say so
+              and the browser can number them. */}
+          <ol className="mt-8 max-w-2xl space-y-6">
             {HOW_IT_WORKS.map((item) => (
-              <div key={item.step} className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6">
-                <span className="text-xs font-bold text-slate-300 dark:text-slate-600">{item.step}</span>
-                <h3 className="mt-3 text-base font-bold text-slate-900 dark:text-slate-50">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-500 dark:text-slate-400">{item.body}</p>
-              </div>
+              <li key={item.title} className="flex gap-4">
+                <span className="mt-0.5 w-5 shrink-0 text-sm font-semibold tabular-nums text-slate-400 dark:text-slate-500">
+                  {item.step}
+                </span>
+                <div>
+                  <h3 className="text-base font-semibold text-slate-900 dark:text-slate-50">{item.title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-slate-500 dark:text-slate-400">{item.body}</p>
+                </div>
+              </li>
             ))}
-          </div>
+          </ol>
         </section>
 
         {/* Competitions */}
@@ -276,7 +276,7 @@ export default async function LandingPage() {
 
           <div className="mt-10 grid gap-5 lg:grid-cols-2">
             <div className="flex flex-col rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-7">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50">🆓 NumberSmith Free</h3>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50">NumberSmith Free</h3>
               <p className="mt-1 text-3xl font-extrabold text-slate-900 dark:text-slate-50">
                 $0 <span className="text-sm font-normal text-slate-400 dark:text-slate-500">forever</span>
               </p>
@@ -301,13 +301,11 @@ export default async function LandingPage() {
               </LinkButton>
             </div>
 
-            <div className="relative flex flex-col rounded-2xl border-2 border-brand-600 bg-white dark:bg-slate-900 p-7">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <span className="rounded-full bg-brand-600 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
-                  Best Value
-                </span>
-              </div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50">⭐ NumberSmith Pro</h3>
+            {/* Emphasised with a ring rather than a thicker border: border-2
+                shrinks the content box by a pixel each side, which made the two
+                columns' buttons render at different heights side by side. */}
+            <div className="relative flex flex-col rounded-2xl border border-brand-600 ring-1 ring-brand-600 bg-white dark:bg-slate-900 p-7">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50">NumberSmith Pro</h3>
               <p className="mt-1 text-3xl font-extrabold text-slate-900 dark:text-slate-50">
                 ${PRO_PRICING.YEARLY} <span className="text-sm font-normal text-slate-400 dark:text-slate-500">/year</span>
               </p>
