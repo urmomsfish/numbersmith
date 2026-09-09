@@ -66,7 +66,7 @@ export default async function OnboardingPlanPage() {
           <ProfileStat label="Recommended Practice" value={`${plan.minutesPerDay} minutes/day`} />
         </div>
 
-        <div className="mt-8 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 sm:p-8">
+        <div className="mt-8 rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-6 sm:p-8">
           <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">
             Your {planTotalWeeks(plan)}-week training plan
           </h2>
@@ -91,7 +91,7 @@ export default async function OnboardingPlanPage() {
 
 function ProfileStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4">
+    <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-card p-4">
       <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">{label}</p>
       <p className="mt-1 text-sm font-bold text-slate-900 dark:text-slate-50">{value}</p>
     </div>

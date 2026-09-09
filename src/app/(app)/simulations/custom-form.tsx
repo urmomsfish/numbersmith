@@ -17,7 +17,7 @@ export function CustomSimulationForm({
   return (
     <form
       action={startCustomSimulationAction}
-      className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5"
+      className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-5"
     >
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <label className="block">

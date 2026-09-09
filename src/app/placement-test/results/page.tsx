@@ -66,7 +66,7 @@ export default async function PlacementResultsPage({
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+      <header className="border-b border-slate-200 dark:border-slate-700 bg-card">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4 sm:px-6">
           <Logo href="/" />
           <LogoutButton />
@@ -85,14 +85,14 @@ export default async function PlacementResultsPage({
         </div>
 
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 text-center">
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-6 text-center">
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
               NumberSmith Rating
             </p>
             <p className="mt-2 text-4xl font-extrabold text-brand-700 dark:text-brand-300">{rating}</p>
             <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">Tier: {tier.label}</p>
           </div>
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 text-center">
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-6 text-center">
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
               Recommended Starting Point
             </p>
@@ -100,7 +100,7 @@ export default async function PlacementResultsPage({
           </div>
         </div>
 
-        <div className="mt-6 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 sm:p-8">
+        <div className="mt-6 rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-6 sm:p-8">
           <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">Skill Breakdown</h2>
           <div className="mt-5 space-y-4">
             {entries.map((e) => (

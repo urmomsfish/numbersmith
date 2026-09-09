@@ -80,7 +80,7 @@ export default async function SimulationsPage() {
       {recent.length > 0 && (
         <>
           <h2 className="mt-10 text-base font-bold text-slate-900 dark:text-slate-50">Recent Results</h2>
-          <div className="mt-3 divide-y divide-slate-100 dark:divide-slate-800 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+          <div className="mt-3 divide-y divide-slate-100 dark:divide-slate-800 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-card">
             {recent.map((a) => (
               <Link
                 key={a.id}

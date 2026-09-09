@@ -88,7 +88,7 @@ export default async function PracticePage({
           return (
             <div
               key={p.id}
-              className="flex flex-col justify-between rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4"
+              className="flex flex-col justify-between rounded-xl border border-slate-200 dark:border-slate-700 bg-card p-4"
             >
               <div>
                 <div className="flex flex-wrap gap-1.5">

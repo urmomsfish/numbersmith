@@ -22,7 +22,7 @@ export default async function StartSimulationPage({
 
   return (
     <div className="mx-auto max-w-lg px-4 py-16 sm:px-6">
-      <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-8 text-center">
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-8 text-center">
         <Badge tone="brand" className="mb-3">
           Simulation
         </Badge>

@@ -12,6 +12,11 @@
    * default; tints give this the strongest colour because its text is
    * slate-600/700, which has far more headroom than the shell's slate-500. */
   --surface: #ffffff;
+  /* Content cards (dashboard boxes, settings panels, problem cards, ...).
+   * A flat, tint-independent off-white rather than pure white — see the
+   * "Card colour" comment further down for why this can't follow the tint's
+   * hue the way --background and --surface do. */
+  --card: #f9f9fa;
   --foreground: #0f172a;
 
   /* Brand: deep indigo — "forge" primary */
@@ -43,6 +48,7 @@
 .dark {
   --background: #0b1120;
   --surface: #0f172a;
+  --card: #171d2b;
   --foreground: #f1f5f9;
 }
 
@@ -65,13 +71,31 @@
  *   - light tints stay bright enough that text-slate-500 — used for page
  *     subtitles sitting directly on the background — holds WCAG AA 4.5:1.
  *     Headroom is thin: the untinted default is only 4.55:1.
- *   - dark tints stay far enough from the slate-900 card colour that cards
- *     keep a visible edge rather than melting into the page.
+ *   - dark tints stay far enough from the card colour that cards keep a
+ *     visible edge rather than melting into the page.
  *   - each tint keeps enough chroma to actually read as coloured, since
  *     lightening to win contrast trades directly against visible hue.
  *
  * `.dark[data-tint="x"]` (0,2,0) outranks `[data-tint="x"]` (0,1,0), so the
  * dark background wins whenever both apply regardless of source order.
+ *
+ * Card colour
+ *
+ * --card (dashboard boxes, settings panels, problem cards, ...) used to be a
+ * flat, untinted white/slate-900 — deliberately, per the previous version of
+ * this comment. It now varies with the theme, but the two modes had to be
+ * solved differently:
+ *
+ *   - Dark: each tint gets its own --card below, a lightened step off that
+ *     tint's --background. Headroom is large (7–10:1 against the card's own
+ *     text even after lightening), so the card can visibly follow the tint's
+ *     hue and still clear WCAG AA.
+ *   - Light: --card stays the single flat value declared in :root for every
+ *     tint, not a per-tint block here. Measured, not assumed: several raw
+ *     tinted backgrounds (blue, violet, rose) already sit below 4.5:1 against
+ *     the slate-500 text used for card body copy — before any darkening at
+ *     all. Any card fill that followed those hues would ship illegible text.
+ *     A flat neutral is the only per-tint value with headroom to spare.
  * ------------------------------------------------------------------------ */
 
 [data-tint="violet"] {
@@ -81,6 +105,7 @@
 .dark[data-tint="violet"] {
   --background: #241748;
   --surface: #241748;
+  --card: #2f2351;
 }
 
 [data-tint="blue"] {
@@ -90,6 +115,7 @@
 .dark[data-tint="blue"] {
   --background: #12294f;
   --surface: #12294f;
+  --card: #1e3458;
 }
 
 [data-tint="cyan"] {
@@ -99,6 +125,7 @@
 .dark[data-tint="cyan"] {
   --background: #092f3c;
   --surface: #092f3c;
+  --card: #153946;
 }
 
 [data-tint="emerald"] {
@@ -108,6 +135,7 @@
 .dark[data-tint="emerald"] {
   --background: #093022;
   --surface: #093022;
+  --card: #153a2d;
 }
 
 [data-tint="rose"] {
@@ -117,6 +145,7 @@
 .dark[data-tint="rose"] {
   --background: #3d1421;
   --surface: #3d1421;
+  --card: #47202c;
 }
 
 [data-tint="amber"] {
@@ -126,6 +155,7 @@
 .dark[data-tint="amber"] {
   --background: #3d2908;
   --surface: #3d2908;
+  --card: #473414;
 }
 
 [data-tint="orange"] {
@@ -135,11 +165,13 @@
 .dark[data-tint="orange"] {
   --background: #3d1c0a;
   --surface: #3d1c0a;
+  --card: #472716;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
+  --color-card: var(--card);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);

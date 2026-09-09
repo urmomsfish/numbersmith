@@ -51,7 +51,7 @@ export function WeekPlanTable({ days, highlightToday = true }: { days: PlanDay[]
             key={dow}
             className={cn(
               "flex items-center justify-between gap-4 px-4 py-3 sm:px-5",
-              isToday ? "bg-brand-50/60 dark:bg-brand-950/40" : "bg-white dark:bg-slate-900"
+              isToday ? "bg-brand-50/60 dark:bg-brand-950/40" : "bg-card"
             )}
           >
             <div className="flex items-center gap-3">

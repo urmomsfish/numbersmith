@@ -38,7 +38,7 @@ export function PracticeFilters({
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-3">
+    <div className="flex flex-wrap items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-card p-3">
       <select
         value={current.topic ?? ""}
         onChange={(e) => update({ topic: e.target.value || undefined })}

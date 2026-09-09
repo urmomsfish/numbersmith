@@ -140,7 +140,7 @@ export default async function PricingPage({
 
           <div className="mx-auto mt-10 grid max-w-4xl gap-6 lg:grid-cols-2">
             {/* Free */}
-            <div className="flex flex-col rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-7">
+            <div className="flex flex-col rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-7">
               <div className="flex items-center gap-2">
                 <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">🆓 NumberSmith Free</h2>
                 {!isPro && user && <Badge tone="slate">Current plan</Badge>}
@@ -175,7 +175,7 @@ export default async function PricingPage({
             </div>
 
             {/* Pro */}
-            <div className="relative flex flex-col rounded-2xl border-2 border-brand-600 bg-white dark:bg-slate-900 p-7">
+            <div className="relative flex flex-col rounded-2xl border-2 border-brand-600 bg-card p-7">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                 <span className="rounded-full bg-brand-600 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
                   Best Value
@@ -261,7 +261,7 @@ export default async function PricingPage({
         </section>
 
         {/* Comparison table */}
-        <section className="border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+        <section className="border-t border-slate-200 dark:border-slate-700 bg-card">
           <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6">
             <h2 className="text-center text-2xl font-bold text-slate-900 dark:text-slate-50">Free vs Pro</h2>
             <div className="mt-8 overflow-x-auto">
@@ -298,7 +298,7 @@ export default async function PricingPage({
             {FAQ.map((item) => (
               <details
                 key={item.q}
-                className="group rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5"
+                className="group rounded-xl border border-slate-200 dark:border-slate-700 bg-card p-5"
               >
                 <summary className="cursor-pointer list-none text-sm font-semibold text-slate-900 dark:text-slate-50 marker:hidden">
                   <span className="flex items-center justify-between gap-3">

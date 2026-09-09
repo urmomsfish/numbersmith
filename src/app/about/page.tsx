@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 
 function Stat({ value, label }: { value: string | number; label: string }) {
   return (
-    <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5">
+    <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-5">
       <p className="font-mono text-3xl font-bold tabular-nums text-slate-900 dark:text-slate-50">{value}</p>
       <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{label}</p>
     </div>
@@ -138,7 +138,7 @@ export default async function AboutPage() {
               {domains.map((d) => (
                 <span
                   key={d.name}
-                  className="rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-1.5 text-sm font-medium text-slate-700 dark:text-slate-200"
+                  className="rounded-full border border-slate-200 dark:border-slate-700 bg-card px-3.5 py-1.5 text-sm font-medium text-slate-700 dark:text-slate-200"
                 >
                   {d.name}
                   <span className="ml-1.5 font-mono text-xs tabular-nums text-slate-400 dark:text-slate-500">

@@ -65,7 +65,7 @@ export default async function LessonsPage() {
                   <Link
                     key={lesson.id}
                     href={locked ? "/pricing" : `/lessons/${lesson.slug}`}
-                    className="flex flex-col rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4 transition-colors hover:border-slate-300 dark:hover:border-slate-600"
+                    className="flex flex-col rounded-xl border border-slate-200 dark:border-slate-700 bg-card p-4 transition-colors hover:border-slate-300 dark:hover:border-slate-600"
                   >
                     <div className="flex items-start justify-between gap-2">
                       <h3 className="text-sm font-bold text-slate-900 dark:text-slate-50">{lesson.title}</h3>

@@ -36,7 +36,7 @@ export default async function AchievementsPage() {
               key={a.id}
               className={cn(
                 "rounded-xl border p-4",
-                unlockedAt ? "border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950" : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900"
+                unlockedAt ? "border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950" : "border-slate-200 bg-card dark:border-slate-700"
               )}
             >
               <div className="flex items-start gap-3">

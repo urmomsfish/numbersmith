@@ -53,7 +53,7 @@ export default async function CompetitionsPage() {
                 <Link
                   key={c.id}
                   href={`/competitions/${c.slug}`}
-                  className="group flex flex-col rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5 transition-colors hover:border-slate-300 dark:hover:border-slate-600"
+                  className="group flex flex-col rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-5 transition-colors hover:border-slate-300 dark:hover:border-slate-600"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <h3 className="text-base font-bold text-slate-900 dark:text-slate-50 group-hover:text-brand-700 dark:group-hover:text-brand-400">

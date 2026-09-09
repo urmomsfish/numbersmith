@@ -90,7 +90,7 @@ export default async function SchedulePage() {
             {[...upcoming, ...undated].map((s) => (
               <div
                 key={s.id}
-                className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4"
+                className="rounded-xl border border-slate-200 dark:border-slate-700 bg-card p-4"
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0">

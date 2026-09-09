@@ -78,7 +78,7 @@ export default async function MistakesPage() {
               <Link
                 key={m.id}
                 href={`/practice/${m.problem.slug}`}
-                className="block rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4 transition-colors hover:border-slate-300 dark:hover:border-slate-600"
+                className="block rounded-xl border border-slate-200 dark:border-slate-700 bg-card p-4 transition-colors hover:border-slate-300 dark:hover:border-slate-600"
               >
                 <div className="flex flex-wrap items-center gap-1.5">
                   <Badge tone={meta.tone}>{meta.label}</Badge>
@@ -120,7 +120,7 @@ export default async function MistakesPage() {
 
 function StatTile({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4 text-center">
+    <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-card p-4 text-center">
       <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">{label}</p>
       <p className="mt-1 text-2xl font-extrabold text-slate-900 dark:text-slate-50">{value}</p>
     </div>

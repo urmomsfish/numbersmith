@@ -130,7 +130,7 @@ export function CompetitionsForm({
         <p className="rounded-lg bg-red-50 dark:bg-red-950 px-3 py-2 text-sm text-danger-600 dark:text-red-400">{state.error}</p>
       )}
 
-      <section className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6">
+      <section className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-6">
         <h2 className="text-base font-bold text-slate-900 dark:text-slate-50">Which competition is your #1 priority?</h2>
         <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
           We&apos;ll weight your training plan and dashboard toward this competition.

@@ -23,7 +23,7 @@ export default function ForgotPasswordPage() {
         <div className="mb-8 flex justify-center">
           <Logo />
         </div>
-        <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-8">
+        <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-8">
           <h1 className="text-xl font-bold text-slate-900 dark:text-slate-50">Reset your password</h1>
           <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
             Enter your account email and we&apos;ll send a 6-digit code to reset it.

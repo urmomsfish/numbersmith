@@ -75,7 +75,7 @@ export function DailyChallengeRunner({
   }
 
   return (
-    <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 sm:p-8">
+    <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-6 sm:p-8">
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <Badge tone="brand">{problem.topicName}</Badge>
         <Badge tone="slate">{difficultyLabel(problem.difficulty)}</Badge>

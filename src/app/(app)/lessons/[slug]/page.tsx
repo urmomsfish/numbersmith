@@ -115,7 +115,7 @@ function Section({
   tone?: "slate" | "brand" | "warning";
 }) {
   const toneClass = {
-    slate: "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900",
+    slate: "border-slate-200 bg-card dark:border-slate-700",
     brand: "border-brand-200 bg-brand-50/60 dark:border-brand-800 dark:bg-brand-950/40",
     warning: "border-amber-200 bg-amber-50/60 dark:border-amber-900 dark:bg-amber-950/40",
   }[tone];

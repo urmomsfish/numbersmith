@@ -50,7 +50,7 @@ export default async function AdminProblemsPage({
         </p>
       )}
 
-      <form className="mt-5 flex flex-wrap gap-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-3">
+      <form className="mt-5 flex flex-wrap gap-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-card p-3">
         <input
           name="q"
           defaultValue={params.q ?? ""}
@@ -74,7 +74,7 @@ export default async function AdminProblemsPage({
         </Button>
       </form>
 
-      <div className="mt-5 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+      <div className="mt-5 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-card">
         <table className="w-full text-sm">
           <thead className="bg-slate-50 dark:bg-slate-800">
             <tr className="text-left text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">

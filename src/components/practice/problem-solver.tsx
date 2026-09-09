@@ -92,7 +92,7 @@ export function ProblemSolver({
   }
 
   return (
-    <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 sm:p-8">
+    <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-6 sm:p-8">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <Badge tone="brand">{problem.topicName}</Badge>
@@ -250,7 +250,7 @@ export function ProblemSolver({
 
 export function DailyCapUpsell() {
   return (
-    <div className="rounded-2xl border border-brand-100 bg-white dark:bg-slate-900 p-8 text-center">
+    <div className="rounded-2xl border border-brand-100 bg-card p-8 text-center">
       <p className="text-3xl">🎉</p>
       <h2 className="mt-3 text-xl font-bold text-slate-900 dark:text-slate-50">You&apos;ve completed today&apos;s training!</h2>
       <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">

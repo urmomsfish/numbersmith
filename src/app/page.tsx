@@ -188,7 +188,7 @@ export default async function LandingPage() {
             {/* A real problem from the database, rendered by the same markup the
                 practice interface uses. Not a mockup. */}
             {sampleProblem && (
-              <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6">
+              <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-6">
                 <div className="flex items-center gap-2">
                   <Badge tone="brand">{sampleProblem.topic.name}</Badge>
                   <Badge tone="slate">{difficultyLabel(sampleProblem.difficulty)}</Badge>
@@ -275,7 +275,7 @@ export default async function LandingPage() {
           </div>
 
           <div className="mt-10 grid gap-5 lg:grid-cols-2">
-            <div className="flex flex-col rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-7">
+            <div className="flex flex-col rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-7">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50">NumberSmith Free</h3>
               <p className="mt-1 text-3xl font-extrabold text-slate-900 dark:text-slate-50">
                 $0 <span className="text-sm font-normal text-slate-400 dark:text-slate-500">forever</span>
@@ -304,7 +304,7 @@ export default async function LandingPage() {
             {/* Emphasised with a ring rather than a thicker border: border-2
                 shrinks the content box by a pixel each side, which made the two
                 columns' buttons render at different heights side by side. */}
-            <div className="relative flex flex-col rounded-2xl border border-brand-600 ring-1 ring-brand-600 bg-white dark:bg-slate-900 p-7">
+            <div className="relative flex flex-col rounded-2xl border border-brand-600 ring-1 ring-brand-600 bg-card p-7">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50">NumberSmith Pro</h3>
               <p className="mt-1 text-3xl font-extrabold text-slate-900 dark:text-slate-50">
                 ${PRO_PRICING.YEARLY} <span className="text-sm font-normal text-slate-400 dark:text-slate-500">/year</span>
@@ -347,7 +347,7 @@ export default async function LandingPage() {
               {FAQ.map((item) => (
                 <details
                   key={item.q}
-                  className="group rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5"
+                  className="group rounded-xl border border-slate-200 dark:border-slate-700 bg-card p-5"
                 >
                   <summary className="cursor-pointer list-none text-sm font-semibold text-slate-900 dark:text-slate-50">
                     <span className="flex items-center justify-between gap-3">

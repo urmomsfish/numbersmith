@@ -77,7 +77,7 @@ export function TestRunner({
 
   return (
     <div className="flex min-h-[calc(100vh-57px)] flex-col">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 sm:px-6">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-700 bg-card px-4 py-3 sm:px-6">
         <div>
           <p className="text-sm font-bold text-slate-900 dark:text-slate-50">{title}</p>
           <p className="text-xs text-slate-400 dark:text-slate-500">
@@ -101,7 +101,7 @@ export function TestRunner({
 
       <div className="flex flex-1 flex-col-reverse gap-5 px-4 py-6 sm:px-6 lg:flex-row">
         <div className="min-w-0 flex-1">
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 sm:p-8">
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-6 sm:p-8">
             <div className="mb-4 flex items-center justify-between">
               <span className="text-sm font-bold text-slate-900 dark:text-slate-50">
                 Question {index + 1}
@@ -205,7 +205,7 @@ export function TestRunner({
         </div>
 
         <aside className="w-full shrink-0 lg:w-56">
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4">
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-4">
             <p className="text-xs font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">Navigator</p>
             <div className="mt-3 grid grid-cols-6 gap-1.5 lg:grid-cols-5">
               {items.map((item, i) => {
@@ -250,7 +250,7 @@ export function TestRunner({
 
       {confirmOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-          <div className="w-full max-w-sm rounded-2xl bg-white dark:bg-slate-900 p-6 shadow-xl">
+          <div className="w-full max-w-sm rounded-2xl bg-card p-6 shadow-xl">
             <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">Submit {shortName}?</h2>
             <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
               You&apos;ve answered {answeredCount} of {items.length} questions

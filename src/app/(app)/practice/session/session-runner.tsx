@@ -51,7 +51,7 @@ export function SessionRunner({
     const accuracy = total > 0 ? Math.round((correctCount / total) * 100) : 0;
     return (
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6">
-        <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-8 text-center">
+        <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-8 text-center">
           <p className="text-3xl">✅</p>
           <h2 className="mt-3 text-xl font-bold text-slate-900 dark:text-slate-50">Session complete</h2>
           <p className="mt-2 text-slate-500 dark:text-slate-400">
