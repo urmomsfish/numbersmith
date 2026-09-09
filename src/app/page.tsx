@@ -78,7 +78,7 @@ export default async function LandingPage() {
         <section className="border-b border-slate-200 dark:border-slate-700">
           <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
             <h1 className="max-w-3xl text-balance text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-5xl">
-              Know what to practice next.
+              Train Smarter. Compete Better.
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
               Take a placement test, add the contests you&apos;re actually sitting, and NumberSmith
