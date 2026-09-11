@@ -21,7 +21,7 @@ export async function sendAiMessageAction(input: { content: string }) {
 
   if (!aiIsConfigured()) {
     throw new Error(
-      "The AI Math Assistant isn't configured yet — ask your NumberSmith admin to set ANTHROPIC_API_KEY."
+      "The AI Math Assistant isn't configured yet — ask your NumberSmith admin to set OPENROUTER_API_KEY."
     );
   }
 

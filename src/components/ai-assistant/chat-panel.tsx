@@ -63,7 +63,7 @@ export function ChatPanel({
           The AI Math Assistant isn&apos;t configured yet.
         </p>
         <p className="mt-1.5 max-w-sm text-xs text-slate-700 dark:text-slate-400">
-          This deployment is missing an ANTHROPIC_API_KEY. Once one is added, this page starts working
+          This deployment is missing an OPENROUTER_API_KEY. Once one is added, this page starts working
           immediately — no other changes needed.
         </p>
       </div>

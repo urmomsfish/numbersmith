@@ -1,19 +1,26 @@
 import "server-only";
-import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 
 /** Mirrors the Stripe/Google pattern: while unconfigured, the feature reports
  * itself as off instead of throwing mid-request. */
 export function aiIsConfigured(): boolean {
-  return Boolean(process.env.ANTHROPIC_API_KEY);
+  return Boolean(process.env.OPENROUTER_API_KEY);
 }
 
-let client: Anthropic | null = null;
-function getClient(): Anthropic {
-  if (!client) client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+let client: OpenAI | null = null;
+function getClient(): OpenAI {
+  if (!client) {
+    client = new OpenAI({
+      apiKey: process.env.OPENROUTER_API_KEY,
+      baseURL: "https://openrouter.ai/api/v1",
+    });
+  }
   return client;
 }
 
-const MODEL = process.env.ANTHROPIC_MODEL || "claude-sonnet-4-5";
+// OpenRouter model slug — still routes to Claude by default, just through
+// OpenRouter instead of Anthropic's API directly.
+const MODEL = process.env.OPENROUTER_MODEL || "anthropic/claude-sonnet-4.5";
 
 const SYSTEM_PROMPT = `You are the NumberSmith AI Math Assistant, built into a competition-math training app for students roughly grades 4-12.
 
@@ -35,12 +42,10 @@ export type ChatTurn = { role: "user" | "assistant"; content: string };
  * chat responses here are short enough that a single round trip is fine. */
 export async function askMathAssistant(history: ChatTurn[]): Promise<string> {
   const messages = history.map((m) => ({ role: m.role, content: m.content }));
-  const response = await getClient().messages.create({
+  const response = await getClient().chat.completions.create({
     model: MODEL,
     max_tokens: 1024,
-    system: SYSTEM_PROMPT,
-    messages,
+    messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
   });
-  const textBlock = response.content.find((b) => b.type === "text");
-  return textBlock?.type === "text" ? textBlock.text : "";
+  return response.choices[0]?.message?.content ?? "";
 }
