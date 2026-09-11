@@ -104,7 +104,7 @@ function QuestionCard({
       <header className="border-b border-slate-200 dark:border-slate-700 bg-card">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4 sm:px-6">
           <Logo href="/" />
-          <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
+          <div className="flex items-center gap-3 text-sm text-slate-700 dark:text-slate-400">
             <span className="tabular-nums">
               {String(Math.floor(elapsed / 60)).padStart(2, "0")}:
               {String(elapsed % 60).padStart(2, "0")}
@@ -115,7 +115,7 @@ function QuestionCard({
           </div>
         </div>
         <div className="mx-auto max-w-3xl px-4 pb-3 sm:px-6">
-          <div className="mb-1.5 flex items-center justify-between text-xs text-slate-400 dark:text-slate-500">
+          <div className="mb-1.5 flex items-center justify-between text-xs text-slate-700 dark:text-slate-500">
             <span>Question {question.questionNumber}</span>
             <span>Adaptive test — usually 20-30 questions</span>
           </div>
@@ -194,7 +194,7 @@ function QuestionCard({
               type="button"
               disabled={pending || !!feedback}
               onClick={() => submit("")}
-              className="text-sm font-medium text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 disabled:opacity-50"
+              className="text-sm font-medium text-slate-700 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 disabled:opacity-50"
             >
               Skip question
             </button>

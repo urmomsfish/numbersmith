@@ -126,7 +126,7 @@ export default async function PricingPage({
             <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50 sm:text-4xl">
               Choose Your Training Level
             </h1>
-            <p className="mt-3 text-lg text-slate-500 dark:text-slate-400">
+            <p className="mt-3 text-lg text-slate-700 dark:text-slate-400">
               Start for free. Upgrade when you&apos;re ready to train without limits.
             </p>
             {contextMessage && (
@@ -154,7 +154,7 @@ export default async function PricingPage({
               </p>
               <p className="mt-5">
                 <span className="text-4xl font-extrabold text-slate-900 dark:text-slate-50">$0</span>
-                <span className="ml-1 text-sm text-slate-400 dark:text-slate-500">forever</span>
+                <span className="ml-1 text-sm text-slate-700 dark:text-slate-500">forever</span>
               </p>
 
               {/* flex-1 pushes the CTA to the card's bottom edge so both plan
@@ -197,12 +197,12 @@ export default async function PricingPage({
                 <span className="text-4xl font-extrabold text-slate-900 dark:text-slate-50">
                   ${PRO_PRICING.YEARLY}
                 </span>
-                <span className="text-sm text-slate-400 dark:text-slate-500">/year</span>
+                <span className="text-sm text-slate-700 dark:text-slate-500">/year</span>
                 <span className="rounded-full bg-emerald-50 dark:bg-emerald-950 px-2 py-0.5 text-xs font-bold text-success-600 dark:text-emerald-400">
                   Save {yearlySavingsPercent()}%
                 </span>
               </div>
-              <p className="mt-1 text-sm text-slate-400 dark:text-slate-500">
+              <p className="mt-1 text-sm text-slate-700 dark:text-slate-500">
                 or ${PRO_PRICING.MONTHLY}/month billed monthly
               </p>
 
@@ -229,7 +229,7 @@ export default async function PricingPage({
                   <Button size="lg" className="w-full" disabled>
                     Coming soon
                   </Button>
-                  <p className="pt-1 text-center text-xs text-slate-400 dark:text-slate-500">
+                  <p className="pt-1 text-center text-xs text-slate-700 dark:text-slate-500">
                     Payments aren&apos;t open yet. The free plan is fully available in the meantime.
                   </p>
                 </div>
@@ -247,7 +247,7 @@ export default async function PricingPage({
                       Get Pro Monthly — ${PRO_PRICING.MONTHLY}/mo
                     </Button>
                   </form>
-                  <p className="pt-1 text-center text-xs text-slate-400 dark:text-slate-500">
+                  <p className="pt-1 text-center text-xs text-slate-700 dark:text-slate-500">
                     Secure checkout by Stripe. Cancel anytime — see our{" "}
                     <Link href="/legal/refunds" className="underline">
                       refund policy
@@ -272,8 +272,8 @@ export default async function PricingPage({
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-slate-200 dark:border-slate-700">
-                    <th className="py-3 text-left font-semibold text-slate-500 dark:text-slate-400">Feature</th>
-                    <th className="px-3 py-3 text-center font-semibold text-slate-500 dark:text-slate-400">Free</th>
+                    <th className="py-3 text-left font-semibold text-slate-700 dark:text-slate-400">Feature</th>
+                    <th className="px-3 py-3 text-center font-semibold text-slate-700 dark:text-slate-400">Free</th>
                     <th className="px-3 py-3 text-center font-semibold text-brand-700 dark:text-brand-300">Pro</th>
                   </tr>
                 </thead>
@@ -281,7 +281,7 @@ export default async function PricingPage({
                   {COMPARISON.map((row) => (
                     <tr key={row.feature}>
                       <td className="py-2.5 text-slate-700 dark:text-slate-200">{row.feature}</td>
-                      <td className="px-3 py-2.5 text-center text-slate-500 dark:text-slate-400">{row.free}</td>
+                      <td className="px-3 py-2.5 text-center text-slate-700 dark:text-slate-400">{row.free}</td>
                       <td className="px-3 py-2.5 text-center font-semibold text-brand-700 dark:text-brand-300">
                         {row.pro}
                       </td>
@@ -316,13 +316,13 @@ export default async function PricingPage({
           </div>
 
           <div className="mt-10 text-center">
-            <p className="text-sm text-slate-500 dark:text-slate-400">
+            <p className="text-sm text-slate-700 dark:text-slate-400">
               The placement test is always free. You never pay to find out where you stand.
             </p>
             <LinkButton href={user ? "/dashboard" : "/signup"} size="lg" className="mt-4">
               {user ? "Back to Training" : "Take the Free Assessment"}
             </LinkButton>
-            <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">
+            <p className="mt-4 text-xs text-slate-700 dark:text-slate-500">
               Questions?{" "}
               <Link href="/" className="underline">
                 Learn more about NumberSmith

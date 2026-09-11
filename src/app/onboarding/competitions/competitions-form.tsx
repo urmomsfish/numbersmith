@@ -82,7 +82,7 @@ export function CompetitionsForm({
         return (
           <section key={category}>
             <h2 className="text-base font-bold text-slate-900 dark:text-slate-50">{meta.title}</h2>
-            <p className="text-xs text-slate-400 dark:text-slate-500">{meta.description}</p>
+            <p className="text-xs text-slate-700 dark:text-slate-500">{meta.description}</p>
             <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
               {items.map((c) => {
                 const isSelected = selected.has(c.slug);
@@ -132,11 +132,11 @@ export function CompetitionsForm({
 
       <section className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-6">
         <h2 className="text-base font-bold text-slate-900 dark:text-slate-50">Which competition is your #1 priority?</h2>
-        <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
+        <p className="mt-1 text-xs text-slate-700 dark:text-slate-500">
           We&apos;ll weight your training plan and dashboard toward this competition.
         </p>
         {selectedList.length === 0 ? (
-          <p className="mt-3 text-sm text-slate-400 dark:text-slate-500">Select at least one competition above first.</p>
+          <p className="mt-3 text-sm text-slate-700 dark:text-slate-500">Select at least one competition above first.</p>
         ) : (
           <div className="mt-3 flex flex-wrap gap-2">
             {selectedList.map((c) => (

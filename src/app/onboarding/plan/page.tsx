@@ -53,7 +53,7 @@ export default async function OnboardingPlanPage() {
     <OnboardingShell activeStep="PLAN">
       <div className="mx-auto max-w-3xl">
         <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50 sm:text-3xl">Your Training Profile</h1>
-        <p className="mt-2 text-slate-500 dark:text-slate-400">
+        <p className="mt-2 text-slate-700 dark:text-slate-400">
           Here&apos;s the personalized plan NumberSmith built from your placement results and goals.
         </p>
 
@@ -92,7 +92,7 @@ export default async function OnboardingPlanPage() {
 function ProfileStat({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-card p-4">
-      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">{label}</p>
+      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-500">{label}</p>
       <p className="mt-1 text-sm font-bold text-slate-900 dark:text-slate-50">{value}</p>
     </div>
   );

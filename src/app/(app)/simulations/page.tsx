@@ -55,7 +55,7 @@ export default async function SimulationsPage() {
                   {c.format === "INTEGER" ? "Integer" : c.format === "MULTIPLE_CHOICE" ? "MC" : "Short"}
                 </Badge>
               </div>
-              <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
+              <p className="mt-1 text-xs text-slate-700 dark:text-slate-500">
                 {c.numQuestions ?? 20} questions · {c.timeLimitMinutes ?? 60} minutes
               </p>
               <form action={startOfficialSimulationAction} className="mt-4">
@@ -90,15 +90,15 @@ export default async function SimulationsPage() {
                 <div>
                   <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">
                     {a.competition.shortName}
-                    {a.mode === "CUSTOM" && <span className="ml-2 text-xs text-slate-400 dark:text-slate-500">Custom</span>}
+                    {a.mode === "CUSTOM" && <span className="ml-2 text-xs text-slate-700 dark:text-slate-500">Custom</span>}
                   </p>
-                  <p className="text-xs text-slate-400 dark:text-slate-500">{a.submittedAt?.toLocaleString() ?? "—"}</p>
+                  <p className="text-xs text-slate-700 dark:text-slate-500">{a.submittedAt?.toLocaleString() ?? "—"}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-bold text-slate-900 dark:text-slate-50">
                     {a.correctCount}/{a.totalQuestions}
                   </p>
-                  <p className="text-xs text-slate-400 dark:text-slate-500">{a.score}%</p>
+                  <p className="text-xs text-slate-700 dark:text-slate-500">{a.score}%</p>
                 </div>
               </Link>
             ))}

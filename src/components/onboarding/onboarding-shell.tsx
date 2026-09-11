@@ -28,7 +28,7 @@ export function OnboardingShell({
           <div className="flex items-center gap-3">
           {/* Only from lg: below that the logo, five steps, and the logout
               button do not fit on one line without wrapping. */}
-          <ol className="hidden items-center gap-1 text-xs font-medium text-slate-400 dark:text-slate-500 lg:flex">
+          <ol className="hidden items-center gap-1 text-xs font-medium text-slate-700 dark:text-slate-500 lg:flex">
             {STEPS.map((step, i) => (
               <li key={step.key} className="flex items-center gap-1">
                 <span
@@ -38,7 +38,7 @@ export function OnboardingShell({
                       ? "bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300"
                       : i < activeIndex
                         ? "text-success-600 dark:text-emerald-400"
-                        : "text-slate-400 dark:text-slate-500"
+                        : "text-slate-700 dark:text-slate-500"
                   )}
                 >
                   <span

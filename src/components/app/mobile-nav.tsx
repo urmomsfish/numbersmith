@@ -29,7 +29,7 @@ export function MobileNav({ isPro }: { isPro?: boolean }) {
           <div className="relative flex h-full w-64 flex-col bg-white shadow-xl dark:bg-slate-900">
             <div className="flex items-center justify-between px-4 py-4">
               <span className="text-sm font-bold text-slate-900 dark:text-slate-50">Menu</span>
-              <button onClick={() => setOpen(false)} className="text-slate-400 dark:text-slate-500">
+              <button onClick={() => setOpen(false)} className="text-slate-700 dark:text-slate-500">
                 ✕
               </button>
             </div>

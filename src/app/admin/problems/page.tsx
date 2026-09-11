@@ -77,7 +77,7 @@ export default async function AdminProblemsPage({
       <div className="mt-5 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-card">
         <table className="w-full text-sm">
           <thead className="bg-slate-50 dark:bg-slate-800">
-            <tr className="text-left text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+            <tr className="text-left text-xs font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-500">
               <th className="px-4 py-2.5">Question</th>
               <th className="px-3 py-2.5">Topic</th>
               <th className="px-3 py-2.5">Difficulty</th>
@@ -95,7 +95,7 @@ export default async function AdminProblemsPage({
                   >
                     {p.question}
                   </Link>
-                  <p className="text-[11px] text-slate-400 dark:text-slate-500">{p.slug}</p>
+                  <p className="text-[11px] text-slate-700 dark:text-slate-500">{p.slug}</p>
                 </td>
                 <td className="px-3 py-2.5 text-slate-600 dark:text-slate-300">{p.topic.name}</td>
                 <td className="px-3 py-2.5">
@@ -123,7 +123,7 @@ export default async function AdminProblemsPage({
             ))}
             {problems.length === 0 && (
               <tr>
-                <td colSpan={5} className="px-4 py-10 text-center text-slate-400 dark:text-slate-500">
+                <td colSpan={5} className="px-4 py-10 text-center text-slate-700 dark:text-slate-500">
                   No problems match these filters.
                 </td>
               </tr>

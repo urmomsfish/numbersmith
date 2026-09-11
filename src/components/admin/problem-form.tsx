@@ -198,7 +198,7 @@ export function ProblemForm({
       </Field>
 
       <fieldset className="rounded-xl border border-slate-200 dark:border-slate-700 p-4">
-        <legend className="px-2 text-xs font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+        <legend className="px-2 text-xs font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">
           Source & Licensing
         </legend>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -237,7 +237,7 @@ export function ProblemForm({
             />
           </Field>
         </div>
-        <p className="mt-3 text-xs text-slate-400 dark:text-slate-500">
+        <p className="mt-3 text-xs text-slate-700 dark:text-slate-500">
           Only add problems that are original, public domain, properly licensed, or used with
           permission. Never transcribe copyrighted competition archives.
         </p>
@@ -284,7 +284,7 @@ function Field({
     <label className="block">
       <span className="mb-1.5 block text-xs font-semibold text-slate-600 dark:text-slate-300">{label}</span>
       {children}
-      {hint && <span className="mt-1 block text-[11px] text-slate-400 dark:text-slate-500">{hint}</span>}
+      {hint && <span className="mt-1 block text-[11px] text-slate-700 dark:text-slate-500">{hint}</span>}
     </label>
   );
 }

@@ -34,18 +34,18 @@ export default async function SettingsPage() {
 
       <Card className="mt-6">
         <CardBody>
-          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">Account</h2>
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">Account</h2>
           <dl className="mt-3 space-y-2 text-sm">
             <div className="flex justify-between">
-              <dt className="text-slate-500 dark:text-slate-400">Name</dt>
+              <dt className="text-slate-700 dark:text-slate-400">Name</dt>
               <dd className="font-medium text-slate-800 dark:text-slate-100">{user.name}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-slate-500 dark:text-slate-400">Email</dt>
+              <dt className="text-slate-700 dark:text-slate-400">Email</dt>
               <dd className="font-medium text-slate-800 dark:text-slate-100">{user.email}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-slate-500 dark:text-slate-400">Role</dt>
+              <dt className="text-slate-700 dark:text-slate-400">Role</dt>
               <dd className="font-medium text-slate-800 dark:text-slate-100">{user.role}</dd>
             </div>
           </dl>
@@ -54,15 +54,15 @@ export default async function SettingsPage() {
 
       <Card className="mt-5">
         <CardBody>
-          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">
             Appearance
           </h2>
-          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+          <p className="mt-2 text-sm text-slate-700 dark:text-slate-400">
             Give the background a gentle colour, in both light and dark mode. Buttons, links, and
             text are left alone so everything stays just as easy to read. Saved on this device.
           </p>
           <TintPicker className="mt-4" />
-          <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">
+          <p className="mt-4 text-xs text-slate-700 dark:text-slate-500">
             Use the sun/moon button in the top bar to switch between light and dark.
           </p>
         </CardBody>
@@ -71,7 +71,7 @@ export default async function SettingsPage() {
       <Card className="mt-5">
         <CardBody>
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">Subscription</h2>
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">Subscription</h2>
             <Badge tone={cancelPending ? "warning" : isPro ? "brand" : "slate"}>
               {cancelPending
                 ? "⭐ Pro — ending"
@@ -101,11 +101,11 @@ export default async function SettingsPage() {
           {(subscription.status === "PRO" || cancelPending) && (
             <dl className="mt-3 space-y-2 text-sm">
               <div className="flex justify-between">
-                <dt className="text-slate-500 dark:text-slate-400">Plan</dt>
+                <dt className="text-slate-700 dark:text-slate-400">Plan</dt>
                 <dd className="font-medium text-slate-800 dark:text-slate-100">{subscription.plan ?? "—"}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-slate-500 dark:text-slate-400">{cancelPending ? "Access ends" : "Renews"}</dt>
+                <dt className="text-slate-700 dark:text-slate-400">{cancelPending ? "Access ends" : "Renews"}</dt>
                 <dd className="font-medium text-slate-800 dark:text-slate-100">
                   {subscription.renewalDate?.toLocaleDateString() ?? "—"}
                 </dd>
@@ -141,7 +141,7 @@ export default async function SettingsPage() {
       <Card className="mt-5">
         <CardBody>
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">
               My Competitions
             </h2>
             <Link
@@ -153,7 +153,7 @@ export default async function SettingsPage() {
           </div>
           <div className="mt-3 flex flex-wrap gap-2">
             {userCompetitions.length === 0 && (
-              <p className="text-sm text-slate-400 dark:text-slate-500">No competitions selected yet.</p>
+              <p className="text-sm text-slate-700 dark:text-slate-500">No competitions selected yet.</p>
             )}
             {userCompetitions.map((uc) => (
               <Badge key={uc.id} tone={uc.isPrimary ? "brand" : "slate"}>
@@ -167,7 +167,7 @@ export default async function SettingsPage() {
 
       <Card className="mt-5">
         <CardBody>
-          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">
             Training Preferences
           </h2>
           <form action={updateProfileAction} className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -221,10 +221,10 @@ export default async function SettingsPage() {
 
       <Card className="mt-5">
         <CardBody>
-          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">
             Placement Test
           </h2>
-          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+          <p className="mt-2 text-sm text-slate-700 dark:text-slate-400">
             Retaking the placement test recalibrates your rating, skill breakdown, and training plan.
             The placement test is always free.
           </p>

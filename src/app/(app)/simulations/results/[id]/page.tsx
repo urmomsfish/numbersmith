@@ -75,7 +75,7 @@ export default async function SimulationResultsPage({
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
-      <Link href="/simulations" className="text-sm font-medium text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300">
+      <Link href="/simulations" className="text-sm font-medium text-slate-700 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300">
         ← Simulations
       </Link>
 
@@ -109,7 +109,7 @@ export default async function SimulationResultsPage({
       <div className="mt-6 grid gap-5 sm:grid-cols-2">
         <Card>
           <CardBody>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">
               Topic Breakdown
             </h2>
             <div className="mt-4 space-y-3">
@@ -119,7 +119,7 @@ export default async function SimulationResultsPage({
                   <div key={topic}>
                     <div className="mb-1 flex justify-between text-sm">
                       <span className="font-medium text-slate-700 dark:text-slate-200">{topic}</span>
-                      <span className="text-slate-500 dark:text-slate-400">
+                      <span className="text-slate-700 dark:text-slate-400">
                         {s.correct}/{s.total}
                       </span>
                     </div>
@@ -133,7 +133,7 @@ export default async function SimulationResultsPage({
 
         <Card>
           <CardBody>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">
               Difficulty Breakdown
             </h2>
             <div className="mt-4 space-y-3">
@@ -143,7 +143,7 @@ export default async function SimulationResultsPage({
                   <div key={bucket}>
                     <div className="mb-1 flex justify-between text-sm">
                       <span className="font-medium text-slate-700 dark:text-slate-200">{bucket}</span>
-                      <span className="text-slate-500 dark:text-slate-400">{pct}%</span>
+                      <span className="text-slate-700 dark:text-slate-400">{pct}%</span>
                     </div>
                     <ProgressBar value={pct} tone={pct >= 70 ? "success" : pct >= 40 ? "brand" : "ember"} />
                   </div>
@@ -156,7 +156,7 @@ export default async function SimulationResultsPage({
 
       <Card className="mt-5">
         <CardBody>
-          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">
             Recommended Training
           </h2>
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
@@ -177,7 +177,7 @@ export default async function SimulationResultsPage({
       {missed.length > 0 && (
         <Card className="mt-5">
           <CardBody>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">
               Questions Missed ({missed.length})
             </h2>
             <div className="mt-3 divide-y divide-slate-100 dark:divide-slate-800">
@@ -188,7 +188,7 @@ export default async function SimulationResultsPage({
                   <div key={item.id} className="py-4">
                     <div className="flex items-start justify-between gap-3">
                       <p className="text-sm text-slate-700 dark:text-slate-200">
-                        <span className="font-bold text-slate-400 dark:text-slate-500">Q{item.order + 1}.</span>{" "}
+                        <span className="font-bold text-slate-700 dark:text-slate-500">Q{item.order + 1}.</span>{" "}
                         {item.problem.question}
                       </p>
                       <Badge tone="slate">{difficultyLabel(item.problem.difficulty)}</Badge>
@@ -219,7 +219,7 @@ export default async function SimulationResultsPage({
 function StatTile({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-card p-4 text-center">
-      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">{label}</p>
+      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-500">{label}</p>
       <p className="mt-1 text-xl font-extrabold text-slate-900 dark:text-slate-50">{value}</p>
     </div>
   );

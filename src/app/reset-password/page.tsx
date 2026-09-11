@@ -101,11 +101,11 @@ export default function ResetPasswordPage() {
             Enter the 6-digit code we emailed you, along with your new password.
           </p>
 
-          <Suspense fallback={<p className="mt-6 text-sm text-slate-400 dark:text-slate-500">Loading…</p>}>
+          <Suspense fallback={<p className="mt-6 text-sm text-slate-700 dark:text-slate-500">Loading…</p>}>
             <ResetForm />
           </Suspense>
 
-          <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
+          <p className="mt-6 text-center text-sm text-slate-700 dark:text-slate-400">
             <Link href="/forgot-password" className="font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300">
               Request a new code
             </Link>

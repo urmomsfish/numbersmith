@@ -80,7 +80,7 @@ export function TestRunner({
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-700 bg-card px-4 py-3 sm:px-6">
         <div>
           <p className="text-sm font-bold text-slate-900 dark:text-slate-50">{title}</p>
-          <p className="text-xs text-slate-400 dark:text-slate-500">
+          <p className="text-xs text-slate-700 dark:text-slate-500">
             {answeredCount} of {items.length} answered
           </p>
         </div>
@@ -105,7 +105,7 @@ export function TestRunner({
             <div className="mb-4 flex items-center justify-between">
               <span className="text-sm font-bold text-slate-900 dark:text-slate-50">
                 Question {index + 1}
-                <span className="ml-1.5 font-normal text-slate-400 dark:text-slate-500">of {items.length}</span>
+                <span className="ml-1.5 font-normal text-slate-700 dark:text-slate-500">of {items.length}</span>
               </span>
               <button
                 type="button"
@@ -175,7 +175,7 @@ export function TestRunner({
             </div>
 
             <div className="mt-6">
-              <label className="mb-1.5 block text-xs font-semibold text-slate-500 dark:text-slate-400">Scratch notes</label>
+              <label className="mb-1.5 block text-xs font-semibold text-slate-700 dark:text-slate-400">Scratch notes</label>
               <textarea
                 value={notes[current.id] ?? ""}
                 onChange={(e) => setNotes((n) => ({ ...n, [current.id]: e.target.value }))}
@@ -206,7 +206,7 @@ export function TestRunner({
 
         <aside className="w-full shrink-0 lg:w-56">
           <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-4">
-            <p className="text-xs font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">Navigator</p>
+            <p className="text-xs font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">Navigator</p>
             <div className="mt-3 grid grid-cols-6 gap-1.5 lg:grid-cols-5">
               {items.map((item, i) => {
                 const answered = !!answers[item.id];
@@ -233,7 +233,7 @@ export function TestRunner({
                 );
               })}
             </div>
-            <div className="mt-4 space-y-1.5 text-[11px] text-slate-400 dark:text-slate-500">
+            <div className="mt-4 space-y-1.5 text-[11px] text-slate-700 dark:text-slate-500">
               <p className="flex items-center gap-1.5">
                 <span className="h-2.5 w-2.5 rounded bg-emerald-100" /> Answered
               </p>
@@ -252,7 +252,7 @@ export function TestRunner({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
           <div className="w-full max-w-sm rounded-2xl bg-card p-6 shadow-xl">
             <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">Submit {shortName}?</h2>
-            <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+            <p className="mt-2 text-sm text-slate-700 dark:text-slate-400">
               You&apos;ve answered {answeredCount} of {items.length} questions
               {items.length - answeredCount > 0 && `, leaving ${items.length - answeredCount} blank`}.
               Answers are revealed only after you submit.

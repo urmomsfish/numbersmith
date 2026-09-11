@@ -41,7 +41,7 @@ export default function SignupPage() {
           <div className="mt-6">
             <GoogleButton />
           </div>
-          <p className="mt-2.5 text-center text-xs leading-relaxed text-slate-400 dark:text-slate-500">
+          <p className="mt-2.5 text-center text-xs leading-relaxed text-slate-700 dark:text-slate-500">
             By continuing with Google, you agree to the{" "}
             <Link href="/legal/terms" target="_blank" className="font-medium underline hover:text-slate-600 dark:hover:text-slate-300">
               Terms of Service
@@ -55,7 +55,7 @@ export default function SignupPage() {
 
           <div className="my-5 flex items-center gap-3">
             <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
-            <span className="text-xs font-medium text-slate-400 dark:text-slate-500">or</span>
+            <span className="text-xs font-medium text-slate-700 dark:text-slate-500">or</span>
             <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
           </div>
 
@@ -136,7 +136,7 @@ export default function SignupPage() {
             </Button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
+          <p className="mt-6 text-center text-sm text-slate-700 dark:text-slate-400">
             Already have an account?{" "}
             <Link href="/login" className="font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300">
               Log in

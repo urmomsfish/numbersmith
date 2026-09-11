@@ -86,7 +86,7 @@ export function MonthPlanCalendar({
           <Link
             href={href(prev.year, prev.month)}
             aria-label="Previous month"
-            className="rounded-lg border border-slate-200 dark:border-slate-700 px-2.5 py-1 text-sm text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
+            className="rounded-lg border border-slate-200 dark:border-slate-700 px-2.5 py-1 text-sm text-slate-700 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
           >
             ‹
           </Link>
@@ -99,7 +99,7 @@ export function MonthPlanCalendar({
           <Link
             href={href(next.year, next.month)}
             aria-label="Next month"
-            className="rounded-lg border border-slate-200 dark:border-slate-700 px-2.5 py-1 text-sm text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
+            className="rounded-lg border border-slate-200 dark:border-slate-700 px-2.5 py-1 text-sm text-slate-700 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
           >
             ›
           </Link>
@@ -111,7 +111,7 @@ export function MonthPlanCalendar({
           {DAY_HEADERS.map((d) => (
             <div
               key={d}
-              className="px-2 py-2 text-center text-[11px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500"
+              className="px-2 py-2 text-center text-[11px] font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-500"
             >
               {d}
             </div>
@@ -183,7 +183,7 @@ export function MonthPlanCalendar({
         </div>
       </div>
 
-      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] text-slate-500 dark:text-slate-400">
+      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] text-slate-700 dark:text-slate-400">
         {Object.entries(TASK_META).map(([type, m]) => (
           <span key={type} className="flex items-center gap-1">
             <span>{m.icon}</span>

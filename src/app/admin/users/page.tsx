@@ -50,7 +50,7 @@ export default async function AdminUsersPage({
       <div className="mt-6 overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 bg-card">
         <table className="w-full text-sm">
           <thead className="bg-slate-50 dark:bg-slate-800">
-            <tr className="text-left text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+            <tr className="text-left text-xs font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-500">
               <th className="px-4 py-2.5">User</th>
               <th className="px-3 py-2.5">Grade</th>
               <th className="px-3 py-2.5">Rating</th>
@@ -66,7 +66,7 @@ export default async function AdminUsersPage({
               <tr key={u.id}>
                 <td className="px-4 py-2.5">
                   <p className="font-medium text-slate-800 dark:text-slate-100">{u.name}</p>
-                  <p className="text-[11px] text-slate-400 dark:text-slate-500">{u.email}</p>
+                  <p className="text-[11px] text-slate-700 dark:text-slate-500">{u.email}</p>
                 </td>
                 <td className="px-3 py-2.5 text-slate-600 dark:text-slate-300">{u.profile?.grade ?? "—"}</td>
                 <td className="px-3 py-2.5 text-slate-600 dark:text-slate-300">{u.ratings[0]?.value ?? "—"}</td>

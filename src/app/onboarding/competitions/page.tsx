@@ -22,7 +22,7 @@ export default async function OnboardingCompetitionsPage() {
     <OnboardingShell activeStep="COMPETITIONS">
       <div className="mx-auto max-w-3xl">
         <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50 sm:text-3xl">What are you training for?</h1>
-        <p className="mt-2 text-slate-500 dark:text-slate-400">
+        <p className="mt-2 text-slate-700 dark:text-slate-400">
           Select every competition you want to prepare for — you can change this anytime.
         </p>
 

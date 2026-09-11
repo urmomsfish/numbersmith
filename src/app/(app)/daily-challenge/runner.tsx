@@ -131,7 +131,7 @@ export function DailyChallengeRunner({
               integerOnly={problem.format === "INTEGER"}
             />
             {done && (
-              <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+              <p className="mt-2 text-sm text-slate-700 dark:text-slate-400">
                 Correct answer: <span className="font-semibold text-slate-800 dark:text-slate-100">{result!.correctAnswer}</span>
               </p>
             )}
@@ -172,11 +172,11 @@ export function DailyChallengeRunner({
           >
             {result!.correct ? "Correct!" : "Not quite."}
             {result!.xpAwarded > 0 && (
-              <span className="font-normal text-slate-500 dark:text-slate-400"> +{result!.xpAwarded} XP</span>
+              <span className="font-normal text-slate-700 dark:text-slate-400"> +{result!.xpAwarded} XP</span>
             )}
           </div>
           <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">Solution</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-500">Solution</p>
             <p className="mt-1.5 text-sm leading-relaxed text-slate-700 dark:text-slate-200">{result!.solution}</p>
           </div>
           {unlocked.map((a, i) => (

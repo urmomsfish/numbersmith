@@ -99,7 +99,7 @@ export function EditCompetitionsForm({
       <section className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-6">
         <h2 className="text-base font-bold text-slate-900 dark:text-slate-50">#1 Priority Competition</h2>
         {selectedList.length === 0 ? (
-          <p className="mt-3 text-sm text-slate-400 dark:text-slate-500">Select at least one competition above.</p>
+          <p className="mt-3 text-sm text-slate-700 dark:text-slate-500">Select at least one competition above.</p>
         ) : (
           <div className="mt-3 flex flex-wrap gap-2">
             {selectedList.map((c) => (

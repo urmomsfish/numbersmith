@@ -87,7 +87,7 @@ export default async function MistakesPage() {
                   {due ? (
                     <Badge tone="ember">Due now</Badge>
                   ) : (
-                    <span className="text-[11px] text-slate-400 dark:text-slate-500">
+                    <span className="text-[11px] text-slate-700 dark:text-slate-500">
                       Next review {m.nextReviewAt.toLocaleDateString()}
                     </span>
                   )}
@@ -121,7 +121,7 @@ export default async function MistakesPage() {
 function StatTile({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-card p-4 text-center">
-      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">{label}</p>
+      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-500">{label}</p>
       <p className="mt-1 text-2xl font-extrabold text-slate-900 dark:text-slate-50">{value}</p>
     </div>
   );

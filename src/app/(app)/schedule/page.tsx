@@ -75,12 +75,12 @@ export default async function SchedulePage() {
       {/* ---------------------------------------------------------------- */}
       <Card className="mt-6">
         <CardBody>
-          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">
             Upcoming
           </h2>
 
           {upcoming.length === 0 && undated.length === 0 && (
-            <p className="mt-3 text-sm text-slate-400 dark:text-slate-500">
+            <p className="mt-3 text-sm text-slate-700 dark:text-slate-500">
               Nothing scheduled yet. Add a competition below and your plan will build itself around
               it.
             </p>
@@ -108,7 +108,7 @@ export default async function SchedulePage() {
                         </Badge>
                       )}
                     </div>
-                    <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                    <p className="mt-1 text-xs text-slate-700 dark:text-slate-400">
                       {CATEGORY_LABEL[s.competition.category] ?? s.competition.category} ·{" "}
                       {difficultyRangeLabel(s.competition.difficultyMin, s.competition.difficultyMax)}
                       {s.competition.numQuestions && s.competition.timeLimitMinutes
@@ -120,14 +120,14 @@ export default async function SchedulePage() {
                         <>
                           {formatContestDate(s.targetDate)}
                           {s.daysAway !== null && s.daysAway > 7 && (
-                            <span className="text-slate-400 dark:text-slate-500">
+                            <span className="text-slate-700 dark:text-slate-500">
                               {" "}
                               · {Math.floor(s.daysAway / 7)} weeks away
                             </span>
                           )}
                         </>
                       ) : (
-                        <span className="text-slate-400 dark:text-slate-500">
+                        <span className="text-slate-700 dark:text-slate-500">
                           No date set — shapes your practice, but doesn&apos;t anchor the calendar.
                         </span>
                       )}
@@ -173,13 +173,13 @@ export default async function SchedulePage() {
       {past.length > 0 && (
         <Card className="mt-5">
           <CardBody>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">
               Past
             </h2>
             <div className="mt-3 space-y-2">
               {past.map((s) => (
                 <div key={s.id} className="flex items-center justify-between gap-3 text-sm">
-                  <span className="text-slate-500 dark:text-slate-400">
+                  <span className="text-slate-700 dark:text-slate-400">
                     {s.competition.shortName} · {s.targetDate && formatContestDate(s.targetDate)}
                   </span>
                   <form action={removeScheduledCompetitionAction}>
@@ -191,7 +191,7 @@ export default async function SchedulePage() {
                 </div>
               ))}
             </div>
-            <p className="mt-3 text-xs text-slate-400 dark:text-slate-500">
+            <p className="mt-3 text-xs text-slate-700 dark:text-slate-500">
               Past contests no longer steer your plan — training has already moved on to the next
               one.
             </p>
@@ -202,11 +202,11 @@ export default async function SchedulePage() {
       {/* ---------------------------------------------------------------- */}
       <Card className="mt-5">
         <CardBody>
-          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">
             Add a competition
           </h2>
           {addable.length === 0 ? (
-            <p className="mt-3 text-sm text-slate-400 dark:text-slate-500">
+            <p className="mt-3 text-sm text-slate-700 dark:text-slate-500">
               You&apos;ve added every competition in the directory.
             </p>
           ) : (
@@ -244,7 +244,7 @@ export default async function SchedulePage() {
               </div>
             </form>
           )}
-          <p className="mt-3 text-xs text-slate-400 dark:text-slate-500">
+          <p className="mt-3 text-xs text-slate-700 dark:text-slate-500">
             Changing anything here rebuilds your training plan straight away.
           </p>
         </CardBody>

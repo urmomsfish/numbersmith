@@ -30,7 +30,7 @@ export default async function DailyChallengePage() {
   if (!data) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-16 text-center sm:px-6">
-        <p className="text-slate-500 dark:text-slate-400">No daily challenge is available right now.</p>
+        <p className="text-slate-700 dark:text-slate-400">No daily challenge is available right now.</p>
       </div>
     );
   }
@@ -87,7 +87,7 @@ export default async function DailyChallengePage() {
         }}
       />
 
-      <p className="mt-6 text-center text-xs text-slate-400 dark:text-slate-500">
+      <p className="mt-6 text-center text-xs text-slate-700 dark:text-slate-500">
         You&apos;ve completed {totalCompleted} daily challenge{totalCompleted === 1 ? "" : "s"}. A new
         one unlocks every day at midnight US Pacific, the same time your streak rolls over.
       </p>

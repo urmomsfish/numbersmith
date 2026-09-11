@@ -33,7 +33,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
-      <Link href="/lessons" className="text-sm font-medium text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300">
+      <Link href="/lessons" className="text-sm font-medium text-slate-700 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300">
         ← Lessons
       </Link>
 
@@ -123,7 +123,7 @@ function Section({
   return (
     <Card className={toneClass}>
       <CardBody>
-        <h2 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+        <h2 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-400">
           <span className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700 text-[10px] font-bold text-slate-600 dark:text-slate-300">
             {step}
           </span>

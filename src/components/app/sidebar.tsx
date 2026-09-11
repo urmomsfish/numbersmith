@@ -61,7 +61,7 @@ export function Sidebar({ isAdmin, isPro }: { isAdmin?: boolean; isPro?: boolean
               <Icon
                 className={cn(
                   "h-[18px] w-[18px]",
-                  active ? "text-brand-600 dark:text-brand-400" : "text-slate-400 dark:text-slate-500"
+                  active ? "text-brand-600 dark:text-brand-400" : "text-slate-700 dark:text-slate-500"
                 )}
               />
               <span className="flex-1">{item.label}</span>
@@ -81,7 +81,7 @@ export function Sidebar({ isAdmin, isPro }: { isAdmin?: boolean; isPro?: boolean
           <IconSettings
             className={cn(
               "h-[18px] w-[18px]",
-              pathname.startsWith("/settings") ? "text-brand-600 dark:text-brand-400" : "text-slate-400 dark:text-slate-500"
+              pathname.startsWith("/settings") ? "text-brand-600 dark:text-brand-400" : "text-slate-700 dark:text-slate-500"
             )}
           />
           Settings
@@ -99,7 +99,7 @@ export function Sidebar({ isAdmin, isPro }: { isAdmin?: boolean; isPro?: boolean
             <IconShield
               className={cn(
                 "h-[18px] w-[18px]",
-                pathname.startsWith("/admin") ? "text-brand-600 dark:text-brand-400" : "text-slate-400 dark:text-slate-500"
+                pathname.startsWith("/admin") ? "text-brand-600 dark:text-brand-400" : "text-slate-700 dark:text-slate-500"
               )}
             />
             Admin

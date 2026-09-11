@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma";
 import type { Role } from "@/lib/types";
 
 const SESSION_COOKIE = "numbersmith_session";
-const SESSION_TTL_SECONDS = 60 * 60 * 24 * 30; // 30 days
+const SESSION_TTL_SECONDS = 60 * 60 * 24 * 2; // 2 days
 
 function secretKey() {
   const secret = process.env.AUTH_SECRET;

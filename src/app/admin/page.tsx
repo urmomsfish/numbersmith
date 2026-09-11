@@ -86,7 +86,7 @@ export default async function AdminOverviewPage() {
       <div className="mt-5 grid gap-5 lg:grid-cols-3">
         <Card>
           <CardBody>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">
               Subscriptions
             </h2>
             <div className="mt-4 space-y-3">
@@ -113,23 +113,23 @@ export default async function AdminOverviewPage() {
 
         <Card>
           <CardBody>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">Revenue</h2>
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">Revenue</h2>
             <p className="mt-3 text-3xl font-extrabold text-slate-900 dark:text-slate-50">
               ${mrr.toFixed(2)}
-              <span className="ml-1 text-sm font-normal text-slate-400 dark:text-slate-500">MRR</span>
+              <span className="ml-1 text-sm font-normal text-slate-700 dark:text-slate-500">MRR</span>
             </p>
-            <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
+            <p className="mt-1 text-xs text-slate-700 dark:text-slate-500">
               Derived from {proSubs.length} active Pro subscription
               {proSubs.length === 1 ? "" : "s"}. No live payment processing in this MVP — Stripe
               integration is architected but not enabled.
             </p>
             <dl className="mt-4 space-y-1.5 text-sm">
               <div className="flex justify-between">
-                <dt className="text-slate-500 dark:text-slate-400">Monthly plan</dt>
+                <dt className="text-slate-700 dark:text-slate-400">Monthly plan</dt>
                 <dd className="font-semibold text-slate-800 dark:text-slate-100">${PRO_PRICING.MONTHLY}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-slate-500 dark:text-slate-400">Yearly plan</dt>
+                <dt className="text-slate-700 dark:text-slate-400">Yearly plan</dt>
                 <dd className="font-semibold text-slate-800 dark:text-slate-100">${PRO_PRICING.YEARLY}</dd>
               </div>
             </dl>
@@ -138,22 +138,22 @@ export default async function AdminOverviewPage() {
 
         <Card>
           <CardBody>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">Content</h2>
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">Content</h2>
             <dl className="mt-3 space-y-2 text-sm">
               <div className="flex justify-between">
-                <dt className="text-slate-500 dark:text-slate-400">Problems</dt>
+                <dt className="text-slate-700 dark:text-slate-400">Problems</dt>
                 <dd className="font-semibold text-slate-800 dark:text-slate-100">{problemCount}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-slate-500 dark:text-slate-400">Lessons</dt>
+                <dt className="text-slate-700 dark:text-slate-400">Lessons</dt>
                 <dd className="font-semibold text-slate-800 dark:text-slate-100">{lessonCount}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-slate-500 dark:text-slate-400">Placements completed</dt>
+                <dt className="text-slate-700 dark:text-slate-400">Placements completed</dt>
                 <dd className="font-semibold text-slate-800 dark:text-slate-100">{placementsCompleted}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-slate-500 dark:text-slate-400">Simulations completed</dt>
+                <dt className="text-slate-700 dark:text-slate-400">Simulations completed</dt>
                 <dd className="font-semibold text-slate-800 dark:text-slate-100">{simulationsCompleted}</dd>
               </div>
             </dl>
@@ -170,12 +170,12 @@ export default async function AdminOverviewPage() {
       <div className="mt-5 grid gap-5 sm:grid-cols-2">
         <Card>
           <CardBody>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">
               Popular Competitions
             </h2>
             <div className="mt-3 space-y-2">
               {popularCompetitions.length === 0 && (
-                <p className="text-sm text-slate-400 dark:text-slate-500">No competition selections yet.</p>
+                <p className="text-sm text-slate-700 dark:text-slate-500">No competition selections yet.</p>
               )}
               {popularCompetitions.map((pc) => (
                 <div key={pc.competitionId} className="flex justify-between text-sm">
@@ -193,12 +193,12 @@ export default async function AdminOverviewPage() {
 
         <Card>
           <CardBody>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">
               Most-Attempted Problems
             </h2>
             <div className="mt-3 space-y-2">
               {popularTopics.length === 0 && (
-                <p className="text-sm text-slate-400 dark:text-slate-500">No attempts recorded yet.</p>
+                <p className="text-sm text-slate-700 dark:text-slate-500">No attempts recorded yet.</p>
               )}
               {popularTopics.map((pt) => {
                 const p = problemById.get(pt.problemId);
@@ -222,7 +222,7 @@ export default async function AdminOverviewPage() {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-card p-4 text-center">
-      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">{label}</p>
+      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-500">{label}</p>
       <p className="mt-1 text-xl font-extrabold text-slate-900 dark:text-slate-50">{value}</p>
     </div>
   );

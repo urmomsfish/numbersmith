@@ -114,7 +114,7 @@ export default async function PracticePage({
           );
         })}
         {problems.length === 0 && (
-          <p className="col-span-full py-12 text-center text-sm text-slate-400 dark:text-slate-500">
+          <p className="col-span-full py-12 text-center text-sm text-slate-700 dark:text-slate-500">
             No problems match these filters. Try broadening your search.
           </p>
         )}

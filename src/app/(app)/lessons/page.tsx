@@ -75,7 +75,7 @@ export default async function LessonsPage() {
                         <Badge tone="success">Done</Badge>
                       ) : null}
                     </div>
-                    <p className="mt-1.5 line-clamp-2 flex-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                    <p className="mt-1.5 line-clamp-2 flex-1 text-xs leading-relaxed text-slate-700 dark:text-slate-400">
                       {lesson.concept}
                     </p>
                     <div className="mt-3 flex items-center gap-1.5">

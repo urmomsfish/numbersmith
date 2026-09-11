@@ -65,7 +65,7 @@ export default async function CompetitionsPage() {
                       </Badge>
                     )}
                   </div>
-                  <p className="mt-0.5 text-xs text-slate-400 dark:text-slate-500">{c.name}</p>
+                  <p className="mt-0.5 text-xs text-slate-700 dark:text-slate-500">{c.name}</p>
 
                   <div className="mt-3 flex flex-wrap gap-1.5">
                     <Badge tone="slate">{gradeRangeLabel(c.gradeMin, c.gradeMax)}</Badge>
@@ -73,36 +73,36 @@ export default async function CompetitionsPage() {
                     <Badge tone="slate">{TEAM_LABEL[c.individualOrTeam]}</Badge>
                   </div>
 
-                  <p className="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                  <p className="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-slate-700 dark:text-slate-400">
                     {c.description}
                   </p>
 
                   <dl className="mt-4 grid grid-cols-2 gap-2 border-t border-slate-100 dark:border-slate-800 pt-3 text-xs">
                     <div>
-                      <dt className="text-slate-400 dark:text-slate-500">Difficulty</dt>
+                      <dt className="text-slate-700 dark:text-slate-500">Difficulty</dt>
                       <dd className="font-semibold text-slate-700 dark:text-slate-200">
                         {difficultyRangeLabel(c.difficultyMin, c.difficultyMax)}
                       </dd>
                     </div>
                     <div>
-                      <dt className="text-slate-400 dark:text-slate-500">Questions</dt>
+                      <dt className="text-slate-700 dark:text-slate-500">Questions</dt>
                       <dd className="font-semibold text-slate-700 dark:text-slate-200">{c.numQuestions ?? "Varies"}</dd>
                     </div>
                     <div>
-                      <dt className="text-slate-400 dark:text-slate-500">Time limit</dt>
+                      <dt className="text-slate-700 dark:text-slate-500">Time limit</dt>
                       <dd className="font-semibold text-slate-700 dark:text-slate-200">
                         {c.timeLimitMinutes ? `${c.timeLimitMinutes} min` : "Untimed"}
                       </dd>
                     </div>
                     <div>
-                      <dt className="text-slate-400 dark:text-slate-500">Region</dt>
+                      <dt className="text-slate-700 dark:text-slate-500">Region</dt>
                       <dd className="font-semibold text-slate-700 dark:text-slate-200">{c.region}</dd>
                     </div>
                   </dl>
 
                   <div className="mt-3 flex flex-wrap gap-1">
                     {c.topics.slice(0, 3).map((ct) => (
-                      <span key={ct.id} className="text-[11px] text-slate-400 dark:text-slate-500">
+                      <span key={ct.id} className="text-[11px] text-slate-700 dark:text-slate-500">
                         {ct.topic.name}
                         {ct !== c.topics.slice(0, 3).at(-1) && " ·"}
                       </span>
@@ -115,7 +115,7 @@ export default async function CompetitionsPage() {
         );
       })}
 
-      <p className="mt-10 rounded-xl bg-slate-100 dark:bg-slate-800 p-4 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+      <p className="mt-10 rounded-xl bg-slate-100 dark:bg-slate-800 p-4 text-xs leading-relaxed text-slate-700 dark:text-slate-400">
         NumberSmith provides independent practice tracks modeled on the published formats of these
         competitions. All problems on NumberSmith are original content written by the NumberSmith team.
         NumberSmith is not affiliated with, endorsed by, or sponsored by any of the organizations that

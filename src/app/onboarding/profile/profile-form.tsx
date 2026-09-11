@@ -107,7 +107,7 @@ export function ProfileForm() {
                 )}
               >
                 <div className="text-sm font-semibold text-slate-800 dark:text-slate-100">{opt.title}</div>
-                <div className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{opt.desc}</div>
+                <div className="mt-0.5 text-xs text-slate-700 dark:text-slate-400">{opt.desc}</div>
               </div>
             </label>
           ))}
@@ -117,7 +117,7 @@ export function ProfileForm() {
       <section>
         <label className="mb-2 block text-sm font-semibold text-slate-800 dark:text-slate-100">
           Competitions you&apos;ve participated in{" "}
-          <span className="font-normal text-slate-400 dark:text-slate-500">(optional)</span>
+          <span className="font-normal text-slate-700 dark:text-slate-500">(optional)</span>
         </label>
         <div className="flex flex-wrap gap-2">
           {PRIOR_COMPETITIONS.map((comp) => (
@@ -151,7 +151,7 @@ export function ProfileForm() {
                   "rounded-lg border px-2 py-2 text-center text-xs font-medium",
                   level === opt.value
                     ? "border-brand-500 bg-brand-50 text-brand-700 dark:border-brand-400 dark:bg-brand-950 dark:text-brand-300"
-                    : "border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600"
+                    : "border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600"
                 )}
               >
                 {opt.label}
@@ -181,7 +181,7 @@ export function ProfileForm() {
 
       <section>
         <label className="mb-2 block text-sm font-semibold text-slate-800 dark:text-slate-100">
-          Target score or rating <span className="font-normal text-slate-400 dark:text-slate-500">(optional)</span>
+          Target score or rating <span className="font-normal text-slate-700 dark:text-slate-500">(optional)</span>
         </label>
         <input
           type="text"

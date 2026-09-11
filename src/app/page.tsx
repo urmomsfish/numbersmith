@@ -108,12 +108,12 @@ export default async function LandingPage() {
           <ol className="mt-8 max-w-2xl space-y-6">
             {HOW_IT_WORKS.map((item) => (
               <li key={item.title} className="flex gap-4">
-                <span className="mt-0.5 w-5 shrink-0 text-sm font-semibold tabular-nums text-slate-400 dark:text-slate-500">
+                <span className="mt-0.5 w-5 shrink-0 text-sm font-semibold tabular-nums text-slate-700 dark:text-slate-500">
                   {item.step}
                 </span>
                 <div>
                   <h3 className="text-base font-semibold text-slate-900 dark:text-slate-50">{item.title}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-slate-500 dark:text-slate-400">{item.body}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-slate-700 dark:text-slate-400">{item.body}</p>
                 </div>
               </li>
             ))}
@@ -125,7 +125,7 @@ export default async function LandingPage() {
           <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
             <div>
               <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-50">Choose Your Competition</h2>
-              <p className="mt-3 text-lg text-slate-500 dark:text-slate-400">
+              <p className="mt-3 text-lg text-slate-700 dark:text-slate-400">
                 Dedicated training tracks across every level of competition mathematics.
               </p>
             </div>
@@ -139,7 +139,7 @@ export default async function LandingPage() {
                 ] as const
               ).map(([category, label]) => (
                 <div key={category}>
-                  <p className="text-xs font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">{label}</p>
+                  <p className="text-xs font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">{label}</p>
                   <div className="mt-2.5 flex flex-wrap gap-2">
                     {competitions
                       .filter((c) => c.category === category)
@@ -165,7 +165,7 @@ export default async function LandingPage() {
               <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-50">
                 Practice Real Competition Mathematics
               </h2>
-              <p className="mt-3 text-lg leading-relaxed text-slate-500 dark:text-slate-400">
+              <p className="mt-3 text-lg leading-relaxed text-slate-700 dark:text-slate-400">
                 Every problem comes with progressive hints, a full worked solution, difficulty and
                 topic tagging, and an estimated solve time. Miss one and it goes straight into your
                 mistake queue for spaced review.
@@ -202,14 +202,14 @@ export default async function LandingPage() {
                       key={choice}
                       className="flex items-center gap-3 rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-200"
                     >
-                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-500 dark:text-slate-400">
+                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-400">
                         {["A", "B", "C", "D", "E"][i]}
                       </span>
                       {choice}
                     </div>
                   ))}
                 </div>
-                <p className="mt-5 text-xs text-slate-400 dark:text-slate-500">
+                <p className="mt-5 text-xs text-slate-700 dark:text-slate-500">
                   One of {problemCount} original problems. Hints and a full solution are available
                   once you attempt it.
                 </p>
@@ -236,14 +236,14 @@ export default async function LandingPage() {
                     </div>
                   ))}
                 </dl>
-                <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">
+                <p className="mt-4 text-xs text-slate-700 dark:text-slate-500">
                   Your placement test sets the starting number. Every problem after that moves it.
                 </p>
               </div>
 
               <div className="order-1 lg:order-2">
                 <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-50">Track Your Improvement</h2>
-                <p className="mt-3 text-lg leading-relaxed text-slate-500 dark:text-slate-400">
+                <p className="mt-3 text-lg leading-relaxed text-slate-700 dark:text-slate-400">
                   A NumberSmith rating from Beginner to Elite, per-topic mastery, per-competition
                   readiness, and a full rating history going back to your first placement test.
                 </p>
@@ -269,7 +269,7 @@ export default async function LandingPage() {
         <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
           <div>
             <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-50">Free vs Pro</h2>
-            <p className="mt-3 text-lg text-slate-500 dark:text-slate-400">
+            <p className="mt-3 text-lg text-slate-700 dark:text-slate-400">
               The free plan is built for students who may never pay for it.
             </p>
           </div>
@@ -278,7 +278,7 @@ export default async function LandingPage() {
             <div className="flex flex-col rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-7">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50">NumberSmith Free</h3>
               <p className="mt-1 text-3xl font-extrabold text-slate-900 dark:text-slate-50">
-                $0 <span className="text-sm font-normal text-slate-400 dark:text-slate-500">forever</span>
+                $0 <span className="text-sm font-normal text-slate-700 dark:text-slate-500">forever</span>
               </p>
               <ul className="mt-5 flex-1 space-y-2 text-sm text-slate-600 dark:text-slate-300">
                 {[
@@ -307,9 +307,9 @@ export default async function LandingPage() {
             <div className="relative flex flex-col rounded-2xl border border-brand-600 ring-1 ring-brand-600 bg-card p-7">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50">NumberSmith Pro</h3>
               <p className="mt-1 text-3xl font-extrabold text-slate-900 dark:text-slate-50">
-                ${PRO_PRICING.YEARLY} <span className="text-sm font-normal text-slate-400 dark:text-slate-500">/year</span>
+                ${PRO_PRICING.YEARLY} <span className="text-sm font-normal text-slate-700 dark:text-slate-500">/year</span>
               </p>
-              <p className="text-xs text-slate-400 dark:text-slate-500">or ${PRO_PRICING.MONTHLY}/month</p>
+              <p className="text-xs text-slate-700 dark:text-slate-500">or ${PRO_PRICING.MONTHLY}/month</p>
               <ul className="mt-5 flex-1 space-y-2 text-sm text-slate-600 dark:text-slate-300">
                 {[
                   "Unlimited daily problems",
@@ -332,7 +332,7 @@ export default async function LandingPage() {
             </div>
           </div>
 
-          <p className="mt-6 text-sm text-slate-400 dark:text-slate-500">
+          <p className="mt-6 text-sm text-slate-700 dark:text-slate-500">
             <Link href="/pricing" className="font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300">
               See the full feature comparison →
             </Link>

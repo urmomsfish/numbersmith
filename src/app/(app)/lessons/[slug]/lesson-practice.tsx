@@ -44,7 +44,7 @@ export function LessonPractice({
       <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-8 text-center">
         <p className="text-3xl">📘</p>
         <h3 className="mt-3 text-lg font-bold text-slate-900 dark:text-slate-50">Lesson complete</h3>
-        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+        <p className="mt-2 text-sm text-slate-700 dark:text-slate-400">
           You solved {correctCount} of {queue.length} — {mastery}% lesson mastery.
         </p>
         <div className="mt-5 flex flex-wrap justify-center gap-2">

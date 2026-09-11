@@ -40,7 +40,7 @@ export function UserMenu({ name, email }: { name: string; email: string }) {
         >
           <div className="px-3 py-2">
             <p className="truncate text-sm font-semibold text-slate-800 dark:text-slate-100">{name}</p>
-            <p className="truncate text-xs text-slate-400 dark:text-slate-500">{email}</p>
+            <p className="truncate text-xs text-slate-700 dark:text-slate-500">{email}</p>
           </div>
           <div className="my-1 h-px bg-slate-100 dark:bg-slate-700" />
           <Link

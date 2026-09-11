@@ -62,7 +62,7 @@ export function ChatPanel({
         <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">
           The AI Math Assistant isn&apos;t configured yet.
         </p>
-        <p className="mt-1.5 max-w-sm text-xs text-slate-500 dark:text-slate-400">
+        <p className="mt-1.5 max-w-sm text-xs text-slate-700 dark:text-slate-400">
           This deployment is missing an ANTHROPIC_API_KEY. Once one is added, this page starts working
           immediately — no other changes needed.
         </p>
@@ -75,7 +75,7 @@ export function ChatPanel({
       <div className="flex-1 space-y-4 overflow-y-auto px-4 py-4 sm:px-5">
         {messages.length === 0 && (
           <div>
-            <p className="text-sm text-slate-500 dark:text-slate-400">Try asking something like:</p>
+            <p className="text-sm text-slate-700 dark:text-slate-400">Try asking something like:</p>
             <div className="mt-2 flex flex-col gap-2">
               {SUGGESTIONS.map((s) => (
                 <button

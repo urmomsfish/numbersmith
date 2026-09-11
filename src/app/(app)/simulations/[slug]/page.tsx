@@ -31,20 +31,20 @@ export default async function StartSimulationPage({
 
         <dl className="mt-6 grid grid-cols-3 gap-3 text-center">
           <div className="rounded-xl bg-slate-50 dark:bg-slate-800 p-3">
-            <dt className="text-[11px] uppercase text-slate-400 dark:text-slate-500">Questions</dt>
+            <dt className="text-[11px] uppercase text-slate-700 dark:text-slate-500">Questions</dt>
             <dd className="text-lg font-bold text-slate-900 dark:text-slate-50">{competition.numQuestions ?? 20}</dd>
           </div>
           <div className="rounded-xl bg-slate-50 dark:bg-slate-800 p-3">
-            <dt className="text-[11px] uppercase text-slate-400 dark:text-slate-500">Time</dt>
+            <dt className="text-[11px] uppercase text-slate-700 dark:text-slate-500">Time</dt>
             <dd className="text-lg font-bold text-slate-900 dark:text-slate-50">{competition.timeLimitMinutes ?? 60}m</dd>
           </div>
           <div className="rounded-xl bg-slate-50 dark:bg-slate-800 p-3">
-            <dt className="text-[11px] uppercase text-slate-400 dark:text-slate-500">Format</dt>
+            <dt className="text-[11px] uppercase text-slate-700 dark:text-slate-500">Format</dt>
             <dd className="text-xs font-bold text-slate-900 dark:text-slate-50">{FORMAT_LABEL[competition.format]}</dd>
           </div>
         </dl>
 
-        <ul className="mt-6 space-y-1.5 text-left text-sm text-slate-500 dark:text-slate-400">
+        <ul className="mt-6 space-y-1.5 text-left text-sm text-slate-700 dark:text-slate-400">
           <li>• The timer starts as soon as you begin and cannot be paused.</li>
           <li>• You can flag questions and navigate freely between them.</li>
           <li>• Answers and solutions stay hidden until you submit.</li>

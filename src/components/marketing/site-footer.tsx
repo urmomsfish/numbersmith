@@ -8,7 +8,7 @@ export function SiteFooter() {
         <div className="flex flex-wrap items-start justify-between gap-8">
           <div className="max-w-sm">
             <Logo href="/" />
-            <p className="mt-3 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+            <p className="mt-3 text-sm leading-relaxed text-slate-700 dark:text-slate-400">
               The adaptive training platform for competition mathematics — from Math Kangaroo and
               MathCounts to AMC, AIME, HMMT, and olympiad mathematics.
             </p>
@@ -16,7 +16,7 @@ export function SiteFooter() {
           <div className="flex gap-12 text-sm">
             <div>
               <p className="font-semibold text-slate-900 dark:text-slate-50">Product</p>
-              <ul className="mt-2 space-y-1.5 text-slate-500 dark:text-slate-400">
+              <ul className="mt-2 space-y-1.5 text-slate-700 dark:text-slate-400">
                 <li>
                   <Link href="/pricing" className="hover:text-slate-900 dark:hover:text-slate-100">
                     Pricing
@@ -41,7 +41,7 @@ export function SiteFooter() {
             </div>
             <div>
               <p className="font-semibold text-slate-900 dark:text-slate-50">Account</p>
-              <ul className="mt-2 space-y-1.5 text-slate-500 dark:text-slate-400">
+              <ul className="mt-2 space-y-1.5 text-slate-700 dark:text-slate-400">
                 <li>
                   <Link href="/login" className="hover:text-slate-900 dark:hover:text-slate-100">
                     Log in
@@ -56,7 +56,7 @@ export function SiteFooter() {
             </div>
             <div>
               <p className="font-semibold text-slate-900 dark:text-slate-50">Legal</p>
-              <ul className="mt-2 space-y-1.5 text-slate-500 dark:text-slate-400">
+              <ul className="mt-2 space-y-1.5 text-slate-700 dark:text-slate-400">
                 <li>
                   <Link href="/legal/terms" className="hover:text-slate-900 dark:hover:text-slate-100">
                     Terms of Service

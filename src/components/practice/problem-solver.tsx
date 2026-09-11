@@ -98,7 +98,7 @@ export function ProblemSolver({
           <Badge tone="brand">{problem.topicName}</Badge>
           <Badge tone="slate">{difficultyLabel(problem.difficulty)}</Badge>
         </div>
-        <span className="tabular-nums text-xs text-slate-400 dark:text-slate-500">
+        <span className="tabular-nums text-xs text-slate-700 dark:text-slate-500">
           {String(Math.floor(elapsed / 60)).padStart(2, "0")}:{String(elapsed % 60).padStart(2, "0")}
         </span>
       </div>
@@ -155,7 +155,7 @@ export function ProblemSolver({
               integerOnly={problem.format === "INTEGER"}
             />
             {result && !result.capped && (
-              <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+              <p className="mt-2 text-sm text-slate-700 dark:text-slate-400">
                 Correct answer: <span className="font-semibold text-slate-800 dark:text-slate-100">{result.correctAnswer}</span>
               </p>
             )}
@@ -195,7 +195,7 @@ export function ProblemSolver({
             )}
           >
             {result.correct ? "Correct! " : "Not quite. "}
-            <span className="font-normal text-slate-500 dark:text-slate-400">
+            <span className="font-normal text-slate-700 dark:text-slate-400">
               {result.rewardSkipped ? (
                 // These paths deliberately pay nothing, so "+0 rating · +0 XP"
                 // would read as a bug rather than as the rule.
@@ -211,7 +211,7 @@ export function ProblemSolver({
             </span>
           </div>
           <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">Solution</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-500">Solution</p>
             <p className="mt-1.5 text-sm leading-relaxed text-slate-700 dark:text-slate-200">{result.solution}</p>
           </div>
           {result.newlyUnlocked.length > 0 && (
@@ -227,7 +227,7 @@ export function ProblemSolver({
           <div className="pt-1">
             <a
               href={reportMailto(problem.question, answerGiven, result.correctAnswer)}
-              className="text-sm font-medium text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
+              className="text-sm font-medium text-slate-700 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
             >
               🚩 Something wrong with this problem? Email {LEGAL.contactEmail}
             </a>
@@ -253,7 +253,7 @@ export function DailyCapUpsell() {
     <div className="rounded-2xl border border-brand-100 bg-card p-8 text-center">
       <p className="text-3xl">🎉</p>
       <h2 className="mt-3 text-xl font-bold text-slate-900 dark:text-slate-50">You&apos;ve completed today&apos;s training!</h2>
-      <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+      <p className="mt-2 text-sm text-slate-700 dark:text-slate-400">
         Come back tomorrow, or unlock unlimited practice right now with NumberSmith Pro.
       </p>
       <div className="mt-6 flex flex-wrap justify-center gap-3">

@@ -45,8 +45,8 @@ export default async function AchievementsPage() {
                   <p className={cn("text-sm font-bold", unlockedAt ? "text-amber-900" : "text-slate-800")}>
                     {a.name}
                   </p>
-                  <p className="mt-0.5 text-xs leading-relaxed text-slate-500 dark:text-slate-400">{a.description}</p>
-                  <p className="mt-1.5 text-[11px] font-semibold text-slate-400 dark:text-slate-500">
+                  <p className="mt-0.5 text-xs leading-relaxed text-slate-700 dark:text-slate-400">{a.description}</p>
+                  <p className="mt-1.5 text-[11px] font-semibold text-slate-700 dark:text-slate-500">
                     {unlockedAt ? `Unlocked ${unlockedAt.toLocaleDateString()}` : `+${a.xpReward} XP`}
                   </p>
                 </div>

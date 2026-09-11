@@ -13,9 +13,8 @@
    * slate-600/700, which has far more headroom than the shell's slate-500. */
   --surface: #ffffff;
   /* Content cards (dashboard boxes, settings panels, problem cards, ...).
-   * A flat, tint-independent off-white rather than pure white — see the
-   * "Card colour" comment further down for why this can't follow the tint's
-   * hue the way --background and --surface do. */
+   * Off-white default; each tint overrides this with its own darker shade —
+   * see the "Card colour" comment further down. */
   --card: #f9f9fa;
   --foreground: #0f172a;
 
@@ -81,26 +80,32 @@
  *
  * Card colour
  *
- * --card (dashboard boxes, settings panels, problem cards, ...) used to be a
- * flat, untinted white/slate-900 — deliberately, per the previous version of
- * this comment. It now varies with the theme, but the two modes had to be
- * solved differently:
+ * --card (dashboard boxes, settings panels, problem cards, ...) follows the
+ * tint's hue in both modes now, mirroring each other:
  *
- *   - Dark: each tint gets its own --card below, a lightened step off that
- *     tint's --background. Headroom is large (7–10:1 against the card's own
- *     text even after lightening), so the card can visibly follow the tint's
- *     hue and still clear WCAG AA.
- *   - Light: --card stays the single flat value declared in :root for every
- *     tint, not a per-tint block here. Measured, not assumed: several raw
- *     tinted backgrounds (blue, violet, rose) already sit below 4.5:1 against
- *     the slate-500 text used for card body copy — before any darkening at
- *     all. Any card fill that followed those hues would ship illegible text.
- *     A flat neutral is the only per-tint value with headroom to spare.
+ *   - Dark: each tint's --card is a lightened step off that tint's
+ *     --background. Headroom is large (7–10:1 against the card's own text
+ *     even after lightening), so no other change was needed.
+ *   - Light: each tint's --card keeps the tint's hue but is built in HSL as
+ *     a genuinely saturated mid-tone (L 78%, S 55%) rather than mixing the
+ *     pastel --background toward black. A black mix desaturates as it
+ *     darkens — on these pastels that reads as a grey/brown "shadow" instead
+ *     of a colour, and it's the opposite of dark mode's cards, which are a
+ *     lighter, still-vivid step off their background. This mirrors that:
+ *     same hue family and comparable saturation to the dark-mode card, just
+ *     lighter overall to suit a light background. Measured, not assumed: at
+ *     L78/S55 the muted card text needs to be slate-700 (not slate-500/600)
+ *     to hold AA — every tint clears 4.7:1+ at slate-700, several drop below
+ *     4.5:1 at slate-600. The muted card text classes were darkened
+ *     accordingly in light mode (slate-500/600 → slate-700; dark-mode
+ *     classes are untouched, they already had headroom). See `bg-card`
+ *     usages / the shared `Card` component for where those classes live.
  * ------------------------------------------------------------------------ */
 
 [data-tint="violet"] {
   --background: #ede9fe;
   --surface: #ede9fe;
+  --card: #b3a8e6;
 }
 .dark[data-tint="violet"] {
   --background: #241748;
@@ -111,6 +116,7 @@
 [data-tint="blue"] {
   --background: #dbeafe;
   --surface: #dbeafe;
+  --card: #a8c3e6;
 }
 .dark[data-tint="blue"] {
   --background: #12294f;
@@ -121,6 +127,7 @@
 [data-tint="cyan"] {
   --background: #cffafe;
   --surface: #cffafe;
+  --card: #a8e1e6;
 }
 .dark[data-tint="cyan"] {
   --background: #092f3c;
@@ -131,6 +138,7 @@
 [data-tint="emerald"] {
   --background: #d1fae5;
   --surface: #d1fae5;
+  --card: #a8e6c6;
 }
 .dark[data-tint="emerald"] {
   --background: #093022;
@@ -141,6 +149,7 @@
 [data-tint="rose"] {
   --background: #ffe4e6;
   --surface: #ffe4e6;
+  --card: #e6a8ac;
 }
 .dark[data-tint="rose"] {
   --background: #3d1421;
@@ -151,6 +160,7 @@
 [data-tint="amber"] {
   --background: #fef3c7;
   --surface: #fef3c7;
+  --card: #e6d9a8;
 }
 .dark[data-tint="amber"] {
   --background: #3d2908;
@@ -161,6 +171,7 @@
 [data-tint="orange"] {
   --background: #ffedd5;
   --surface: #ffedd5;
+  --card: #e6cba8;
 }
 .dark[data-tint="orange"] {
   --background: #3d1c0a;
@@ -176,6 +187,48 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Video-lesson stage: staggered bullet reveal, growing bars, popping points,
+ * and an SVG stroke "draw-on" used by the line-diagram shapes. */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes grow-w {
+  from {
+    width: 0%;
+  }
+  to {
+    width: var(--target-w);
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes draw-on {
+  from {
+    stroke-dashoffset: var(--draw-len);
+  }
+  to {
+    stroke-dashoffset: 0;
   }
 }
 

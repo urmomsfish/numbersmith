@@ -40,7 +40,7 @@ function Section({
   return (
     <section id={id} className="border-t border-slate-200 dark:border-slate-700">
       <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6 sm:py-16">
-        <p className="text-xs font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">{eyebrow}</p>
+        <p className="text-xs font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">{eyebrow}</p>
         <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-3xl">
           {title}
         </h2>
@@ -101,7 +101,7 @@ export default async function AboutPage() {
               study tool that quietly guesses at your level, or quietly gets an answer wrong, is
               worse than no study tool at all.
             </p>
-            <p className="mt-4 leading-relaxed text-slate-500 dark:text-slate-400">
+            <p className="mt-4 leading-relaxed text-slate-700 dark:text-slate-400">
               It is early. There is no user testimonial section on this page, no success-rate
               statistic, and no score-improvement claim, because NumberSmith has not been running
               long enough for any of those to be true. What follows is only what can be verified
@@ -113,7 +113,7 @@ export default async function AboutPage() {
         {/* What's actually in it — read live from the database */}
         <section className="border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
           <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6 sm:py-16">
-            <p className="text-xs font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+            <p className="text-xs font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">
               What is actually in it
             </p>
             <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-3xl">
@@ -141,14 +141,14 @@ export default async function AboutPage() {
                   className="rounded-full border border-slate-200 dark:border-slate-700 bg-card px-3.5 py-1.5 text-sm font-medium text-slate-700 dark:text-slate-200"
                 >
                   {d.name}
-                  <span className="ml-1.5 font-mono text-xs tabular-nums text-slate-400 dark:text-slate-500">
+                  <span className="ml-1.5 font-mono text-xs tabular-nums text-slate-700 dark:text-slate-500">
                     {d._count.children}
                   </span>
                 </span>
               ))}
             </div>
 
-            <div className="mt-8 space-y-3 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+            <div className="mt-8 space-y-3 text-sm leading-relaxed text-slate-700 dark:text-slate-400">
               <p className="font-semibold text-slate-900 dark:text-slate-50">
                 What that {problemCount.toLocaleString()} actually consists of:
               </p>
@@ -209,7 +209,7 @@ export default async function AboutPage() {
           </p>
           <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-5">
             <pre className="font-mono text-sm leading-relaxed text-slate-700 dark:text-slate-200">
-              <span className="text-slate-400 dark:text-slate-500">$ npm run verify:answers</span>
+              <span className="text-slate-700 dark:text-slate-500">$ npm run verify:answers</span>
               {`\n\nverified:  ${handWritten}/${handWritten}\nmismatches: 0\n\n--- generated bank ---\ngenerators:        ${GENERATOR_COUNT}\ngenerated:         ${(problemCount - handWritten).toLocaleString()}\nanswer mismatches: 0\nstructural faults: 0`}
             </pre>
           </div>
@@ -219,7 +219,7 @@ export default async function AboutPage() {
             catches what a per-problem check cannot: duplicate options, an answer letter with no
             corresponding choice, missing hints, or a difficulty outside the scale.
           </p>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-slate-700 dark:text-slate-400">
             This catches mathematical errors in answer keys. It does not certify that every hint and
             worked solution is perfectly worded — those are reviewed by hand. If you find an error of
             any kind, please report it to{" "}
@@ -367,7 +367,7 @@ export default async function AboutPage() {
                 Read the Privacy Policy
               </LinkButton>
             </div>
-            <p className="mt-6 text-sm text-slate-500 dark:text-slate-400">
+            <p className="mt-6 text-sm text-slate-700 dark:text-slate-400">
               Still deciding?{" "}
               <Link href="/#faq" className="font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300">
                 Read the FAQ →

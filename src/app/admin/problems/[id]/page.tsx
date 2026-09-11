@@ -26,14 +26,14 @@ export default async function EditProblemPage({
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
-      <Link href="/admin/problems" className="text-sm font-medium text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300">
+      <Link href="/admin/problems" className="text-sm font-medium text-slate-700 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300">
         ← Problems
       </Link>
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Edit Problem</h1>
-          <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
+          <p className="mt-1 text-xs text-slate-700 dark:text-slate-500">
             {attemptCount} student attempt{attemptCount === 1 ? "" : "s"} recorded
           </p>
         </div>

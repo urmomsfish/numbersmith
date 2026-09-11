@@ -112,7 +112,7 @@ export function PracticeFilters({
       {(current.topic || current.competition || current.difficulty || current.format || current.q) && (
         <button
           onClick={() => router.push(pathname)}
-          className="text-sm font-medium text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
+          className="text-sm font-medium text-slate-700 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
         >
           Clear
         </button>

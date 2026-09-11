@@ -121,7 +121,7 @@ export default async function StudyPlanPage({
           <Card>
             <CardBody>
               <div className="flex items-center justify-between">
-                <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+                <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">
                   Week {week} of {totalWeeks} · {phase.name}
                 </h2>
                 {(nextContest?.competition ?? plan.primaryCompetition) && (
@@ -130,9 +130,9 @@ export default async function StudyPlanPage({
                   </Badge>
                 )}
               </div>
-              <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">{phase.description}</p>
+              <p className="mt-1 text-xs text-slate-700 dark:text-slate-500">{phase.description}</p>
               {nextContest?.targetDate && (
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                <p className="mt-1 text-xs text-slate-700 dark:text-slate-400">
                   Built around{" "}
                   <span className="font-semibold text-slate-700 dark:text-slate-200">
                     {nextContest.competition.shortName}
@@ -151,7 +151,7 @@ export default async function StudyPlanPage({
                 </p>
               )}
               {!nextContest?.targetDate && (
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                <p className="mt-1 text-xs text-slate-700 dark:text-slate-400">
                   No contest date set.{" "}
                   <Link href="/schedule" className="text-brand-600 dark:text-brand-400 underline">
                     Add one
@@ -228,8 +228,8 @@ export default async function StudyPlanPage({
 
           <Card>
             <CardBody>
-              <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">Set a Goal</h2>
-              <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
+              <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">Set a Goal</h2>
+              <p className="mt-1 text-xs text-slate-700 dark:text-slate-500">
                 Add your competition date and target rating, and the plan rebuilds around it.
               </p>
               <form action={saveGoalAction} className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -302,7 +302,7 @@ export default async function StudyPlanPage({
         <div className="space-y-5">
           <Card>
             <CardBody className="text-center">
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-500">
                 Current Rating
               </p>
               <p className="mt-2 text-4xl font-extrabold text-brand-700 dark:text-brand-300">{currentRating}</p>
@@ -315,15 +315,15 @@ export default async function StudyPlanPage({
           {plan.targetRating && (
             <Card>
               <CardBody>
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-500">
                   Progress to Target
                 </p>
                 <div className="mt-2 flex items-baseline justify-between">
                   <span className="text-2xl font-extrabold text-slate-900 dark:text-slate-50">{plan.targetRating}</span>
-                  <span className="text-xs text-slate-400 dark:text-slate-500">target</span>
+                  <span className="text-xs text-slate-700 dark:text-slate-500">target</span>
                 </div>
                 <ProgressBar value={progressToTarget} tone="success" className="mt-3" />
-                <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-500">
+                <p className="mt-1.5 text-xs text-slate-700 dark:text-slate-500">
                   {Math.round(progressToTarget)}% of the way from {plan.currentRating}
                 </p>
               </CardBody>
@@ -333,11 +333,11 @@ export default async function StudyPlanPage({
           {daysUntilCompetition !== null && (
             <Card>
               <CardBody className="text-center">
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-500">
                   Days Until Competition
                 </p>
                 <p className="mt-2 text-4xl font-extrabold text-ember-600 dark:text-ember-400">{daysUntilCompetition}</p>
-                <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
+                <p className="mt-1 text-xs text-slate-700 dark:text-slate-500">
                   {/* Stored as UTC midnight, so it must be read back in UTC —
                       otherwise a contest on the 13th renders as the 12th for
                       anyone west of Greenwich. */}
@@ -349,7 +349,7 @@ export default async function StudyPlanPage({
 
           <Card>
             <CardBody>
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-500">
                 Today&apos;s Task
               </p>
               <p className="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">

@@ -31,7 +31,7 @@ export default async function VideoLessonPage({ params }: { params: Promise<{ sl
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
       <Link
         href="/video-lessons"
-        className="text-sm font-medium text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
+        className="text-sm font-medium text-slate-400 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-300"
       >
         ← Video Lessons
       </Link>

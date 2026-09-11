@@ -65,7 +65,7 @@ export function AnswerInput({
 
   return (
     <div>
-      <label className="mb-2 block text-xs font-medium text-slate-500 dark:text-slate-400">
+      <label className="mb-2 block text-xs font-medium text-slate-700 dark:text-slate-400">
         {integerOnly ? "Enter an integer answer" : "Enter your answer"}
       </label>
       <input
@@ -98,7 +98,7 @@ export function AnswerInput({
               </button>
             ))}
           </div>
-          <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-500">
+          <p className="mt-1.5 text-xs text-slate-700 dark:text-slate-500">
             You can also type <span className="font-mono">sqrt</span> or{" "}
             <span className="font-mono">pi</span>.
           </p>

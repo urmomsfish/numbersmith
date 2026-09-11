@@ -83,7 +83,7 @@ export function CustomSimulationForm({
 
       <div className="mt-4">
         <span className="mb-2 block text-xs font-semibold text-slate-600 dark:text-slate-300">
-          Topics <span className="font-normal text-slate-400 dark:text-slate-500">(leave empty for mixed)</span>
+          Topics <span className="font-normal text-slate-700 dark:text-slate-500">(leave empty for mixed)</span>
         </span>
         <div className="flex flex-wrap gap-2">
           {topics.map((t) => (
@@ -99,7 +99,7 @@ export function CustomSimulationForm({
 
       <div className="mt-5 flex items-center justify-between gap-3">
         {!isPro && (
-          <p className="text-xs text-slate-400 dark:text-slate-500">
+          <p className="text-xs text-slate-700 dark:text-slate-500">
             Custom sets count toward your free weekly simulation limit.{" "}
             <Link href="/pricing" className="font-semibold text-brand-600 dark:text-brand-400">
               Go unlimited →

@@ -6,13 +6,15 @@
 //   --background  page shell behind the cards. Bounded much more tightly,
 //                 because page subtitles use slate-500 and the untinted
 //                 default only clears AA by 0.05.
-//   --card        dashboard boxes, settings panels, problem cards, etc. Light
-//                 mode uses one flat value for every tint rather than
-//                 following each tint's hue — measured, not assumed: several
-//                 raw tinted backgrounds (blue, violet, rose) already sit
-//                 below 4.5:1 against the slate-500 text used for card body
-//                 copy, before any darkening at all. Dark mode has far more
-//                 headroom and does follow the tint's hue per block.
+//   --card        dashboard boxes, settings panels, problem cards, etc. Both
+//                 modes follow the tint's hue per block as a genuinely
+//                 saturated colour (HSL, not a black-mixed shade of
+//                 --background, which reads as grey/brown): dark lightens
+//                 off its background, light is built directly at L78/S55.
+//                 All light-mode muted card text was moved to slate-700
+//                 (from slate-500/400) to keep headroom at that saturation;
+//                 slate-600 drops several tints below AA. See the "Card
+//                 colour" comment in globals.css.
 //
 // Run after touching any --background/--card value or adding a tint:
 //   npm run verify:contrast
@@ -76,14 +78,13 @@ const FG_DARK = baseDark["--foreground"];
 
 // Tailwind values used directly in component classNames, not via our CSS vars.
 const SLATE_600 = "#475569"; // page subtitles and sidebar nav labels
-const SLATE_500 = "#64748b"; // card body copy, light mode
+const SLATE_700 = "#334155"; // (light mode) card body/meta text
 const SLATE_400 = "#94a3b8"; // card meta text, dark mode (the tighter of the
 // two patterns the app uses: "text-slate-500 dark:text-slate-400" renders
 // slate-400 in dark mode, and it sits closer in luminance to a lightened dark
 // card than slate-500 does, making it the binding constraint there).
 
-const CARD_LIGHT = base["--card"]; // flat in light mode — see file header
-if (!CARD_LIGHT) {
+if (!base["--card"]) {
   console.error("✗ :root is missing --card");
   process.exitCode = 1;
 }
@@ -95,6 +96,7 @@ const themes = [
     dark: baseDark["--background"],
     lightSurface: base["--surface"],
     darkSurface: baseDark["--surface"],
+    lightCard: base["--card"],
     darkCard: baseDark["--card"],
   },
 ];
@@ -114,12 +116,18 @@ for (const [selector, decls] of rules) {
     process.exitCode = 1;
     continue;
   }
+  if (!decls["--card"]) {
+    console.error(`✗ ${id}: missing [data-tint="${id}"] --card override`);
+    process.exitCode = 1;
+    continue;
+  }
   themes.push({
     id,
     light: decls["--background"],
     dark: darkDecls["--background"],
     lightSurface: decls["--surface"],
     darkSurface: darkDecls["--surface"],
+    lightCard: decls["--card"],
     darkCard: darkDecls["--card"],
   });
 }
@@ -176,24 +184,17 @@ for (const t of themes) {
   need("dark chrome: body text", FG_DARK, t.darkSurface);
   need("dark chrome: brand-400 link", BRAND_400, t.darkSurface);
 
-  // Card body text. This is the constraint that rules out a hue-following
-  // light card — see the file header — so it is checked for real, not just
-  // referenced.
-  need("light card: slate-500 body text", SLATE_500, CARD_LIGHT);
+  // Card body text.
+  need("light card: slate-700 body text", SLATE_700, t.lightCard);
   need("dark card: slate-400 meta text", SLATE_400, t.darkCard);
 
   // Cards must stay visually distinguishable from the page behind them, or
   // the fill reads as a seamless continuation of the shell — though the
   // border every card already has (border-slate-200/700) is the primary cue
   // for that, not the fill. This just asserts the fill is a genuine, distinct
-  // value rather than 1.000 (identical to the background), not a target
-  // "clearly visible" step: for the untinted default theme specifically,
-  // slate-500 body text on the card leaves only ~0.02 of ratio headroom
-  // between "some separation" and breaking AA (measured — see the "Card
-  // colour" comment above), so a real perceptibility bar is not reachable
-  // here without a text-colour change this constant does not make.
+  // value rather than 1.000 (identical to the background).
   const MIN_CARD_STEP = 1.001;
-  const cardVsBg = ratio(CARD_LIGHT, t.light);
+  const cardVsBg = ratio(t.lightCard, t.light);
   if (cardVsBg < MIN_CARD_STEP) checks.push(`light card melts into the page (${cardVsBg.toFixed(3)})`);
   const darkCardVsBg = ratio(t.darkCard, t.dark);
   if (darkCardVsBg < MIN_CARD_STEP) checks.push(`dark card melts into the page (${darkCardVsBg.toFixed(3)})`);
