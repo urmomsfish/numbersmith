@@ -25,7 +25,7 @@ export const NAV_ITEMS = [
   { href: "/practice", label: "Practice", icon: IconTarget },
   { href: "/lessons", label: "Lessons", icon: IconBook },
   { href: "/video-lessons", label: "Video Lessons", icon: IconVideo, pro: true },
-  { href: "/ai-assistant", label: "AI Assistant", icon: IconSparkles, pro: true },
+  { href: "/ai-assistant", label: "SmithAI", icon: IconSparkles, pro: true },
   { href: "/competitions", label: "Competitions", icon: IconTrophy },
   { href: "/simulations", label: "Simulations", icon: IconTimer },
   { href: "/daily-challenge", label: "Daily Challenge", icon: IconCalendar },

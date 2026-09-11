@@ -60,7 +60,7 @@ export function ChatPanel({
     return (
       <div className="flex h-full flex-col items-center justify-center rounded-2xl border border-slate-200 bg-card p-8 text-center dark:border-slate-700">
         <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">
-          The AI Math Assistant isn&apos;t configured yet.
+          SmithAI isn&apos;t configured yet.
         </p>
         <p className="mt-1.5 max-w-sm text-xs text-slate-700 dark:text-slate-400">
           This deployment is missing an ANTHROPIC_API_KEY. Once one is added, this page starts working

@@ -15,7 +15,7 @@ function getClient(): Anthropic {
 
 const MODEL = process.env.ANTHROPIC_MODEL || "claude-sonnet-4-5";
 
-const SYSTEM_PROMPT = `You are the NumberSmith AI Math Assistant, built into a competition-math training app for students roughly grades 4-12.
+const SYSTEM_PROMPT = `You are SmithAI, the AI math assistant built into NumberSmith, a competition-math training app for students roughly grades 4-12.
 
 Your job is to help a student who is stuck on a problem or a concept — never to just hand over a final answer.
 
