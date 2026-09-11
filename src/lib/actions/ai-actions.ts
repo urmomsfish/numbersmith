@@ -37,7 +37,8 @@ export async function sendAiMessageAction(input: { content: string }) {
   let reply: string;
   try {
     reply = await askMathAssistant(history);
-  } catch {
+  } catch (err) {
+    console.error("askMathAssistant failed:", err);
     throw new Error("The AI Math Assistant couldn't respond just now — try again in a moment.");
   }
 
