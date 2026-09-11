@@ -28,7 +28,7 @@ const COMPARISON: { feature: string; free: string; pro: string }[] = [
   { feature: "Custom Practice Sets", free: "—", pro: "✓" },
   { feature: "Advanced Problems (Expert+)", free: "—", pro: "✓" },
   { feature: "Video Lessons", free: "—", pro: "✓" },
-  { feature: "SmithAI", free: "—", pro: "✓" },
+  { feature: "Smith AI", free: "—", pro: "✓" },
 ];
 
 const FREE_FEATURES = [
@@ -58,7 +58,7 @@ const PRO_FEATURES = [
   "Custom practice sets",
   "Detailed performance reports",
   "Video lessons — animated, narration-free walkthroughs of key concepts",
-  "SmithAI — step-by-step help that never just gives the answer",
+  "Smith AI — step-by-step help that never just gives the answer",
 ];
 
 const FAQ = [
@@ -76,7 +76,7 @@ const FAQ = [
   },
   {
     q: "What does Pro include?",
-    a: "Unlimited daily problems and simulations, the full problem database and lesson library, advanced adaptive training, full mistake review with spaced repetition, advanced statistics, competition-specific roadmaps, custom practice sets, a full library of animated video lessons, and SmithAI for step-by-step help on any problem or concept.",
+    a: "Unlimited daily problems and simulations, the full problem database and lesson library, advanced adaptive training, full mistake review with spaced repetition, advanced statistics, competition-specific roadmaps, custom practice sets, a full library of animated video lessons, and Smith AI for step-by-step help on any problem or concept.",
   },
   {
     q: "How do ratings work?",
@@ -113,7 +113,7 @@ export default async function PricingPage({
         : params.from === "video-lessons" || params.from === "video-lesson"
           ? "Video Lessons are a Pro feature."
           : params.from === "ai-assistant"
-            ? "SmithAI is a Pro feature."
+            ? "Smith AI is a Pro feature."
             : null;
 
   return (
