@@ -6,6 +6,9 @@ import { prisma } from "@/lib/prisma";
 import type { Role } from "@/lib/types";
 
 const SESSION_COOKIE = "numbersmith_session";
+// Non-httpOnly companion cookie so client-side JS (the no-flash theme script)
+// can tell logged-in from logged-out without being able to read the session itself.
+const AUTH_STATUS_COOKIE = "numbersmith_auth";
 const SESSION_TTL_SECONDS = 60 * 60 * 24 * 2; // 2 days
 
 function secretKey() {
@@ -37,11 +40,19 @@ export async function createSession(userId: string) {
     path: "/",
     maxAge: SESSION_TTL_SECONDS,
   });
+  store.set(AUTH_STATUS_COOKIE, "1", {
+    httpOnly: false,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: SESSION_TTL_SECONDS,
+  });
 }
 
 export async function destroySession() {
   const store = await cookies();
   store.delete(SESSION_COOKIE);
+  store.delete(AUTH_STATUS_COOKIE);
 }
 
 async function currentUserId(): Promise<string | null> {
