@@ -47,6 +47,9 @@ export type Scene =
   | { type: "example"; heading: string; prompt: string; bullets: string[]; diagram?: Diagram }
   | { type: "strategy"; heading: string; bullets: string[] }
   | { type: "pitfall"; heading: string; bullets: string[] }
+  // A pause-and-solve beat: the prompt is shown alone, then the answer
+  // reveals itself after a few seconds so the learner can attempt it first.
+  | { type: "practice"; heading: string; prompt: string; answer: string }
   | { type: "summary"; heading: string; bullets: string[] };
 
 export type VideoLessonSeed = {
