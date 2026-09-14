@@ -54,7 +54,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "modular-arithmetic",
     difficulty: 7,
     competitionSlug: "hmmt",
-    variants: 120,
+    variants: 131,
     params: (r) => {
       const p = pick(r, [7, 11, 13, 17, 19, 23, 29, 31]);
       const a = int(r, 2, p - 1);
@@ -89,7 +89,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "advanced-number-theory",
     difficulty: 6,
     competitionSlug: "aime",
-    variants: 130,
+    variants: 142,
     params: (r) => ({ n: int(r, 30, 2000) }),
     build: ({ n }) => {
       let answer = 0;
@@ -124,7 +124,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "advanced-number-theory",
     difficulty: 8,
     competitionSlug: "aime",
-    variants: 55,
+    variants: 60,
     params: (r) => ({ n: int(r, 2, 60) }),
     build: ({ n }) => {
       // 1/x + 1/y = 1/n  <=>  (x-n)(y-n) = n^2, so the count is d(n^2).
@@ -161,7 +161,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "modular-arithmetic",
     difficulty: 6,
     competitionSlug: "arml",
-    variants: 120,
+    variants: 131,
     params: (r) => {
       const m = pick(r, [3, 4, 5, 7, 8, 9, 11]);
       const k = pick(r, [3, 4, 5, 7, 8, 9, 11, 13]);
@@ -199,7 +199,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "modular-arithmetic",
     difficulty: 6,
     competitionSlug: "stanford-math-tournament",
-    variants: 110,
+    variants: 120,
     params: (r) => {
       const m = int(r, 7, 60);
       const a = int(r, 2, m - 1);
@@ -240,7 +240,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "advanced-combinatorics",
     difficulty: 7,
     competitionSlug: "purple-comet",
-    variants: 60,
+    variants: 66,
     params: (r) => {
       const k = int(r, 3, 6);
       const n = int(r, 4, 18);
@@ -279,7 +279,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "advanced-combinatorics",
     difficulty: 6,
     competitionSlug: "amc12",
-    variants: 60,
+    variants: 66,
     params: (r) => ({ m: int(r, 2, 9), n: int(r, 2, 9) }),
     build: ({ m, n }) => {
       const answer = nCr(m + n, m);
@@ -309,7 +309,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "advanced-combinatorics",
     difficulty: 8,
     competitionSlug: "hmmt",
-    variants: 7,
+    variants: 8,
     params: (r) => ({ n: int(r, 3, 9) }),
     build: ({ n }) => {
       const d = [1, 0];
@@ -338,7 +338,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "recursion-in-counting",
     difficulty: 7,
     competitionSlug: "arml",
-    variants: 18,
+    variants: 20,
     params: (r) => ({ n: int(r, 4, 21) }),
     build: ({ n }) => {
       // Count = Fibonacci(n+2) with F(1)=F(2)=1.
@@ -370,7 +370,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "polynomials",
     difficulty: 7,
     competitionSlug: "amc12",
-    variants: 110,
+    variants: 120,
     params: (r) => {
       const p = intExcept(r, -7, 7, [0]);
       const q = intExcept(r, -7, 7, [0, p]);
@@ -416,7 +416,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "factoring",
     difficulty: 6,
     competitionSlug: "amc12",
-    variants: 110,
+    variants: 120,
     params: (r) => {
       const x = intExcept(r, -9, 12, []);
       const y = intExcept(r, -9, 12, [x]);
@@ -447,7 +447,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "sequences",
     difficulty: 6,
     competitionSlug: "amc12",
-    variants: 90,
+    variants: 99,
     params: (r) => {
       const a = int(r, 1, 20);
       const num = int(r, 1, 6);
@@ -487,7 +487,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "sequences",
     difficulty: 7,
     competitionSlug: "stanford-math-tournament",
-    variants: 90,
+    variants: 99,
     params: (r) => ({ n: int(r, 4, 120) }),
     build: ({ n }) => {
       const answer = frac(n, n + 1);
@@ -522,7 +522,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "advanced-geometry",
     difficulty: 7,
     competitionSlug: "math-prize-for-girls",
-    variants: 57,
+    variants: 63,
     params: (r) => ({ i: int(r, 0, HERONIAN.length - 1), k: int(r, 1, 3) }),
     build: ({ i, k }) => {
       const [a, b, c] = HERONIAN[i].map((x) => x * k);
@@ -553,7 +553,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "advanced-geometry",
     difficulty: 7,
     competitionSlug: "arml",
-    variants: 90,
+    variants: 99,
     params: (r) => ({ a: int(r, 2, 30), b: int(r, 2, 30) }),
     build: ({ a, b }) => {
       // Right triangle with vertices (0,0), (a,0), (0,b).
@@ -587,7 +587,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "advanced-geometry",
     difficulty: 7,
     competitionSlug: "hmmt",
-    variants: 80,
+    variants: 88,
     params: (r) => {
       const pa = int(r, 2, 15);
       const k = int(r, 2, 12);
@@ -624,7 +624,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "advanced-geometry",
     difficulty: 6,
     competitionSlug: "amc12",
-    variants: 55,
+    variants: 60,
     params: (r) => ({ i: int(r, 0, HERONIAN.length - 1), k: int(r, 1, 4) }),
     build: ({ i, k }) => {
       const [a, b, c] = HERONIAN[i].map((x) => x * k);
@@ -660,7 +660,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "counting-probability",
     difficulty: 7,
     competitionSlug: "amc12",
-    variants: 55,
+    variants: 60,
     params: (r) => {
       const n = int(r, 4, 12);
       const k = int(r, 1, n - 1);
@@ -700,7 +700,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "expected-value",
     difficulty: 8,
     competitionSlug: "pumac",
-    variants: 12,
+    variants: 14,
     params: (r) => ({ sides: pick(r, [4, 6, 8, 10, 12, 20]), rolls: int(r, 2, 3) }),
     build: ({ sides, rolls }) => {
       // E[max] = sum_{v} v * (v^rolls - (v-1)^rolls) / sides^rolls
@@ -745,7 +745,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "inequalities-olympiad",
     difficulty: 8,
     competitionSlug: "amc12",
-    variants: 110,
+    variants: 120,
     params: (r) => {
       // Choosing a = k·p² and b = k·q² makes ab a perfect square, so the
       // minimum 2√(ab) is an integer.
@@ -792,7 +792,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "functional-equations",
     difficulty: 8,
     competitionSlug: "amc12",
-    variants: 110,
+    variants: 120,
     params: (r) => {
       const c = intExcept(r, -4, 4, [0, 1, -1]); // c = ±1 makes the system singular
       const a = intExcept(r, -6, 6, [0]);
@@ -838,7 +838,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "advanced-number-theory",
     difficulty: 7,
     competitionSlug: "amc12",
-    variants: 130,
+    variants: 142,
     params: (r) => ({ n: int(r, 20, 300) }),
     build: ({ n }) => {
       const factors = factorize(n);
@@ -870,7 +870,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "advanced-number-theory",
     difficulty: 8,
     competitionSlug: "aime",
-    variants: 120,
+    variants: 131,
     params: (r) => ({ n: int(r, 20, 200), p: pick(r, [2, 3, 5, 7, 11, 13]) }),
     build: ({ n, p }) => {
       let answer = 0;
@@ -909,7 +909,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "advanced-number-theory",
     difficulty: 8,
     competitionSlug: "hmmt",
-    variants: 140,
+    variants: 153,
     params: (r) => {
       const p = pick(r, [7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43]);
       const a = int(r, 2, p - 1);
@@ -948,7 +948,7 @@ export const ADVANCED: Generator[] = [
     topicSlug: "advanced-combinatorics",
     difficulty: 8,
     competitionSlug: "amc12",
-    variants: 10,
+    variants: 11,
     params: (r) => ({ n: int(r, 3, 12) }),
     build: ({ n }) => {
       const answer = nCr(2 * n, n) / (n + 1);

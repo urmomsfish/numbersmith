@@ -80,7 +80,7 @@ export const LOGIC: Generator[] = [
     topicSlug: "deduction",
     difficulty: 3,
     competitionSlug: "math-kangaroo",
-    variants: 90,
+    variants: 99,
     params: (r) => {
       const n = int(r, 3, 4);
       // Each box carries one label: "the prize is (not) in box t".
@@ -151,7 +151,7 @@ export const LOGIC: Generator[] = [
     topicSlug: "deduction",
     difficulty: 5,
     competitionSlug: "mathcounts",
-    variants: 120,
+    variants: 131,
     // Statements are about *how many* knaves there are, not about who is who.
     //
     // That is forced, not stylistic. If every statement only asserted the type
@@ -242,7 +242,7 @@ export const LOGIC: Generator[] = [
     topicSlug: "deduction",
     difficulty: 3,
     competitionSlug: "amc8",
-    variants: 90,
+    variants: 99,
     params: (r) => {
       const b = int(r, 2, 5);
       const a = int(r, b + 1, 9);
@@ -282,7 +282,7 @@ export const LOGIC: Generator[] = [
     topicSlug: "patterns",
     difficulty: 2,
     competitionSlug: "moems",
-    variants: 110,
+    variants: 120,
     params: (r) => ({
       s: int(r, 1, 9),
       m: int(r, 2, 4),
@@ -322,7 +322,7 @@ export const LOGIC: Generator[] = [
     topicSlug: "patterns",
     difficulty: 3,
     competitionSlug: "mathcounts",
-    variants: 100,
+    variants: 110,
     params: (r) => ({ s: int(r, 3, 8), n: int(r, 5, 40) }),
     build: ({ s, n }) => {
       const NAMES: Record<number, string> = {
@@ -360,7 +360,7 @@ export const LOGIC: Generator[] = [
     topicSlug: "invariants",
     difficulty: 5,
     competitionSlug: "amc10",
-    variants: 60,
+    variants: 66,
     params: (r) => ({ n: int(r, 5, 64) }),
     build: ({ n }) => {
       const answer = (n * (n + 1)) / 2 - (n - 1);
@@ -388,7 +388,7 @@ export const LOGIC: Generator[] = [
     topicSlug: "invariants",
     difficulty: 6,
     competitionSlug: "amc10",
-    variants: 7,
+    variants: 8,
     params: (r) => ({ n: int(r, 3, 9) }),
     build: ({ n }) => {
       const answer = fact(n + 1) - 1;
@@ -416,7 +416,7 @@ export const LOGIC: Generator[] = [
     topicSlug: "invariants",
     difficulty: 5,
     competitionSlug: "purple-comet",
-    variants: 100,
+    variants: 110,
     params: (r) => {
       const p = int(r, 6, 60);
       const q = int(r, 6, 60);
@@ -465,7 +465,7 @@ export const LOGIC: Generator[] = [
     topicSlug: "strategy",
     difficulty: 5,
     competitionSlug: "mathcounts",
-    variants: 110,
+    variants: 120,
     params: (r) => {
       const k = int(r, 2, 7);
       const n = int(r, 10, 120);
@@ -501,7 +501,7 @@ export const LOGIC: Generator[] = [
     topicSlug: "strategy",
     difficulty: 8,
     competitionSlug: "arml",
-    variants: 90,
+    variants: 99,
     params: (r) => {
       const a = int(r, 1, NIM_MAX);
       const b = int(r, 1, NIM_MAX);
@@ -540,7 +540,7 @@ export const LOGIC: Generator[] = [
     topicSlug: "logical-puzzles",
     difficulty: 4,
     competitionSlug: "math-kangaroo",
-    variants: 60,
+    variants: 66,
     params: (r) => ({ n: int(r, 4, 400) }),
     build: ({ n }) => {
       let answer = 0;
@@ -579,7 +579,7 @@ export const LOGIC: Generator[] = [
     competitionSlug: "amc8",
     // s = 2 has no solution — it would need two distinct nonzero digits
     // summing to 2 — so the usable range is 3..17.
-    variants: 15,
+    variants: 17,
     params: (r) => ({ s: int(r, 2, 17) }),
     build: ({ s }) => {
       // A and B are the digits; A + B = s with both nonzero and distinct.
@@ -619,7 +619,7 @@ export const LOGIC: Generator[] = [
     topicSlug: "logical-puzzles",
     difficulty: 5,
     competitionSlug: "mathcounts",
-    variants: 9,
+    variants: 10,
     params: (r) => ({ k: int(r, 2, 10) }),
     build: ({ k }) => {
       const found: number[] = [];

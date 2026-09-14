@@ -32,7 +32,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "linear-equations",
     difficulty: 2,
     competitionSlug: "math-kangaroo",
-    variants: 150,
+    variants: 164,
     params: (r) => {
       const a = intExcept(r, 2, 12, [0]);
       const x = intExcept(r, -9, 12, [0]);
@@ -59,7 +59,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "linear-equations",
     difficulty: 3,
     competitionSlug: "amc8",
-    variants: 150,
+    variants: 164,
     params: (r) => {
       const a = intExcept(r, 2, 12, [0]);
       const c = intExcept(r, 1, 11, [0, a]);
@@ -89,7 +89,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "linear-equations",
     difficulty: 3,
     competitionSlug: "mathcounts",
-    variants: 110,
+    variants: 120,
     params: (r) => {
       const k = intExcept(r, 2, 9, [0]);
       const b = intExcept(r, -9, 9, [0]);
@@ -115,7 +115,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "systems-of-equations",
     difficulty: 4,
     competitionSlug: "amc10",
-    variants: 140,
+    variants: 153,
     params: (r) => {
       const x = intExcept(r, -8, 10, []);
       const y = intExcept(r, -8, 10, []);
@@ -153,7 +153,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "systems-of-equations",
     difficulty: 3,
     competitionSlug: "mathcounts",
-    variants: 110,
+    variants: 120,
     params: (r) => {
       const x = intExcept(r, -6, 12, []);
       const y = intExcept(r, -6, 12, []);
@@ -185,7 +185,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "inequalities",
     difficulty: 3,
     competitionSlug: "amc8",
-    variants: 100,
+    variants: 110,
     params: (r) => {
       const a = int(r, 2, 9);
       const b = intExcept(r, -15, 15, []);
@@ -217,7 +217,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "inequalities",
     difficulty: 3,
     competitionSlug: "math-league-high-school",
-    variants: 90,
+    variants: 99,
     params: (r) => {
       const a = int(r, 2, 9);
       const b = intExcept(r, -12, 12, []);
@@ -249,7 +249,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "quadratics",
     difficulty: 4,
     competitionSlug: "amc10",
-    variants: 120,
+    variants: 131,
     params: (r) => {
       const p = intExcept(r, -9, 9, [0]);
       const q = intExcept(r, -9, 9, [0]);
@@ -291,7 +291,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "quadratics",
     difficulty: 4,
     competitionSlug: "math-league-high-school",
-    variants: 110,
+    variants: 120,
     params: (r) => {
       const p = intExcept(r, -10, 10, []);
       const q = intExcept(r, -10, 10, [p]);
@@ -330,7 +330,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "quadratics",
     difficulty: 5,
     competitionSlug: "amc12",
-    variants: 80,
+    variants: 88,
     params: (r) => {
       const a = pick(r, [1, 2, 3, 4]);
       const h = intExcept(r, -8, 8, []);
@@ -366,7 +366,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "exponents-radicals",
     difficulty: 2,
     competitionSlug: "amc8",
-    variants: 60,
+    variants: 66,
     params: (r) => {
       const base = pick(r, [2, 3, 5]);
       const m = int(r, 1, 6);
@@ -408,7 +408,7 @@ export const ALGEBRA: Generator[] = [
     difficulty: 3,
     competitionSlug: "mathcounts",
     // 4 bases × 3 exponents × 2 exponents, minus draws that overflow the cap.
-    variants: 20,
+    variants: 22,
     params: (r) => {
       const base = pick(r, [2, 3, 5, 10]);
       const m = int(r, 2, 4);
@@ -440,7 +440,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "sequences",
     difficulty: 3,
     competitionSlug: "amc8",
-    variants: 140,
+    variants: 153,
     params: (r) => {
       const a1 = intExcept(r, -10, 20, []);
       const d = intExcept(r, 2, 12, [0]);
@@ -470,7 +470,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "sequences",
     difficulty: 4,
     competitionSlug: "amc10",
-    variants: 45,
+    variants: 50,
     params: (r) => {
       const a1 = int(r, 1, 8);
       const ratio = pick(r, [2, 3]);
@@ -500,7 +500,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "sequences",
     difficulty: 4,
     competitionSlug: "mathcounts",
-    variants: 52,
+    variants: 57,
     params: (r) => ({ n: int(r, 8, 60) }),
     build: ({ n }) => {
       const answer = (n * (n + 1)) / 2;
@@ -525,7 +525,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "functions",
     difficulty: 2,
     competitionSlug: "math-league-elementary-middle",
-    variants: 140,
+    variants: 153,
     params: (r) => {
       const a = intExcept(r, -6, 8, [0]);
       const b = intExcept(r, -12, 12, []);
@@ -555,7 +555,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "functions",
     difficulty: 4,
     competitionSlug: "amc10",
-    variants: 110,
+    variants: 120,
     params: (r) => {
       const a = intExcept(r, -5, 6, [0]);
       const b = intExcept(r, -9, 9, []);
@@ -582,7 +582,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "polynomials",
     difficulty: 3,
     competitionSlug: "amc8",
-    variants: 140,
+    variants: 153,
     params: (r) => {
       const a = intExcept(r, 1, 5, [0]);
       const b = intExcept(r, -8, 8, []);
@@ -609,7 +609,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "polynomials",
     difficulty: 5,
     competitionSlug: "amc12",
-    variants: 110,
+    variants: 120,
     params: (r) => {
       const a = intExcept(r, 1, 4, [0]);
       const b = intExcept(r, -7, 7, []);
@@ -641,7 +641,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "factoring",
     difficulty: 4,
     competitionSlug: "mathcounts",
-    variants: 90,
+    variants: 99,
     params: (r) => {
       const a = int(r, 11, 99);
       const d = int(r, 1, 9);
@@ -666,7 +666,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "factoring",
     difficulty: 3,
     competitionSlug: "amc8",
-    variants: 66,
+    variants: 72,
     params: (r) => {
       const p = int(r, 1, 12);
       const q = intExcept(r, 1, 12, [p]);
@@ -707,7 +707,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "exponents-radicals",
     difficulty: 3,
     competitionSlug: "amc8",
-    variants: 120,
+    variants: 131,
     params: (r) => ({ k: int(r, 2, 12), m: pick(r, SQUAREFREE) }),
     build: ({ k, m }) => {
       const n = k * k * m;
@@ -742,7 +742,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "exponents-radicals",
     difficulty: 4,
     competitionSlug: "amc10",
-    variants: 110,
+    variants: 120,
     params: (r) => {
       const a = int(r, 2, 40);
       const b = intExcept(r, 2, 40, [a]);
@@ -785,7 +785,7 @@ export const ALGEBRA: Generator[] = [
     difficulty: 4,
     competitionSlug: "amc10",
     // Requiring m/n in lowest terms, plus the size caps, leaves 60 instances.
-    variants: 60,
+    variants: 66,
     params: (r) => {
       const b = int(r, 2, 7);
       const n = int(r, 2, 4);
@@ -836,7 +836,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "exponents-radicals",
     difficulty: 4,
     competitionSlug: "amc10",
-    variants: 90,
+    variants: 99,
     params: (r) => {
       const a = int(r, 2, 9);
       const b = intExcept(r, 2, 9, [a]);
@@ -872,7 +872,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "exponents-radicals",
     difficulty: 5,
     competitionSlug: "amc12",
-    variants: 100,
+    variants: 110,
     params: (r) => {
       const b = int(r, 2, 9);
       const want = int(r, 0, 2);
@@ -936,7 +936,7 @@ export const ALGEBRA: Generator[] = [
     topicSlug: "exponents-radicals",
     difficulty: 5,
     competitionSlug: "amc10",
-    variants: 100,
+    variants: 110,
     params: (r) => {
       const b = int(r, 2, 6);
       const a = int(r, 2, 6);

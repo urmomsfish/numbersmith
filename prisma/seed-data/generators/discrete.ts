@@ -14,7 +14,7 @@ export const NUMBER_THEORY: Generator[] = [
     topicSlug: "modular-arithmetic",
     difficulty: 3,
     competitionSlug: "mathcounts",
-    variants: 150,
+    variants: 164,
     params: (r) => ({ n: int(r, 20, 900), m: int(r, 3, 19) }),
     build: ({ n, m }) => {
       const answer = n % m;
@@ -39,7 +39,7 @@ export const NUMBER_THEORY: Generator[] = [
     topicSlug: "modular-arithmetic",
     difficulty: 5,
     competitionSlug: "amc10",
-    variants: 110,
+    variants: 120,
     params: (r) => ({ base: intExcept(r, 2, 9, [1]), exp: int(r, 10, 200) }),
     build: ({ base, exp }) => {
       // Cycle-based derivation.
@@ -68,7 +68,7 @@ export const NUMBER_THEORY: Generator[] = [
     topicSlug: "primes",
     difficulty: 3,
     competitionSlug: "amc8",
-    variants: 110,
+    variants: 120,
     params: (r) => {
       const lo = int(r, 2, 160);
       const hi = lo + int(r, 10, 60);
@@ -103,7 +103,7 @@ export const NUMBER_THEORY: Generator[] = [
     topicSlug: "divisibility",
     difficulty: 3,
     competitionSlug: "mathcounts",
-    variants: 130,
+    variants: 142,
     params: (r) => ({ limit: int(r, 40, 600), d: int(r, 3, 19) }),
     build: ({ limit, d }) => {
       const answer = Math.floor(limit / d);
@@ -128,7 +128,7 @@ export const NUMBER_THEORY: Generator[] = [
     topicSlug: "number-patterns",
     difficulty: 2,
     competitionSlug: "moems",
-    variants: 140,
+    variants: 153,
     params: (r) => ({ n: int(r, 100, 99999) }),
     build: ({ n }) => {
       const answer = String(n).split("").reduce((a, d) => a + Number(d), 0);
@@ -153,7 +153,7 @@ export const NUMBER_THEORY: Generator[] = [
     topicSlug: "diophantine-equations",
     difficulty: 5,
     competitionSlug: "amc10",
-    variants: 90,
+    variants: 99,
     params: (r) => {
       const a = pick(r, [2, 3, 4, 5, 7]);
       const b = pick(r, [3, 5, 7, 8, 11]);
@@ -189,7 +189,7 @@ export const NUMBER_THEORY: Generator[] = [
     topicSlug: "factorization",
     difficulty: 4,
     competitionSlug: "mathcounts",
-    variants: 110,
+    variants: 120,
     params: (r) => ({ n: int(r, 12, 300) }),
     build: ({ n }) => {
       let s = 0;
@@ -220,7 +220,7 @@ export const NUMBER_THEORY: Generator[] = [
     topicSlug: "integer-properties",
     difficulty: 3,
     competitionSlug: "amc8",
-    variants: 80,
+    variants: 88,
     params: (r) => ({ limit: int(r, 30, 900) }),
     build: ({ limit }) => {
       const answer = Math.floor(Math.sqrt(limit));
@@ -250,7 +250,7 @@ export const COMBINATORICS: Generator[] = [
     topicSlug: "counting-principles",
     difficulty: 2,
     competitionSlug: "math-kangaroo",
-    variants: 90,
+    variants: 99,
     params: (r) => ({ a: int(r, 2, 9), b: int(r, 2, 9), c: int(r, 1, 6) }),
     build: ({ a, b, c }) => {
       const answer = c > 1 ? a * b * c : a * b;
@@ -281,7 +281,7 @@ export const COMBINATORICS: Generator[] = [
     topicSlug: "permutations",
     difficulty: 3,
     competitionSlug: "amc8",
-    variants: 21,
+    variants: 23,
     params: (r) => {
       const n = int(r, 4, 10);
       const k = int(r, 2, Math.min(4, n));
@@ -307,7 +307,7 @@ export const COMBINATORICS: Generator[] = [
     topicSlug: "combinations",
     difficulty: 4,
     competitionSlug: "amc10",
-    variants: 39,
+    variants: 43,
     params: (r) => {
       const n = int(r, 5, 14);
       const k = int(r, 2, Math.min(5, n - 1));
@@ -339,7 +339,7 @@ export const COMBINATORICS: Generator[] = [
     topicSlug: "inclusion-exclusion",
     difficulty: 4,
     competitionSlug: "mathcounts",
-    variants: 110,
+    variants: 120,
     params: (r) => {
       const total = int(r, 20, 60);
       const a = int(r, 5, total - 5);
@@ -371,7 +371,7 @@ export const COMBINATORICS: Generator[] = [
     topicSlug: "pigeonhole",
     difficulty: 3,
     competitionSlug: "amc8",
-    variants: 56,
+    variants: 62,
     params: (r) => ({ boxes: int(r, 3, 30), want: int(r, 0, 1) }),
     build: ({ boxes, want }) => {
       const answer = want === 1 ? boxes + 1 : boxes * 2 + 1;
@@ -404,7 +404,7 @@ export const COMBINATORICS: Generator[] = [
     topicSlug: "permutations",
     difficulty: 5,
     competitionSlug: "amc10",
-    variants: 40,
+    variants: 44,
     params: (r) => {
       const a = int(r, 1, 4);
       const b = int(r, 1, 4);
@@ -436,7 +436,7 @@ export const COMBINATORICS: Generator[] = [
     topicSlug: "graph-theory",
     difficulty: 3,
     competitionSlug: "mathcounts",
-    variants: 39,
+    variants: 43,
     params: (r) => ({ n: int(r, 4, 42) }),
     build: ({ n }) => {
       const answer = (n * (n - 1)) / 2;
@@ -461,7 +461,7 @@ export const COMBINATORICS: Generator[] = [
     topicSlug: "recursion-in-counting",
     difficulty: 4,
     competitionSlug: "amc10",
-    variants: 25,
+    variants: 28,
     params: (r) => ({ n: int(r, 4, 28) }),
     build: ({ n }) => {
       const f = [1, 1];
@@ -495,7 +495,7 @@ export const COMBINATORICS: Generator[] = [
     topicSlug: "casework",
     difficulty: 4,
     competitionSlug: "mathcounts",
-    variants: 85,
+    variants: 93,
     params: (r) => ({ n: int(r, 15, 99) }),
     build: ({ n }) => {
       // Case on the number of dimes, then on nickels; pennies fill the rest.
@@ -531,7 +531,7 @@ export const COMBINATORICS: Generator[] = [
     topicSlug: "casework",
     difficulty: 4,
     competitionSlug: "amc10",
-    variants: 70,
+    variants: 77,
     params: (r) => {
       const d = int(r, 2, 4);
       const s = int(r, 1, 9 * d);
@@ -581,7 +581,7 @@ export const COMBINATORICS: Generator[] = [
     topicSlug: "casework",
     difficulty: 5,
     competitionSlug: "amc10",
-    variants: 49,
+    variants: 54,
     params: (r) => ({ n: int(r, 12, 60) }),
     build: ({ n }) => {
       let count = 0;
@@ -624,7 +624,7 @@ export const COMBINATORICS: Generator[] = [
     topicSlug: "graph-theory",
     difficulty: 3,
     competitionSlug: "mathcounts",
-    variants: 90,
+    variants: 99,
     params: (r) => {
       const n = int(r, 4, 24);
       const d = int(r, 2, Math.min(n - 1, 9));
@@ -658,7 +658,7 @@ export const COMBINATORICS: Generator[] = [
     topicSlug: "graph-theory",
     difficulty: 3,
     competitionSlug: "amc8",
-    variants: 90,
+    variants: 99,
     params: (r) => ({ m: int(r, 2, 15), n: int(r, 2, 15) }),
     build: ({ m, n }) => {
       const answer = m * n;
@@ -686,7 +686,7 @@ export const COMBINATORICS: Generator[] = [
     topicSlug: "graph-theory",
     difficulty: 3,
     competitionSlug: "mathcounts",
-    variants: 60,
+    variants: 66,
     params: (r) => {
       const n = int(r, 6, 40);
       const c = int(r, 1, Math.min(6, n - 1));
@@ -721,7 +721,7 @@ export const COMBINATORICS: Generator[] = [
     topicSlug: "graph-theory",
     difficulty: 5,
     competitionSlug: "amc10",
-    variants: 90,
+    variants: 99,
     params: (r) => {
       const v = int(r, 4, 20);
       const e = int(r, v, 3 * v - 6); // connected, and within the planar bound
@@ -756,7 +756,7 @@ export const COMBINATORICS: Generator[] = [
     topicSlug: "recursion-in-counting",
     difficulty: 4,
     competitionSlug: "mathcounts",
-    variants: 23,
+    variants: 26,
     params: (r) => ({ n: int(r, 3, 25) }),
     build: ({ n }) => {
       const f = [1, 1, 2];
@@ -793,7 +793,7 @@ export const COMBINATORICS: Generator[] = [
     topicSlug: "recursion-in-counting",
     difficulty: 5,
     competitionSlug: "amc10",
-    variants: 21,
+    variants: 23,
     params: (r) => ({ n: int(r, 4, 24) }),
     build: ({ n }) => {
       const a = [1, 2, 4];
@@ -834,7 +834,7 @@ export const COMBINATORICS: Generator[] = [
     difficulty: 4,
     competitionSlug: "amc10",
     // 14 club sizes × the committee sizes each allows exhausts the space.
-    variants: 67,
+    variants: 74,
     params: (r) => {
       const n = int(r, 5, 18);
       const k = int(r, 2, Math.min(6, n - 1));
@@ -864,7 +864,7 @@ export const COMBINATORICS: Generator[] = [
     topicSlug: "combinations",
     difficulty: 5,
     competitionSlug: "amc10",
-    variants: 90,
+    variants: 99,
     params: (r) => {
       const b = int(r, 3, 12);
       const g = int(r, 2, 8);
@@ -902,7 +902,7 @@ export const COMBINATORICS: Generator[] = [
     topicSlug: "permutations",
     difficulty: 4,
     competitionSlug: "mathcounts",
-    variants: 16,
+    variants: 18,
     params: (r) => ({ n: int(r, 4, 11), together: int(r, 0, 1) }),
     build: ({ n, together }) => {
       const answer = together === 1 ? 2 * fact(n - 2) : fact(n - 1);
@@ -941,7 +941,7 @@ export const PROBABILITY: Generator[] = [
     topicSlug: "basic-probability",
     difficulty: 2,
     competitionSlug: "amc8",
-    variants: 110,
+    variants: 120,
     params: (r) => ({ a: int(r, 1, 12), b: int(r, 1, 12) }),
     build: ({ a, b }) => {
       const answer = frac(a, a + b);
@@ -971,7 +971,7 @@ export const PROBABILITY: Generator[] = [
     topicSlug: "counting-probability",
     difficulty: 4,
     competitionSlug: "amc10",
-    variants: 11,
+    variants: 12,
     params: (r) => ({ target: int(r, 2, 12) }),
     build: ({ target }) => {
       let favorable = 0;
@@ -998,7 +998,7 @@ export const PROBABILITY: Generator[] = [
     topicSlug: "counting-probability",
     difficulty: 5,
     competitionSlug: "amc10",
-    variants: 12,
+    variants: 14,
     params: (r) => ({ sides: pick(r, [4, 6, 8, 10]), rolls: int(r, 2, 4) }),
     build: ({ sides, rolls }) => {
       const totalOutcomes = Math.pow(sides, rolls);
@@ -1031,7 +1031,7 @@ export const PROBABILITY: Generator[] = [
     topicSlug: "expected-value",
     difficulty: 4,
     competitionSlug: "mathcounts",
-    variants: 21,
+    variants: 23,
     params: (r) => ({ n: int(r, 2, 20), p: pick(r, [2, 4, 5, 10]) }),
     build: ({ n, p }) => {
       const answer = n / p;
@@ -1057,7 +1057,7 @@ export const PROBABILITY: Generator[] = [
     topicSlug: "conditional-probability",
     difficulty: 5,
     competitionSlug: "amc12",
-    variants: 64,
+    variants: 70,
     params: (r) => {
       const red = int(r, 2, 9);
       const blue = int(r, 2, 9);
@@ -1097,7 +1097,7 @@ export const PROBABILITY: Generator[] = [
     difficulty: 4,
     competitionSlug: "mathcounts",
     // 5 dice counts × 6 die shapes exhausts the parameter space.
-    variants: 30,
+    variants: 33,
     params: (r) => ({ dice: int(r, 1, 5), faces: pick(r, [4, 6, 8, 10, 12, 20]) }),
     build: ({ dice, faces }) => {
       const answer = frac(dice * (faces + 1), 2);
@@ -1140,7 +1140,7 @@ export const PROBABILITY: Generator[] = [
     topicSlug: "expected-value",
     difficulty: 4,
     competitionSlug: "amc10",
-    variants: 90,
+    variants: 99,
     params: (r) => {
       const a = int(r, 2, 15);
       const b = int(r, 2, 15);
@@ -1178,7 +1178,7 @@ export const PROBABILITY: Generator[] = [
     topicSlug: "expected-value",
     difficulty: 5,
     competitionSlug: "amc10",
-    variants: 60,
+    variants: 66,
     params: (r) => {
       const n = int(r, 2, 8);
       const den = pick(r, [2, 3, 4, 5, 6]);
@@ -1216,7 +1216,7 @@ export const PROBABILITY: Generator[] = [
     topicSlug: "games-and-strategies",
     difficulty: 4,
     competitionSlug: "mathcounts",
-    variants: 90,
+    variants: 99,
     params: (r) => {
       const faces = 6;
       const threshold = int(r, 2, 6);
@@ -1253,7 +1253,7 @@ export const PROBABILITY: Generator[] = [
     topicSlug: "games-and-strategies",
     difficulty: 6,
     competitionSlug: "amc10",
-    variants: 40,
+    variants: 44,
     params: (r) => {
       const den = pick(r, [2, 3, 4, 5, 6]);
       const num = int(r, 1, den - 1);

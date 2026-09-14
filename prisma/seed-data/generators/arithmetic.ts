@@ -20,7 +20,7 @@ export const ARITHMETIC: Generator[] = [
     topicSlug: "fractions",
     difficulty: 2,
     competitionSlug: "math-kangaroo",
-    variants: 110,
+    variants: 120,
     params: (r) => {
       const b = pick(r, [2, 3, 4, 5, 6, 8, 10, 12]);
       const d = pick(r, [2, 3, 4, 5, 6, 8, 10, 12]);
@@ -52,7 +52,7 @@ export const ARITHMETIC: Generator[] = [
     topicSlug: "fractions",
     difficulty: 2,
     competitionSlug: "moems",
-    variants: 100,
+    variants: 110,
     params: (r) => {
       const b = pick(r, [3, 4, 5, 6, 8, 10, 12]);
       const d = pick(r, [3, 4, 5, 6, 8, 10, 12]);
@@ -81,7 +81,7 @@ export const ARITHMETIC: Generator[] = [
     topicSlug: "fractions",
     difficulty: 2,
     competitionSlug: "math-league-elementary-middle",
-    variants: 80,
+    variants: 88,
     params: (r) => {
       const b = pick(r, [2, 3, 4, 5, 6, 8]);
       const a = int(r, 1, b - 1);
@@ -112,7 +112,7 @@ export const ARITHMETIC: Generator[] = [
     topicSlug: "fractions",
     difficulty: 1,
     competitionSlug: "math-kangaroo",
-    variants: 70,
+    variants: 77,
     params: (r) => {
       const k = int(r, 2, 12);
       const n = int(r, 2, 15);
@@ -138,7 +138,7 @@ export const ARITHMETIC: Generator[] = [
     topicSlug: "percentages",
     difficulty: 2,
     competitionSlug: "amc8",
-    variants: 80,
+    variants: 88,
     params: (r) => {
       const p = pick(r, [5, 10, 12, 15, 20, 25, 30, 40, 50, 60, 75, 80]);
       const base = int(r, 2, 40) * 20;
@@ -173,7 +173,7 @@ export const ARITHMETIC: Generator[] = [
     topicSlug: "percentages",
     difficulty: 3,
     competitionSlug: "mathcounts",
-    variants: 70,
+    variants: 77,
     params: (r) => {
       const p = pick(r, [10, 20, 25, 40, 50, 60, 75, 80]);
       const answer = int(r, 2, 50) * 5;
@@ -203,7 +203,7 @@ export const ARITHMETIC: Generator[] = [
     topicSlug: "percentages",
     difficulty: 3,
     competitionSlug: "amc8",
-    variants: 80,
+    variants: 88,
     params: (r) => {
       const from = int(r, 2, 40) * 5;
       const pct = pick(r, [10, 20, 25, 50, 75]);
@@ -234,7 +234,7 @@ export const ARITHMETIC: Generator[] = [
     topicSlug: "ratios-proportions",
     difficulty: 3,
     competitionSlug: "mathcounts",
-    variants: 90,
+    variants: 99,
     params: (r) => {
       const a = int(r, 1, 7);
       const b = intExcept(r, 1, 7, [a]);
@@ -266,7 +266,7 @@ export const ARITHMETIC: Generator[] = [
     topicSlug: "ratios-proportions",
     difficulty: 2,
     competitionSlug: "math-league-elementary-middle",
-    variants: 80,
+    variants: 88,
     params: (r) => {
       const perUnit = int(r, 2, 12);
       const n1 = int(r, 2, 9);
@@ -298,7 +298,7 @@ export const ARITHMETIC: Generator[] = [
     topicSlug: "rates",
     difficulty: 2,
     competitionSlug: "amc8",
-    variants: 80,
+    variants: 88,
     params: (r) => {
       const speed = pick(r, [15, 20, 25, 30, 40, 45, 50, 55, 60, 65, 70]);
       const hours = int(r, 2, 9);
@@ -330,7 +330,7 @@ export const ARITHMETIC: Generator[] = [
     topicSlug: "rates",
     difficulty: 3,
     competitionSlug: "mathcounts",
-    variants: 80,
+    variants: 88,
     params: (r) => {
       const speed = pick(r, [12, 15, 20, 24, 25, 30, 40, 50, 60]);
       const hours = int(r, 2, 12);
@@ -361,7 +361,7 @@ export const ARITHMETIC: Generator[] = [
     difficulty: 5,
     competitionSlug: "amc10",
     // Only 6 (a,b) pairs from the clean-number pool give an integer joint time.
-    variants: 6,
+    variants: 7,
     params: (r) => {
       const a = pick(r, [2, 3, 4, 6, 12]);
       const b = pick(r, [2, 3, 4, 6, 12]);
@@ -393,7 +393,7 @@ export const ARITHMETIC: Generator[] = [
     topicSlug: "averages",
     difficulty: 2,
     competitionSlug: "math-league-elementary-middle",
-    variants: 110,
+    variants: 120,
     params: (r) => {
       const n = int(r, 3, 6);
       const mean = int(r, 5, 40);
@@ -430,7 +430,7 @@ export const ARITHMETIC: Generator[] = [
     topicSlug: "averages",
     difficulty: 4,
     competitionSlug: "mathcounts",
-    variants: 100,
+    variants: 110,
     params: (r) => {
       const n = int(r, 4, 6);
       const target = int(r, 60, 95);
@@ -473,7 +473,7 @@ export const ARITHMETIC: Generator[] = [
     topicSlug: "number-properties",
     difficulty: 4,
     competitionSlug: "mathcounts",
-    variants: 90,
+    variants: 99,
     params: (r) => ({ n: int(r, 12, 400) }),
     build: ({ n }) => {
       // Divisor count from the prime factorization.
@@ -511,7 +511,7 @@ export const ARITHMETIC: Generator[] = [
     topicSlug: "number-properties",
     difficulty: 3,
     competitionSlug: "amc8",
-    variants: 90,
+    variants: 99,
     params: (r) => {
       const a = int(r, 6, 90);
       const b = intExcept(r, 6, 90, [a]);
