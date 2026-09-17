@@ -5,8 +5,11 @@
 export const LEGAL = {
   /** The operating entity. Currently a sole proprietorship, so this is the
    * owner's legal name with NumberSmith as the trading name. If an LLC is
-   * formed later, replace this with the registered company name. */
-  entityName: "Aarit Chakraborty, doing business as NumberSmith",
+   * formed later, replace this with the registered company name.
+   * NOTE: this must match whoever is actually the legal/financial owner on
+   * file with Stripe (business representative, payout bank account, tax ID)
+   * — it is documentation of that fact, not a substitute for it. */
+  entityName: "Srabanti Chowdhury, doing business as NumberSmith",
 
   /** Governing law for the Terms of Service. */
   jurisdiction: "the State of California, United States",

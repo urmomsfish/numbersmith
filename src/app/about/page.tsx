@@ -327,9 +327,9 @@ export default async function AboutPage() {
         {/* Who */}
         <Section eyebrow="Who built it" title="One person, working in the open">
           <p>
-            NumberSmith is built and maintained by Aarit Chakraborty, operating as a sole
-            proprietorship in {LEGAL.jurisdiction}. It is not a company with a
-            support department, and this page is not going to pretend otherwise.
+            NumberSmith was founded and is built by Aarit Chakraborty. It operates as a sole
+            proprietorship owned by Srabanti Chowdhury in {LEGAL.jurisdiction}. It is not a
+            company with a support department, and this page is not going to pretend otherwise.
           </p>
           <p>
             Practically, that means support email goes to a real person and is answered within about{" "}
