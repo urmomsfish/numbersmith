@@ -3,6 +3,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { parseChoices, parseHints } from "@/lib/engine/scoring";
 import { isProUser } from "@/lib/subscription";
+import { canReviewMistakes } from "@/lib/actions/mistake-actions";
 import { SessionRunner } from "@/app/(app)/practice/session/session-runner";
 
 export default async function MistakeReviewPage() {
@@ -11,11 +12,14 @@ export default async function MistakeReviewPage() {
 
   const isPro = await isProUser(user.id);
 
+  const gate = await canReviewMistakes(user.id);
+  if (!gate.allowed) redirect("/pricing?from=mistake-review-limit");
+
   const mistakes = await prisma.mistake.findMany({
     where: { userId: user.id, resolved: false, nextReviewAt: { lte: new Date() } },
     include: { problem: { include: { topic: true } } },
     orderBy: { nextReviewAt: "asc" },
-    take: isPro ? 15 : 5,
+    take: isPro ? 15 : Math.min(5, gate.remaining ?? 0),
   });
 
   if (mistakes.length === 0) redirect("/mistakes");

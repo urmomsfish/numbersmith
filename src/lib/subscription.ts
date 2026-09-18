@@ -75,4 +75,4 @@ export function isCancelPending(sub: Subscription): boolean {
 // Free-tier limits. Pro is unlimited on all of these.
 export const FREE_DAILY_PROBLEM_LIMIT = 15;
 export const FREE_SIMULATIONS_PER_WEEK = 2;
-export const FREE_MISTAKE_LIMIT = 10;
+export const FREE_MISTAKE_REVIEWS_PER_WEEK = 10;

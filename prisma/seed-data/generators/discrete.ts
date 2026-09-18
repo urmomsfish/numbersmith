@@ -127,7 +127,6 @@ export const NUMBER_THEORY: Generator[] = [
     id: "gen-nt-digit-sum",
     topicSlug: "number-patterns",
     difficulty: 2,
-    competitionSlug: "moems",
     variants: 153,
     params: (r) => ({ n: int(r, 100, 99999) }),
     build: ({ n }) => {

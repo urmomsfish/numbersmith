@@ -40,24 +40,44 @@ export const COMPETITIONS: CompetitionSeed[] = [
     order: 1,
   },
   {
-    slug: "moems",
-    name: "Math Olympiads for Elementary and Middle Schools",
-    shortName: "MOEMS",
+    slug: "moems-e",
+    name: "Math Olympiads for Elementary and Middle Schools — Division E",
+    shortName: "MOEMS (Elementary)",
     category: "ELEMENTARY_MIDDLE",
     format: "SHORT_ANSWER",
     individualOrTeam: "INDIVIDUAL",
     gradeMin: 2,
-    gradeMax: 8,
+    gradeMax: 6,
     difficultyMin: 1,
+    difficultyMax: 2,
+    numQuestions: 5,
+    timeLimitMinutes: 30,
+    organization: "MOEMS (practice track, not officially affiliated)",
+    description:
+      "Division E: short, five-problem contests for grades 2-6 that reward clean reasoning over multiple steps rather than speed alone — no calculators, no multiple choice.",
+    roadmap:
+      "Focus on multi-step word problems with clean integer answers — practice showing full reasoning, not just guessing from choices.",
+    order: 2,
+  },
+  {
+    slug: "moems-m",
+    name: "Math Olympiads for Elementary and Middle Schools — Division M",
+    shortName: "MOEMS (Middle)",
+    category: "ELEMENTARY_MIDDLE",
+    format: "SHORT_ANSWER",
+    individualOrTeam: "INDIVIDUAL",
+    gradeMin: 5,
+    gradeMax: 8,
+    difficultyMin: 2,
     difficultyMax: 4,
     numQuestions: 5,
     timeLimitMinutes: 30,
     organization: "MOEMS (practice track, not officially affiliated)",
     description:
-      "Short, five-problem contests (Division E for grades 2-6, Division M for grades 5-8) that reward clean reasoning over multiple steps rather than speed alone.",
+      "Division M: short, five-problem contests for grades 5-8 that step up to light pre-algebra, ratios, probability, and more involved geometry than Division E.",
     roadmap:
-      "Focus on multi-step word problems with clean integer answers — practice showing full reasoning, not just guessing from choices.",
-    order: 2,
+      "Build on Division E fundamentals with ratio, percent, probability, and multi-step algebraic reasoning, still aiming for clean, fully-justified answers.",
+    order: 3,
   },
   {
     slug: "mathcounts",
@@ -77,7 +97,7 @@ export const COMPETITIONS: CompetitionSeed[] = [
       "The premier US middle school competition with four rounds: Sprint (speed), Target (depth), Team (collaboration), and Countdown (head-to-head buzzer round).",
     roadmap:
       "Drill Sprint-style speed sets, then slow down for Target-style multi-step problems, and finish with timed Countdown-style mental math reps.",
-    order: 3,
+    order: 4,
   },
   {
     slug: "amc8",
@@ -97,7 +117,7 @@ export const COMPETITIONS: CompetitionSeed[] = [
       "A 25-question, 40-minute multiple-choice contest for students in grade 8 and below, covering arithmetic, pre-algebra, and introductory geometry and counting.",
     roadmap:
       "Build broad topic coverage first, then run full 25-question / 40-minute simulations to build pacing and multiple-choice elimination strategy.",
-    order: 4,
+    order: 5,
   },
   {
     slug: "purple-comet",
@@ -117,7 +137,7 @@ export const COMPETITIONS: CompetitionSeed[] = [
       "A free online team competition with Middle and High School divisions, featuring integer-answer problems that increase steadily in difficulty.",
     roadmap:
       "Practice integer-answer problem sets in increasing difficulty order, and rehearse team communication and problem-splitting strategy.",
-    order: 5,
+    order: 6,
   },
   {
     slug: "math-league-elementary-middle",
@@ -137,7 +157,7 @@ export const COMPETITIONS: CompetitionSeed[] = [
       "A season-long series of short contests testing grade-appropriate topics with an emphasis on consistent, steady scoring across the year.",
     roadmap:
       "Build steady topic-by-topic mastery so accuracy stays high across every contest in the season, not just a single test date.",
-    order: 6,
+    order: 7,
   },
 
   // ---- High School ----
@@ -159,7 +179,7 @@ export const COMPETITIONS: CompetitionSeed[] = [
       "A 25-question, 75-minute multiple-choice contest for students in grade 10 and below, covering algebra, geometry, number theory, combinatorics, and probability.",
     roadmap:
       "Strengthen algebra and geometry fundamentals, then build speed with mixed topic sets and full-length timed simulations.",
-    order: 7,
+    order: 8,
   },
   {
     slug: "amc12",
@@ -179,7 +199,7 @@ export const COMPETITIONS: CompetitionSeed[] = [
       "The senior sibling of the AMC 10, adding trigonometry, logarithms, and more advanced algebra and geometry to the same 25-question format.",
     roadmap:
       "Layer advanced algebra, trig, and complex numbers on top of AMC 10 fundamentals, then push pacing with full simulations.",
-    order: 8,
+    order: 9,
   },
   {
     slug: "aime",
@@ -199,7 +219,7 @@ export const COMPETITIONS: CompetitionSeed[] = [
       "An invitational 15-question, 3-hour exam for top AMC scorers, requiring an integer answer from 0-999 with no multiple-choice safety net.",
     roadmap:
       "Master integer-answer techniques (no elimination strategy to fall back on), and build the stamina for a 3-hour, 15-question format.",
-    order: 9,
+    order: 10,
   },
   {
     slug: "arml",
@@ -219,7 +239,7 @@ export const COMPETITIONS: CompetitionSeed[] = [
       "A team-oriented competition combining individual, relay, and full-team rounds, rewarding both deep problem solving and collaboration under time pressure.",
     roadmap:
       "Train individually on advanced mixed-topic sets, then practice relay-style problems where each answer feeds the next.",
-    order: 10,
+    order: 11,
   },
   {
     slug: "hmmt",
@@ -239,7 +259,7 @@ export const COMPETITIONS: CompetitionSeed[] = [
       "One of the most competitive high school tournaments, with subject-specific rounds (Algebra, Geometry, Combinatorics, Number Theory) plus team and guts rounds.",
     roadmap:
       "Specialize in one subject round at a time, building deep pattern libraries for algebra, geometry, combinatorics, and number theory separately.",
-    order: 11,
+    order: 12,
   },
   {
     slug: "pumac",
@@ -259,7 +279,7 @@ export const COMPETITIONS: CompetitionSeed[] = [
       "A large university-run tournament with individual subject tests and team rounds, similar in spirit and difficulty to HMMT.",
     roadmap:
       "Continue subject-round specialization from HMMT prep, with an emphasis on speed across many short, hard problems.",
-    order: 12,
+    order: 13,
   },
   {
     slug: "stanford-math-tournament",
@@ -279,7 +299,7 @@ export const COMPETITIONS: CompetitionSeed[] = [
       "A university-hosted tournament-style competition with general and subject-specific rounds for advanced high school students.",
     roadmap:
       "Blend general mixed-topic rounds with focused subject practice to prepare for both formats.",
-    order: 13,
+    order: 14,
   },
   {
     slug: "math-league-high-school",
@@ -299,7 +319,7 @@ export const COMPETITIONS: CompetitionSeed[] = [
       "A season-long series of short high-school-level contests, testing consistent mastery of the core high school curriculum plus competition techniques.",
     roadmap:
       "Focus on consistency across many short contests rather than one high-stakes exam — steady weekly practice compounds here.",
-    order: 14,
+    order: 15,
   },
   {
     slug: "math-prize-for-girls",
@@ -319,7 +339,7 @@ export const COMPETITIONS: CompetitionSeed[] = [
       "A prestigious invitational competition for young women excelling in mathematics, featuring short-answer problems at AIME-and-beyond difficulty.",
     roadmap:
       "Push into AIME-and-above difficulty with an emphasis on clean short-answer writeups under real time pressure.",
-    order: 15,
+    order: 16,
   },
 
   // ---- Olympiad / Advanced ----
@@ -341,7 +361,7 @@ export const COMPETITIONS: CompetitionSeed[] = [
       "An untimed, at-home proof-based competition — the ideal on-ramp from short-answer contests into full olympiad-style proof writing.",
     roadmap:
       "Start writing full proofs (not just final answers): justify every step, and practice explaining *why*, not only *what*.",
-    order: 16,
+    order: 17,
   },
   {
     slug: "usamo",
@@ -361,7 +381,7 @@ export const COMPETITIONS: CompetitionSeed[] = [
       "The premier US olympiad, a six-problem, two-day proof-based exam for the nation's top AIME qualifiers.",
     roadmap:
       "Master core olympiad techniques — invariants, extremal principle, induction, clever constructions — across algebra, geometry, number theory, and combinatorics.",
-    order: 17,
+    order: 18,
   },
   {
     slug: "imo",
@@ -381,7 +401,7 @@ export const COMPETITIONS: CompetitionSeed[] = [
       "The world championship of mathematical problem solving — six proof-based problems across two days for national teams worldwide.",
     roadmap:
       "Refine olympiad proof technique to international competition standard, with heavy emphasis on functional equations and advanced geometry.",
-    order: 18,
+    order: 19,
   },
   {
     slug: "imo-shortlist",
@@ -401,7 +421,7 @@ export const COMPETITIONS: CompetitionSeed[] = [
       "The curated pool of hardest candidate problems considered for the IMO each year — a training staple for advanced olympiad students.",
     roadmap:
       "Work shortlist-style problems by subject area, focusing on the hardest 20% of problems within each topic.",
-    order: 19,
+    order: 20,
   },
   {
     slug: "egmo",
@@ -421,6 +441,35 @@ export const COMPETITIONS: CompetitionSeed[] = [
       "An international olympiad for young women, proof-based and structured like the IMO across two days of competition.",
     roadmap:
       "Follow an IMO-style prep track with a slightly gentler difficulty ramp, ideal for olympiad newcomers aiming at national team selection.",
-    order: 20,
+    order: 21,
   },
 ];
+
+// Default topic emphasis per competition category — used to populate each
+// competition's "main topics" without hand-authoring 20 separate lists.
+export const CATEGORY_TOPIC_WEIGHTS: Record<string, Record<string, number>> = {
+  ELEMENTARY_MIDDLE: {
+    arithmetic: 5,
+    "number-theory": 3,
+    geometry: 3,
+    combinatorics: 3,
+    logic: 4,
+    algebra: 2,
+    probability: 2,
+  },
+  HIGH_SCHOOL: {
+    algebra: 5,
+    geometry: 5,
+    "number-theory": 4,
+    combinatorics: 4,
+    probability: 3,
+    logic: 2,
+  },
+  OLYMPIAD: {
+    "advanced-olympiad": 5,
+    algebra: 4,
+    geometry: 4,
+    "number-theory": 4,
+    combinatorics: 4,
+  },
+};

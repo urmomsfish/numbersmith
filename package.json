@@ -9,6 +9,7 @@
     "lint": "eslint",
     "db:seed": "tsx prisma/seed.ts",
     "db:sync-problems": "tsx scripts/sync-problem-bank.ts",
+    "db:sync-competitions": "tsx scripts/sync-competitions.ts",
     "db:sync-video-lessons": "tsx scripts/sync-video-lessons.ts",
     "db:sync-lessons": "tsx scripts/sync-lessons.ts",
     "verify:answers": "tsx scripts/verify-answers.ts",

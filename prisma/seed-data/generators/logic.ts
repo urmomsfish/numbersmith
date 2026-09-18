@@ -281,7 +281,6 @@ export const LOGIC: Generator[] = [
     id: "gen-logic-recursive-pattern",
     topicSlug: "patterns",
     difficulty: 2,
-    competitionSlug: "moems",
     variants: 120,
     params: (r) => ({
       s: int(r, 1, 9),

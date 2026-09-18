@@ -15,6 +15,7 @@
 import { PROBLEMS } from "../prisma/seed-data/problems";
 import { GENERATED_PROBLEMS, GENERATION_ISSUES, GENERATORS } from "../prisma/seed-data/generators";
 import { OLYMPIAD_PROBLEMS } from "../prisma/seed-data/problems-olympiad";
+import { MOEMS_PROBLEMS } from "../prisma/seed-data/problems-moems";
 
 /** Independently computed answers. Each is derived from scratch — brute force
  * where feasible — never copied from the stored answer. */
@@ -381,6 +382,6 @@ console.log(`verified:  ${OLYMPIAD_PROBLEMS.length - olympMissing.length}/${OLYM
 console.log(`mismatches: ${olympFail}`);
 if (olympMissing.length) console.log(`no independent check: ${olympMissing.join(", ")}`);
 
-console.log(`\nTOTAL BANK: ${PROBLEMS.length + GENERATED_PROBLEMS.length + OLYMPIAD_PROBLEMS.length}`);
+console.log(`\nTOTAL BANK: ${PROBLEMS.length + GENERATED_PROBLEMS.length + OLYMPIAD_PROBLEMS.length + MOEMS_PROBLEMS.length}`);
 
 if (failures || uncovered.length || mismatches.length || structural || olympFail || olympMissing.length) process.exit(1);

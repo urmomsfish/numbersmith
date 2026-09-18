@@ -50,7 +50,7 @@ const FAQ = [
   },
   {
     q: "What ages is this for?",
-    a: "Elementary through high school. Tracks span Math Kangaroo and MOEMS for younger students, MathCounts and AMC 8 for middle school, AMC 10/12 and AIME for high school, and USAMO/IMO-level material for olympiad students.",
+    a: "Elementary through high school. Tracks span Math Kangaroo and MOEMS (Elementary and Middle divisions) for younger students, MathCounts and AMC 8 for middle school, AMC 10/12 and AIME for high school, and USAMO/IMO-level material for olympiad students.",
   },
 ];
 

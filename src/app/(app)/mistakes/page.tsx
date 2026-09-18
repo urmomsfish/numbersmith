@@ -4,7 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { Badge } from "@/components/ui/badge";
 import { LinkButton } from "@/components/ui/button";
 import { Card, CardBody } from "@/components/ui/card";
-import { isProUser, FREE_MISTAKE_LIMIT } from "@/lib/subscription";
+import { isProUser, FREE_MISTAKE_REVIEWS_PER_WEEK } from "@/lib/subscription";
+import { canReviewMistakes } from "@/lib/actions/mistake-actions";
 import { difficultyLabel } from "@/lib/types";
 
 const REASON_LABEL: Record<string, { label: string; tone: "danger" | "warning" | "slate" | "brand" }> = {
@@ -20,20 +21,18 @@ export default async function MistakesPage() {
 
   const isPro = await isProUser(user.id);
 
-  const [allMistakes, resolvedCount] = await Promise.all([
+  const [allMistakes, resolvedCount, reviewGate] = await Promise.all([
     prisma.mistake.findMany({
       where: { userId: user.id, resolved: false },
       include: { problem: { include: { topic: true } } },
       orderBy: { nextReviewAt: "asc" },
     }),
     prisma.mistake.count({ where: { userId: user.id, resolved: true } }),
+    canReviewMistakes(user.id),
   ]);
 
-  const visible = isPro ? allMistakes : allMistakes.slice(0, FREE_MISTAKE_LIMIT);
-  const hidden = allMistakes.length - visible.length;
-
   const now = new Date();
-  const dueNow = visible.filter((m) => m.nextReviewAt <= now);
+  const dueNow = allMistakes.filter((m) => m.nextReviewAt <= now);
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
@@ -45,10 +44,18 @@ export default async function MistakesPage() {
             back on a spaced schedule.
           </p>
         </div>
-        {dueNow.length > 0 && (
+        {dueNow.length > 0 && reviewGate.allowed && (
           <LinkButton href="/mistakes/review">Review {dueNow.length} Due →</LinkButton>
         )}
       </div>
+
+      {!isPro && (
+        <p className="mt-3 text-xs font-medium text-slate-600 dark:text-slate-400">
+          {reviewGate.allowed
+            ? `${reviewGate.remaining} of ${FREE_MISTAKE_REVIEWS_PER_WEEK} weekly reviews left on the free plan.`
+            : `You've used all ${FREE_MISTAKE_REVIEWS_PER_WEEK} weekly reviews on the free plan.`}
+        </p>
+      )}
 
       <div className="mt-6 grid grid-cols-3 gap-3">
         <StatTile label="Open Mistakes" value={String(allMistakes.length)} />
@@ -71,7 +78,7 @@ export default async function MistakesPage() {
         </Card>
       ) : (
         <div className="mt-6 space-y-3">
-          {visible.map((m) => {
+          {allMistakes.map((m) => {
             const meta = REASON_LABEL[m.reason] ?? REASON_LABEL.INCORRECT;
             const due = m.nextReviewAt <= now;
             return (
@@ -98,14 +105,12 @@ export default async function MistakesPage() {
             );
           })}
 
-          {hidden > 0 && (
+          {!isPro && !reviewGate.allowed && dueNow.length > 0 && (
             <div className="rounded-xl border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950 p-5 text-center">
-              <p className="font-semibold text-amber-900">
-                {hidden} more mistake{hidden === 1 ? "" : "s"} tracked
-              </p>
+              <p className="font-semibold text-amber-900">Weekly review limit reached</p>
               <p className="mt-1 text-sm text-amber-800 dark:text-amber-400">
-                The free plan shows your {FREE_MISTAKE_LIMIT} most urgent mistakes. Pro unlocks the full
-                mistake log with spaced repetition scheduling.
+                The free plan includes {FREE_MISTAKE_REVIEWS_PER_WEEK} mistake reviews per week. Pro unlocks
+                unlimited reviews with spaced repetition scheduling.
               </p>
               <LinkButton href="/pricing" className="mt-4">
                 Explore Pro

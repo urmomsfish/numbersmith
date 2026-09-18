@@ -51,7 +51,6 @@ export const ARITHMETIC: Generator[] = [
     id: "gen-frac-sub",
     topicSlug: "fractions",
     difficulty: 2,
-    competitionSlug: "moems",
     variants: 110,
     params: (r) => {
       const b = pick(r, [3, 4, 5, 6, 8, 10, 12]);

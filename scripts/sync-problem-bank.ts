@@ -18,6 +18,7 @@
 import { PrismaClient } from "../src/generated/prisma";
 import { PROBLEMS } from "../prisma/seed-data/problems";
 import { OLYMPIAD_PROBLEMS } from "../prisma/seed-data/problems-olympiad";
+import { MOEMS_PROBLEMS } from "../prisma/seed-data/problems-moems";
 import { GENERATED_PROBLEMS, GENERATION_ISSUES } from "../prisma/seed-data/generators";
 import { toProblemRow } from "../prisma/seed-data/problem-rows";
 
@@ -63,6 +64,7 @@ async function main() {
     ...PROBLEMS.map((p) => ({ seed: p, isPlacement: true })),
     ...GENERATED_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
     ...OLYMPIAD_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
+    ...MOEMS_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
   ];
   console.log(`Seed data defines ${candidates.length} problems.`);
 

@@ -130,3 +130,22 @@ export async function cancelSubscriptionAction() {
   revalidatePath("/pricing");
   redirect("/settings");
 }
+
+/** Sends the user to Stripe's hosted Billing Portal, where they can update
+ * their payment method, view invoices, or cancel — without the app needing
+ * to build any of that UI itself. */
+export async function manageBillingAction() {
+  const user = await requireUser();
+
+  const sub = await prisma.subscription.findUnique({ where: { userId: user.id } });
+  if (!isStripeConfigured() || !sub?.externalCustomerId) {
+    redirect("/settings");
+  }
+
+  const session = await stripe!.billingPortal.sessions.create({
+    customer: sub.externalCustomerId,
+    return_url: `${appBaseUrl()}/settings`,
+  });
+
+  redirect(session.url);
+}

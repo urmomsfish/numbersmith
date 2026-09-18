@@ -8,13 +8,18 @@ import { prisma } from "@/lib/prisma";
 export function recommendCompetitionSlug(grade: number, rating: number): { slug: string; label: string } {
   if (grade <= 4) {
     return rating >= 1300
-      ? { slug: "math-kangaroo", label: "Math Kangaroo Advanced / MOEMS" }
+      ? { slug: "math-kangaroo", label: "Math Kangaroo Advanced / MOEMS Division E" }
       : { slug: "math-kangaroo", label: "Math Kangaroo" };
   }
   if (grade <= 5) {
     return rating >= 1400
-      ? { slug: "moems", label: "MOEMS Advanced / Math Kangaroo" }
-      : { slug: "moems", label: "MOEMS" };
+      ? { slug: "moems-e", label: "MOEMS Division E Advanced / Math Kangaroo" }
+      : { slug: "moems-e", label: "MOEMS Division E" };
+  }
+  if (grade <= 6) {
+    return rating >= 1450
+      ? { slug: "moems-m", label: "MOEMS Division M Advanced / MathCounts" }
+      : { slug: "moems-m", label: "MOEMS Division M" };
   }
   if (grade <= 8) {
     return rating >= 1500

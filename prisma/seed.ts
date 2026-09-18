@@ -1,45 +1,17 @@
 import { PrismaClient } from "../src/generated/prisma";
 import bcrypt from "bcryptjs";
 import { TOPICS } from "./seed-data/topics";
-import { COMPETITIONS } from "./seed-data/competitions";
+import { COMPETITIONS, CATEGORY_TOPIC_WEIGHTS } from "./seed-data/competitions";
 import { PROBLEMS } from "./seed-data/problems";
 import { GENERATED_PROBLEMS, GENERATION_ISSUES } from "./seed-data/generators";
 import { OLYMPIAD_PROBLEMS } from "./seed-data/problems-olympiad";
+import { MOEMS_PROBLEMS } from "./seed-data/problems-moems";
 import { LESSONS } from "./seed-data/lessons";
 import { ACHIEVEMENTS } from "./seed-data/achievements";
 
 import { gradesForDifficulty, secondsForDifficulty, toProblemRow } from "./seed-data/problem-rows";
 
 const prisma = new PrismaClient();
-
-// Default topic emphasis per competition category — used to populate each
-// competition's "main topics" without hand-authoring 20 separate lists.
-const CATEGORY_TOPIC_WEIGHTS: Record<string, Record<string, number>> = {
-  ELEMENTARY_MIDDLE: {
-    arithmetic: 5,
-    "number-theory": 3,
-    geometry: 3,
-    combinatorics: 3,
-    logic: 4,
-    algebra: 2,
-    probability: 2,
-  },
-  HIGH_SCHOOL: {
-    algebra: 5,
-    geometry: 5,
-    "number-theory": 4,
-    combinatorics: 4,
-    probability: 3,
-    logic: 2,
-  },
-  OLYMPIAD: {
-    "advanced-olympiad": 5,
-    algebra: 4,
-    geometry: 4,
-    "number-theory": 4,
-    combinatorics: 4,
-  },
-};
 
 async function main() {
   console.log("Seeding NumberSmith database...");
@@ -194,7 +166,7 @@ async function main() {
     console.log(`  (${GENERATION_ISSUES.length} generation notes, no answer mismatches)`);
   }
 
-  const generatedRows = [...GENERATED_PROBLEMS, ...OLYMPIAD_PROBLEMS].map((p) => {
+  const generatedRows = [...GENERATED_PROBLEMS, ...OLYMPIAD_PROBLEMS, ...MOEMS_PROBLEMS].map((p) => {
     const topicId = topicIdBySlug.get(p.topicSlug);
     if (!topicId) throw new Error(`Unknown topic slug: ${p.topicSlug} (problem ${p.slug})`);
     return toProblemRow(p, {
@@ -210,7 +182,7 @@ async function main() {
       skipDuplicates: true,
     });
   }
-  console.log(`  Practice problems: ${generatedRows.length} (${GENERATED_PROBLEMS.length} generated + ${OLYMPIAD_PROBLEMS.length} hand-written olympiad)`);
+  console.log(`  Practice problems: ${generatedRows.length} (${GENERATED_PROBLEMS.length} generated + ${OLYMPIAD_PROBLEMS.length} hand-written olympiad + ${MOEMS_PROBLEMS.length} hand-written MOEMS)`);
 
   // ---------------------------------------------------------------------
   // Lessons

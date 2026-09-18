@@ -5,7 +5,11 @@ import { Card, CardBody } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button, LinkButton } from "@/components/ui/button";
 import { getSubscription, grantsProAccess, isCancelPending } from "@/lib/subscription";
-import { cancelSubscriptionAction, startProTrialAction } from "@/lib/actions/subscription-actions";
+import {
+  cancelSubscriptionAction,
+  manageBillingAction,
+  startProTrialAction,
+} from "@/lib/actions/subscription-actions";
 import { updateProfileAction } from "@/lib/actions/settings-actions";
 import { TintPicker } from "@/components/tint-picker";
 
@@ -127,6 +131,13 @@ export default async function SettingsPage() {
               </>
             )}
             {cancelPending && <LinkButton href="/pricing">Resubscribe</LinkButton>}
+            {subscription.externalCustomerId && (
+              <form action={manageBillingAction}>
+                <Button type="submit" variant="outline">
+                  Manage Billing
+                </Button>
+              </form>
+            )}
             {isPro && !cancelPending && (
               <form action={cancelSubscriptionAction}>
                 <Button type="submit" variant="outline">

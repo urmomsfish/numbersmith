@@ -68,7 +68,7 @@ const FAQ = [
   },
   {
     q: "Which competitions are supported?",
-    a: "Twenty competitions across three tiers: Math Kangaroo, MOEMS, MathCounts, AMC 8, Purple Comet, and Math League for elementary and middle school; AMC 10, AMC 12, AIME, ARML, HMMT, PUMaC, Stanford Math Tournament, and Math Prize for Girls for high school; and USAMTS, USAMO, IMO, IMO Shortlist, and EGMO for olympiad training.",
+    a: "Twenty-one competitions across three tiers: Math Kangaroo, MOEMS (Elementary and Middle divisions), MathCounts, AMC 8, Purple Comet, and Math League for elementary and middle school; AMC 10, AMC 12, AIME, ARML, HMMT, PUMaC, Stanford Math Tournament, and Math Prize for Girls for high school; and USAMTS, USAMO, IMO, IMO Shortlist, and EGMO for olympiad training.",
   },
   {
     q: "Can I change my competitions later?",
