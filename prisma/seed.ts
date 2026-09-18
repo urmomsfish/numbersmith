@@ -6,6 +6,11 @@ import { PROBLEMS } from "./seed-data/problems";
 import { GENERATED_PROBLEMS, GENERATION_ISSUES } from "./seed-data/generators";
 import { OLYMPIAD_PROBLEMS } from "./seed-data/problems-olympiad";
 import { MOEMS_PROBLEMS } from "./seed-data/problems-moems";
+import { PURPLE_COMET_PROBLEMS } from "./seed-data/problems-purple-comet";
+import { MATH_LEAGUE_EM_PROBLEMS, MATH_LEAGUE_HS_PROBLEMS } from "./seed-data/problems-math-league";
+import { ARML_PROBLEMS } from "./seed-data/problems-arml";
+import { PUMAC_PROBLEMS, SMT_PROBLEMS } from "./seed-data/problems-pumac-smt";
+import { MATH_PRIZE_FOR_GIRLS_PROBLEMS } from "./seed-data/problems-math-prize-girls";
 import { LESSONS } from "./seed-data/lessons";
 import { ACHIEVEMENTS } from "./seed-data/achievements";
 
@@ -166,7 +171,18 @@ async function main() {
     console.log(`  (${GENERATION_ISSUES.length} generation notes, no answer mismatches)`);
   }
 
-  const generatedRows = [...GENERATED_PROBLEMS, ...OLYMPIAD_PROBLEMS, ...MOEMS_PROBLEMS].map((p) => {
+  const HAND_WRITTEN_COMPETITION_PROBLEMS = [
+    ...MOEMS_PROBLEMS,
+    ...PURPLE_COMET_PROBLEMS,
+    ...MATH_LEAGUE_EM_PROBLEMS,
+    ...MATH_LEAGUE_HS_PROBLEMS,
+    ...ARML_PROBLEMS,
+    ...PUMAC_PROBLEMS,
+    ...SMT_PROBLEMS,
+    ...MATH_PRIZE_FOR_GIRLS_PROBLEMS,
+  ];
+
+  const generatedRows = [...GENERATED_PROBLEMS, ...OLYMPIAD_PROBLEMS, ...HAND_WRITTEN_COMPETITION_PROBLEMS].map((p) => {
     const topicId = topicIdBySlug.get(p.topicSlug);
     if (!topicId) throw new Error(`Unknown topic slug: ${p.topicSlug} (problem ${p.slug})`);
     return toProblemRow(p, {
@@ -182,7 +198,7 @@ async function main() {
       skipDuplicates: true,
     });
   }
-  console.log(`  Practice problems: ${generatedRows.length} (${GENERATED_PROBLEMS.length} generated + ${OLYMPIAD_PROBLEMS.length} hand-written olympiad + ${MOEMS_PROBLEMS.length} hand-written MOEMS)`);
+  console.log(`  Practice problems: ${generatedRows.length} (${GENERATED_PROBLEMS.length} generated + ${OLYMPIAD_PROBLEMS.length} hand-written olympiad + ${HAND_WRITTEN_COMPETITION_PROBLEMS.length} hand-written competition-tagged)`);
 
   // ---------------------------------------------------------------------
   // Lessons

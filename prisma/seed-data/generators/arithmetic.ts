@@ -79,7 +79,6 @@ export const ARITHMETIC: Generator[] = [
     id: "gen-frac-of",
     topicSlug: "fractions",
     difficulty: 2,
-    competitionSlug: "math-league-elementary-middle",
     variants: 88,
     params: (r) => {
       const b = pick(r, [2, 3, 4, 5, 6, 8]);
@@ -264,7 +263,6 @@ export const ARITHMETIC: Generator[] = [
     id: "gen-ratio-proportion",
     topicSlug: "ratios-proportions",
     difficulty: 2,
-    competitionSlug: "math-league-elementary-middle",
     variants: 88,
     params: (r) => {
       const perUnit = int(r, 2, 12);
@@ -391,7 +389,6 @@ export const ARITHMETIC: Generator[] = [
     id: "gen-average-basic",
     topicSlug: "averages",
     difficulty: 2,
-    competitionSlug: "math-league-elementary-middle",
     variants: 120,
     params: (r) => {
       const n = int(r, 3, 6);

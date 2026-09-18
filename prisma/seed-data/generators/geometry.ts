@@ -137,7 +137,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-triangle-area",
     topicSlug: "area-volume",
     difficulty: 2,
-    competitionSlug: "math-league-elementary-middle",
     variants: 120,
     params: (r) => {
       const base = int(r, 3, 30);
@@ -334,7 +333,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-coord-slope",
     topicSlug: "coordinate-geometry",
     difficulty: 3,
-    competitionSlug: "math-league-high-school",
     variants: 110,
     params: (r) => {
       const x1 = int(r, -9, 9);

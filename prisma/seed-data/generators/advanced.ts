@@ -160,7 +160,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-crt",
     topicSlug: "modular-arithmetic",
     difficulty: 6,
-    competitionSlug: "arml",
     variants: 131,
     params: (r) => {
       const m = pick(r, [3, 4, 5, 7, 8, 9, 11]);
@@ -198,7 +197,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-modular-inverse",
     topicSlug: "modular-arithmetic",
     difficulty: 6,
-    competitionSlug: "stanford-math-tournament",
     variants: 120,
     params: (r) => {
       const m = int(r, 7, 60);
@@ -239,7 +237,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-stars-bars",
     topicSlug: "advanced-combinatorics",
     difficulty: 7,
-    competitionSlug: "purple-comet",
     variants: 66,
     params: (r) => {
       const k = int(r, 3, 6);
@@ -337,7 +334,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-no-adjacent",
     topicSlug: "recursion-in-counting",
     difficulty: 7,
-    competitionSlug: "arml",
     variants: 20,
     params: (r) => ({ n: int(r, 4, 21) }),
     build: ({ n }) => {
@@ -486,7 +482,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-telescoping",
     topicSlug: "sequences",
     difficulty: 7,
-    competitionSlug: "stanford-math-tournament",
     variants: 99,
     params: (r) => ({ n: int(r, 4, 120) }),
     build: ({ n }) => {
@@ -521,7 +516,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-heron",
     topicSlug: "advanced-geometry",
     difficulty: 7,
-    competitionSlug: "math-prize-for-girls",
     variants: 63,
     params: (r) => ({ i: int(r, 0, HERONIAN.length - 1), k: int(r, 1, 3) }),
     build: ({ i, k }) => {
@@ -552,7 +546,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-pick-theorem",
     topicSlug: "advanced-geometry",
     difficulty: 7,
-    competitionSlug: "arml",
     variants: 99,
     params: (r) => ({ a: int(r, 2, 30), b: int(r, 2, 30) }),
     build: ({ a, b }) => {
@@ -699,7 +692,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-expected-max-dice",
     topicSlug: "expected-value",
     difficulty: 8,
-    competitionSlug: "pumac",
     variants: 14,
     params: (r) => ({ sides: pick(r, [4, 6, 8, 10, 12, 20]), rolls: int(r, 2, 3) }),
     build: ({ sides, rolls }) => {

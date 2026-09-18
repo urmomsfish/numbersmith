@@ -19,6 +19,11 @@ import { PrismaClient } from "../src/generated/prisma";
 import { PROBLEMS } from "../prisma/seed-data/problems";
 import { OLYMPIAD_PROBLEMS } from "../prisma/seed-data/problems-olympiad";
 import { MOEMS_PROBLEMS } from "../prisma/seed-data/problems-moems";
+import { PURPLE_COMET_PROBLEMS } from "../prisma/seed-data/problems-purple-comet";
+import { MATH_LEAGUE_EM_PROBLEMS, MATH_LEAGUE_HS_PROBLEMS } from "../prisma/seed-data/problems-math-league";
+import { ARML_PROBLEMS } from "../prisma/seed-data/problems-arml";
+import { PUMAC_PROBLEMS, SMT_PROBLEMS } from "../prisma/seed-data/problems-pumac-smt";
+import { MATH_PRIZE_FOR_GIRLS_PROBLEMS } from "../prisma/seed-data/problems-math-prize-girls";
 import { GENERATED_PROBLEMS, GENERATION_ISSUES } from "../prisma/seed-data/generators";
 import { toProblemRow } from "../prisma/seed-data/problem-rows";
 
@@ -65,6 +70,13 @@ async function main() {
     ...GENERATED_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
     ...OLYMPIAD_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
     ...MOEMS_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
+    ...PURPLE_COMET_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
+    ...MATH_LEAGUE_EM_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
+    ...MATH_LEAGUE_HS_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
+    ...ARML_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
+    ...PUMAC_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
+    ...SMT_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
+    ...MATH_PRIZE_FOR_GIRLS_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
   ];
   console.log(`Seed data defines ${candidates.length} problems.`);
 

@@ -414,7 +414,6 @@ export const LOGIC: Generator[] = [
     id: "gen-logic-invariant-gcd",
     topicSlug: "invariants",
     difficulty: 5,
-    competitionSlug: "purple-comet",
     variants: 110,
     params: (r) => {
       const p = int(r, 6, 60);
@@ -499,7 +498,6 @@ export const LOGIC: Generator[] = [
     id: "gen-logic-nim-three-piles",
     topicSlug: "strategy",
     difficulty: 8,
-    competitionSlug: "arml",
     variants: 99,
     params: (r) => {
       const a = int(r, 1, NIM_MAX);

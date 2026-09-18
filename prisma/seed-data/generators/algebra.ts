@@ -216,7 +216,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-inequality-largest",
     topicSlug: "inequalities",
     difficulty: 3,
-    competitionSlug: "math-league-high-school",
     variants: 99,
     params: (r) => {
       const a = int(r, 2, 9);
@@ -290,7 +289,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-quadratic-larger-root",
     topicSlug: "quadratics",
     difficulty: 4,
-    competitionSlug: "math-league-high-school",
     variants: 120,
     params: (r) => {
       const p = intExcept(r, -10, 10, []);
@@ -524,7 +522,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-function-evaluate",
     topicSlug: "functions",
     difficulty: 2,
-    competitionSlug: "math-league-elementary-middle",
     variants: 153,
     params: (r) => {
       const a = intExcept(r, -6, 8, [0]);
