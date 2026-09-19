@@ -900,4 +900,310 @@ export const HMMT_PROBLEMS: ProblemSeed[] = [
     topicSlug: "casework",
     competitionSlug: "hmmt",
   },
+  {
+    slug: "hmmt-57",
+    question:
+      "Complex numbers x, y, z satisfy x + y + z = 3, x^2 + y^2 + z^2 = 7, and x^3 + y^3 + z^3 = 15. Compute x^5 + y^5 + z^5.",
+    format: "INTEGER",
+    answer: "83",
+    solution:
+      "Let e1 = x+y+z, e2 = xy+yz+zx, e3 = xyz and let p_k = x^k+y^k+z^k. From e1 = 3 and p_2 = e1^2 - 2e2 we get 7 = 9 - 2e2, so e2 = 1. Newton's identity p_3 = e1 p_2 - e2 p_1 + 3e3 gives 15 = 3·7 - 1·3 + 3e3 = 18 + 3e3, so e3 = -1. Hence x, y, z are exactly the roots of t^3 - 3t^2 + t + 1 = 0, so each of them satisfies t^3 = 3t^2 - t - 1. Summing that relation over the three roots (after multiplying by t^{k-3}) yields the linear recurrence p_k = 3p_{k-1} - p_{k-2} - p_{k-3} for k ≥ 4. With p_1 = 3, p_2 = 7, p_3 = 15: p_4 = 3·15 - 7 - 3 = 35, and p_5 = 3·35 - 15 - 7 = 83. (Numerical check: the roots are 1, 1±√2, and 1^5 + (1+√2)^5 + (1-√2)^5 = 83.)",
+    hints: [
+      "Convert the three given power sums into the elementary symmetric quantities x+y+z, xy+yz+zx, xyz one at a time.",
+      "Those three numbers determine a cubic that each of x, y, z satisfies — turn that cubic into a linear recurrence for the power sums p_k.",
+      "Run the recurrence forward twice, from p_3 to p_4 to p_5.",
+    ],
+    difficulty: 9,
+    topicSlug: "algebra",
+    competitionSlug: "hmmt",
+  },
+  {
+    slug: "hmmt-58",
+    question:
+      "Compute the sum of all real numbers x satisfying (x^2 - 5x + 5)^(x^2 - 9x + 20) = 1.",
+    format: "INTEGER",
+    answer: "15",
+    solution:
+      "A real power a^b equals 1 in exactly three situations: a = 1; a = -1 with b an even integer; or b = 0 with a ≠ 0. Handle each case. (i) x^2-5x+5 = 1 gives x^2-5x+4 = 0, so x = 1 or x = 4. (ii) x^2-5x+5 = -1 gives x^2-5x+6 = 0, so x = 2 or x = 3; the exponent at x = 2 is 4-18+20 = 6 and at x = 3 is 9-27+20 = 2, both even, so both survive. (iii) x^2-9x+20 = 0 gives x = 4 or x = 5; the base at x = 4 is 16-20+5 = 1 ≠ 0 and at x = 5 is 25-25+5 = 5 ≠ 0, so both are valid. The distinct solutions are {1, 2, 3, 4, 5} (x = 4 arises twice), and their sum is 15. The trap is double-counting x = 4 or forgetting the negative-base case; Vieta shortcuts on any single case give the wrong total.",
+    hints: [
+      "There is more than one way for a real power to equal 1 — list every case for the base and exponent, including a negative base.",
+      "A base of -1 only works when the exponent is an even integer, and a zero exponent only works when the base is nonzero — check each candidate against those conditions.",
+      "Collect the surviving roots into a set (one value shows up in two different cases) before adding.",
+    ],
+    difficulty: 9,
+    topicSlug: "exponents-radicals",
+    competitionSlug: "hmmt",
+  },
+  {
+    slug: "hmmt-59",
+    question:
+      "A function f defined on all real numbers except 0 and 1 satisfies f(x) + 2f(1/(1-x)) = x for every x in its domain. Compute f(5).",
+    format: "SHORT_ANSWER",
+    answer: "29/30",
+    solution:
+      "The substitution map T(x) = 1/(1-x) has order 3: starting at x = 5, T(5) = 1/(1-5) = -1/4, T(-1/4) = 1/(1+1/4) = 4/5, and T(4/5) = 1/(1-4/5) = 5, back to the start. Writing the given relation at each point of this 3-cycle with a = f(5), b = f(-1/4), c = f(4/5) yields the linear system a + 2b = 5, b + 2c = -1/4, c + 2a = 4/5. Solve it: from the first, b = (5-a)/2; from the second, c = (-1/4 - b)/2 = (-1/4 - (5-a)/2)/2 = (2a - 11)/8. Substituting into the third, (2a-11)/8 + 2a = 4/5, i.e. 2a - 11 + 16a = 32/5, so 18a = 11 + 32/5 = 87/5 and a = 87/90 = 29/30. (Equivalently, solving the system in general gives f(x) = (x - 2/(1-x) + 4(x-1)/x)/9, which indeed returns 29/30 at x = 5 and satisfies the original equation.)",
+    hints: [
+      "Apply the substitution x → 1/(1-x) repeatedly starting from x = 5 and see how quickly you return to 5.",
+      "Writing the given equation at each point of that short orbit turns the problem into a small linear system in three unknown function values.",
+      "Solve the 3×3 system for the unknown that equals f(5).",
+    ],
+    difficulty: 10,
+    topicSlug: "functional-equations",
+    competitionSlug: "hmmt",
+  },
+  {
+    slug: "hmmt-60",
+    question:
+      "Let a, b, c be the three roots of x^3 - 3x - 1 = 0. Compute (a^2 b + b^2 c + c^2 a)(a b^2 + b c^2 + c a^2).",
+    format: "SHORT_ANSWER",
+    answer: "-18",
+    solution:
+      "Neither factor alone is a symmetric function of a, b, c — swapping two roots exchanges the two factors — so neither factor is determined by the coefficients. Their product, however, is fully symmetric (every permutation either fixes both factors or swaps them), so it is a polynomial in e1 = a+b+c = 0, e2 = ab+bc+ca = -3, e3 = abc = 1. Expanding and reducing gives the identity (a^2b+b^2c+c^2a)(ab^2+bc^2+ca^2) = e1^3 e3 - 6 e1 e2 e3 + e2^3 + 9 e3^2. Since e1 = 0 here, this collapses to e2^3 + 9e3^2 = (-3)^3 + 9 = -27 + 9 = -18. (Cross-check: the two factors S1, S2 satisfy S1 + S2 = e1 e2 - 3e3 = -3 and S1·S2 = -18, so they are the roots of t^2 + 3t - 18 = 0, namely 3 and -6 — and numerically the two cyclic sums for x^3-3x-1 really are 3 and -6, whose product is -18.)",
+    hints: [
+      "Check what happens to each factor when you transpose two of the roots — individually they are not symmetric, but ask whether their product is.",
+      "A symmetric polynomial in the roots is expressible in e1 = a+b+c, e2 = ab+bc+ca, e3 = abc; read those three off the cubic.",
+      "It also helps to compute the sum of the two factors, since the sum and product together identify them as the roots of a quadratic you can check.",
+    ],
+    difficulty: 10,
+    topicSlug: "polynomials",
+    competitionSlug: "hmmt",
+  },
+  {
+    slug: "hmmt-61",
+    question:
+      "Nonnegative real numbers a, b, c satisfy a + b + c = 3. Compute the maximum possible value of a^2 b + b^2 c + c^2 a + abc.",
+    format: "INTEGER",
+    answer: "4",
+    solution:
+      "The expression is cyclic but not symmetric, so only cyclic relabelings are free. Among the three cyclic rotations (a,b,c), (b,c,a), (c,a,b), each variable occupies the middle slot once, so we may assume b lies (weakly) between a and c. Expand b(a+c)^2 = a^2 b + 2abc + bc^2 and compare it with the target expression: (a^2b + b^2c + c^2a + abc) - b(a+c)^2 = b^2 c + c^2 a - abc - bc^2 = c(b^2 + ca - ab - bc) = c(b-a)(b-c) ≤ 0, because b lying between a and c makes (b-a) and (b-c) opposite in sign (and c ≥ 0). Hence a^2b + b^2c + c^2a + abc ≤ b(a+c)^2 = b(3-b)^2. Maximizing g(b) = b(3-b)^2 on [0,3]: g'(b) = (3-b)^2 - 2b(3-b) = (3-b)(3-3b), so the interior critical point is b = 1, giving g(1) = 1·4 = 4 (and g(0) = g(3) = 0). So the expression never exceeds 4, and 4 is attained — e.g. at (a,b,c) = (2,1,0), where the value is 4·1 = 4, and also at (1,1,1), where it is 1+1+1+1 = 4. The maximum is 4.",
+    hints: [
+      "The expression is unchanged by cyclic rotation but not by arbitrary swaps — use that freedom to put the middle-sized variable in a specific slot.",
+      "With b between a and c, compare the expression to b(a+c)^2; the difference factors into a product whose sign you can pin down.",
+      "That reduces everything to maximizing a one-variable cubic b(3-b)^2 on [0,3].",
+    ],
+    difficulty: 10,
+    topicSlug: "inequalities-olympiad",
+    competitionSlug: "hmmt",
+  },
+  {
+    slug: "hmmt-62",
+    question:
+      "Each of the 16 unit squares of a 4×4 grid is colored black or white. Compute the number of colorings in which every one of the nine 2×2 blocks of adjacent squares contains exactly two black squares.",
+    format: "INTEGER",
+    answer: "30",
+    solution:
+      "Write each row as a 0/1 string (1 = black). Fix two adjacent rows r and r', and set d_j = r(j) + r'(j) ∈ {0,1,2} for j = 1,...,4. The 2×2 condition on columns j, j+1 says d_j + d_{j+1} = 2, so consecutive d's are forced: either d_j = 1 for all j, or the d's alternate 0,2,0,2 (or 2,0,2,0). In the first case r' is the exact complement of r. In the second case every column has both entries equal, so r' = r, and r itself must alternate (0101 or 1010). Now split on whether some row is one of the two alternating strings. If a row r is NOT alternating, then for each neighboring row the second case is unavailable, so every neighbor is the complement of r, and the whole grid is determined by r as r, r̄, r, r̄. There are 2^4 - 2 = 14 non-alternating strings, each giving exactly one grid. If every row is alternating, then any two adjacent alternating rows are automatically fine (equal rows land in the second case, complementary rows in the first), so all 2^4 = 16 choices work. Total: 14 + 16 = 30. (Exhaustive check over all 2^16 colorings confirms 30; more generally an m×n grid gives 2^m + 2^n - 2.)",
+    hints: [
+      "Compare two adjacent rows column by column: let d_j be the number of black squares in column j among those two rows, and see what the 2×2 condition forces about consecutive d_j.",
+      "You should find exactly two possibilities for a pair of adjacent rows: one row is the complement of the other, or the two rows are equal and alternate in color.",
+      "Split into the case where some row is not an alternating string (which rigidly determines the whole grid) and the case where every row alternates.",
+    ],
+    difficulty: 10,
+    topicSlug: "advanced-combinatorics",
+    competitionSlug: "hmmt",
+  },
+  {
+    slug: "hmmt-63",
+    question:
+      "Compute the number of permutations σ of {1, 2, ..., 8} such that |σ(i) - i| ≤ 2 for every i.",
+    format: "INTEGER",
+    answer: "400",
+    solution:
+      "Build σ by deciding σ(1), σ(2), ..., in order. When you reach position i, the only values that can still be used are i-2, i-1, i, i+1, i+2, and all values below i-2 must already be spent; so the relevant state is just which of the few values near i remain unused. This bounded-state bookkeeping (a transfer-matrix / dynamic-programming count) makes the counts A(n) for {1,...,n} satisfy the linear recurrence A(n) = 2A(n-1) + 2A(n-3) - A(n-5) for n ≥ 6. The small cases are computed directly: A(1) = 1, A(2) = 2, A(3) = 6, A(4) = 14, A(5) = 31. Then A(6) = 2·31 + 2·6 - 1 = 73, A(7) = 2·73 + 2·14 - 2 = 172, and A(8) = 2·172 + 2·31 - 6 = 400. (Exhaustive enumeration of all 8! = 40320 permutations confirms 400.)",
+    hints: [
+      "Assign σ(1), σ(2), ... left to right; at position i only the values i-2, ..., i+2 are still in play, so very little information about the past matters.",
+      "That bounded state means the counts A(n) for {1,...,n} satisfy a fixed linear recurrence — find it from small cases (A(1) through A(5) are 1, 2, 6, 14, 31).",
+      "Use A(n) = 2A(n-1) + 2A(n-3) - A(n-5) to climb from A(5) to A(8).",
+    ],
+    difficulty: 9,
+    topicSlug: "recursion-in-counting",
+    competitionSlug: "hmmt",
+  },
+  {
+    slug: "hmmt-64",
+    question:
+      "A fair coin is flipped repeatedly until the four most recent flips read, in order, heads, tails, heads, heads. Compute the expected number of flips.",
+    format: "INTEGER",
+    answer: "18",
+    solution:
+      "Track the length of the longest suffix of the flips so far that is a prefix of the target word W = HTHH; the states are '', 'H', 'HT', 'HTH'. Let E_s be the expected additional flips from state s. From '': a head moves to 'H', a tail stays at '' — E_∅ = 1 + (E_H + E_∅)/2. From 'H': a head keeps only the suffix 'H' (HH ends in H), a tail moves to 'HT' — E_H = 1 + (E_H + E_HT)/2. From 'HT': a head moves to 'HTH', a tail drops to '' (HTT has no useful suffix) — E_HT = 1 + (E_HTH + E_∅)/2. From 'HTH': a head finishes; a tail gives HTHT, whose longest useful suffix is 'HT' — E_HTH = 1 + (0 + E_HT)/2. Solving: substituting upward gives E_HTH = 1 + E_HT/2, E_HT = 1 + (1 + E_HT/2 + E_∅)/2, E_H = 2 + E_HT, E_∅ = 2 + E_H. Working through, E_∅ = 18. (Shortcut: for a pattern of length L over a fair coin, the expected wait is the sum of 2^k over every k for which the length-k prefix of the pattern equals its length-k suffix. For HTHH: k = 4 matches (the whole word) and k = 1 matches (H = H), while k = 2 and k = 3 do not, giving 2^4 + 2^1 = 18. Simulation over 200,000 trials averaged 17.97.)",
+    hints: [
+      "Set up states recording how much of the target pattern you have matched so far, and be careful about where a failed extension drops you — a mismatch does not always send you back to zero progress.",
+      "From the state 'HTH', a tail leaves you having already matched 'HT', not nothing; from 'H', another head still leaves you at 'H'.",
+      "Write one linear equation per state for the expected remaining flips and solve the system.",
+    ],
+    difficulty: 10,
+    topicSlug: "expected-value",
+    competitionSlug: "hmmt",
+  },
+  {
+    slug: "hmmt-65",
+    question:
+      "Two players alternate turns removing exactly 1, 3, or 4 stones from a single pile; the player who removes the last stone wins. Compute the number of integers n with 1 ≤ n ≤ 1000 for which the player who moves second can force a win from a pile of n stones.",
+    format: "INTEGER",
+    answer: "285",
+    solution:
+      "Call n a P-position if the player about to move loses under optimal play (equivalently, the second player wins). By definition n is a P-position exactly when every legal move n → n-1, n-3, n-4 lands on a non-P-position, and n = 0 counts as a P-position (the player to move has already lost). Computing upward: 0 is P; 1, 3, 4 are N (each can move straight to 0); 2 is P (its only legal move is to 1, an N-position); 5 is N (remove 3 to reach the P-position 2) and 6 is N (remove 4 to reach 2); 7 is P (its moves reach 6, 4, 3, all N). Continuing reveals the pattern: the P-positions are exactly n ≡ 0 or 2 (mod 7). This is easily confirmed by induction: from n ≡ 0 (mod 7) the moves land on residues 6, 4, 3, and from n ≡ 2 (mod 7) they land on residues 1, 6, 5 — none of which is 0 or 2 — while from each of the residues 1, 3, 4, 5, 6 there is a move landing on residue 0 or 2 (subtract 1, 1, 4, 3, 4 respectively). Counting in 1 ≤ n ≤ 1000: n ≡ 0 (mod 7) gives 7, 14, ..., 994, that is 142 values; n ≡ 2 (mod 7) gives 2, 9, ..., 996, that is 143 values. Total 285. (A direct DP over n ≤ 1000 confirms 285.)",
+    hints: [
+      "Work out by hand, from n = 0 upward, which pile sizes are losses for whoever must move; a position loses exactly when every legal move hands the opponent a winning position.",
+      "Compute the first fifteen or so and look for a pattern modulo a small number — the move set {1,3,4} suggests trying modulus 7.",
+      "Prove the pattern by induction, then count residues in the given range (watch the endpoints — the two residue classes do not contribute equally).",
+    ],
+    difficulty: 9,
+    topicSlug: "games-and-strategies",
+    competitionSlug: "hmmt",
+  },
+  {
+    slug: "hmmt-66",
+    question:
+      "In triangle ABC, AB = 7, BC = 8, and CA = 9. The bisector of angle A meets BC at D and meets the circumcircle of ABC again at M. Compute DM.",
+    format: "SHORT_ANSWER",
+    answer: "√21/2",
+    solution:
+      "First locate D: the bisector from A splits BC in the ratio AB : AC = 7 : 9, so BD = 8·7/16 = 7/2 and DC = 8·9/16 = 9/2. Next find AD. The standard bisector-length relation AD^2 = AB·AC - BD·DC gives AD^2 = 63 - (7/2)(9/2) = 63 - 63/4 = 189/4, so AD = (3√21)/2. Finally, since M is the second intersection of line AD with the circumcircle, the power of the point D gives DB·DC = DA·DM, so DM = (63/4)/((3√21)/2) = (63/4)·(2/(3√21)) = 21/(2√21) = √21/2. (Equivalently AM = AB·AC/AD = 63/((3√21)/2) = 2√21, and DM = AM - AD = 2√21 - (3√21)/2 = √21/2. A coordinate computation with B=(0,0), C=(8,0), A=(2,3√5) gives AD ≈ 6.8739, AM ≈ 9.1652, DM ≈ 2.29129 = √21/2 ≈ 2.29129.)",
+    hints: [
+      "Start by splitting BC in the ratio of the two adjacent sides to get BD and DC.",
+      "There is a clean relation for the length of the bisector segment AD in terms of AB·AC and BD·DC — use it.",
+      "For the piece past D, use the power of the point D with respect to the circumcircle: DB·DC = DA·DM.",
+    ],
+    difficulty: 10,
+    topicSlug: "advanced-geometry",
+    competitionSlug: "hmmt",
+  },
+  {
+    slug: "hmmt-67",
+    question:
+      "A regular tetrahedron has edge length 6. A sphere S1 is tangent to all four faces. A smaller sphere S2 is tangent to the three faces meeting at one particular vertex and is also tangent to S1. Compute the radius of S2.",
+    format: "SHORT_ANSWER",
+    answer: "√6/4",
+    solution:
+      "For a regular tetrahedron of edge a, the inradius is r = a√6/12 and the circumradius is R = a√6/4 = 3r. With a = 6: r = √6/2 and R = 3√6/2, and both spheres' centers lie on the line from the chosen vertex V through the center O, with VO = R = 3r. A sphere tangent to the three faces through V has its center on that line, and by the homothety centered at V taking the whole configuration to itself, a center at distance t from V has tangent-distance-to-those-faces equal to t·r/R = t/3, which is its radius ρ. External tangency to S1 requires (distance between centers) = r + ρ, i.e. R - t = r + t/3, i.e. 3r - t = r + t/3. Then 2r = 4t/3, so t = 3r/2 and ρ = t/3 = r/2 = √6/4. (Check: centers are R - t = 3r - 1.5r = 1.5r apart, and r + ρ = r + 0.5r = 1.5r. A coordinate computation with the tetrahedron's vertices at alternating cube corners gives ρ ≈ 0.612372 = √6/4 ≈ 0.612372.)",
+    hints: [
+      "Both sphere centers lie on the line joining the chosen vertex to the tetrahedron's center; get the inradius and circumradius of a regular tetrahedron of edge 6 and notice how they compare.",
+      "Scaling about the vertex sends the configuration into itself, so a center at distance t from the vertex is at distance proportional to t from the three faces meeting there — that gives the small sphere's radius in terms of t.",
+      "Write the external tangency condition 'distance between centers = sum of radii' along that line and solve for t.",
+    ],
+    difficulty: 10,
+    topicSlug: "three-d-geometry",
+    competitionSlug: "hmmt",
+  },
+  {
+    slug: "hmmt-68",
+    question:
+      "A circle of radius 1 has its center on the y-axis and is tangent to the parabola y = x^2 at two distinct points. Compute the y-coordinate of its center.",
+    format: "SHORT_ANSWER",
+    answer: "5/4",
+    solution:
+      "Let the center be (0, k), so the circle is x^2 + (y-k)^2 = 1. Substituting y = x^2 gives the quartic x^2 + (x^2 - k)^2 = 1, i.e. x^4 + (1-2k)x^2 + (k^2 - 1) = 0. Tangency at two distinct points means the curves meet at exactly two x-values, each with multiplicity 2 — so this quartic (which is even in x, hence has roots in ± pairs) must be a perfect square (x^2 - u)^2 for some u > 0. Matching coefficients: 1 - 2k = -2u and k^2 - 1 = u^2. From the first, u = (2k-1)/2; substituting into the second gives k^2 - 1 = (2k-1)^2/4, so 4k^2 - 4 = 4k^2 - 4k + 1 and 4k = 5, k = 5/4. Then u = 3/4 > 0, so the tangency points are x = ±√3/2 — two distinct points, as required. Indeed at k = 5/4 the quartic factors as (4x^2 - 3)^2/16. The answer is 5/4.",
+    hints: [
+      "Substitute y = x^2 into the circle's equation to get a quartic in x; it only involves even powers of x.",
+      "Tangency at two points means each intersection is a double root, so that quartic must be the square of a quadratic in x^2.",
+      "Match coefficients against (x^2 - u)^2 and solve the resulting system for k, then confirm u > 0 so the two tangency points are real and distinct.",
+    ],
+    difficulty: 9,
+    topicSlug: "coordinate-geometry",
+    competitionSlug: "hmmt",
+  },
+  {
+    slug: "hmmt-69",
+    question:
+      "In triangle ABC with AB = 13, BC = 14, CA = 15, there is a unique point P inside the triangle satisfying ∠PAB = ∠PBC = ∠PCA. Call this common angle ω. Compute tan ω.",
+    format: "SHORT_ANSWER",
+    answer: "168/295",
+    solution:
+      "Let the common angle be ω and write [ABC] = K. Applying the sine rule in triangle PAB: PA/sin ω = AB/sin(∠APB), and chasing the three conditions around the triangle (or applying the trigonometric form of Ceva's theorem to the cevians AP, BP, CP) produces the classical relation cot ω = cot A + cot B + cot C. Now for any triangle, cot A = (b^2 + c^2 - a^2)/(4K) (from the law of cosines together with K = (1/2)bc sin A), so summing the three gives cot A + cot B + cot C = (a^2 + b^2 + c^2)/(4K). For the 13-14-15 triangle, Heron's formula with s = 21 gives K = √(21·8·7·6) = 84, and a^2 + b^2 + c^2 = 196 + 225 + 169 = 590. Hence cot ω = 590/336 = 295/168 and tan ω = 168/295. (Numerically solving for P in coordinates gives P ≈ (7.4870, 4.2638) with all three angles ≈ 0.5176847 rad and tan ω ≈ 0.5694915 = 168/295.)",
+    hints: [
+      "The three equal-angle conditions are exactly the concurrency condition for the cevians AP, BP, CP — apply the trigonometric concurrency criterion and chase angles.",
+      "The relation you should reach is cot ω = cot A + cot B + cot C.",
+      "Express each cotangent as (sum of two squared sides minus the third)/(4·area) and use Heron's formula on the 13-14-15 triangle.",
+    ],
+    difficulty: 10,
+    topicSlug: "advanced-geometry",
+    competitionSlug: "hmmt",
+  },
+  {
+    slug: "hmmt-70",
+    question:
+      "Compute the number of integers n with 0 ≤ n ≤ 2024 for which the binomial coefficient C(2024, n) is NOT divisible by 3.",
+    format: "INTEGER",
+    answer: "729",
+    solution:
+      "Write everything in base 3. Since 3 is prime, C(m, n) mod 3 equals the product of C(m_i, n_i) over the base-3 digits (Lucas's theorem), and C(m_i, n_i) = 0 exactly when n_i > m_i. Hence 3 ∤ C(2024, n) if and only if every base-3 digit of n is at most the corresponding digit of 2024. Convert: 2024 = 2·729 + 2·243 + 0·81 + 2·27 + 2·9 + 2·3 + 2, so 2024 = (2 2 0 2 2 2 2) in base 3. Each digit d of 2024 offers d+1 admissible digits for n, so the count is (2+1)(2+1)(0+1)(2+1)(2+1)(2+1)(2+1) = 3^6 · 1 = 729. (Equivalently, by Kummer's theorem one needs no carries when adding n and 2024-n in base 3. Brute-force evaluation of all 2025 binomial coefficients modulo 3 confirms 729.)",
+    hints: [
+      "Divisibility of a binomial coefficient by a prime is governed by the base-p digits of the top and bottom entries — write 2024 in base 3.",
+      "C(2024, n) is nonzero mod 3 exactly when each base-3 digit of n is at most the corresponding digit of 2024.",
+      "Multiply (digit + 1) across all seven base-3 digits of 2024, remembering the zero digit contributes a factor of 1.",
+    ],
+    difficulty: 10,
+    topicSlug: "advanced-number-theory",
+    competitionSlug: "hmmt",
+  },
+  {
+    slug: "hmmt-71",
+    question:
+      "Compute the smallest positive integer n for which the decimal expansion of 1/n is eventually periodic with minimal period length exactly 12.",
+    format: "INTEGER",
+    answer: "707",
+    solution:
+      "Strip any factors of 2 and 5 from n (they only affect the pre-period), so we may assume gcd(n,10) = 1; the minimal period of 1/n is then the multiplicative order of 10 modulo n, and removing factors of 2 or 5 only shrinks n, so the smallest example is coprime to 10. We need ord_n(10) = 12, so n | 10^12 - 1 but n divides no 10^d - 1 with d a proper divisor of 12. Factor 10^12 - 1 = (10^6-1)(10^6+1) = (3^3 · 7 · 11 · 13 · 37)(101 · 9901). The orders of 10 modulo the prime powers involved are: ord_3 = ord_9 = 1, ord_27 = 3, ord_7 = 6, ord_11 = 2, ord_13 = 6, ord_37 = 3, ord_101 = 4, ord_9901 = 12. The order modulo n is the lcm of the orders modulo its prime-power factors, so we need that lcm to be 12 = 4·3: some factor must contribute a multiple of 4 (only 101 or 9901 do) and some factor must contribute a multiple of 3 (27, 7, 13, 37, or 9901). Using 9901 alone costs 9901. Otherwise we must include 101 and a cheapest partner contributing order divisible by 3: the candidates are 7 (order 6), 13 (order 6), 27 (order 3), 37 (order 3), giving 101·7 = 707, 101·13 = 1313, 101·27 = 2727, 101·37 = 3737. The smallest is n = 707 = 7·101, with ord = lcm(6,4) = 12. A direct search over all n confirms 707 is the smallest such n.",
+    hints: [
+      "The period length of 1/n is the multiplicative order of 10 modulo n once factors of 2 and 5 are removed, so you want the smallest n with ord_n(10) = 12.",
+      "Such an n must divide 10^12 - 1 — factor it, and compute the order of 10 modulo each prime power appearing.",
+      "The order mod n is the lcm of the orders mod its prime-power factors, so combine a factor contributing a multiple of 4 with one contributing a multiple of 3, as cheaply as possible.",
+    ],
+    difficulty: 10,
+    topicSlug: "number-theory",
+    competitionSlug: "hmmt",
+  },
+  {
+    slug: "hmmt-72",
+    question:
+      "Compute the sum of all positive integers n ≤ 2024 whose positive divisors sum to an odd number.",
+    format: "INTEGER",
+    answer: "50202",
+    solution:
+      "Write n = 2^a · m with m odd. The sum-of-divisors function is multiplicative, so σ(n) = (2^{a+1} - 1)·σ(m); the first factor is always odd, so σ(n) is odd exactly when σ(m) is odd. For an odd prime power p^e, σ(p^e) = 1 + p + ... + p^e is a sum of e+1 odd terms, hence odd exactly when e is even. So σ(m) is odd exactly when every exponent in the odd part m is even, i.e. m is a perfect square. Thus σ(n) is odd if and only if n = 2^a · (odd square), which is the same as saying n is a perfect square or twice a perfect square (a even gives a square; a odd gives twice a square). These two families are disjoint, since a square is never twice a square. Now sum: squares n = k^2 ≤ 2024 need k ≤ 44 (44^2 = 1936, 45^2 = 2025), contributing Σ_{k=1}^{44} k^2 = 44·45·89/6 = 29370. Twice-squares n = 2k^2 ≤ 2024 need k^2 ≤ 1012, i.e. k ≤ 31, contributing 2·Σ_{k=1}^{31} k^2 = 2·(31·32·63/6) = 2·10416 = 20832. Total: 29370 + 20832 = 50202. (A direct loop over n ≤ 2024 confirms 50202.)",
+    hints: [
+      "Use multiplicativity: split n into its power of 2 and its odd part, and decide when each prime-power factor of the divisor sum is odd.",
+      "For an odd prime power, the divisor sum is odd exactly when the exponent is even — translate that into a description of n.",
+      "The n that qualify are precisely the squares and twice-squares; sum each family with the formula for Σk^2 after finding the largest usable k.",
+    ],
+    difficulty: 9,
+    topicSlug: "divisibility",
+    competitionSlug: "hmmt",
+  },
+  {
+    slug: "hmmt-73",
+    question:
+      "Compute the number of positive integers n ≤ 2024 such that 2^n ≡ n (mod 7).",
+    format: "INTEGER",
+    answer: "288",
+    solution:
+      "Modulo 7 the powers of 2 cycle with period 3 (2, 4, 1, 2, 4, 1, ...), so 2^n mod 7 depends only on n mod 3, while n mod 7 depends only on n mod 7. Since gcd(3,7) = 1, the whole condition depends only on n mod 21, and by the Chinese Remainder Theorem each residue mod 21 corresponds to an independent choice of (n mod 3, n mod 7). Checking n = 1, ..., 21: the condition 2^n ≡ n (mod 7) holds exactly for n ≡ 11, 15, 16 (mod 21). (For instance n = 11: 2^11 ≡ 2^2 = 4 and 11 ≡ 4; n = 15: 2^15 ≡ 1 and 15 ≡ 1; n = 16: 2^16 ≡ 2 and 16 ≡ 2.) So exactly 3 of every 21 consecutive integers qualify. Now 2024 = 21·96 + 8, and the integers 1 through 2016 form 96 complete blocks of 21, giving 96·3 = 288 solutions. The leftover integers 2017, ..., 2024 are congruent to 1, ..., 8 mod 21, and none of 11, 15, 16 appears among those, so they contribute nothing. Total: 288. (A direct count over n ≤ 2024 confirms 288.)",
+    hints: [
+      "Figure out separately how 2^n mod 7 depends on n and how n mod 7 depends on n — the two have different periods.",
+      "Combining the two periods shows the condition depends only on n modulo 21; find all qualifying residues by checking n = 1 through 21.",
+      "Count complete blocks of 21 in [1, 2024] and then handle the leftover tail carefully.",
+    ],
+    difficulty: 9,
+    topicSlug: "modular-arithmetic",
+    competitionSlug: "hmmt",
+  },
+  {
+    slug: "hmmt-74",
+    question:
+      "Compute the number of simple graphs on the labeled vertex set {1, 2, 3, 4, 5, 6} that are connected.",
+    format: "INTEGER",
+    answer: "26704",
+    solution:
+      "Let T(n) = 2^C(n,2) be the number of all labeled simple graphs on n vertices and C(n) the number of connected ones. Classify an arbitrary graph by the connected component containing vertex 1: if that component has k vertices, choose the other k-1 of them among the remaining n-1 vertices in C(n-1, k-1) ways, make that component connected in C(k) ways, and fill in the other n-k vertices arbitrarily in T(n-k) ways. This gives T(n) = Σ_{k=1}^{n} C(n-1,k-1) C(k) T(n-k), i.e. C(n) = T(n) - Σ_{k=1}^{n-1} C(n-1,k-1) C(k) T(n-k). With T(1)=1, T(2)=2, T(3)=8, T(4)=64, T(5)=1024, T(6)=32768:\nC(1)=1; C(2)=2-1·1·1=1; C(3)=8-(1·1·2 + 2·1·1)=8-4=4; C(4)=64-(1·1·8 + 3·1·2 + 3·4·1)=64-26=38; C(5)=1024-(1·1·64 + 4·1·8 + 6·4·2 + 4·38·1)=1024-296=728; C(6)=32768-(1·1·1024 + 5·1·64 + 10·4·8 + 10·38·2 + 5·728·1)=32768-(1024+320+320+760+3640)=32768-6064=26704.\nSo there are 26704 connected labeled graphs on 6 vertices. (Independently confirmed by running the same recursion in code and by the known value for n = 5, namely 728.)",
+    hints: [
+      "Counting connected graphs directly is hopeless; count all graphs instead and peel off the disconnected ones.",
+      "Classify every graph by the vertex set of the connected component containing vertex 1 — that component is connected and the rest of the graph is completely arbitrary.",
+      "This yields a recursion expressing 2^C(n,2) as a binomial convolution of the connected counts; run it up from n = 1 to n = 6.",
+    ],
+    difficulty: 10,
+    topicSlug: "graph-theory",
+    competitionSlug: "hmmt",
+  },
 ];

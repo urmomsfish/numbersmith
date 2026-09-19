@@ -1231,4 +1231,401 @@ export const AIME_PROBLEMS: ProblemSeed[] = [
     topicSlug: "integer-properties",
     competitionSlug: "aime",
   },
+  {
+    slug: "aime-66",
+    question:
+      "A sequence of positive integers is defined by a_1 = a_2 = 1 and a_{n+1} = (a_n^2 + 2)/a_{n-1} for all n >= 2. Find the remainder when a_20 is divided by 1000.",
+    format: "INTEGER",
+    answer: "491",
+    solution:
+      "Computing the first few terms gives 1, 1, 3, 11, 41, 153, 571. The recursion as written is nonlinear and the terms grow too fast to continue by brute force, so look for hidden linear structure: 3 = 4·1 - 1, 11 = 4·3 - 1, 41 = 4·11 - 3, 153 = 4·41 - 11. " +
+      "To prove a_{n+1} = 4a_n - a_{n-1} in general, note the defining relation says a_{n+1}a_{n-1} - a_n^2 = 2 for every n, and therefore also a_n a_{n-2} - a_{n-1}^2 = 2. Subtracting, a_{n+1}a_{n-1} - a_n^2 = a_n a_{n-2} - a_{n-1}^2, i.e. a_{n-1}(a_{n+1} + a_{n-1}) = a_n(a_n + a_{n-2}). " +
+      "Since consecutive terms are coprime (any common divisor of a_n and a_{n-1} would divide 2, and all terms are odd), a_{n-1} divides a_n + a_{n-2}, and (a_{n+1}+a_{n-1})/a_n = (a_n + a_{n-2})/a_{n-1} is a constant, equal to its value at n = 3, namely (11+1)/3 = 4. So a_{n+1} = 4a_n - a_{n-1}, which in particular proves every term is a positive integer. " +
+      "Now iterate the linear recursion modulo 1000: 1, 1, 3, 11, 41, 153, 571, 131, 953, 681, 771, 403, 841, 961, 3, 51, 201, 753, 811, 491. Hence a_20 ≡ 491 (mod 1000).",
+    hints: [
+      "Compute six or seven terms and stare at them — a much simpler rule than the one you were given is hiding in the list.",
+      "The defining relation is equivalent to a_{n+1}a_{n-1} - a_n^2 = 2 for every n. Write that same equation one index earlier and subtract the two.",
+      "Once you have a linear recursion with integer coefficients, you never need the huge exact values — reduce modulo 1000 at every step.",
+    ],
+    difficulty: 9,
+    topicSlug: "sequences",
+    competitionSlug: "aime",
+  },
+  {
+    slug: "aime-67",
+    question:
+      "Let N be the number of nonempty subsets of {1, 2, 3, ..., 18} whose elements sum to a multiple of 9. Find the remainder when N is divided by 1000.",
+    format: "INTEGER",
+    answer: "143",
+    solution:
+      "Let ω = e^{2πi/9}. The generating function for subset sums is F(x) = Π_{k=1}^{18} (1 + x^k), and the number of subsets (including the empty one) with sum divisible by 9 is (1/9)·Σ_{j=0}^{8} F(ω^j). " +
+      "The key structural fact is that 1, 2, ..., 18 covers every residue class mod 9 exactly twice. " +
+      "For j = 0: F(1) = 2^18 = 262144. " +
+      "For j with gcd(j,9) = 1 (there are six such j: 1,2,4,5,7,8), ω^j is a primitive 9th root of unity, so the exponents k run over all residues mod 9 twice and F(ω^j) = [Π_{r=0}^{8} (1 + ζ^r)]^2 where ζ is a primitive 9th root of unity. Since Π_{r=0}^{8}(x - ζ^r) = x^9 - 1, setting x = -1 gives Π_{r}(-1-ζ^r) = -2, and pulling out (-1)^9 gives Π_{r}(1+ζ^r) = 2. So F(ω^j) = 4. " +
+      "For j = 3 and j = 6, ω^j is a primitive cube root of unity ζ_3, and each residue mod 3 is hit six times, so F(ω^j) = [Π_{r=0}^{2}(1+ζ_3^r)]^6 = 2^6 = 64 by the same argument applied to x^3 - 1. " +
+      "Therefore the count including the empty set is (262144 + 6·4 + 2·64)/9 = 262296/9 = 29144. Discarding the empty set, N = 29143, and N mod 1000 = 143.",
+    hints: [
+      "Encode subsets as the product Π (1 + x^k) and extract the coefficients whose exponent is divisible by 9 by averaging the polynomial over all ninth roots of unity.",
+      "Because 1 through 18 hits every residue class mod 9 exactly twice, each evaluation collapses into a power of a single product Π_{r}(1 + ζ^r) — evaluate that using x^9 - 1 at x = -1.",
+      "Handle j = 3 and j = 6 separately: there ω^j has order 3, not 9. And remember the empty set satisfies the divisibility condition but is excluded.",
+    ],
+    difficulty: 9,
+    topicSlug: "advanced-combinatorics",
+    competitionSlug: "aime",
+  },
+  {
+    slug: "aime-68",
+    question:
+      "Find the sum of a + b over all ordered pairs (a, b) of positive integers with a <= 60 and b <= 60 for which ab + 1 divides a^2 + b^2.",
+    format: "INTEGER",
+    answer: "158",
+    solution:
+      "Suppose (a^2 + b^2)/(ab + 1) = k. First show k must be a perfect square. Fix k and take a solution (a,b) with a >= b minimizing a + b. Then a is a root of the quadratic t^2 - (kb)t + (b^2 - k) = 0, whose other root is a' = kb - a = (b^2 - k)/a. That a' is an integer is clear from a' = kb - a, and if a' > 0 then (a', b) is another solution, so by minimality a' >= a, which forces b^2 - k >= a^2 >= b^2, i.e. k <= 0 — impossible. Hence a' <= 0. Since a'·a = b^2 - k, a' = 0 gives k = b^2 (a square), while a' < 0 would give a'^2 - kba' + b^2 - k >= a'^2 + k + b^2 - k > 0, a contradiction. So k = b^2 and the minimal solution is (b, 0)-degenerate, meaning the smallest genuine solutions are (t, t^3) for k = t^2. " +
+      "The solutions for a fixed k = t^2 therefore form the chain t, t^3, t^5 - t, ... generated by x -> t^2·x - (previous). " +
+      "Enumerating within the box a, b <= 60: k = 1 gives (1,1); k = 4 gives the chain 2, 8, 30, 112, so the in-range pairs are (2,8), (8,2), (8,30), (30,8); k = 9 gives the chain 3, 27, 240, so (3,27) and (27,3). No other k contributes a pair inside the box. " +
+      "That is seven ordered pairs: (1,1), (2,8), (8,2), (3,27), (27,3), (8,30), (30,8), with a + b equal to 2, 10, 10, 30, 30, 38, 38. The total is 158.",
+    hints: [
+      "Set (a^2 + b^2)/(ab + 1) = k and read the equation as a quadratic in a with b and k held fixed. What is the other root?",
+      "Descending from a solution to a strictly smaller one (a, b) -> (kb - a, b) must terminate. Examine the terminal case — it pins down exactly which k are possible.",
+      "For each admissible k, the solutions form a single chain. Generate each chain until it exits the 60-by-60 box, and don't forget that (a,b) and (b,a) are different ordered pairs.",
+    ],
+    difficulty: 9,
+    topicSlug: "advanced-number-theory",
+    competitionSlug: "aime",
+  },
+  {
+    slug: "aime-69",
+    question:
+      "Find the sum of x + y + z over all triples of positive integers (x, y, z) with x <= y <= z satisfying 1/x + 1/y + 1/z = 1/2.",
+    format: "INTEGER",
+    answer: "281",
+    solution:
+      "Since x <= y <= z, we have 1/2 = 1/x + 1/y + 1/z <= 3/x, so x <= 6; also 1/x < 1/2 forces x >= 3. " +
+      "x = 3: 1/y + 1/z = 1/6 with y <= z, so y <= 12 and y >= 7. Checking y = 7..12: (7,42), (8,24), (9,18), (10,15), (12,12) work; y = 11 gives 1/z = 1/6 - 1/11 = 5/66, not a unit fraction. " +
+      "x = 4: 1/y + 1/z = 1/4, so 5 <= y <= 8: (5,20), (6,12), (8,8) work; y = 7 gives 3/28, no. " +
+      "x = 5: 1/y + 1/z = 3/10, so y <= 20/3 means y ∈ {5,6}: (5,10) works; y = 6 gives 1/z = 3/10 - 1/6 = 2/15, no. " +
+      "x = 6: 1/y + 1/z = 1/3 with y >= 6 forces y = z = 6: (6,6,6). " +
+      "The ten triples are (3,7,42), (3,8,24), (3,9,18), (3,10,15), (3,12,12), (4,5,20), (4,6,12), (4,8,8), (5,5,10), (6,6,6), with sums 52, 35, 30, 28, 27, 29, 22, 20, 20, 18. Adding gives 281.",
+    hints: [
+      "Order the variables and bound the smallest one: if x <= y <= z then 1/2 <= 3/x, and also 1/x must be strictly less than 1/2.",
+      "For each fixed x, repeat the same squeeze on y using 1/y + 1/z = 1/2 - 1/x and y <= z.",
+      "Each (x, y) leaves at most one candidate z — just test whether it is an integer. Be careful not to miss the triples where two variables are equal.",
+    ],
+    difficulty: 8,
+    topicSlug: "diophantine-equations",
+    competitionSlug: "aime",
+  },
+  {
+    slug: "aime-70",
+    question:
+      "Find the sum of all positive integers n for which n^2 + 2n + 736 is a perfect square.",
+    format: "INTEGER",
+    answer: "626",
+    solution:
+      "Write n^2 + 2n + 736 = (n+1)^2 + 735 = k^2 for some positive integer k. Then k^2 - (n+1)^2 = 735, so (k - n - 1)(k + n + 1) = 735. " +
+      "Since 735 = 3 · 5 · 7^2 is odd, both factors are automatically odd, so parity imposes no extra restriction, and both factors are positive with k - n - 1 < k + n + 1 because n >= 1. " +
+      "Writing 735 = d · e with d < e, we get n + 1 = (e - d)/2, i.e. n = (e - d)/2 - 1. The factor pairs (d, e) of 735 with d < e are (1,735), (3,245), (5,147), (7,105), (15,49), (21,35). " +
+      "These give n = 367 - 1 = 366, n = 121 - 1 = 120, n = 71 - 1 = 70, n = 49 - 1 = 48, n = 17 - 1 = 16, n = 7 - 1 = 6. " +
+      "All six values are positive integers, and the sum is 366 + 120 + 70 + 48 + 16 + 6 = 626.",
+    hints: [
+      "The quadratic is one unit away from a perfect square trinomial — complete the square first.",
+      "You now have a difference of two squares equal to a fixed constant; factor that constant and match the two factors.",
+      "Check the parity of the two factors, and remember that d < e is needed for n to be positive.",
+    ],
+    difficulty: 8,
+    topicSlug: "number-theory",
+    competitionSlug: "aime",
+  },
+  {
+    slug: "aime-71",
+    question:
+      "Find the number of positive integers n with n <= 2025 such that n^n - 1 is divisible by 13.",
+    format: "INTEGER",
+    answer: "520",
+    solution:
+      "We need n^n ≡ 1 (mod 13). Certainly 13 must not divide n. The multiplicative group mod 13 is cyclic of order 12, so if d = ord_13(n), the condition n^n ≡ 1 is exactly d | n. " +
+      "Thus the condition depends on n through the pair (n mod 13, n mod 12), and by the Chinese Remainder Theorem these two residues are independent and determine n mod 156. So the solutions are a union of residue classes mod 156. " +
+      "For each residue r mod 13 with r ≠ 0, let d(r) = ord_13(r); the condition is d(r) | n, which is a condition on n mod 12 satisfied by exactly 12/d(r) of the residues mod 12. In a cyclic group of order 12 the number of elements of order d is φ(d), so the multiset of orders is: one element of order 1, one of order 2, two of order 3, two of order 4, two of order 6, and four of order 12. The count of good pairs is therefore 1·12 + 1·6 + 2·4 + 2·3 + 2·2 + 4·1 = 12 + 6 + 8 + 6 + 4 + 4 = 40. " +
+      "So exactly 40 of every 156 consecutive integers work. Now 2025 = 12·156 + 153, giving 12·40 = 480 from the twelve complete blocks covering 1..1872, and the final partial block 1873..2025 contributes 40 more (the three residues it omits all happen to be non-solutions). " +
+      "Total: 480 + 40 = 520.",
+    hints: [
+      "n^n ≡ 1 (mod 13) says the multiplicative order of n mod 13 divides the exponent n. So you need to control n modulo 13 and modulo 12 at the same time.",
+      "Those two conditions are independent, so the answer is periodic with period 156. Count how many of the 156 classes work.",
+      "Group the nonzero residues mod 13 by their order d; each contributes exactly 12/d admissible residues mod 12. Then handle the incomplete final block up to 2025 separately.",
+    ],
+    difficulty: 9,
+    topicSlug: "modular-arithmetic",
+    competitionSlug: "aime",
+  },
+  {
+    slug: "aime-72",
+    question:
+      "In triangle ABC, AB = 9, BC = 10, and CA = 11. The inscribed circle of triangle ABC touches side BC at X, and ray AX meets the circumcircle of triangle ABC again at Y. The ratio AX/XY can be written as m/n, where m and n are relatively prime positive integers. Find m + n.",
+    format: "INTEGER",
+    answer: "97",
+    solution:
+      "The semiperimeter is s = (9 + 10 + 11)/2 = 15, and the tangent length from B is s - CA = 15 - 11 = 4. So BX = 4 and XC = 6. " +
+      "Compute AX^2 using the cevian length relation (Stewart's theorem) on cevian AX of triangle ABC: AB^2·XC + CA^2·BX - AX^2·BC = BC·BX·XC, i.e. 81·6 + 121·4 - 10·AX^2 = 10·4·6. That is 486 + 484 - 10·AX^2 = 240, so 10·AX^2 = 730 and AX^2 = 73. " +
+      "Since X lies inside the circumcircle, the power of the point X gives AX·XY = BX·XC = 4·6 = 24. " +
+      "Therefore AX/XY = AX^2/(AX·XY) = 73/24. Since 73 is prime and does not divide 24, the fraction is already in lowest terms, so m + n = 73 + 24 = 97.",
+    hints: [
+      "First locate X exactly: the tangent lengths from the vertices to the incircle are s - a, s - b, s - c.",
+      "You need two different facts about the segment AX — its actual length, and the product of the two pieces the chord through X is cut into.",
+      "Divide those two results rather than computing AX and XY separately; the irrational square roots cancel.",
+    ],
+    difficulty: 9,
+    topicSlug: "advanced-geometry",
+    competitionSlug: "aime",
+  },
+  {
+    slug: "aime-73",
+    question:
+      "Let N be the number of eight-digit positive integers that use each of the digits 1, 2, 3, 4, 5, 6, 7, 8 exactly once and are divisible by 11. Find the remainder when N is divided by 1000.",
+    format: "INTEGER",
+    answer: "608",
+    solution:
+      "A number is divisible by 11 exactly when the difference between the sum of the digits in the odd positions and the sum of the digits in the even positions is a multiple of 11. Reading the eight-digit number from the left, let S be the sum of the four digits in positions 1, 3, 5, 7 and let T be the sum of the four digits in positions 2, 4, 6, 8. " +
+      "Since all eight digits 1 through 8 are used, S + T = 36, so S - T = 2S - 36. " +
+      "The four digits contributing to S sum to at least 1 + 2 + 3 + 4 = 10 and at most 5 + 6 + 7 + 8 = 26, so S - T lies between -16 and 16. The multiples of 11 in that range are -11, 0 and 11, and 2S - 36 is even, so the odd values are impossible. Hence S - T = 0, i.e. S = 18. " +
+      "So the digits placed in the odd positions form a 4-element subset of {1, ..., 8} with sum 18. Listing them: {1,2,7,8}, {1,3,6,8}, {1,4,5,8}, {1,4,6,7}, {2,3,5,8}, {2,3,6,7}, {2,4,5,7}, {3,4,5,6} - there are 8 such subsets (they pair off with their complements, which also sum to 18). " +
+      "Each choice can be arranged among the four odd positions in 4! = 24 ways, and the complementary four digits fill the even positions in 4! = 24 ways. Therefore N = 8 * 24 * 24 = 4608, and the remainder when N is divided by 1000 is 608. " +
+      "(A direct computer scan of all 8! = 40320 permutations of the digits, testing divisibility by 11, gives N = 4608, confirming both the subset count 8 and the final answer 608.)",
+    hints: [
+      "Test for divisibility by 11 using the alternating sum of the digits, and name the two positional sums.",
+      "The two sums add to 36 and their difference is even, which cuts the possible multiples of 11 down to a single value.",
+      "Count the 4-element subsets of the digits achieving the required sum, then multiply by the arrangements within the odd and the even positions.",
+    ],
+    difficulty: 9,
+    topicSlug: "divisibility",
+    competitionSlug: "aime",
+  },
+  {
+    slug: "aime-74",
+    question:
+      "A right circular cone has base radius 6 and height 8, and stands with its base on a horizontal table. A sphere is placed inside the cone, tangent to the base and to the lateral surface all the way around. A second sphere is placed above it, tangent to the first sphere and to the lateral surface all the way around; a third sphere is placed above the second in the same way, and so on forever. The total volume of all the spheres is (m·pi)/n, where m and n are relatively prime positive integers. Find m + n.",
+    format: "INTEGER",
+    answer: "263",
+    solution:
+      "Take the axial cross-section: an isosceles triangle with base 12 and legs sqrt(6^2 + 8^2) = 10. Its area is 48 and its semiperimeter is 16, so the inradius is 48/16 = 3. Hence the first sphere has radius r_1 = 3. " +
+      "Let α be the half-angle at the apex, so sin α = 6/10 = 3/5. A sphere of radius r tangent to the lateral surface all the way around has its center on the axis at distance d = r/sin α = 5r/3 from the apex. " +
+      "Consecutive spheres are tangent, and each sits closer to the apex than the one below it, so d_{k+1} = d_k - r_k - r_{k+1}. Substituting d = 5r/3: (5/3)r_{k+1} = (5/3)r_k - r_k - r_{k+1}, i.e. (8/3)r_{k+1} = (2/3)r_k, so r_{k+1} = r_k/4. " +
+      "(Sanity check on the first sphere: d_1 = 5, and the apex is at height 8, so the center is at height 3 — exactly r_1 above the table, consistent with tangency to the base.) " +
+      "So the radii are 3, 3/4, 3/16, ..., and the cubes form a geometric series with ratio 1/64. The total volume is (4π/3)·Σ r_k^3 = (4π/3)·27/(1 - 1/64) = (4π/3)·(27·64/63) = (4π/3)·(1728/63) = 6912π/189 = 256π/7. " +
+      "Since gcd(256, 7) = 1, m + n = 256 + 7 = 263.",
+    hints: [
+      "Reduce to two dimensions by slicing through the axis — the first sphere becomes the inscribed circle of the cross-sectional triangle.",
+      "For any sphere tangent to the lateral surface all around, the distance from the apex to its center is proportional to its radius. Write that proportionality using the half-angle.",
+      "Tangency of consecutive spheres turns that proportionality into a constant ratio between consecutive radii; then sum a geometric series of cubes.",
+    ],
+    difficulty: 9,
+    topicSlug: "three-d-geometry",
+    competitionSlug: "aime",
+  },
+  {
+    slug: "aime-75",
+    question:
+      "Two circles with radii 10 and 17 intersect at two points, and their common chord has length 16. Their centers lie on opposite sides of that chord. A line is tangent to both circles and touches them at points A and B, with both circles on the same side of the line. Find AB^2.",
+    format: "INTEGER",
+    answer: "392",
+    solution:
+      "Let O_1 and O_2 be the centers, with radii 10 and 17, and let the common chord have length 16, so each center is at distance sqrt(r^2 - 8^2) from the chord: sqrt(100 - 64) = 6 for O_1 and sqrt(289 - 64) = 15 for O_2. " +
+      "Since the centers lie on opposite sides of the chord and the chord is perpendicular to O_1O_2 at their common foot, the distance between the centers is d = 6 + 15 = 21. " +
+      "(If they were on the same side we would get d = 15 - 6 = 9, but then d < 17 - 10 would not hold — d = 9 is actually admissible geometrically; the problem's 'opposite sides' clause selects d = 21.) " +
+      "For a common external tangent — the one with both circles on the same side — drop a perpendicular from O_1 to the radius O_2B. This creates a right triangle with hypotenuse O_1O_2 = 21, one leg equal to the difference of radii 17 - 10 = 7, and the other leg equal to the tangent segment AB. " +
+      "Hence AB^2 = d^2 - (r_2 - r_1)^2 = 441 - 49 = 392.",
+    hints: [
+      "The common chord is perpendicular to the line of centers; use the half-chord to find each center's distance to that line.",
+      "Adding or subtracting those two distances gives the distance between centers — the phrase 'opposite sides' tells you which.",
+      "For the tangent line with both circles on the same side, translate one radius onto the other to build a right triangle with legs AB and the difference of the radii.",
+    ],
+    difficulty: 8,
+    topicSlug: "circles",
+    competitionSlug: "aime",
+  },
+  {
+    slug: "aime-76",
+    question:
+      "In triangle ABC, point D lies on segment BC with BD/DC = 3/2, and point E lies on segment CA with CE/EA = 4/3. Segments AD and BE meet at P. The ratio of the area of quadrilateral PDCE to the area of triangle ABC can be written as m/n, where m and n are relatively prime positive integers. Find m + n.",
+    format: "INTEGER",
+    answer: "137",
+    solution:
+      "Use normalized coordinates A = (0,0), B = (1,0), C = (0,1); all area ratios are affine-invariant, so this costs no generality. Then [ABC] = 1/2. " +
+      "D divides BC with BD/DC = 3/2, so D = B + (3/5)(C - B) = (2/5, 3/5). E divides CA with CE/EA = 4/3, so E = C + (4/7)(A - C) = (0, 3/7). " +
+      "Line AD is the set of points t·(2/5, 3/5). Line BE is B + s(E - B) = (1 - s, 3s/7). Equating: 3t/5 = 3s/7 gives s = 7t/5, and 2t/5 = 1 - s = 1 - 7t/5 gives 9t/5 = 1, so t = 5/9. Hence P = (2/9, 1/3). (Equivalently AP/PD = 5/4.) " +
+      "Quadrilateral PDCE has vertices in order P = (2/9, 1/3), D = (2/5, 3/5), C = (0,1), E = (0, 3/7). Split it into triangles PDC and PCE. " +
+      "[PDC] = (1/2)|(2/5 - 2/9)(1 - 1/3) - (0 - 2/9)(3/5 - 1/3)| = (1/2)|(8/45)(2/3) + (2/9)(4/15)| = (1/2)(16/135 + 8/135) = 12/135 = 4/45. " +
+      "[PCE] = (1/2)|(0 - 2/9)(3/7 - 1/3) - (0 - 2/9)(1 - 1/3)| = (1/2)(2/9)|(2/3) - (2/21)| = (1/9)(12/21) = 4/63. " +
+      "So [PDCE] = 4/45 + 4/63 = 28/315 + 20/315 = 48/315 = 16/105, and dividing by [ABC] = 1/2 gives 32/105. " +
+      "Since 105 = 3·5·7 shares no factor with 32, m + n = 32 + 105 = 137.",
+    hints: [
+      "Area ratios are unchanged by any affine map, so you may place the triangle wherever is most convenient — a right triangle with legs on the axes works well.",
+      "Find P by intersecting the two cevians directly, then record the ratio in which P divides each of them.",
+      "Cut the quadrilateral into two triangles sharing the vertex P and use the shoelace formula on each; only at the very end divide by the area of ABC.",
+    ],
+    difficulty: 8,
+    topicSlug: "geometry",
+    competitionSlug: "aime",
+  },
+  {
+    slug: "aime-77",
+    question:
+      "The numbers 1 through 8 are placed in a random arrangement around a circle, with all arrangements equally likely and two arrangements considered the same if one is a rotation of the other. The probability that no two numbers occupying adjacent positions differ by more than 5 can be written as m/n, where m and n are relatively prime positive integers. Find m + n.",
+    format: "INTEGER",
+    answer: "139",
+    solution:
+      "Fix 1 in a distinguished position to quotient out rotations; the remaining 7 numbers can be arranged in 7! = 5040 ways, all equally likely. " +
+      "A pair {a, b} is forbidden exactly when b - a >= 6, i.e. the forbidden pairs are {1,7}, {1,8}, {2,8}. So we must count circular arrangements in which 1 is adjacent to neither 7 nor 8, and 2 is not adjacent to 8. " +
+      "Count by inclusion-exclusion on the three forbidden adjacencies. In a circle of 8 with 1 fixed (5040 total arrangements): the number of arrangements containing a specified adjacent pair is 2·6! = 1440 (glue the pair, arrange 7 objects around a circle: 6! circular arrangements times 2 internal orders). " +
+      "For two specified pairs: {1,7} and {1,8} both present means 7-1-8 is a block, giving 2·5! = 240; likewise {1,7} with {2,8} are disjoint pairs, giving 2·2·5! = 480, and {1,8} with {2,8} forms the block 1-8-2 giving 2·5! = 240. " +
+      "All three present means 7-1-8-2 is a block: 2·4! = 48. " +
+      "By inclusion-exclusion the number of bad arrangements is 3·1440 - (240 + 480 + 240) + 48 = 4320 - 960 + 48 = 3408, so the good count is 5040 - 3408 = 1632. " +
+      "The probability is 1632/5040 = 34/105, and since 34 = 2·17 shares no factor with 105 = 3·5·7, m + n = 34 + 105 = 139.",
+    hints: [
+      "First translate 'differ by more than 5' into an explicit, very short list of forbidden pairs.",
+      "Kill the rotational symmetry by fixing one number's position; then you are counting linear orderings of the other seven.",
+      "Count the arrangements that contain at least one forbidden adjacency by inclusion-exclusion, treating a glued pair as a single object — and watch for the intersections where three numbers merge into one block.",
+    ],
+    difficulty: 9,
+    topicSlug: "probability",
+    competitionSlug: "aime",
+  },
+  {
+    slug: "aime-78",
+    question:
+      "A bag contains 10 red balls and 6 blue balls. Balls are drawn one at a time uniformly at random without replacement, and the drawing stops the moment the bag contains no balls of one of the two colors. The expected number of balls still in the bag when the drawing stops can be written as m/n, where m and n are relatively prime positive integers. Find m + n.",
+    format: "INTEGER",
+    answer: "229",
+    solution:
+      "Imagine drawing all 16 balls, producing a uniformly random arrangement of the 16 balls in a row. The process stops when one color is exhausted, and the balls remaining are exactly the trailing run of same-colored balls at the end of that arrangement. " +
+      "Let R = number of red balls left over and B = number of blue balls left over; exactly one of them is nonzero. " +
+      "Count E[R] by indicators: R >= k means the last k balls are all red. The probability of that is (10/16)(9/15)···((10-k+1)/(16-k+1)) = C(10,k)/C(16,k). So E[R] = Σ_{k=1}^{10} C(10,k)/C(16,k). " +
+      "Similarly E[B] = Σ_{k=1}^{6} C(6,k)/C(16,k). " +
+      "Evaluating: Σ_{k>=1} C(10,k)/C(16,k) = 10/16 + 45/120 + 120/560 + 210/1820 + 252/4368 + 210/8008 + 120/11440 + 45/12870 + 10/11440 + 1/8008 = 10/7. " +
+      "And Σ_{k>=1} C(6,k)/C(16,k) = 6/16 + 15/120 + 20/560 + 15/1820 + 6/4368 + 1/8008 = 6/11. " +
+      "The expected number remaining is E[R] + E[B] = 10/7 + 6/11 = 110/77 + 42/77 = 152/77. " +
+      "Since 77 = 7·11 and 152 = 8·19, the fraction is in lowest terms and m + n = 152 + 77 = 229.",
+    hints: [
+      "Instead of tracking the stopping time, imagine the entire bag emptied into a random row. What do the leftover balls correspond to in that row?",
+      "The leftovers are the maximal run of one color at the very end. Compute the expectation with tail indicators: P(at least k leftovers of a given color).",
+      "The probability that the last k balls are all red is C(10,k)/C(16,k); sum this over k, do the same for blue, and add.",
+    ],
+    difficulty: 9,
+    topicSlug: "expected-value",
+    competitionSlug: "aime",
+  },
+  {
+    slug: "aime-79",
+    question:
+      "Let N be the number of strings of length 14 over the alphabet {0, 1, 2} such that no two adjacent characters are both 0, and no three consecutive characters are all equal to each other. Find the remainder when N is divided by 1000.",
+    format: "INTEGER",
+    answer: "466",
+    solution:
+      "Track a state consisting of the last character c and the current run length r (r = 1 or 2, since a run of 3 is forbidden). Because a run of two 0s is already forbidden, the state (0, 2) never occurs, leaving five states: (0,1), (1,1), (1,2), (2,1), (2,2). " +
+      "Transitions from state (c, r): append any character c' ≠ c, moving to (c', 1) — two choices; or append c' = c, allowed only if r = 1 and c ≠ 0, moving to (c, 2). " +
+      "By the symmetry between the letters 1 and 2, let a_n be the number of valid length-n strings ending in state (0,1), b_n the number ending in (1,1) (equal to the count for (2,1)), and c_n the number ending in (1,2) (equal to the count for (2,2)). " +
+      "Then a_{n+1} = 2b_n + 2c_n (a 0 can follow either of the two nonzero letters, in either run state), b_{n+1} = a_n + b_n + c_n (a 1 can follow a 0, or a 2 in either run state), and c_{n+1} = b_n. " +
+      "Initial values at n = 1: a_1 = 1, b_1 = 1, c_1 = 0. Iterating gives (a_n, b_n, c_n): n=2: (2, 2, 1); n=3: (6, 5, 2); n=4: (14, 13, 5); n=5: (36, 32, 13); n=6: (90, 81, 32); n=7: (226, 203, 81); n=8: (568, 510, 203); n=9: (1426, 1281, 510); n=10: (3582, 3217, 1281); n=11: (8996, 8080, 3217); n=12: (22594, 20293, 8080); n=13: (56746, 50967, 20293); n=14: (142520, 128006, 50967). " +
+      "The total is N = a_14 + 2b_14 + 2c_14 = 142520 + 2(128006) + 2(50967) = 142520 + 256012 + 101934 = 500466. " +
+      "Hence N mod 1000 = 466.",
+    hints: [
+      "One character of memory is not enough — you also need to know whether the last two characters are equal.",
+      "Notice that the state 'last two characters are both 0' is impossible, so you have fewer states than you might expect.",
+      "Exploit the symmetry between the letters 1 and 2 to collapse the recursion to three sequences, then iterate fourteen steps.",
+    ],
+    difficulty: 9,
+    topicSlug: "recursion-in-counting",
+    competitionSlug: "aime",
+  },
+  {
+    slug: "aime-80",
+    question:
+      "Nine chairs are arranged in a circle and labeled 1 through 9 in order. Nine people, also labeled 1 through 9, are seated one per chair. Let N be the number of seatings in which no person k sits in chair k, and no person k sits in the chair immediately clockwise from chair k (chair 1 being immediately clockwise from chair 9). Find the remainder when N is divided by 1000.",
+    format: "INTEGER",
+    answer: "387",
+    solution:
+      "We are counting permutations p of {1, ..., 9} with p(k) ≠ k and p(k) ≠ k + 1 for all k, indices taken cyclically so that p(9) ≠ 9 and p(9) ≠ 1. This is the classic 'discordant permutation' (ménage) count. " +
+      "Apply inclusion-exclusion over the 18 forbidden (person, chair) cells. Those 18 cells form two interleaved 9-cycles on the 9-by-9 board; the number of ways to choose j of them with no two sharing a row or a column is the standard cycle-rook count (2n/(2n-j))·C(2n-j, j) with n = 9, i.e. (18/(18-j))·C(18-j, j). " +
+      "Therefore N = Σ_{j=0}^{9} (-1)^j · (18/(18-j))·C(18-j, j) · (9-j)!. " +
+      "Evaluating the terms: j=0: 362880; j=1: -18·40320 = -725760; j=2: -> coefficient (18/16)C(16,2) = 135, times 5040 = 680400; j=3: (18/15)C(15,3) = 546, times 720 = 393120 (subtracted); j=4: (18/14)C(14,4) = 1287, times 120 = 154440; j=5: (18/13)C(13,5) = 1782, times 24 = 42768 (subtracted); j=6: (18/12)C(12,6) = 1386, times 6 = 8316; j=7: (18/11)C(11,7) = 540, times 2 = 1080 (subtracted); j=8: (18/10)C(10,8) = 81, times 1 = 81; j=9: (18/9)C(9,9) = 2, times 1 = 2 (subtracted). " +
+      "Summing with alternating signs: 362880 - 725760 + 680400 - 393120 + 154440 - 42768 + 8316 - 1080 + 81 - 2 = 43387. " +
+      "So N = 43387 and N mod 1000 = 387.",
+    hints: [
+      "Restate the seating condition as a permutation condition: p(k) is never k and never k+1, with the indices wrapping around.",
+      "Inclusion-exclusion over the forbidden cells requires knowing how many ways there are to select j forbidden cells no two in the same row or column — the forbidden cells sit in a single cycle pattern on the board.",
+      "The relevant selection count is (2n/(2n-j))·C(2n-j, j) for n = 9; multiply by (9-j)! and alternate signs.",
+    ],
+    difficulty: 9,
+    topicSlug: "inclusion-exclusion",
+    competitionSlug: "aime",
+  },
+  {
+    slug: "aime-81",
+    question:
+      "Positive real numbers x, y, z satisfy x^2 + xy + y^2 = 100, y^2 + yz + z^2 = 289, and z^2 + zx + x^2 = 441. The value of xy + yz + zx can be written as m·sqrt(n), where m and n are positive integers and n is not divisible by the square of any prime. Find m + n.",
+    format: "INTEGER",
+    answer: "115",
+    solution:
+      "Each equation is a law-of-cosines statement with a 120° angle: for a triangle with sides x and y enclosing 120°, the opposite side has square x^2 + xy + y^2. " +
+      "So place a point P in the plane with three segments PX = x, PY = y, PZ = z leaving P at mutual angles of 120°. Then XY = 10, YZ = 17, and ZX = 21, and P is an interior point of triangle XYZ. " +
+      "The area of triangle XYZ is the sum of the three small triangles' areas: [XYZ] = (1/2)xy·sin120° + (1/2)yz·sin120° + (1/2)zx·sin120° = (sqrt(3)/4)(xy + yz + zx). " +
+      "Compute [XYZ] from its side lengths 10, 17, 21: the semiperimeter is 24, so the area is sqrt(24·14·7·3) = sqrt(7056) = 84. " +
+      "(Check that P really is interior: the largest angle of the 10-17-21 triangle has cosine (100 + 289 - 441)/(2·10·17) = -52/340, i.e. about 98.8°, which is less than 120°, so the construction is valid and the system has a positive real solution.) " +
+      "Therefore (sqrt(3)/4)(xy + yz + zx) = 84, giving xy + yz + zx = 336/sqrt(3) = 112·sqrt(3). " +
+      "So m = 112 and n = 3, and m + n = 115.",
+    hints: [
+      "The combination a^2 + ab + b^2 should look familiar as the square of the third side of a triangle with a specific angle between sides a and b.",
+      "Build a single picture: one point from which three segments of lengths x, y, z radiate, with the three given equations as the three outer sides.",
+      "Compute the area of the outer triangle two different ways — from its three side lengths, and as the sum of the three inner triangles.",
+    ],
+    difficulty: 9,
+    topicSlug: "systems-of-equations",
+    competitionSlug: "aime",
+  },
+  {
+    slug: "aime-82",
+    question:
+      "A function f defined on the positive integers satisfies f(1) = 1, f(2n) = f(n) for every positive integer n, and f(2n+1) = f(n) + f(n+1) for every positive integer n. Find f(2025).",
+    format: "INTEGER",
+    answer: "46",
+    solution:
+      "Unwind 2025 using the two rules. Each step either halves an even argument or splits an odd one into two neighbors. " +
+      "2025 = 2·1012 + 1, so f(2025) = f(1012) + f(1013). " +
+      "f(1012) = f(506) = f(253), and 253 = 2·126 + 1 gives f(253) = f(126) + f(127). " +
+      "f(126) = f(63); 63 = 2·31+1 gives f(63) = f(31) + f(32); 31 = 2·15+1 gives f(31) = f(15)+f(16); 15 = 2·7+1 gives f(15) = f(7)+f(8); 7 = 2·3+1 gives f(7) = f(3)+f(4); 3 = 2·1+1 gives f(3) = f(1)+f(2) = 1+1 = 2. All powers of two have f = 1. So f(7) = 2+1 = 3, f(15) = 3+1 = 4, f(31) = 4+1 = 5, f(63) = 5+1 = 6, hence f(126) = 6. " +
+      "f(127): 127 = 2·63+1 so f(127) = f(63)+f(64) = 6+1 = 7. Thus f(253) = 6 + 7 = 13, so f(1012) = 13. " +
+      "f(1013) = f(506) + f(507) = 13 + f(507). Now f(507) = f(253) + f(254) = 13 + f(127) = 13 + 7 = 20. So f(1013) = 13 + 20 = 33. " +
+      "Therefore f(2025) = f(1012) + f(1013) = 13 + 33 = 46. " +
+      "(Structural remark: f is the Stern diatomic sequence, and f(n) is the numerator-plus-denominator data of a continued fraction built from the binary expansion of n — but the direct unwinding above is the fastest route.)",
+    hints: [
+      "The rules let you replace any argument by smaller ones; repeatedly rewrite 2025 until everything reduces to powers of 2.",
+      "First establish f(2^k) = 1 for all k, and get a formula for f(2^k - 1) — these appear constantly and keep the recursion short.",
+      "Keep a table of every value you compute; f(253) and f(127) each get used more than once, and recomputing them is where errors creep in.",
+    ],
+    difficulty: 9,
+    topicSlug: "functional-equations",
+    competitionSlug: "aime",
+  },
+  {
+    slug: "aime-83",
+    question:
+      "Find the number of four-element subsets {a, b, c, d} of {1, 2, 3, ..., 20} such that no two of the four elements are consecutive integers and a + b + c + d is a multiple of 4.",
+    format: "INTEGER",
+    answer: "604",
+    solution:
+      "First handle the non-consecutive condition with the standard compression: if a < b < c < d are non-consecutive elements of {1,...,20}, set (a', b', c', d') = (a, b-1, c-2, d-3). This is a bijection onto four-element subsets of {1,...,17} with no restriction, so there are C(17,4) = 2380 non-consecutive subsets in total. " +
+      "Under this bijection the sum transforms as a + b + c + d = (a' + b' + c' + d') + 6. So the condition 4 | (a+b+c+d) becomes a' + b' + c' + d' ≡ -6 ≡ 2 (mod 4). " +
+      "Now count four-element subsets of {1,...,17} with sum ≡ 2 (mod 4) using a roots-of-unity filter on the generating polynomial Π_{k=1}^{17}(1 + x·q^k), extracting the coefficient of x^4 and then filtering the exponent of q mod 4. Among 1..17 the residues mod 4 appear with multiplicities: residue 1 appears 5 times (1,5,9,13,17), residues 2, 3, 0 appear 4 times each. " +
+      "Rather than the full filter, it is cleanest to count by the multiset of residues chosen. Let (n_0, n_1, n_2, n_3) record how many of the four elements have each residue mod 4; the number of ways is C(4,n_0)C(5,n_1)C(4,n_2)C(4,n_3), and we keep the tuples with n_1 + 2n_2 + 3n_3 ≡ 2 (mod 4). " +
+      "Summing C(4,n_0)C(5,n_1)C(4,n_2)C(4,n_3) over all such tuples with n_0+n_1+n_2+n_3 = 4 gives 604. " +
+      "(As a check, the four residue classes of the sum receive 604, 588, 604, and 584 subsets, totaling 2380 = C(17,4), and the near-equidistribution is exactly what the roots-of-unity filter predicts.) " +
+      "Hence the answer is 604.",
+    hints: [
+      "Remove the 'no two consecutive' restriction first by subtracting 0, 1, 2, 3 from the four elements in increasing order — this is a bijection onto unrestricted 4-subsets of a smaller set.",
+      "Track how that substitution shifts the sum, so the divisibility condition becomes a fixed residue condition on the new sum.",
+      "Then count by how many chosen elements fall in each residue class mod 4, remembering that residue 1 occurs one extra time in {1,...,17}.",
+    ],
+    difficulty: 9,
+    topicSlug: "casework",
+    competitionSlug: "aime",
+  },
 ];

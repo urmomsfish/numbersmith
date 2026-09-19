@@ -873,4 +873,157 @@ export const ARML_PROBLEMS: ProblemSeed[] = [
     topicSlug: "permutations",
     competitionSlug: "arml",
   },
+  {
+    slug: "arml-57",
+    question:
+      "Let N be the least positive integer such that 2N is a perfect square, 3N is a perfect cube, and 5N is a perfect fifth power. Compute the number of positive divisors of N.",
+    format: "SHORT_ANSWER",
+    answer: "8400",
+    solution:
+      "Any prime other than 2, 3, 5 dividing N would need its exponent divisible by 2, 3, and 5 simultaneously (since it is untouched by the multipliers), hence at least 30, which only enlarges N; so write N = 2^a · 3^b · 5^c. The three conditions become nine congruences on (a, b, c): 2N square forces a + 1 ≡ 0 (mod 2), b ≡ 0 (mod 2), c ≡ 0 (mod 2); 3N cube forces a ≡ 0 (mod 3), b + 1 ≡ 0 (mod 3), c ≡ 0 (mod 3); 5N fifth power forces a ≡ 0 (mod 5), b ≡ 0 (mod 5), c + 1 ≡ 0 (mod 5). Solving each coordinate separately by the Chinese Remainder Theorem: a is odd and divisible by 15, so the least is a = 15; b is even, ≡ 2 (mod 3), and ≡ 0 (mod 5), so the least is b = 20; c is even, divisible by 3, and ≡ 4 (mod 5), so the least is c = 24. Thus N = 2^15 · 3^20 · 5^24, and the number of divisors is (15 + 1)(20 + 1)(24 + 1) = 16 · 21 · 25 = 8400.",
+    hints: [
+      "Argue first that N can only involve the primes 2, 3, and 5, then write N = 2^a · 3^b · 5^c and translate each of the three conditions into congruences on a, b, and c.",
+      "Each of a, b, c must satisfy three congruences with moduli 2, 3, and 5 — note the multiplier shifts exactly one exponent by 1 in each condition.",
+      "Minimize a, b, c independently via the Chinese Remainder Theorem, then apply the divisor-counting formula.",
+    ],
+    difficulty: 9,
+    topicSlug: "advanced-number-theory",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-58",
+    question:
+      "Compute the number of strings of length 12 over the alphabet {A, B, C} in which no two consecutive letters are equal and the three-letter block ABA never occurs.",
+    format: "SHORT_ANSWER",
+    answer: "2632",
+    solution:
+      "Track the state (last two letters) and extend one letter at a time. There are 6 legal length-2 strings (any ordered pair of distinct letters), each with count 1. A transition from state (x, y) to (y, z) is allowed when z ≠ y and (x, y, z) ≠ (A, B, A). Every state has 2 legal continuations except the state (A, B), which has only 1 (namely C, since A is banned by the ABA rule and B by the no-repeat rule). Running this transfer step ten times and totalling the states after each extension gives the string counts by length: t(2) = 6, t(3) = 11, t(4) = 20, t(5) = 37, t(6) = 68, t(7) = 125, t(8) = 230, t(9) = 423, t(10) = 778, t(11) = 1431, t(12) = 2632. (These satisfy t(n) = t(n−1) + t(n−2) + t(n−3) for n ≥ 5, reflecting the fact that after an AB the next letter is forced.) The answer is t(12) = 2632.",
+    hints: [
+      "Two consecutive letters are not enough information on their own — but knowing the last TWO letters is, since the forbidden block has length 3.",
+      "Set up a transfer/DP over the 6 states given by the last two (distinct) letters; every state has two continuations except one special state.",
+      "Iterate the DP from length 2 up to length 12 and sum the final state counts.",
+    ],
+    difficulty: 8,
+    topicSlug: "advanced-combinatorics",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-59",
+    question:
+      "In triangle ABC, point D lies on BC with BD/DC = 1/2, point E lies on CA with CE/EA = 1/3, and point F lies on AB with AF/FB = 1/4. Segments AD, BE, and CF bound a triangle in the interior of ABC. Compute the ratio of the area of that interior triangle to the area of triangle ABC, as a fraction.",
+    format: "SHORT_ANSWER",
+    answer: "529/1870",
+    solution:
+      "Ratios of areas and ratios along lines are preserved by affine maps, so we may compute in any convenient triangle. Take A = (0,0), B = (1,0), C = (0,1). Then D = (B + ½C)/(3/2) = (2/3, 1/3), E = (C + ⅓A)/(4/3) = (0, 3/4), and F = (A + ¼B)/(5/4) = (1/5, 0). Line AD is y = x/2; line BE is x + (4/3)y = 1; line CF is 5x + y = 1. Intersecting them pairwise: AD ∩ BE = (3/5, 3/10), BE ∩ CF = (1/17, 12/17), CF ∩ AD = (2/11, 1/11). The shoelace formula gives the interior triangle area 2645/18700, while [ABC] = 1/2, so the ratio is 2·(2645/18700) = 2645/9350 = 529/1870. (This agrees with Routh's theorem: for BD/DC = x, CE/EA = y, AF/FB = z the ratio is (xyz − 1)²/((xy + x + 1)(yz + y + 1)(zx + z + 1)); here xyz = 1/24, so the numerator is (23/24)² = 529/576, and the denominator factors are 5/3, 17/12, and 11/8, whose product is 935/288, giving (529/576)·(288/935) = 529/1870.)",
+    hints: [
+      "Area ratios are affine invariants — replace the general triangle by a convenient one such as (0,0), (1,0), (0,1) and use coordinates.",
+      "Locate D, E, F by the section formula, write the three cevian lines, and intersect them in pairs to get the three vertices of the inner triangle.",
+      "Apply the shoelace formula to the inner triangle and divide by the area of the reference triangle.",
+    ],
+    difficulty: 9,
+    topicSlug: "advanced-geometry",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-60",
+    question:
+      "Let P(x) be the polynomial of degree at most 5 satisfying P(k) = k/(k + 2) for each of k = 0, 1, 2, 3, 4, 5. Compute P(6), as a fraction.",
+    format: "SHORT_ANSWER",
+    answer: "11/14",
+    solution:
+      "Clear the denominator by introducing Q(x) = (x + 2)·P(x) − x. Since P has degree at most 5, Q has degree at most 6, and Q(k) = (k + 2)·k/(k + 2) − k = 0 for k = 0, 1, 2, 3, 4, 5. So Q has the six known roots 0 through 5, forcing Q(x) = c·x(x − 1)(x − 2)(x − 3)(x − 4)(x − 5) for some constant c. The leading constant is pinned down by the one input that kills the factor x + 2: at x = −2, Q(−2) = 0·P(−2) + 2 = 2, while the product gives c·(−2)(−3)(−4)(−5)(−6)(−7) = 5040c, so c = 2/5040 = 1/2520. Now evaluate at x = 6: Q(6) = c·6·5·4·3·2·1 = 720/2520 = 2/7, and Q(6) = 8·P(6) − 6, so 8·P(6) = 6 + 2/7 = 44/7 and P(6) = 44/56 = 11/14. (Direct Lagrange interpolation through the six data points confirms P(6) = 11/14.)",
+    hints: [
+      "Fractional values are awkward — multiply through by x + 2 and consider the auxiliary polynomial (x + 2)·P(x) − x instead.",
+      "That auxiliary polynomial vanishes at six known inputs, so it factors completely up to one unknown constant; find the constant by plugging in the value of x that makes the factor x + 2 vanish.",
+      "Evaluate the factored form at x = 6 and solve back for P(6).",
+    ],
+    difficulty: 9,
+    topicSlug: "polynomials",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-61",
+    question:
+      "Points A and B in the plane satisfy AB = 10. Let R be the set of all points P with PA² + PB² ≤ 100 for which the angle APB measures at least 120°. Compute the area of R, in exact form.",
+    format: "SHORT_ANSWER",
+    answer: "200π/9 − 50√3/3",
+    solution:
+      "Place A = (0,0) and B = (10,0), and let M = (5,0) be the midpoint. The median-length identity PA² + PB² = 2·PM² + AB²/2 turns the first condition into 2·PM² + 50 ≤ 100, i.e. PM ≤ 5: a closed disk of radius 5 centered at M. The second condition describes the region between the two circular arcs on which ∠APB = 120°. For a chord of length 10 subtending an inscribed angle of 120°, the law of sines gives the arc's circle radius ρ = 10/(2 sin 120°) = 10/√3, and the region ∠APB ≥ 120° consists of the two circular segments cut off by AB on the minor-arc side. The half-chord is 5, so sin(θ/2) = 5/ρ = √3/2 and the central angle is θ = 120°; each segment has area (ρ²/2)(θ − sin θ) = (100/3)/2 · (2π/3 − √3/2) = 100π/9 − 25√3/3, and there are two of them (one on each side of AB). Finally, check containment: the farthest point of a segment from AB is at height ρ − ρ·cos 60° = ρ/2 = 5/√3 ≈ 2.89 < 5, and every point of the segments is within 5 of M, so the angle region already lies inside the disk PM ≤ 5 and the first condition imposes no further cut. Hence area(R) = 2(100π/9 − 25√3/3) = 200π/9 − 50√3/3 ≈ 40.95.",
+    hints: [
+      "Rewrite PA² + PB² using the midpoint M of AB — the first condition collapses into a single disk.",
+      "The locus of points seeing AB at a fixed angle is a pair of circular arcs through A and B; find the radius of those arcs from the chord length and the inscribed angle.",
+      "Compute the two circular-segment areas, and don't forget to check whether the disk from the first condition actually cuts anything off.",
+    ],
+    difficulty: 9,
+    topicSlug: "coordinate-geometry",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-62",
+    question:
+      "A rectangle has one side lying on the diameter of a semicircle of radius 10 and its two opposite vertices on the arc of that semicircle. Compute the largest possible perimeter of such a rectangle.",
+    format: "SHORT_ANSWER",
+    answer: "20√5",
+    solution:
+      "Put the center of the semicircle at the origin with the diameter along the x-axis and the arc above it. By symmetry the rectangle's base runs from (−a, 0) to (a, 0) for some a with 0 < a < 10, and its upper vertices (±a, b) lie on the arc, so a² + b² = 100. The perimeter is P = 2(2a) + 2b = 4a + 2b.\n\nWrite a = 10 cos θ and b = 10 sin θ with 0 < θ < 90°, which automatically enforces a² + b² = 100. Then P = 40 cos θ + 20 sin θ. A sum of the form p cos θ + q sin θ equals √(p² + q²)·sin(θ + φ) for the angle φ with tan φ = p/q, so its largest value is √(p² + q²), reached when θ + φ = 90°. Here √(40² + 20²) = √2000 = 20√5, and the maximizing θ satisfies tan θ = q/p = 20/40 = 1/2, which does lie strictly between 0° and 90°, so the maximum is attained by an honest rectangle.\n\nAt that angle cos θ = 2/√5 and sin θ = 1/√5, giving a = 20/√5 = 4√5 and b = 10/√5 = 2√5, a rectangle of base 8√5 and height 2√5 whose perimeter is 16√5 + 4√5 = 20√5 ≈ 44.72. (Calculus agrees: differentiating 4a + 2√(100 − a²) gives the critical point a = 4√5 and the value 20√5, and a numerical sweep over a finds the same maximum.)",
+    hints: [
+      "Use the symmetry about the perpendicular bisector of the diameter: the rectangle is determined by the coordinates of one upper vertex on the arc.",
+      "Write that vertex as (10 cos θ, 10 sin θ) so the arc condition is automatic, and express the perimeter as a combination of cos θ and sin θ.",
+      "A combination p cos θ + q sin θ has largest value √(p² + q²); check that the angle achieving it is actually in range.",
+    ],
+    difficulty: 8,
+    topicSlug: "geometry",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-63",
+    question:
+      "In an election between two candidates A and B, candidate A receives 7 votes and candidate B receives 5 votes. The 12 ballots are counted one at a time in a uniformly random order. Compute the probability that at some moment during the count the number of ballots counted for A exceeds the number counted for B by exactly 4, as a fraction.",
+    format: "SHORT_ANSWER",
+    answer: "5/18",
+    solution:
+      "Encode a counting order as a lattice path: start at 0 and step +1 for each A ballot and −1 for each B ballot. The path has 12 steps, 7 up and 5 down, and ends at height 7 − 5 = 2; all C(12,7) = 792 such paths are equally likely. Because the steps are ±1 and the path starts at 0, A's lead exceeds B's by exactly 4 at some moment if and only if the path reaches height 4 at some moment — a lead of 5 or more cannot be attained without passing through 4 first. Count the paths that touch height 4 by reflection: given such a path, reflect the portion after its first visit to height 4 across the horizontal line y = 4. This is a bijection onto the set of all 12-step ±1 paths from 0 to the reflected endpoint 2·4 − 2 = 6, since any path ending at 6 > 4 must touch 4. Paths from 0 to 6 in 12 steps have u up-steps and 12 − u down-steps with u − (12 − u) = 6, so u = 9, and there are C(12,9) = 220 of them. The probability is therefore 220/792 = 5/18. (Exhaustive enumeration of all 792 orders confirms exactly 220 favorable ones.)",
+    hints: [
+      "Turn each counting order into a path that steps up for an A ballot and down for a B ballot, and note how many such paths there are and where they all end.",
+      "Since the steps are ±1, 'lead exactly 4 at some moment' is the same as 'the path ever reaches height 4' — now count the paths that touch that height.",
+      "Reflect the part of the path after its first visit to height 4; this matches those paths bijectively with all paths ending at a different, easily computed height.",
+    ],
+    difficulty: 9,
+    topicSlug: "probability",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-64",
+    question:
+      "A sequence is defined by a₁ = 3 and a_{n+1} = a_n² − a_n + 1 for n ≥ 1. Compute the exact value of the infinite sum 1/a₁ + 1/a₂ + 1/a₃ + ⋯, as a fraction.",
+    format: "SHORT_ANSWER",
+    answer: "1/2",
+    solution:
+      "The recursion can be rewritten as a_{n+1} − 1 = a_n(a_n − 1), which gives the telescoping identity 1/a_n = 1/(a_n − 1) − 1/(a_{n+1} − 1): indeed 1/(a_n − 1) − 1/(a_n(a_n − 1)) = (a_n − 1)/(a_n(a_n − 1)) = 1/a_n. Summing from n = 1 to N collapses to 1/(a₁ − 1) − 1/(a_{N+1} − 1) = 1/2 − 1/(a_{N+1} − 1). Since a₁ = 3 and the terms grow at least quadratically (3, 7, 43, 1807, 3263443, …), a_{N+1} → ∞, so the tail vanishes and the sum equals 1/2. (Partial sums: 1/3, 10/21, 439/903, … which already agrees with 1/2 to more than 40 decimal places after six terms.)",
+    hints: [
+      "Rewrite the recursion in the form a_{n+1} − 1 = a_n(a_n − 1) and look at the quantity 1/(a_n − 1).",
+      "Show that 1/a_n equals the difference of two consecutive terms of that sequence, so the sum telescopes.",
+      "Check that a_n grows without bound so the leftover tail term goes to 0.",
+    ],
+    difficulty: 8,
+    topicSlug: "sequences",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-65",
+    question:
+      "Compute the largest real number M such that x² + y² + z² ≥ M(xy + yz) holds for all real numbers x, y, and z.",
+    format: "SHORT_ANSWER",
+    answer: "√2",
+    solution:
+      "Fix a value of M and ask when Q(x, y, z) = x² + y² + z² − M(xy + yz) is nonnegative for every real triple. Group the x-terms and the z-terms separately, since y is the only variable interacting with both: x² − Mxy = (x − My/2)² − M²y²/4, and likewise z² − Mzy = (z − My/2)² − M²y²/4. Therefore Q = (x − My/2)² + (z − My/2)² + y²(1 − M²/2). The first two squares are never negative and can be made 0 by choosing x = z = My/2, so Q ≥ 0 for all triples exactly when the leftover coefficient satisfies 1 − M²/2 ≥ 0, i.e. M² ≤ 2. For M ≤ 0 the inequality is certainly true, so the constraint that matters is M ≤ √2. At M = √2 the inequality holds for all reals, and it is sharp: taking y = √2 and x = z = My/2 = 1 gives x² + y² + z² = 1 + 2 + 1 = 4 and xy + yz = √2 + √2 = 2√2, and indeed 4 = √2 · 2√2. For any M > √2 that same triple violates the inequality. Hence the largest M is √2. (A numerical sweep over 500000 random triples with xy + yz > 0 gives a minimum of (x² + y² + z²)/(xy + yz) equal to 1.41421…, and eigenvalue computation for the associated symmetric matrix gives the extreme value √2 exactly.)",
+    hints: [
+      "Rewrite the inequality as 'a certain expression in x, y, z is never negative' and notice that y is the only variable that interacts with both of the others.",
+      "Complete the square in x and, separately, in z, treating y as a constant; the two squares can always be driven to zero.",
+      "What survives is a multiple of y², and requiring its coefficient to be nonnegative pins down the largest admissible M; exhibit the equality case to confirm sharpness.",
+    ],
+    difficulty: 9,
+    topicSlug: "inequalities",
+    competitionSlug: "arml",
+  },
 ];

@@ -1866,4 +1866,219 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     topicSlug: "coordinate-geometry",
     competitionSlug: "amc10",
   },
+  {
+    slug: "amc10-113",
+    question:
+      "Three fair six-sided dice are rolled. What is the probability that at least one pair among the three dice shows values that differ by exactly 1?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["5/12", "7/12", "1/2", "2/3", "11/18"],
+    answer: "B",
+    solution:
+      "Complementary counting is cleaner: count the ordered triples in which no two of the three values differ by exactly 1. Work with the underlying multiset of values first. If all three values are equal (6 multisets), no two differ by 1, giving 6 ordered triples. If exactly two are equal, say value a twice and b once with b ≠ a, we need |a − b| ≠ 1; for each a there are 6 − 1 (itself) − (number of neighbors of a) choices of b, which is 4 when a ∈ {1,6} and 3 otherwise, for 2(4) + 4(3) = 20 multisets, each giving 3 ordered triples, so 60. If all three are distinct, we need a 3-element subset of {1,…,6} with no two elements consecutive; the standard gap count gives C(6 − 3 + 1, 3) = C(4,3) = 4 such subsets, each giving 3! = 6 ordered triples, so 24. The total with no pair differing by 1 is 6 + 60 + 24 = 90, so the count with at least one such pair is 216 − 90 = 126, and the probability is 126/216 = 7/12.",
+    hints: [
+      "Counting the arrangements that avoid the condition entirely is far easier than counting the ones that satisfy it.",
+      "Split the 'no two differ by 1' count by how many of the three dice are equal: all three equal, exactly two equal, or all distinct.",
+      "For the all-distinct case you are choosing a 3-element subset of {1,…,6} containing no two consecutive integers — there are C(4,3) = 4 of them.",
+    ],
+    difficulty: 8,
+    topicSlug: "counting-probability",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-114",
+    question:
+      "Two circles of radii 1 and 4 are externally tangent to each other, and both are tangent to the same line ℓ, on the same side of ℓ. A third circle lies in the region bounded by ℓ and the two given circles, tangent to ℓ and externally tangent to both circles. What is the radius of the third circle?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["2/3", "4/9", "1/2", "4/5", "2/5"],
+    answer: "B",
+    solution:
+      "First establish the key lemma. If two circles of radii r and R are externally tangent to each other and both tangent to a common line, the distance between their points of tangency with that line is 2√(rR): dropping a horizontal segment between the centers gives a right triangle with hypotenuse r + R (the distance between centers) and vertical leg |R − r|, so the horizontal leg is √((R+r)² − (R−r)²) = 2√(rR). Now let the small circle have radius r and place the three tangency points on ℓ. The tangency point of the new circle lies between the other two, so the two short distances add to the long one: 2√(1·r) + 2√(4·r) = 2√(1·4). That gives 2√r + 4√r = 4, so 6√r = 4, √r = 2/3, and r = 4/9. (Equivalently, 1/√r = 1/√1 + 1/√4.)",
+    hints: [
+      "Everything happens along ℓ — work with the three points where the circles touch ℓ rather than with the centers directly.",
+      "For two mutually tangent circles that both touch a line, find the distance between their two tangency points on that line by building a right triangle from the two centers.",
+      "The three tangency points are collinear, so the two smaller gaps sum to the largest; this is the tangent-line case of Descartes' circle relation, 1/√r = 1/√r₁ + 1/√r₂.",
+    ],
+    difficulty: 8,
+    topicSlug: "circles",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-115",
+    question:
+      "Let f(x) = x² − 4x + 1. What is the sum of all real numbers x that satisfy f(f(x)) = x but do not satisfy f(x) = x?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["8", "5", "3", "−2", "2"],
+    answer: "C",
+    solution:
+      "Any solution of f(x) = x is automatically a solution of f(f(x)) = x, so the polynomial f(x) − x must divide f(f(x)) − x. Here f(x) − x = x² − 5x + 1. Expanding, f(f(x)) − x = (x² − 4x + 1)² − 4(x² − 4x + 1) + 1 − x, a quartic with leading coefficient 1, and dividing by x² − 5x + 1 gives the factorization f(f(x)) − x = (x² − 5x + 1)(x² − 3x − 2). The solutions we want are the roots of the second factor. Its discriminant is 9 + 8 = 17 > 0, so both of its roots are real, and neither is a root of x² − 5x + 1 (the factors share no root since 17 ≠ 21). By Vieta's formulas the sum of the roots of x² − 3x − 2 is 3.",
+    hints: [
+      "Every fixed point of f is also a fixed point of f∘f — what does that tell you about how the quartic f(f(x)) − x factors?",
+      "Divide f(f(x)) − x by f(x) − x = x² − 5x + 1; the quotient is another monic quadratic.",
+      "Check the quotient's discriminant to confirm both of its roots are real, then read off the sum of its roots from its coefficients.",
+    ],
+    difficulty: 8,
+    topicSlug: "functions",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-116",
+    question:
+      "What is the smallest positive integer n such that n! is divisible by 2025⁵?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["40", "45", "30", "50", "25"],
+    answer: "B",
+    solution:
+      "First factor: 2025 = 81 · 25 = 3⁴ · 5², so 2025⁵ = 3²⁰ · 5¹⁰. We need the exponent of 3 in n! to be at least 20 and the exponent of 5 to be at least 10; the exponent of a prime p in n! is ⌊n/p⌋ + ⌊n/p²⌋ + ⌊n/p³⌋ + ⋯ (Legendre's formula). The 5 condition is the binding one. For n = 44 the exponent of 5 is ⌊44/5⌋ + ⌊44/25⌋ = 8 + 1 = 9, which is too small; for n = 45 it is ⌊45/5⌋ + ⌊45/25⌋ = 9 + 1 = 10, which is exactly enough. Since the exponent is nondecreasing in n, we need n ≥ 45. We must still confirm the 3 condition holds there: for n = 45 the exponent of 3 is ⌊45/3⌋ + ⌊45/9⌋ + ⌊45/27⌋ = 15 + 5 + 1 = 21 ≥ 20. Both conditions hold at n = 45, so the answer is 45. (Note n = 40 fails: its exponent of 5 is only 8 + 1 = 9.)",
+    hints: [
+      "Factor 2025 into primes before doing anything else, then raise that factorization to the fifth power.",
+      "Count how many times each prime divides n! by summing ⌊n/p⌋ + ⌊n/p²⌋ + ⋯ — do this for both primes, since only one of the two conditions will actually be binding.",
+      "The jump past the needed power of 5 happens at a multiple of 5; find the first n that clears it, then verify the power of 3 is already large enough there.",
+    ],
+    difficulty: 8,
+    topicSlug: "divisibility",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-117",
+    question:
+      "Let P = (4, 1). Point A lies somewhere on the x-axis and point B lies somewhere on the line y = x. What is the smallest possible value of PA + AB + BP?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["√17", "√34", "2√17", "√29", "6"],
+    answer: "B",
+    solution:
+      "Reflect P across each of the two lines. Reflecting across the x-axis gives P₁ = (4, −1); reflecting across y = x gives P₂ = (1, 4). For any choice of A on the x-axis, PA = P₁A, and for any B on y = x, BP = BP₂. So the perimeter equals P₁A + AB + BP₂, which is the length of a path from P₁ to P₂ through A and then B, and is therefore at least the straight-line distance P₁P₂. That distance is √((4−1)² + (−1−4)²) = √(9 + 25) = √34. The bound is attained: since P = (4,1) lies strictly inside the 45° wedge between the two lines (0 < 1 < 4), the segment P₁P₂ really does cross the x-axis and then y = x, at A = (3.4, 0) and B = (2.125, 2.125). So the minimum is √34. (A slicker check: the two reflections turn the 45° angle at the origin into a 90° angle, so P₁OP₂ is right-angled with legs OP₁ = OP₂ = √17, giving P₁P₂ = √2 · √17 = √34.)",
+    hints: [
+      "A path that must touch a line is shortest when you unfold it — replace a leg of the path by its mirror image.",
+      "Reflect P across the x-axis and, separately, across the line y = x; the perimeter becomes the length of a path joining the two images.",
+      "The minimum is the straight-line distance between the two reflected points — but confirm that segment actually meets both lines in the right order, which it does because P sits inside the wedge.",
+    ],
+    difficulty: 8,
+    topicSlug: "coordinate-geometry",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-118",
+    question:
+      "A frog starts at 0 on the number line. Each second it jumps forward 1 unit or forward 2 units, each with probability 1/2, independently of all previous jumps. What is the probability that the frog ever lands exactly on 10?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["2/3", "341/512", "683/1024", "1023/1024", "341/1024"],
+    answer: "C",
+    solution:
+      "Let pₙ be the probability the frog ever lands on n. The frog reaches n only by arriving from n − 1 (then jumping 1) or from n − 2 (then jumping 2), and these two events are disjoint given where the last jump started, so pₙ = (1/2)pₙ₋₁ + (1/2)pₙ₋₂ with p₀ = 1 and p₁ = 1/2. The characteristic equation 2x² − x − 1 = 0 factors as (2x + 1)(x − 1) = 0, with roots 1 and −1/2, so pₙ = A + B(−1/2)ⁿ. From p₀ = 1 and p₁ = 1/2 we get A + B = 1 and A − B/2 = 1/2, so A = 2/3 and B = 1/3, giving pₙ = 2/3 + (1/3)(−1/2)ⁿ. Then p₁₀ = 2/3 + (1/3)(1/1024) = (2048 + 1)/3072 = 2049/3072 = 683/1024. (Choice A is the limiting value as n → ∞, and 341/512 is p₉.)",
+    hints: [
+      "Condition on the frog's last jump before it would reach 10 — there are only two ways to arrive at any given point.",
+      "This gives a two-term recurrence pₙ = (1/2)pₙ₋₁ + (1/2)pₙ₋₂ with p₀ = 1 and p₁ = 1/2.",
+      "Solve the recurrence in closed form: the characteristic roots are 1 and −1/2, so pₙ = 2/3 + (1/3)(−1/2)ⁿ.",
+    ],
+    difficulty: 8,
+    topicSlug: "probability",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-119",
+    question:
+      "A sequence of positive integers satisfies aₙ₊₂ = aₙ₊₁ + aₙ for all n ≥ 1. Given that a₇ = 200, how many possible values are there for a₁?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["3", "4", "5", "6", "2"],
+    answer: "B",
+    solution:
+      "Write everything in terms of a₁ and a₂: the terms are a₁, a₂, a₁ + a₂, a₁ + 2a₂, 2a₁ + 3a₂, 3a₁ + 5a₂, 5a₁ + 8a₂. So 5a₁ + 8a₂ = 200. Reducing mod 8 gives 5a₁ ≡ 0 (mod 8), and since gcd(5,8) = 1 this forces 8 | a₁. Writing a₁ = 8k gives 40k + 8a₂ = 200, so 5k + a₂ = 25 and a₂ = 25 − 5k. Both terms must be positive integers, so k ≥ 1 and 25 − 5k ≥ 1, i.e. k ≤ 4 (k = 5 would give a₂ = 0, which is not a positive integer). That yields k = 1, 2, 3, 4, i.e. (a₁, a₂) = (8, 20), (16, 15), (24, 10), (32, 5) — 4 possible values of a₁. Every such pair does produce a valid all-positive sequence, since all terms are positive sums. The answer is 4. (Choice C counts the degenerate a₂ = 0 case.)",
+    hints: [
+      "Express a₇ in terms of a₁ and a₂ alone by expanding the recurrence forward.",
+      "You get 5a₁ + 8a₂ = 200 — a linear Diophantine equation; reduce mod 8 to see what a₁ must be a multiple of.",
+      "Enumerate the solutions, and be strict about 'positive integers' — a term equal to 0 does not count.",
+    ],
+    difficulty: 7,
+    topicSlug: "sequences",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-120",
+    question:
+      "In triangle ABC, AB = 10, BC = 12, and CA = 14. The segment from A that splits angle A into two equal angles meets BC at D, and the perpendicular dropped from A to line BC meets BC at E. What is DE?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["2", "3", "5", "7/2", "4"],
+    answer: "B",
+    solution:
+      "Put B at 0 and C at 12 on a number line along BC, and locate both points on it. For D, the angle bisector from A divides BC in the ratio of the adjacent sides: BD/DC = AB/AC = 10/14 = 5/7, so BD = 12 · 5/12 = 5. For E, use the Pythagorean theorem twice with AE as the common leg: AB² − BE² = AE² = AC² − EC², and with EC = 12 − BE this gives 100 − BE² = 196 − (12 − BE)², so 100 − BE² = 196 − 144 + 24BE − BE², hence 100 = 52 + 24BE and BE = 2. (Equivalently BE = (AB² + BC² − AC²)/(2·BC) = (100 + 144 − 196)/24 = 2.) Both D and E lie between B and C, so DE = |BD − BE| = |5 − 2| = 3.",
+    hints: [
+      "Set up a single coordinate along BC and find the position of each of the two points on it separately.",
+      "The bisector from A cuts BC into pieces proportional to the two adjacent sides — that locates D.",
+      "For the foot of the perpendicular, write AE² two ways using the two right triangles it creates, then subtract to eliminate AE.",
+    ],
+    difficulty: 7,
+    topicSlug: "triangles",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-121",
+    question:
+      "How many permutations (a₁, a₂, …, a₆) of the numbers 1, 2, 3, 4, 5, 6 satisfy both aᵢ ≠ i for all i from 1 to 6 and aᵢ ≠ i + 1 for all i from 1 to 5?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["265", "96", "144", "120", "84"],
+    answer: "B",
+    solution:
+      "Think of it as placing 6 non-attacking rooks on a 6×6 board where the cell in row i and column j is forbidden when j = i or j = i + 1. The forbidden cells form a single 'staircase' of 11 cells: (1,1),(1,2),(2,2),(2,3),(3,3),(3,4),(4,4),(4,5),(5,5),(5,6),(6,6). Apply inclusion–exclusion on the number of chosen forbidden cells. Because the staircase is a path, the number of ways rₖ to choose k of these 11 cells with no two in the same row or column is the number of ways to choose k non-adjacent cells from a path of 11, namely C(12 − k, k). The count is Σₖ (−1)ᵏ rₖ (6 − k)! = Σₖ (−1)ᵏ C(12 − k, k)(6 − k)!. The individual terms rₖ(6 − k)! for k = 0,…,6 are 1·720 = 720, 11·120 = 1320, 45·24 = 1080, 84·6 = 504, 70·2 = 140, 21·1 = 21, and 1·1 = 1. With alternating signs, 720 − 1320 + 1080 − 504 + 140 − 21 + 1 = 96. A direct computer enumeration of all 720 permutations confirms 96. (Choice A, 265, is the count of derangements of 6 — the answer if you forget the second restriction.)",
+    hints: [
+      "Each index i has exactly two forbidden values, so this is a rook-placement problem on a board with a staircase of forbidden cells.",
+      "Use inclusion–exclusion over the number of forbidden cells you force to be used; you need the number of ways to pick k forbidden cells no two sharing a row or column.",
+      "The forbidden cells form a path, so picking k of them with no two in a shared row or column is the same as picking k non-adjacent cells from a row of 11, giving C(12 − k, k).",
+    ],
+    difficulty: 8,
+    topicSlug: "inclusion-exclusion",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-122",
+    question: "What is the remainder when 7^(7^7) is divided by 100?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["7", "49", "43", "1", "93"],
+    answer: "C",
+    solution:
+      "Work out how the powers of 7 behave mod 100: 7¹ = 7, 7² = 49, 7³ = 343 ≡ 43, 7⁴ ≡ 43 · 7 = 301 ≡ 1. So the powers of 7 cycle mod 100 with period 4, and 7ᴺ mod 100 depends only on N mod 4. The second step is to reduce the tower's exponent: N = 7⁷, and 7 ≡ −1 (mod 4), so 7⁷ ≡ (−1)⁷ = −1 ≡ 3 (mod 4). Therefore 7^(7⁷) ≡ 7³ ≡ 43 (mod 100). (Choice A is what you get from the error of reducing the exponent mod 4 to 1 instead of 3; choice D comes from reducing it to 0.)",
+    hints: [
+      "Compute 7, 7², 7³, 7⁴ modulo 100 and look for when the powers start repeating.",
+      "Once you know the cycle length, the only thing that matters about the huge exponent 7⁷ is its remainder upon division by that cycle length.",
+      "Reduce 7⁷ modulo 4 using 7 ≡ −1 (mod 4) — no need to compute 7⁷ = 823543 itself.",
+    ],
+    difficulty: 8,
+    topicSlug: "modular-arithmetic",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-123",
+    question:
+      "A three-digit positive integer is chosen at random, with all 900 of them equally likely. What is the probability that its digits, read from left to right, are either strictly increasing or strictly decreasing?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["7/75", "17/75", "2/15", "17/150", "4/25"],
+    answer: "B",
+    solution:
+      "Count the two kinds separately. If the digits strictly increase, none of them can be 0 (a 0 could only come first, and the leading digit is nonzero anyway, so 0 cannot appear at all), and any three distinct digits from 1 through 9 can be written in increasing order in exactly one way. That gives C(9, 3) = 84 numbers. If the digits strictly decrease, 0 is allowed — it can only land in the units place, and the leading digit is then automatically nonzero — so any three distinct digits from 0 through 9 arrange in decreasing order in exactly one way, giving C(10, 3) = 120 numbers. The two cases cannot overlap, since a strictly increasing triple of digits is never strictly decreasing. So 84 + 120 = 204 of the 900 three-digit numbers qualify, and the probability is 204/900 = 17/75.",
+    hints: [
+      "For each kind of number, notice that a set of three distinct digits determines the number completely — the order is forced.",
+      "Decide separately whether the digit 0 is available in each case, thinking about where a 0 could possibly sit.",
+      "Add the two counts (they cannot overlap) and divide by 900, then reduce the fraction.",
+    ],
+    difficulty: 7,
+    topicSlug: "counting-principles",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-124",
+    question:
+      "Each of the nine unit squares of a 3×3 grid is colored red or blue. How many of the 512 colorings contain no 2×2 block of four squares that are all the same color?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["417", "336", "322", "320", "256"],
+    answer: "C",
+    solution:
+      "There are four 2×2 blocks (upper-left, upper-right, lower-left, lower-right). For each block B, let A_B be the set of colorings in which B is monochromatic; |A_B| = 2 (the block's color) × 2⁵ (the other five cells) = 64. Use inclusion–exclusion. Singles: 4 · 64 = 256. Pairs: two blocks overlap either in two cells (horizontally or vertically adjacent blocks, 4 such pairs) or in one cell (the two diagonal pairs, 2 such pairs). If both blocks are monochromatic and they share at least one cell, they must share the same color, so their union of 6 cells (adjacent pair) or 7 cells (diagonal pair) is one color: adjacent pairs give 2 · 2³ = 16 each, diagonal pairs give 2 · 2² = 8 each. Pair total: 4 · 16 + 2 · 8 = 80. Triples: any three of the four blocks overlap pairwise in a connected way, so all are forced to the same color, and their union always covers 8 of the 9 cells (it misses exactly the corner of the one omitted block). That leaves 2 · 2¹ = 4 colorings each, and there are 4 triples: 16. Quadruple: all nine cells one color, 2 colorings. Inclusion–exclusion gives |A₁ ∪ … ∪ A₄| = 256 − 80 + 16 − 2 = 190, so the answer is 512 − 190 = 322. An exhaustive check of all 512 colorings confirms 322.",
+    hints: [
+      "Count the colorings that DO contain a monochromatic 2×2 block and subtract from 512.",
+      "There are four 2×2 blocks; overlapping blocks that are both monochromatic are forced to share the same color, which collapses many cells at once.",
+      "Apply inclusion–exclusion, treating the horizontally/vertically adjacent block pairs (sharing two cells) separately from the diagonal pairs (sharing one cell).",
+    ],
+    difficulty: 8,
+    topicSlug: "casework",
+    competitionSlug: "amc10",
+  },
 ];

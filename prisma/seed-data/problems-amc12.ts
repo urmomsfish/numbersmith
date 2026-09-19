@@ -1848,4 +1848,220 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
     topicSlug: "counting-probability",
     competitionSlug: "amc12",
   },
+  {
+    slug: "amc12-113",
+    question:
+      "What is the sum of all real numbers x with 0 ≤ x < 2π that satisfy sin 3x = cos 2x?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["5π", "9π/2", "4π", "7π/2", "13π/2"],
+    answer: "B",
+    solution:
+      "Rewrite the right side as a sine: cos 2x = sin(π/2 − 2x). The equation sin u = sin v holds exactly when u = v + 2kπ or u = π − v + 2kπ. First family: 3x = π/2 − 2x + 2kπ gives 5x = π/2 + 2kπ, so x = π/10 + 2kπ/5. Taking k = 0,1,2,3,4 gives the five values π/10, π/2, 9π/10, 13π/10, 17π/10, all in [0, 2π). Second family: 3x = π − (π/2 − 2x) + 2kπ gives 3x = π/2 + 2x + 2kπ, so x = π/2 + 2kπ, whose only value in [0, 2π) is π/2 — already on the first list. So there are exactly five solutions, and their sum is (1 + 5 + 9 + 13 + 17)π/10 = 45π/10 = 9π/2. As a shortcut, the five values form an arithmetic progression with middle term 9π/10, so their sum is 5 · 9π/10 = 9π/2. Symbolic solution over the interval confirms exactly these five roots.",
+    hints: [
+      "Turn both sides into the same trigonometric function so you can compare arguments directly.",
+      "sin u = sin v has two families of solutions: u = v + 2kπ and u = π − v + 2kπ. Generate both, then discard duplicates.",
+      "The surviving solutions form an arithmetic progression, so the sum is the number of them times the middle one.",
+    ],
+    difficulty: 8,
+    topicSlug: "functions",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-114",
+    question:
+      "How many positive integers n ≤ 1000 have an odd number of positive divisors and are divisible by exactly two distinct primes?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["10", "12", "14", "15", "31"],
+    answer: "B",
+    solution:
+      "Two separate ideas combine here. First, a positive integer has an odd number of divisors exactly when it is a perfect square: divisors pair up as d ↔ n/d, and the only unpaired case is d = √n. So n = m² with m² ≤ 1000, i.e. 1 ≤ m ≤ 31. Second, n = m² has exactly two distinct prime factors precisely when m does (squaring does not change which primes divide a number). So we need to count m in [1, 31] divisible by exactly two distinct primes. Listing them: 6, 10, 12, 14, 15, 18, 20, 21, 22, 24, 26, 28 — that is 12 values (note 30 = 2·3·5 has three distinct primes and is excluded, and prime powers like 8, 16, 27 have only one). The corresponding n are 36, 100, 144, 196, 225, 324, 400, 441, 484, 576, 676, 784. The answer is 12. (Choice E is simply the count of all squares up to 1000.)",
+    hints: [
+      "First translate 'odd number of divisors' into a much more familiar condition on n.",
+      "That reduces the problem to n = m² with m ≤ 31; now note that m² and m have the exact same set of prime divisors.",
+      "Count integers m from 1 to 31 with exactly two distinct prime factors — be careful to exclude 30, which has three.",
+    ],
+    difficulty: 8,
+    topicSlug: "number-theory",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-115",
+    question:
+      "Quadrilateral ABCD is inscribed in a circle, with AB = 2, BC = 6, CD = 4, and DA = 4. What is the length of diagonal AC?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["16/7", "8√7/7", "16√7/7", "2√7", "4√7/7"],
+    answer: "C",
+    solution:
+      "Because ABCD is cyclic, angles B and D are supplementary, so cos D = −cos B. Compute AC² from each of the two triangles that the diagonal creates. In triangle ABC: AC² = AB² + BC² − 2·AB·BC·cos B = 4 + 36 − 24 cos B = 40 − 24 cos B. In triangle ACD: AC² = CD² + DA² − 2·CD·DA·cos D = 16 + 16 + 32 cos B = 32 + 32 cos B. Setting these equal: 40 − 24 cos B = 32 + 32 cos B, so 8 = 56 cos B and cos B = 1/7. Then AC² = 40 − 24/7 = (280 − 24)/7 = 256/7, so AC = 16/√7 = 16√7/7. (Choice A is AC², forgetting the square root's effect; choice D is √28.)",
+    hints: [
+      "Draw the diagonal AC to split the quadrilateral into two triangles, and write AC² using each triangle.",
+      "The inscribed quadrilateral forces the two angles at B and D to be supplementary, so their cosines are negatives of each other.",
+      "Apply the law of cosines twice, set the two expressions for AC² equal, solve for cos B, then back-substitute.",
+    ],
+    difficulty: 8,
+    topicSlug: "quadrilaterals",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-116",
+    question:
+      "How many functions f from the set {1, 2, 3, 4, 5} to itself satisfy f(f(x)) = f(x) for every x in {1, 2, 3, 4, 5}?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["26", "120", "195", "196", "3125"],
+    answer: "D",
+    solution:
+      "The condition says precisely that f fixes every value it takes: if y = f(x) is in the image, then f(y) = f(f(x)) = f(x) = y. Conversely, if every element of the image is a fixed point then f(f(x)) = f(x) automatically, since f(x) always lies in the image. So the functions being counted are exactly those obtained by choosing a nonempty set S ⊆ {1,…,5}, declaring f(s) = s for every s ∈ S, and sending each of the remaining 5 − |S| elements to an arbitrary element of S. Different pairs (S, assignment) give different functions, because S is recovered from f as its image (equivalently, its fixed-point set). If |S| = k there are C(5, k) choices of S and k^(5−k) ways to map the other elements into it, so the total is Σ from k = 1 to 5 of C(5,k)·k^(5−k) = 5·1 + 10·8 + 10·9 + 5·4 + 1·1 = 5 + 80 + 90 + 20 + 1 = 196. A brute-force check over all 5⁵ = 3125 functions confirms 196. (Choice A, 26, counts the functions with f(f(x)) = x instead — a misreading of the condition; choice B assumes f must be one-to-one and counts all 5! permutations, when in fact the identity is the only permutation that works; choice C drops the k = 5 term, i.e. forgets the identity map; choice E is the number of functions with no condition imposed at all.)",
+    hints: [
+      "Feed a value of f back into f: what does the condition force about the numbers that actually occur as outputs?",
+      "Every element of the image must be a fixed point, and conversely any f that fixes each element of its image works — so f is determined by its image S together with where the elements outside S go.",
+      "Group by k = |S|: choose S in C(5,k) ways, then send each of the other 5 − k elements to any of the k elements of S, and sum over k from 1 to 5 (do not skip k = 5).",
+    ],
+    difficulty: 9,
+    topicSlug: "counting-principles",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-117",
+    question:
+      "How many subsets of {1, 2, 3, …, 12} contain no three consecutive integers?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["1364", "1597", "1705", "1920", "2048"],
+    answer: "C",
+    solution:
+      "Let aₙ be the number of valid subsets of {1, …, n}. Classify by the longest run of consecutive integers at the very end, i.e. by whether n is excluded, or n is included but n − 1 is not, or both n and n − 1 are included (in which case n − 2 must be excluded). Those three cases contribute aₙ₋₁, aₙ₋₂, and aₙ₋₃ respectively, so aₙ = aₙ₋₁ + aₙ₋₂ + aₙ₋₃. The base cases are a₀ = 1, a₁ = 2, a₂ = 4. Iterating: a₃ = 7, a₄ = 13, a₅ = 24, a₆ = 44, a₇ = 81, a₈ = 149, a₉ = 274, a₁₀ = 504, a₁₁ = 927, a₁₂ = 1705. An exhaustive check over all 4096 subsets confirms 1705. (Choice A, 1364, is what the two-term 'no two consecutive' style recursion would drift toward, and 1597 is a Fibonacci number — both are the answers to different, easier problems.)",
+    hints: [
+      "Build the subsets up one element at a time and set up a recursion on n, the size of the ground set.",
+      "Condition on the tail: either n is left out, or n is in and n − 1 is out, or both n and n − 1 are in — in which case n − 2 is forced out.",
+      "This gives a three-term recursion aₙ = aₙ₋₁ + aₙ₋₂ + aₙ₋₃ (a tribonacci sequence); start from a₀ = 1, a₁ = 2, a₂ = 4 and iterate up to n = 12.",
+    ],
+    difficulty: 9,
+    topicSlug: "advanced-combinatorics",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-118",
+    question:
+      "A function f, defined for all real x other than 0 and 1, satisfies f(x) + f(1 − 1/x) = x for every such x. What is f(3)?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["3/2", "11/12", "19/12", "25/12", "17/12"],
+    answer: "B",
+    solution:
+      "Let g(x) = 1 − 1/x. Starting from x = 3 and applying g repeatedly: g(3) = 1 − 1/3 = 2/3, g(2/3) = 1 − 3/2 = −1/2, and g(−1/2) = 1 − (−2) = 3. So g has order 3 and {3, 2/3, −1/2} is a three-element cycle. Write a = f(3), b = f(2/3), c = f(−1/2). Substituting x = 3, x = 2/3, and x = −1/2 into the functional equation gives three linear equations: a + b = 3, b + c = 2/3, c + a = −1/2. Adding all three gives 2(a + b + c) = 3 + 2/3 − 1/2 = 19/6, so a + b + c = 19/12. Then a = (a + b + c) − (b + c) = 19/12 − 2/3 = 19/12 − 8/12 = 11/12. So f(3) = 11/12. (Choice C is the sum a + b + c, the value you get if you stop one step early.)",
+    hints: [
+      "Apply the substitution x ↦ 1 − 1/x repeatedly starting at x = 3 and see what happens.",
+      "The substitution has order 3, so you land back at 3 after three steps — that gives you three equations in three unknowns.",
+      "Add all three equations to get the total of the three unknowns, then subtract off the pair you already know.",
+    ],
+    difficulty: 9,
+    topicSlug: "functional-equations",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-119",
+    question:
+      "Real numbers x and y satisfy x > 1, y > 1, xy = 144, and log_x y + log_y x = 10/3. What is (x + y)/2?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["12", "13√3", "26√3", "13", "14√3"],
+    answer: "B",
+    solution:
+      "Let t = log_x y. Then log_y x = 1/t, so t + 1/t = 10/3, giving 3t² − 10t + 3 = 0, which factors as (3t − 1)(t − 3) = 0, so t = 3 or t = 1/3. The two cases just swap x and y, so assume t = 3, meaning y = x³. Then xy = x · x³ = x⁴ = 144, so x = 144^(1/4) = √12 = 2√3 (positive root, and indeed 2√3 ≈ 3.46 > 1). Then y = 144/x = 144/(2√3) = 72/√3 = 24√3 (equivalently y = x³ = (2√3)³ = 8 · 3√3 = 24√3). So (x + y)/2 = (2√3 + 24√3)/2 = 26√3/2 = 13√3. (Choice C is x + y rather than its average; choice A is √144, the geometric mean rather than the arithmetic mean.)",
+    hints: [
+      "The two logarithms are reciprocals of each other — introduce a single variable for one of them.",
+      "That turns the second condition into a quadratic whose roots are 3 and 1/3; either root gives the same unordered pair {x, y}.",
+      "Combine y = x³ with xy = 144 to get x⁴ = 144, then remember the question asks for the average, not the sum.",
+    ],
+    difficulty: 9,
+    topicSlug: "exponents-radicals",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-120",
+    question:
+      "A pyramid has a square base of side length 6 and four congruent lateral edges of length 3√3. A cube rests on the base of the pyramid with its bottom face centered on the base and its edges parallel to the base edges, and all four of its top vertices lie on the lateral surface of the pyramid. What is the edge length of the cube?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["5/2", "12/5", "2", "18/7", "3"],
+    answer: "C",
+    solution:
+      "First find the pyramid's height. The base square of side 6 has half-diagonal 3√2, so the apex is directly above the center at height h with h² + (3√2)² = (3√3)², i.e. h² + 18 = 27, giving h = 3. Second, slice the pyramid horizontally. At height y the cross-section is a square whose side shrinks linearly from 6 at y = 0 to 0 at y = h = 3, so its side is 6(1 − y/3). The cube of edge s has its top face at height s, centered, with half-side s/2, and its top vertices lie on the boundary of the cross-section square exactly when s/2 equals the cross-section's half-side, 3(1 − s/3). Solving s/2 = 3 − s gives (3/2)s = 3, so s = 2. Check: with apex (0,0,3) and base corners (±3, ±3, 0), one lateral face lies in the plane x + z = 3, and the cube's top vertex (1, 1, 2) satisfies 1 + 2 = 3, confirming it lies on that face. (Choice E is h itself, the answer if you conflate the cube's edge with the pyramid's height.)",
+    hints: [
+      "The lateral edge length is not the height — get the height first using the half-diagonal of the square base.",
+      "Take horizontal cross-sections: at height y the cross-section is a square whose side length shrinks linearly with y.",
+      "The cube's top face sits at height s and must exactly match the cross-section square there; set the two half-side lengths equal and solve.",
+    ],
+    difficulty: 9,
+    topicSlug: "three-d-geometry",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-121",
+    question:
+      "A monic polynomial P of degree 4 satisfies P(1) = 3, P(2) = 6, P(3) = 11, and P(4) = 18. What is P(6)?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["38", "128", "146", "158", "278"],
+    answer: "D",
+    solution:
+      "The given values 3, 6, 11, 18 are exactly k² + 2 for k = 1, 2, 3, 4. So define Q(x) = P(x) − (x² + 2). Since P is monic of degree 4 and x² + 2 has degree 2, Q is also monic of degree 4. But Q(1) = Q(2) = Q(3) = Q(4) = 0, so Q has the four roots 1, 2, 3, 4 — and being monic of degree 4, it is exactly Q(x) = (x − 1)(x − 2)(x − 3)(x − 4) with no extra factor. Therefore P(x) = (x − 1)(x − 2)(x − 3)(x − 4) + x² + 2. Evaluating at x = 6: (5)(4)(3)(2) + 36 + 2 = 120 + 38 = 158. (Direct solution of the 4×4 linear system for the coefficients gives P(x) = x⁴ − 10x³ + 36x² − 50x + 26, and P(6) = 158 as well. Choice A is 6² + 2, the answer if you forget the product term entirely.)",
+    hints: [
+      "Look hard at the four output values 3, 6, 11, 18 — they follow a simple quadratic pattern in the input.",
+      "Subtract that quadratic from P to build a new polynomial with four known roots, and note that subtracting a degree-2 polynomial keeps P monic of degree 4.",
+      "A monic degree-4 polynomial with four known roots is completely determined — write it down and evaluate at 6.",
+    ],
+    difficulty: 9,
+    topicSlug: "polynomials",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-122",
+    question:
+      "How many ordered pairs (a, b) of integers with 1 ≤ a ≤ 150 and 1 ≤ b ≤ 150 satisfy the condition that a² + b² is divisible by 21?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["49", "100", "196", "900", "441"],
+    answer: "A",
+    solution:
+      "Since 21 = 3 · 7, handle the two primes separately. Modulo 3, the squares are 0 and 1, so a² + b² ≡ 0 (mod 3) requires a² ≡ b² ≡ 0, i.e. 3 | a and 3 | b (1 + 1 = 2 and 0 + 1 = 1 are both nonzero mod 3). Modulo 7, the nonzero squares are 1, 2, and 4, and no two of {0,1,2,4} sum to 0 mod 7 except 0 + 0 — check: 1+1=2, 1+2=3, 1+4=5, 2+2=4, 2+4=6, 4+4=1, none ≡ 0 — so a² + b² ≡ 0 (mod 7) requires 7 | a and 7 | b. (This is the general fact that for a prime p ≡ 3 (mod 4), p | a² + b² forces p | a and p | b; here 3 ≡ 3 and 7 ≡ 3 mod 4.) Combining, 21 | a and 21 | b. In [1, 150] there are ⌊150/21⌋ = 7 multiples of 21 for each of a and b, giving 7 · 7 = 49 ordered pairs. Exhaustive verification over all 22500 pairs confirms 49. (Choice D, 900, is the answer to the same question with 15 in place of 21 — a tempting analogy that fails, because 5 ≡ 1 mod 4 and 2² ≡ −1 mod 5, so a² + b² can be divisible by 5 without either a or b being.)",
+    hints: [
+      "Factor 21 and analyze the two prime conditions independently before recombining them.",
+      "List the possible values of a square modulo 3 and modulo 7, then see which pairs of them can sum to 0.",
+      "For both of these primes the only way is a ≡ b ≡ 0, which forces 21 | a and 21 | b — this is special to primes that are 3 mod 4, and would fail for a prime like 5.",
+    ],
+    difficulty: 9,
+    topicSlug: "integer-properties",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-123",
+    question:
+      "A point P lies inside equilateral triangle ABC with PA = 3, PB = 4, and PC = 5. What is the side length of the triangle?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["√41", "√(25 − 12√3)", "√(25 + 12√3)", "√(50 + 12√3)", "7"],
+    answer: "C",
+    solution:
+      "Rotate the plane 60° about vertex A, sending B to C, and let P map to P′. Then AP′ = AP = 3 and angle PAP′ = 60°, so triangle APP′ is equilateral and PP′ = 3. Also CP′ = BP = 4 because rotation preserves the distance and B ↦ C. So triangle PP′C has sides PP′ = 3, P′C = 4, PC = 5 — a right triangle with the right angle at P′. Now compute angle AP′C = angle AP′P + angle PP′C = 60° + 90° = 150°. Applying the law of cosines in triangle AP′C, whose side AC is the triangle's side s: s² = AP′² + P′C² − 2·AP′·P′C·cos 150° = 9 + 16 − 2(3)(4)(−√3/2) = 25 + 12√3. So s = √(25 + 12√3) ≈ 6.766. Solving the three circle equations directly with a computer algebra system returns exactly two positive roots, √(25 + 12√3) and √(25 − 12√3) ≈ 2.05; the latter is too small to contain a point at distance 5 from a vertex and corresponds to P lying outside the triangle, so the answer is √(25 + 12√3). (Choice B is that extraneous root; choice A, √41, comes from mistakenly using cos 90° = 0.)",
+    hints: [
+      "Three distances from an interior point to three vertices are hard to use directly — look for a rigid motion that carries one vertex to another.",
+      "Rotate 60° about one vertex. The image of P together with P and the original vertex forms an equilateral triangle, and the three given lengths get gathered into a single triangle.",
+      "That gathered triangle has sides 3, 4, 5, so it is right-angled; add its right angle to the rotation's 60° to get the 150° angle you need for the law of cosines.",
+    ],
+    difficulty: 9,
+    topicSlug: "advanced-geometry",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-124",
+    question:
+      "A bug starts at one vertex of a regular octahedron. Each move, it walks along an edge to one of the adjacent vertices, chosen uniformly at random and independently of previous moves. What is the probability that after 4 moves the bug is back at its starting vertex?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["1/4", "5/32", "1/16", "3/16", "21/128"],
+    answer: "D",
+    solution:
+      "A regular octahedron has 6 vertices in 3 opposite pairs, and each vertex is adjacent to the 4 vertices other than itself and its opposite. Group the vertices relative to the start S: the start itself, its opposite O, and the four 'equatorial' vertices. Let sₙ, oₙ, eₙ be the probabilities of being at S, at O, and at any one specific equatorial vertex after n moves. From S or from O the bug must go to an equatorial vertex; from an equatorial vertex it goes to S, to O, or to one of the two equatorial vertices adjacent to it, each with probability 1/4. Start with s₀ = 1, o₀ = 0, e₀ = 0. After 1 move: s₁ = 0, o₁ = 0, e₁ = 1/4 each. After 2: s₂ = 4 · (1/4)(1/4) = 1/4, o₂ = 1/4, and each equatorial vertex has e₂ = 2 · (1/4)(1/4) = 1/8. After 3: s₃ = 4 · (1/8)(1/4) = 1/8, o₃ = 1/8, and e₃ = (s₂ + o₂)(1/4) + 2·e₂·(1/4) = (1/2)(1/4) + 2(1/8)(1/4) = 1/8 + 1/16 = 3/16. After 4: s₄ = 4 · e₃ · (1/4) = 3/16. So the probability is 3/16. A direct transition-matrix computation over the 6 vertices confirms s₄ = 3/16 (and o₄ = 3/16, with each equatorial vertex at 5/32).",
+    hints: [
+      "Six vertices is too many to track individually — use the symmetry to collapse them into just three classes relative to the starting vertex.",
+      "The key structural fact is that each vertex is adjacent to every vertex except its own opposite, so the bug can never move to the antipode in one step.",
+      "Set up a recursion on the three class probabilities and iterate it four times; note that after an even number of moves the start and its opposite are equally likely.",
+    ],
+    difficulty: 9,
+    topicSlug: "probability",
+    competitionSlug: "amc12",
+  },
 ];

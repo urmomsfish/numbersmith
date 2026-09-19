@@ -1359,4 +1359,157 @@ export const PURPLE_COMET_PROBLEMS: ProblemSeed[] = [
     topicSlug: "functions",
     competitionSlug: "purple-comet",
   },
+  {
+    slug: "purple-comet-90",
+    question:
+      "A fair six-sided die is rolled repeatedly until every one of the six faces has appeared at least once. The probability that exactly 8 rolls are needed is m/n, where m and n are relatively prime positive integers. Find m + n.",
+    format: "INTEGER",
+    answer: "3091",
+    solution:
+      "Exactly 8 rolls are needed precisely when the first 7 rolls show exactly 5 distinct faces and the 8th roll shows the one remaining face. Choose the set of 5 faces appearing in the first seven rolls in C(6,5) = 6 ways, then count the length-7 sequences that use all 5 of them: by inclusion–exclusion this surjection count is Σ_{i=0}^{5} (−1)^i C(5,i)(5 − i)^7 = 16800. So the number of favorable length-7 prefixes is 6 · 16800 = 100800, and the final roll is forced (1 of 6 outcomes). Therefore the probability is 100800/6^8 = 100800/1679616 = 175/2916. Since 2916 = 2²·3^6 and 175 = 5²·7 are relatively prime, m + n = 175 + 2916 = 3091. (A state-by-state dynamic program over the set of seen faces reproduces 175/2916 exactly.)",
+    hints: [
+      "Needing exactly 8 rolls means the first 7 rolls miss exactly one face, and the 8th roll is that face.",
+      "Count length-7 sequences over a chosen 5-element set of faces that use all five — an inclusion–exclusion surjection count.",
+      "Multiply by the number of ways to choose which 5 faces appear and by the probability the last roll is the specific missing face, then reduce the fraction.",
+    ],
+    difficulty: 9,
+    topicSlug: "counting-probability",
+    competitionSlug: "purple-comet",
+  },
+  {
+    slug: "purple-comet-91",
+    question:
+      "Find the number of integers k with 0 ≤ k ≤ 2026 for which the decimal representation of 2^k begins with the digit 1.",
+    format: "INTEGER",
+    answer: "610",
+    solution:
+      "Key observation: for k ≥ 1, 2^k begins with the digit 1 if and only if 2^k has one more digit than 2^{k−1}. Indeed, if 2^k ∈ [10^d, 2·10^d) then 2^{k−1} ∈ [5·10^{d−1}, 10^d), which has d digits while 2^k has d + 1; conversely, if the digit count increases at step k then 2^{k−1} < 10^d ≤ 2^k < 2·10^d, so 2^k starts with 1. Since doubling never adds two digits at once, the digit count increases by exactly 1 at each such k. Now 2^0 = 1 has 1 digit and begins with 1, while 2^2026 has ⌊2026·log₁₀2⌋ + 1 = ⌊609.887…⌋ + 1 = 610 digits. So the digit count rises 610 − 1 = 609 times over k = 1, …, 2026, contributing 609 values, plus the value k = 0. The total is 609 + 1 = 610. (Equivalently, the answer equals the number of digits of 2^2026: each block of exponents sharing a digit count contains exactly one power starting with 1. Direct computation of all 2027 powers confirms 610.)",
+    hints: [
+      "Compare 2^k with 2^{k−1}: when exactly does doubling increase the number of decimal digits?",
+      "Show that the digit count increases at step k precisely when 2^k has leading digit 1.",
+      "Count the total number of digit-count increases from 2^0 up to 2^2026 using log₁₀2, and handle k = 0 separately.",
+    ],
+    difficulty: 9,
+    topicSlug: "number-properties",
+    competitionSlug: "purple-comet",
+  },
+  {
+    slug: "purple-comet-92",
+    question:
+      "A token starts at position 5 on the number line. Each second the token moves one unit to the right with probability 2/3 and one unit to the left with probability 1/3, independently of all earlier moves. The token stops as soon as it reaches position 0 or position 10. The probability that it stops at position 10 rather than at position 0 is m/n, where m and n are relatively prime positive integers. Find m + n.",
+    format: "INTEGER",
+    answer: "65",
+    solution:
+      "For k = 0, 1, …, 10 let p_k be the probability of stopping at 10 when the token currently sits at k, so p_0 = 0, p_10 = 1, and conditioning on the next move gives p_k = (2/3)p_{k+1} + (1/3)p_{k−1} for 1 ≤ k ≤ 9. Rather than solving ten equations, look at the consecutive differences d_k = p_k − p_{k−1}. Rewriting the recurrence as (2/3)(p_{k+1} − p_k) = (1/3)(p_k − p_{k−1}) gives d_{k+1} = d_k/2, so the differences form a geometric progression with ratio 1/2: d_k = d_1·(1/2)^{k−1}. Summing, p_k = d_1(1 + 1/2 + ⋯ + (1/2)^{k−1}) = d_1·(1 − (1/2)^k)/(1 − 1/2) = 2d_1(1 − 2^{−k}). The boundary condition p_10 = 1 fixes 2d_1 = 1/(1 − 2^{−10}), so p_k = (1 − 2^{−k})/(1 − 2^{−10}) = (2^k − 1)·2^{10−k}/(2^{10} − 1). At k = 5 this is (2^5 − 1)·2^5/(2^{10} − 1) = 31·32/1023 = 992/1023. Since 1023 = 31·33 and 992 = 31·32, the fraction reduces to 32/33, and gcd(32, 33) = 1. Hence m + n = 32 + 33 = 65. (Iterating the recurrence numerically from p_0 = 0, p_10 = 1 converges to p_5 = 0.969696…, and 32/33 = 0.969696…; an exact linear solve of the ten equations returns 32/33.)",
+    hints: [
+      "Let p_k be the probability of finishing at 10 starting from k, and condition on the very next step to get one equation per interior position.",
+      "Do not solve the system head-on: examine the consecutive differences p_k − p_{k−1} and show each is half the previous one.",
+      "Summing a geometric progression expresses p_k in terms of a single unknown, which the condition at the far end determines.",
+    ],
+    difficulty: 9,
+    topicSlug: "probability",
+    competitionSlug: "purple-comet",
+  },
+  {
+    slug: "purple-comet-93",
+    question:
+      "Find the number of six-digit positive integers whose digits sum to 21 and in which no digit is greater than 6.",
+    format: "INTEGER",
+    answer: "7232",
+    solution:
+      "First drop the leading-digit restriction and count strings d₁d₂…d₆ with each dᵢ ∈ {0, 1, …, 6} and Σdᵢ = 21. Without the upper bound, the number of nonnegative solutions is C(21 + 5, 5) = C(26,5) = 65780. Correct with inclusion–exclusion on the set of positions where dᵢ ≥ 7: choosing j such positions and subtracting 7 from each leaves a free sum of 21 − 7j, so the count is Σ_{j≥0} (−1)^j C(6,j)·C(26 − 7j, 5) = 65780 − 6·11628 + 15·792 − 20·1 = 65780 − 69768 + 11880 − 20 = 7872. Now remove the strings with d₁ = 0: those are five-digit-position strings with digits at most 6 summing to 21, counted the same way as Σ_{j≥0} (−1)^j C(5,j)·C(25 − 7j, 4) = 12650 − 5·3060 + 10·330 − 10·1 = 12650 − 15300 + 3300 − 10 = 640. Therefore the answer is 7872 − 640 = 7232. (Exhaustive enumeration of all 7^6 = 117649 digit strings confirms 7232.)",
+    hints: [
+      "Ignore the no-leading-zero rule at first and count all length-6 digit strings with digits at most 6 that sum to 21.",
+      "Count unbounded nonnegative solutions first, then subtract the ones violating the cap of 6 using inclusion–exclusion on which positions are too large — the correction has three nonzero terms.",
+      "Finally subtract the strings that begin with 0, which is the same computation one position shorter.",
+    ],
+    difficulty: 8,
+    topicSlug: "inclusion-exclusion",
+    competitionSlug: "purple-comet",
+  },
+  {
+    slug: "purple-comet-94",
+    question:
+      "Three piles of stones contain a, b, and c stones, where a, b, and c are integers with 1 ≤ a, b, c ≤ 20. Two players alternate turns; on a turn a player chooses one pile and removes any positive number of stones from that pile, and the player who removes the very last stone wins. Find the number of ordered triples (a, b, c) for which the player who moves second can force a win no matter how the first player plays.",
+    format: "INTEGER",
+    answer: "270",
+    solution:
+      "Write each pile size in binary and add the three sizes bitwise without carrying (the binary digital sum). The positions from which the player to move loses are exactly those where this bitwise sum is 0: from such a position every move changes exactly one pile and therefore breaks the balance, while from an unbalanced position one can always restore it — take the highest bit where the sum is 1, pick a pile whose size has that bit set, and replace it by the bitwise sum of the other two, which is strictly smaller. So the second player wins exactly when a XOR b XOR c = 0, i.e. c = a XOR b. Count ordered triples with all entries in [1,20]. Split by the bit of value 16: let L = {1,…,15} (that bit clear) and H = {16,…,20} (that bit set, low part in {0,…,4}). If a, b ∈ L then c = a XOR b ≤ 15 is automatically in range, and c ≥ 1 forces a ≠ b: 15·15 − 15 = 210 triples. If a, b ∈ H, say a = 16 + u and b = 16 + v with u, v ∈ {0,…,4}, then c = u XOR v ≤ 7 is in range and nonzero exactly when u ≠ v: 5·5 − 5 = 20 triples. If exactly one of a, b lies in H, say a = 16 + u and b ∈ L, then c = 16 + (u XOR b), which is at most 20 only when u XOR b ≤ 4; writing b = u XOR t with t ∈ {0,…,4} and requiring b ≠ 0 gives t ≠ u, so 4 choices of b for each of the 5 values of u, and doubling for the two orders gives 2·5·4 = 40 triples. Total: 210 + 20 + 40 = 270. (A direct retrograde analysis of the game over all 20³ starting positions also returns 270 losing-for-the-mover triples.)",
+    hints: [
+      "Experiment with two piles first: decide exactly which two-pile positions are losses for the player about to move, and look for the pattern in binary.",
+      "Guess the family of losing positions in terms of binary digits and verify the two required properties — every move leaves the family, and from outside it some move re-enters it.",
+      "Counting the triples with that binary condition is a separate job: handle the bit of value 16 separately, since only 16 through 20 use it.",
+    ],
+    difficulty: 9,
+    topicSlug: "games-and-strategies",
+    competitionSlug: "purple-comet",
+  },
+  {
+    slug: "purple-comet-95",
+    question:
+      "A bag contains 4 red marbles and 7 blue marbles. The marbles are drawn one at a time, without replacement, until the bag is empty, and the colors are recorded in order. The expected number of positions in this sequence of 11 colors at which the color differs from the color immediately before it is m/n, where m and n are relatively prime positive integers. Find m + n.",
+    format: "INTEGER",
+    answer: "67",
+    solution:
+      "Use linearity of expectation with one indicator per adjacent slot. There are 10 adjacent pairs of positions. For a fixed pair of positions, the two marbles occupying them are a uniformly random ordered pair of distinct marbles, so the probability their colors differ is (number of ordered red-blue pairs)/(number of ordered pairs) = 2·4·7/(11·10) = 56/110 = 28/55. By linearity the expected number of color changes is 10 · 28/55 = 280/55 = 56/11. Since gcd(56, 11) = 1, m + n = 56 + 11 = 67. (Averaging over all 11!/(4!7!) = 330 distinct color sequences gives exactly 56/11.)",
+    hints: [
+      "Rather than tracking whole sequences, attach an indicator variable to each of the 10 adjacent position pairs.",
+      "For one fixed adjacent pair, compute the probability that the two marbles there have different colors — by symmetry it does not depend on which pair you picked.",
+      "Multiply by the number of adjacent pairs and reduce.",
+    ],
+    difficulty: 8,
+    topicSlug: "expected-value",
+    competitionSlug: "purple-comet",
+  },
+  {
+    slug: "purple-comet-96",
+    question:
+      "Find the number of nonempty subsets of {1, 2, 3, …, 15} whose elements have a product that is a perfect square.",
+    format: "INTEGER",
+    answer: "511",
+    solution:
+      "Only the parities of the prime exponents matter, and the primes that occur are 2, 3, 5, 7, 11, 13. Attach to each n the length-6 vector of those exponents reduced mod 2; multiplying numbers adds vectors mod 2, and a product is a perfect square exactly when the vectors of the chosen numbers add to the zero vector. So the question counts the subsets of 15 given vectors in the 6-dimensional space over the field with two elements that sum to zero — that is, the size of the kernel of the linear map sending a subset to its vector sum. The map is onto: 2, 3, 5, 7, 11, 13 themselves give the six standard basis vectors, so the image is all of the 6-dimensional space and the rank is 6. Hence the kernel has 2^(15 − 6) = 2^9 = 512 elements, one of which is the empty subset. The answer is 512 − 1 = 511. (Exhaustive enumeration of all 2^15 = 32768 subsets confirms 511 nonempty square-product subsets, for example {1}, {2, 8}, {3, 12}, {2, 3, 6}, and {6, 10, 15}.)",
+    hints: [
+      "A product is a perfect square exactly when every prime appears an even number of times — record only the parity of each prime's exponent.",
+      "Encode each number 1 through 15 as a vector of those parities and note that choosing a subset corresponds to adding the chosen vectors with 1 + 1 = 0.",
+      "Count the solutions of a homogeneous linear system over the two-element field: find the rank of the 15 vectors, and remember to exclude the empty subset.",
+    ],
+    difficulty: 8,
+    topicSlug: "factorization",
+    competitionSlug: "purple-comet",
+  },
+  {
+    slug: "purple-comet-97",
+    question:
+      "Let S be the set of 49 points (x, y) where x and y are integers with 0 ≤ x ≤ 6 and 0 ≤ y ≤ 6. Find the number of triangles of positive area whose three vertices all lie in S.",
+    format: "INTEGER",
+    answer: "17600",
+    solution:
+      "There are C(49,3) = 18424 ways to choose three of the points; subtract the collinear triples. Group collinear triples by the primitive direction vector of their line. Horizontal: 7 rows, each with C(7,3) = 35 triples, giving 245; vertical likewise 245. Slope ±1: the diagonals in each of the two directions have lengths 3, 4, 5, 6, 7, 6, 5, 4, 3 (lengths 1 and 2 contribute nothing), so each direction gives C(3,3)+C(4,3)+C(5,3)+C(6,3)+C(7,3)+C(6,3)+C(5,3)+C(4,3)+C(3,3) = 1+4+10+20+35+20+10+4+1 = 105; two directions give 210. Directions (1,±2) and (2,±1): each of these four directions contributes 23, for 92. Directions (1,±3) and (3,±1): each contributes 5, for 20. Directions (2,±3) and (3,±2): each contributes 3, for 12. No other primitive direction admits three lattice points inside the 7 × 7 array. Total collinear triples: 245 + 245 + 210 + 92 + 20 + 12 = 824. Therefore the number of triangles is 18424 − 824 = 17600. (An exhaustive check of all 18424 triples via the cross-product determinant confirms exactly 824 degenerate ones.)",
+    hints: [
+      "Count all triples of points first, then subtract the degenerate (collinear) ones.",
+      "Organize the collinear triples by the primitive direction vector of the line they lie on — rows, columns, the two slope-±1 families, then the sparser directions like (1,2) and (2,3).",
+      "For each direction, count how many lattice points of the grid lie on each line of that direction and sum the corresponding C(length, 3).",
+    ],
+    difficulty: 8,
+    topicSlug: "coordinate-geometry",
+    competitionSlug: "purple-comet",
+  },
+  {
+    slug: "purple-comet-98",
+    question:
+      "The integers 1 through 14 are written in order around a circle, so that 14 and 1 are adjacent. Find the number of subsets S of {1, 2, …, 14} such that no three integers that are consecutive around this circle all belong to S.",
+    format: "INTEGER",
+    answer: "5071",
+    solution:
+      "Let c(n) be the number of valid subsets when n ≥ 3 integers are arranged in a circle, and let L(n) be the corresponding count for a path (a straight row of n integers with no three consecutive chosen), which satisfies L(n) = L(n−1) + L(n−2) + L(n−3) with L(0) = 1, L(1) = 2, L(2) = 4 — condition on whether the last element is omitted, is chosen alone after an omission, or is the second of a chosen pair after an omission. Cutting the circle between positions n and 1 and casework on how many of the elements at the seam are chosen shows that c(n) obeys the very same recursion c(n) = c(n−1) + c(n−2) + c(n−3) for n ≥ 6. Direct enumeration of the small circles gives c(3) = 7 (all 8 subsets except the full one), c(4) = 11, and c(5) = 21. Iterating: c(6) = 39, c(7) = 71, c(8) = 131, c(9) = 241, c(10) = 443, c(11) = 815, c(12) = 1499, c(13) = 2757, c(14) = 5071. (Brute-force enumeration of all 2^14 = 16384 subsets confirms 5071.)",
+    hints: [
+      "Start with the easier straight-line version: subsets of a row of n items with no three consecutive chosen satisfy a three-term recursion.",
+      "For the circular version, cut the circle at one place and handle the wrap-around constraint by casework on the elements near the cut.",
+      "Establish the same three-term recursion for the circular counts, nail down the base cases by hand for n = 3, 4, 5, and iterate up to n = 14.",
+    ],
+    difficulty: 9,
+    topicSlug: "recursion-in-counting",
+    competitionSlug: "purple-comet",
+  },
 ];

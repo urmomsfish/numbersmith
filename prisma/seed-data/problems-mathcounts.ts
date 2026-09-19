@@ -1495,4 +1495,241 @@ export const MATHCOUNTS_PROBLEMS: ProblemSeed[] = [
     topicSlug: "averages",
     competitionSlug: "mathcounts",
   },
+  {
+    slug: "mathcounts-127",
+    question:
+      "Two positive integers differ by 4, and the sum of their squares is 296. What is the larger of the two integers?",
+    format: "SHORT_ANSWER",
+    answer: "14",
+    solution:
+      "Let the smaller integer be x, so the larger is x + 4. Then x² + (x+4)² = 296, which expands to 2x² + 8x + 16 = 296, or x² + 4x - 140 = 0. Factoring (or using the quadratic formula) gives (x - 10)(x + 14) = 0, so x = 10 (rejecting the negative root). The larger integer is 10 + 4 = 14. (Check: 10² + 14² = 100 + 196 = 296.)",
+    hints: [
+      "Represent the two integers using a single variable, since their difference is fixed.",
+      "Expand the sum of squares into a quadratic equation and solve for the variable, discarding any root that isn't a positive integer.",
+    ],
+    difficulty: 7,
+    topicSlug: "quadratics",
+    competitionSlug: "mathcounts",
+  },
+  {
+    slug: "mathcounts-128",
+    question:
+      "Working together, Pipe A and Pipe B can fill a tank in 4 hours. Pipe A alone would take 6 fewer hours than Pipe B alone would take. How many hours would Pipe A take to fill the tank by itself?",
+    format: "SHORT_ANSWER",
+    answer: "6",
+    solution:
+      "Let Pipe B take b hours alone, so Pipe A takes b - 6 hours alone. Their rates satisfy 1/(b-6) + 1/b = 1/4. Multiplying through by 4b(b-6) gives 4b + 4(b-6) = b(b-6), which simplifies to b² - 14b + 24 = 0, factoring as (b - 12)(b - 2) = 0. Since b - 6 must be positive, b = 12 (rejecting b = 2). So Pipe A alone takes 12 - 6 = 6 hours. (Check: 1/6 + 1/12 = 2/12 + 1/12 = 3/12 = 1/4.)",
+    hints: [
+      "Let Pipe B's alone-time be a variable, and write Pipe A's alone-time in terms of it.",
+      "Add their individual rates (1/time) to equal the combined rate of 1/4, then clear denominators to get a quadratic.",
+    ],
+    difficulty: 7,
+    topicSlug: "rates",
+    competitionSlug: "mathcounts",
+  },
+  {
+    slug: "mathcounts-129",
+    question:
+      "Five years ago, a father was 4 times as old as his son. In 5 years, the father will be 3 times as old as the son will be then. How old is the father now?",
+    format: "SHORT_ANSWER",
+    answer: "85",
+    solution:
+      "Let f and s be the father's and son's current ages. Five years ago: f - 5 = 4(s - 5). In five years: f + 5 = 3(s + 5). The first equation gives f = 4s - 15; the second gives f = 3s + 10. Setting them equal: 4s - 15 = 3s + 10, so s = 25, and f = 4(25) - 15 = 85. (Check: 5 years ago they were 80 and 20, and 80 = 4(20); in 5 years they'll be 90 and 30, and 90 = 3(30).)",
+    hints: [
+      "Write one equation for the ages five years ago and another for the ages five years from now.",
+      "Solve the resulting system of two linear equations for the father's current age.",
+    ],
+    difficulty: 7,
+    topicSlug: "systems-of-equations",
+    competitionSlug: "mathcounts",
+  },
+  {
+    slug: "mathcounts-130",
+    question:
+      "The product of two positive integers is 180, and the sum of their squares is 481. What is the sum of the two integers?",
+    format: "SHORT_ANSWER",
+    answer: "29",
+    solution:
+      "Let the integers be x and y, with xy = 180 and x² + y² = 481. Using the identity (x+y)² = x² + y² + 2xy, we get (x+y)² = 481 + 2(180) = 841, so x + y = 29 (taking the positive root since both integers are positive). (Check: the integers are 20 and 9, since 20·9 = 180 and 20² + 9² = 400 + 81 = 481, and 20 + 9 = 29.)",
+    hints: [
+      "You don't need to find the two integers individually — think about how (x+y)² relates to x² + y² and xy.",
+      "Substitute the given product and sum of squares into that identity and solve for x + y.",
+    ],
+    difficulty: 7,
+    topicSlug: "algebra",
+    competitionSlug: "mathcounts",
+  },
+  {
+    slug: "mathcounts-131",
+    question:
+      "A right triangle has legs of length 9 and 12. A circle is drawn tangent to all three sides of the triangle. What is the area of the region inside the triangle but outside the circle, in terms of π?",
+    format: "SHORT_ANSWER",
+    answer: "54-9π",
+    solution:
+      "The hypotenuse is √(9² + 12²) = 15. The triangle's area is (9·12)/2 = 54, and its semiperimeter is (9+12+15)/2 = 18. The radius of the circle tangent to all three sides equals area divided by semiperimeter: r = 54/18 = 3. The circle's area is π(3²) = 9π. The region inside the triangle but outside the circle is 54 - 9π.",
+    hints: [
+      "First find the triangle's hypotenuse, area, and semiperimeter.",
+      "The radius of the circle tangent to all three sides equals the triangle's area divided by its semiperimeter.",
+    ],
+    difficulty: 7,
+    topicSlug: "area-volume",
+    competitionSlug: "mathcounts",
+  },
+  {
+    slug: "mathcounts-132",
+    question:
+      "A laser beam starts at point (2, 1), travels in a straight line, bounces off the x-axis, and then hits the point (10, 7). At what x-coordinate does the beam hit the x-axis?",
+    format: "SHORT_ANSWER",
+    answer: "3",
+    solution:
+      "Reflect the target point (10, 7) across the x-axis to get (10, -7); the straight-line path from (2, 1) to (10, -7) crosses the x-axis at the same point the actual bouncing beam does. The slope from (2,1) to (10,-7) is (-7-1)/(10-2) = -1, so the line is y - 1 = -1(x - 2), i.e., y = -x + 3. Setting y = 0 gives x = 3.",
+    hints: [
+      "Bouncing paths are easier to handle if you reflect one of the two points across the line of the bounce.",
+      "Find the equation of the straight line connecting the reflected point to the other original point, then find where it crosses the x-axis.",
+    ],
+    difficulty: 7,
+    topicSlug: "coordinate-geometry",
+    competitionSlug: "mathcounts",
+  },
+  {
+    slug: "mathcounts-133",
+    question:
+      "In triangle ABC, point D lies on AB and point E lies on AC such that DE is parallel to BC, with AD = 6 and DB = 9. If the area of triangle ADE is 24, what is the area of quadrilateral DBCE?",
+    format: "SHORT_ANSWER",
+    answer: "126",
+    solution:
+      "Since DE ∥ BC, triangle ADE is similar to triangle ABC with ratio AD/AB = 6/15 = 2/5. The ratio of areas is (2/5)² = 4/25, so the area of triangle ABC is 24 ÷ (4/25) = 150. The area of quadrilateral DBCE is the area of ABC minus the area of ADE: 150 - 24 = 126.",
+    hints: [
+      "The parallel segment DE creates a smaller triangle similar to the full triangle ABC.",
+      "The ratio of the two triangles' areas is the square of the ratio of their corresponding sides; use it to find the area of ABC, then subtract.",
+    ],
+    difficulty: 7,
+    topicSlug: "similarity-congruence",
+    competitionSlug: "mathcounts",
+  },
+  {
+    slug: "mathcounts-134",
+    question:
+      "Two chords of a circle intersect at a point inside the circle. One chord is divided by the intersection point into pieces of length 3 and 8. The other chord is divided into two pieces whose lengths differ by 2. What is the length of the longer piece of the second chord?",
+    format: "SHORT_ANSWER",
+    answer: "6",
+    solution:
+      "When two chords intersect inside a circle, the products of their two pieces are equal. The first chord's pieces multiply to 3 · 8 = 24. Let the second chord's shorter piece be x, so the longer is x + 2, and x(x+2) = 24. This gives x² + 2x - 24 = 0, factoring as (x-4)(x+6) = 0, so x = 4 (rejecting the negative root). The longer piece is x + 2 = 6. (Check: 4 · 6 = 24 = 3 · 8.)",
+    hints: [
+      "There's a relationship between the products of the two pieces of each intersecting chord.",
+      "Set up an equation using the unknown pieces of the second chord and the known product from the first chord, then solve the resulting quadratic.",
+    ],
+    difficulty: 7,
+    topicSlug: "circles",
+    competitionSlug: "mathcounts",
+  },
+  {
+    slug: "mathcounts-135",
+    question: "What is the remainder when 7^100 is divided by 9?",
+    format: "SHORT_ANSWER",
+    answer: "7",
+    solution:
+      "Compute powers of 7 mod 9: 7¹ ≡ 7, 7² ≡ 49 ≡ 4, 7³ ≡ 28 ≡ 1 (mod 9). The remainders repeat with period 3. Since 100 = 3(33) + 1, 7^100 ≡ 7^1 ≡ 7 (mod 9).",
+    hints: [
+      "Compute the remainders of successive powers of 7 when divided by 9, and look for a repeating pattern.",
+      "Once you find the cycle length, use the remainder of 100 divided by that length to locate 7^100 in the cycle.",
+    ],
+    difficulty: 7,
+    topicSlug: "modular-arithmetic",
+    competitionSlug: "mathcounts",
+  },
+  {
+    slug: "mathcounts-136",
+    question: "How many positive integers less than 1000 are divisible by 6 but not by 8?",
+    format: "SHORT_ANSWER",
+    answer: "125",
+    solution:
+      "The number of multiples of 6 less than 1000 is ⌊999/6⌋ = 166. A number divisible by both 6 and 8 must be divisible by their least common multiple, 24; there are ⌊999/24⌋ = 41 such multiples. So the number of multiples of 6 that are not multiples of 8 is 166 - 41 = 125.",
+    hints: [
+      "Count the multiples of 6 below 1000 first.",
+      "Then figure out which of those are also multiples of 8 — this requires the least common multiple of 6 and 8 — and subtract that count.",
+    ],
+    difficulty: 7,
+    topicSlug: "divisibility",
+    competitionSlug: "mathcounts",
+  },
+  {
+    slug: "mathcounts-137",
+    question:
+      "Two positive integers have a greatest common divisor of 8 and a least common multiple of 240. Their sum is 88. What is the positive difference between the two integers?",
+    format: "SHORT_ANSWER",
+    answer: "8",
+    solution:
+      "For any two positive integers, the product of their GCD and LCM equals the product of the integers themselves, so the two integers multiply to 8 · 240 = 1920. Combined with their sum of 88, they are roots of t² - 88t + 1920 = 0. The discriminant is 88² - 4(1920) = 7744 - 7680 = 64, so t = (88 ± 8)/2, giving t = 48 or t = 40. Their positive difference is 48 - 40 = 8. (Check: gcd(48,40) = 8 and lcm(48,40) = 48·40/8 = 240.)",
+    hints: [
+      "There's a relationship between two numbers' GCD, LCM, and their product.",
+      "Use that product together with the given sum to set up and solve a quadratic whose roots are the two integers.",
+    ],
+    difficulty: 7,
+    topicSlug: "number-theory",
+    competitionSlug: "mathcounts",
+  },
+  {
+    slug: "mathcounts-138",
+    question: "How many positive divisors of 2³ · 3² · 5 are perfect squares?",
+    format: "SHORT_ANSWER",
+    answer: "4",
+    solution:
+      "A divisor of 2³ · 3² · 5 has the form 2^a · 3^b · 5^c where 0 ≤ a ≤ 3, 0 ≤ b ≤ 2, 0 ≤ c ≤ 1. For the divisor to be a perfect square, each exponent must be even: a ∈ {0, 2} (2 choices), b ∈ {0, 2} (2 choices), c ∈ {0} (1 choice, since c ≤ 1). The total count is 2 · 2 · 1 = 4. (These divisors are 1, 4, 9, and 36.)",
+    hints: [
+      "Write a general divisor using variable exponents on each prime factor, bounded by the exponents in the original factorization.",
+      "A perfect square needs every prime's exponent to be even — count how many allowed exponent values are even for each prime, then multiply.",
+    ],
+    difficulty: 7,
+    topicSlug: "factorization",
+    competitionSlug: "mathcounts",
+  },
+  {
+    slug: "mathcounts-139",
+    question:
+      "A bag contains 5 red marbles and 7 blue marbles. Two marbles are drawn at random without replacement. Given that at least one of the two marbles drawn is red, what is the probability that both marbles are red? Express your answer as a fraction in lowest terms.",
+    format: "SHORT_ANSWER",
+    answer: "2/9",
+    solution:
+      "There are C(12,2) = 66 total ways to draw two marbles. The number of ways both are red is C(5,2) = 10. The number of ways both are blue is C(7,2) = 21, so the number of ways at least one is red is 66 - 21 = 45. The desired conditional probability is (ways both red)/(ways at least one red) = 10/45 = 2/9.",
+    hints: [
+      "It helps to first count outcomes where both marbles are blue — the complement of 'at least one red.'",
+      "The conditional probability is the count of both-red outcomes divided by the count of at-least-one-red outcomes, not divided by the total number of outcomes.",
+    ],
+    difficulty: 7,
+    topicSlug: "conditional-probability",
+    competitionSlug: "mathcounts",
+  },
+  {
+    slug: "mathcounts-140",
+    question:
+      "In how many ways can 4 different books be distributed among 3 different students so that every student receives at least one book?",
+    format: "SHORT_ANSWER",
+    answer: "36",
+    solution:
+      "Since there are 4 books and 3 students with each student getting at least one, the books must split among students in a 2-1-1 pattern. Choose which 2 of the 4 books go together: C(4,2) = 6 ways. This leaves two single books and one pair of books to assign to the 3 distinct students: 3! = 6 ways. Total: 6 · 6 = 36. (This can also be found directly: 3⁴ total assignments minus those missing at least one student, 3·2⁴, plus those missing at least two, 3·1⁴, gives 81 - 48 + 3 = 36.)",
+    hints: [
+      "With 4 books and 3 students each needing at least one, figure out the only possible split of group sizes among the students.",
+      "Count how many ways to choose which books form the size-2 group, then how many ways to assign the three groups to the three distinct students.",
+    ],
+    difficulty: 7,
+    topicSlug: "counting-principles",
+    competitionSlug: "mathcounts",
+  },
+  {
+    slug: "mathcounts-141",
+    question:
+      "In a game, you roll a fair six-sided die. If the number rolled is prime, you win that many dollars. If the number rolled is not prime, you lose $2. What is the expected value of your winnings, in dollars? Express your answer as a fraction in lowest terms.",
+    format: "SHORT_ANSWER",
+    answer: "2/3",
+    solution:
+      "The prime outcomes are 2, 3, and 5; the non-prime outcomes are 1, 4, and 6. Each of the six outcomes occurs with probability 1/6. The expected value is (1/6)(2 + 3 + 5) + (1/6)(-2 - 2 - 2) = 10/6 - 6/6 = 4/6 = 2/3.",
+    hints: [
+      "Sort the six possible rolls into the prime ones and the non-prime ones.",
+      "Multiply each outcome's payoff by its probability of 1/6 and add everything together.",
+    ],
+    difficulty: 7,
+    topicSlug: "expected-value",
+    competitionSlug: "mathcounts",
+  },
 ];

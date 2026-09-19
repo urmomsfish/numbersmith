@@ -843,6 +843,159 @@ export const PUMAC_PROBLEMS: ProblemSeed[] = [
     topicSlug: "advanced-number-theory",
     competitionSlug: "pumac",
   },
+  {
+    slug: "pumac-52",
+    question:
+      "Let f(x) = x^2 - 2. Call a real number x quadruply cyclic if f(f(f(f(x)))) = x but f(f(x)) ≠ x. How many quadruply cyclic real numbers are there?",
+    format: "INTEGER",
+    answer: "12",
+    solution:
+      "First localize the solutions. If x > 2 then f(x) = x^2 - 2 > x, and the iterates keep increasing, so f(f(f(f(x)))) > x. If x < -2 then f(x) = x^2 - 2 > 2, and the same argument applies. Hence every solution of f^4(x) = x lies in [-2, 2]. On that interval write x = 2cos θ with θ ∈ [0, π]. Then f(2cos θ) = 4cos²θ - 2 = 2cos 2θ (this is the Chebyshev conjugation), so f^4(x) = 2cos 16θ and f^2(x) = 2cos 4θ. The equation 2cos 16θ = 2cos θ holds exactly when 16θ ≡ ±θ (mod 2π), i.e. 15θ = 2πk or 17θ = 2πk. In [0, π] the first gives θ = 2πk/15 for k = 0,...,7 (8 values) and the second gives θ = 2πk/17 for k = 0,...,8 (9 values), overlapping only at θ = 0. That is 16 distinct values of θ, hence 16 distinct real x — and since f^4(x) - x is a polynomial of degree 16, these are all of its roots. The same computation for 2cos 4θ = 2cos θ gives 3θ = 2πk (θ = 0, 2π/3) or 5θ = 2πk (θ = 0, 2π/5, 4π/5), i.e. 4 distinct solutions of f^2(x) = x. Every solution of f^2(x) = x also satisfies f^4(x) = x, so the answer is 16 - 4 = 12.",
+    hints: [
+      "Show first that every real solution must lie in [-2, 2]: outside that interval the iterates of x^2 - 2 strictly increase away from x.",
+      "On [-2, 2] substitute x = 2cos θ. The map x ↦ x^2 - 2 then does something very simple to θ — find out what, and rewrite both equations as statements about θ.",
+      "Count the θ ∈ [0, π] satisfying each equation separately, remembering that every solution of f(f(x)) = x is automatically a solution of the fourth-iterate equation.",
+    ],
+    difficulty: 10,
+    topicSlug: "functions",
+    competitionSlug: "pumac",
+  },
+  {
+    slug: "pumac-53",
+    question:
+      "Distinct real numbers a, b, c satisfy a^2 = b + 6, b^2 = c + 6, and c^2 = a + 6. Find the sum of all possible values of a + b + c.",
+    format: "SHORT_ANSWER",
+    answer: "-1",
+    solution:
+      "Let g(t) = t^2 - 6. The three equations say exactly that g(a) = b, g(b) = c, g(c) = a, so a is a root of g(g(g(t))) - t, a polynomial of degree 8. Expanding and factoring gives g(g(g(t))) - t = (t^2 - t - 6)(t^6 + t^5 - 17t^4 - 11t^3 + 91t^2 + 25t - 149). The quadratic factor t^2 - t - 6 = (t-3)(t+2) collects the fixed points t = 3 and t = -2 of g, which produce a = b = c and are excluded by the distinctness hypothesis. The remaining six roots are permuted by g, and since none of them is fixed by g they fall into orbits of size 3; there are six of them, so they form exactly two 3-cycles. Each 3-cycle is one valid triple {a, b, c}, and conversely. Therefore the two possible values of a + b + c are the sums of the roots in the two cycles, and together they account for all six roots of the sextic. By Vieta's formulas that total is -(coefficient of t^5) = -1. (Numerically the two cycles are real and have sums (-1 + √17)/2 ≈ 1.5616 and (-1 - √17)/2 ≈ -2.5616, which indeed add to -1.)",
+    hints: [
+      "The three equations just say that the single map t ↦ t^2 - 6 sends a to b, b to c, and c back to a. So a satisfies one eighth-degree polynomial equation.",
+      "The solutions with a = b = c come from the fixed points of that map; factor the corresponding quadratic out and look at the degree-6 factor that remains.",
+      "The six remaining roots split into exactly two 3-cycles, one for each valid triple, so the sum of the two answers is the sum of all six roots — which you can read off from a single coefficient without solving anything.",
+    ],
+    difficulty: 10,
+    topicSlug: "systems-of-equations",
+    competitionSlug: "pumac",
+  },
+  {
+    slug: "pumac-54",
+    question:
+      "Exactly 8 of the 16 unit cells of a 4×4 grid are shaded, in such a way that every row and every column contains an even number of shaded cells. In how many ways can this be done?",
+    format: "INTEGER",
+    answer: "246",
+    solution:
+      "Record each row as a vector in F_2^4. The row condition says each row vector has even weight (one of 0000, the six weight-2 vectors, and 1111), and the column condition says the four row vectors sum to 0 in F_2^4. We need the total weight to be 8. The possible multisets of row weights are {4,4,0,0}, {4,2,2,0}, and {2,2,2,2}. Case {4,4,0,0}: two rows equal 1111 and two equal 0000; the sum is automatically 0, and we only choose which two rows are full: C(4,2) = 6. Case {4,2,2,0}: with one 1111 row and one 0000 row, the two weight-2 rows r, r' must satisfy r + r' = 1111, i.e. they are complementary. Choose the position of the 1111 row (4 ways), of the 0000 row (3 ways), and fill the remaining two positions with an ordered complementary pair (the six weight-2 vectors form 3 complementary pairs, so 6 ordered pairs): 4·3·6 = 72. Case {2,2,2,2}: identify the six weight-2 vectors with the six edges of K_4. Four of them sum to 0 iff every vertex has even degree in the chosen multiset. Either all four rows are equal (6 ways), or they form two equal pairs (choose the two distinct vectors, C(6,2) = 15, and arrange them 4!/(2!2!) = 6 ways, giving 90), or all four are distinct, in which case they form a 4-cycle of K_4 — there are 3 such cycles, each orderable in 4! = 24 ways, giving 72. Total 6 + 90 + 72 = 168. Grand total: 6 + 72 + 168 = 246.",
+    hints: [
+      "Think of each row as a length-4 vector of 0s and 1s. The row condition restricts which vectors may appear; the column condition is a single equation relating the four row vectors mod 2.",
+      "Split into cases by the multiset of row weights (each weight is 0, 2, or 4) that sums to 8: only {4,4,0,0}, {4,2,2,0}, and {2,2,2,2} are possible.",
+      "For the all-weight-2 case, match the six weight-2 vectors with the six edges of a complete graph on 4 vertices; summing to zero mod 2 means every vertex has even degree.",
+    ],
+    difficulty: 9,
+    topicSlug: "advanced-combinatorics",
+    competitionSlug: "pumac",
+  },
+  {
+    slug: "pumac-55",
+    question:
+      "A fair coin is flipped repeatedly until one of the two blocks HTH or HHT has appeared as three consecutive flips. Find the probability that HTH appears first.",
+    format: "SHORT_ANSWER",
+    answer: "1/3",
+    solution:
+      "Track the longest suffix of the flip sequence that could still be extended into either target block. The relevant states are: 0 (no usable suffix — nothing yet, or the last flip was a T not preceded by an H), H, HH, and HT. Let p_S be the probability that HTH wins from state S. From HH: a head keeps us in HH, a tail completes HHT and loses, so p_HH = (1/2)p_HH, giving p_HH = 0 — once HH occurs, HHT is inevitable before HTH. From HT: a head completes HTH and wins, a tail leaves us at state 0, so p_HT = 1/2 + (1/2)p_0. From H: a head moves to HH, a tail moves to HT, so p_H = (1/2)(0) + (1/2)p_HT. From 0: a head moves to H, a tail stays at 0, so p_0 = (1/2)p_H + (1/2)p_0, hence p_0 = p_H. Substituting, p_0 = p_H = (1/2)p_HT = (1/2)(1/2 + (1/2)p_0) = 1/4 + (1/4)p_0, so (3/4)p_0 = 1/4 and p_0 = 1/3. The asymmetry comes entirely from the fact that HH is an absorbing trap for HTH while HT is not a trap for HHT.",
+    hints: [
+      "Set up a Markov chain whose states are the useful suffixes of the sequence so far: nothing usable, H, HH, HT. Every flip moves you between these or ends the game.",
+      "Look hard at the state HH: from there, can HTH ever appear before HHT? Answer that first — it collapses one whole branch.",
+      "Write one linear equation per state for the probability that HTH wins from that state, and solve the small system.",
+    ],
+    difficulty: 10,
+    topicSlug: "probability",
+    competitionSlug: "pumac",
+  },
+  {
+    slug: "pumac-60",
+    question:
+      "A permutation (a_1, a_2, ..., a_8) of 1, 2, ..., 8 is called zigzag if a_1 < a_2 > a_3 < a_4 > a_5 < a_6 > a_7 < a_8. How many zigzag permutations are there?",
+    format: "INTEGER",
+    answer: "1385",
+    solution:
+      "Let A(n) be the number of up-down permutations of {1,...,n} (those with a_1 < a_2 > a_3 < ...), so the answer is A(8). Set A(0) = A(1) = 1. The complement map x ↦ n+1-x turns up-down permutations into down-up ones, so down-up permutations are equally numerous, and the total number of alternating permutations of either type on n letters is 2A(n) for n ≥ 2. Now take any alternating arrangement of {1,...,n+1} and look at where the largest entry n+1 sits: it must occupy a peak, so it splits the arrangement into a left part of k entries and a right part of n-k entries, each of which is itself alternating (of one of the two types), and the entry sets can be chosen in C(n,k) ways. Summing over k and both types gives the binomial convolution 2A(n+1) = Σ_{k=0}^{n} C(n,k)A(k)A(n-k) (these are the Euler zigzag numbers). Iterating: A(2) = 1, A(3) = 2, A(4) = 5, A(5) = 16, A(6) = 61, A(7) = 272, and 2A(8) = Σ_{k=0}^{7} C(7,k)A(k)A(7-k) = 2770, so A(8) = 1385. A direct exhaustive check of all 8! = 40320 permutations confirms 1385.",
+    hints: [
+      "Don't try to build the permutation left to right. Instead condition on where the largest entry 8 sits — the inequality pattern forces it into a specific kind of position.",
+      "Removing the largest entry splits the arrangement into two shorter arrangements with the same alternating structure, and the two entry sets can be chosen independently.",
+      "That gives a binomial convolution recurrence 2A(n+1) = Σ C(n,k)A(k)A(n-k); start from A(0) = A(1) = 1 and iterate up to n = 8.",
+    ],
+    difficulty: 9,
+    topicSlug: "permutations",
+    competitionSlug: "pumac",
+  },
+  {
+    slug: "pumac-56",
+    question:
+      "A cube ABCDA'B'C'D' has edge length 6, where ABCD is its bottom face and A', B', C', D' lie directly above A, B, C, D respectively. Let M be the midpoint of edge BB', and let N be the midpoint of edge C'D'. The plane through A, M, and N cuts the cube into two pieces. Find the volume of the smaller piece.",
+    format: "SHORT_ANSWER",
+    answer: "165/2",
+    solution:
+      "Put A = (0,0,0), B = (6,0,0), C = (6,6,0), D = (0,6,0) and add 6 to the z-coordinate for the primed vertices. Then M = (6,0,3) and N = (3,6,6). A normal to the plane through these three points is (6,0,3) × (3,6,6) = (-18,-27,36), proportional to (2,3,-4), so the plane is 2x + 3y - 4z = 0. Evaluating 2x + 3y - 4z at the eight vertices gives 0 at A, and 12, 30, 18, 6 at B, C, D, C' (positive) against -24, -12, -6 at A', B', D' (negative), so the plane really does separate the cube, with only three vertices on the negative side. Tracking the sign changes along edges, the cross-section is the pentagon A(0,0,0), M(6,0,3), (6,4,6), N(3,6,6), (0,6,9/2) — note the two vertices on edges B'C' and DD' that are not given in the problem. For the volume, slice vertically: over a point (x,y) of the bottom square the piece on the negative side (the one containing A') occupies the z-values from (2x+3y)/4 up to 6, provided (2x+3y)/4 ≤ 6, i.e. 2x + 3y ≤ 24. So its volume is the integral over the square [0,6]² of max(0, 6 - (2x+3y)/4). Compute it as (integral of 6 - (2x+3y)/4 over the whole square) plus (the correction over the small triangle where the integrand is negative). The first is 6·36 - (1/4)(2·108 + 3·108) = 216 - 135 = 81, using that the integral of x and of y over the square is each 108. The exceptional triangle where 2x + 3y ≥ 24 has vertices (3,6), (6,6), (6,4), hence area 3 and centroid (5, 16/3), at which (2x+3y)/4 - 6 = 26/4 - 6 = 1/2; since the integrand is linear, the correction is 3·(1/2) = 3/2. Total 81 + 3/2 = 165/2. The other piece has volume 216 - 165/2 = 267/2, which is larger, so the answer is 165/2. (A Monte Carlo estimate over the cube gives 82.4994, and taking the convex hull of the three negative-side vertices together with the five pentagon vertices gives the same value exactly.)",
+    hints: [
+      "Coordinatize the cube with A at the origin, then find a normal vector to the plane through the three given points; the plane equation comes out with small integer coefficients.",
+      "Evaluate that linear expression at all eight vertices. The sign pattern tells you which vertices end up on which side — and the cross-section turns out to be a pentagon, so there are two intersection points you were not handed.",
+      "Rather than chopping the solid into pyramids, integrate: over each point of the bottom face, find the range of heights belonging to your piece, and watch for the region of the base where that range is empty.",
+    ],
+    difficulty: 10,
+    topicSlug: "three-d-geometry",
+    competitionSlug: "pumac",
+  },
+  {
+    slug: "pumac-57",
+    question:
+      "A point P lies inside square ABCD (with vertices labeled in order) and satisfies PA = 6, PB = 8, and PC = 10. Find the side length of the square.",
+    format: "SHORT_ANSWER",
+    answer: "2√(17+4√14)",
+    solution:
+      "Place A = (0,0), B = (t,0), C = (t,t), D = (0,t), where t is the side length, and let P = (x,y). Then x² + y² = 36, (x-t)² + y² = 64, and (x-t)² + (y-t)² = 100. Subtracting the first from the second gives -2tx + t² = 28, so x = (t² - 28)/(2t). Subtracting the second from the third gives -2ty + t² = 36, so y = (t² - 36)/(2t). Substituting both into x² + y² = 36 and writing u = t²: (u - 28)² + (u - 36)² = 144u, i.e. 2u² - 272u + 2080 = 0, i.e. u² - 136u + 1040 = 0, so u = 68 ± 16√14. The root u = 68 - 16√14 ≈ 8.13 forces x, y < 0 (indeed x² + y² = 36 already requires u > 36), so P would lie outside the square; it is rejected. The valid root is u = 68 + 16√14 ≈ 127.87, giving t = √(68 + 16√14) = 2√(17 + 4√14) ≈ 11.308, with x ≈ 4.416 and y ≈ 4.062 both strictly between 0 and t, so P really is interior. (The radicand 17 + 4√14 does not denest over the rationals.)",
+    hints: [
+      "Put the square on coordinate axes with side length t and P = (x,y). Subtracting pairs of the three distance equations kills the quadratic terms and expresses x and y in terms of t.",
+      "Substitute those expressions back into PA² = 36 and set u = t² to get a quadratic in u.",
+      "Both roots of that quadratic are positive — use the requirement that P lie strictly inside the square (check the signs of x and y) to discard the wrong one.",
+    ],
+    difficulty: 10,
+    topicSlug: "coordinate-geometry",
+    competitionSlug: "pumac",
+  },
+  {
+    slug: "pumac-58",
+    question:
+      "Find the smallest integer n > 1 whose last six decimal digits agree with the last six decimal digits of n^2.",
+    format: "INTEGER",
+    answer: "109376",
+    solution:
+      "The condition is n² ≡ n (mod 10^6), i.e. 10^6 = 2^6·5^6 divides n(n-1). Since n and n-1 are coprime, 2^6 = 64 divides exactly one of them and 5^6 = 15625 divides exactly one of them, giving four cases (this is the Chinese Remainder Theorem, with the idempotents of Z/10^6). If 10^6 divides n or n-1, then n ≥ 10^6, which is far too big. Case 15625 | n and 64 | n-1: write n = 15625m; since 15625 ≡ 9 (mod 64), we need 9m ≡ 1 (mod 64), and 9·57 = 513 = 8·64 + 1, so m ≡ 57 (mod 64) and the least value is n = 15625·57 = 890625. Case 64 | n and 15625 | n-1: write n = 15625k + 1; we need 9k + 1 ≡ 0 (mod 64), i.e. 9k ≡ 63 (mod 64), so k ≡ 7 (mod 64) and the least value is n = 15625·7 + 1 = 109376. The smallest of the four candidates is 109376, and indeed 109376² = 11963109376, whose last six digits are 109376.",
+    hints: [
+      "Translate the digit condition into a congruence, then factor 10^6 and use that n and n-1 share no common factor.",
+      "The prime power 2^6 must divide one of n, n-1 entirely and 5^6 must divide one of them entirely — enumerate the four ways this can happen.",
+      "Two of the four cases force n ≥ 10^6; for the other two, solve a small linear congruence modulo 64 and take the smaller resulting value.",
+    ],
+    difficulty: 10,
+    topicSlug: "modular-arithmetic",
+    competitionSlug: "pumac",
+  },
+  {
+    slug: "pumac-59",
+    question:
+      "How many ordered pairs (x, y) of integers with 0 ≤ x ≤ 100 and 0 ≤ y ≤ 100 satisfy x^2 + y^2 ≡ 1 (mod 101)?",
+    format: "INTEGER",
+    answer: "100",
+    solution:
+      "The range 0 ≤ x, y ≤ 100 is exactly one complete residue system modulo the prime 101, so we are counting points of the 'circle' x² + y² = 1 over the field F_101. Since 101 ≡ 1 (mod 4), -1 is a quadratic residue modulo 101 — concretely 10² = 100 ≡ -1 (mod 101). Writing i for the residue 10, the quadratic form factors: x² + y² ≡ (x + iy)(x - iy) (mod 101), because (iy)² = -y². Now change variables to u = x + 10y and v = x - 10y modulo 101. This linear map has determinant (1)(-10) - (10)(1) = -20, which is not divisible by 101, so it is a bijection from (Z/101)² to itself. Under it the equation becomes uv ≡ 1 (mod 101), which has exactly 100 solutions: u may be any of the 100 nonzero residues, and then v is forced to be its inverse (u = 0 is impossible). Hence there are exactly 100 ordered pairs. (An exhaustive check over all 101² = 10201 pairs confirms 100.)",
+    hints: [
+      "First check whether -1 is a square modulo 101 — try to find a residue whose square is 100 ≡ -1. If one exists, the sum x² + y² factors.",
+      "With such a residue i in hand, rewrite x² + y² as a product (x + iy)(x - iy) and change variables to u = x + iy, v = x - iy.",
+      "Verify the change of variables is invertible modulo 101, then count solutions of uv ≡ 1 directly.",
+    ],
+    difficulty: 9,
+    topicSlug: "advanced-number-theory",
+    competitionSlug: "pumac",
+  },
 ];
 
 export const SMT_PROBLEMS: ProblemSeed[] = [
@@ -1651,6 +1804,159 @@ export const SMT_PROBLEMS: ProblemSeed[] = [
     ],
     difficulty: 9,
     topicSlug: "number-theory",
+    competitionSlug: "stanford-math-tournament",
+  },
+  {
+    slug: "smt-52",
+    question:
+      "Find the number of triples (a, b, c) of positive integers with a ≤ b ≤ c and a + b + c = 60 for which no integer greater than 1 divides all three of a, b, and c.",
+    format: "INTEGER",
+    answer: "192",
+    solution:
+      "Count ordered triples first and repair the ordering at the end. The number of ordered triples of positive integers with a + b + c = 60 is C(59,2) = 1711 (stars and bars). For a divisor d of 60, the ordered triples all of whose entries are divisible by d are exactly d times the ordered triples summing to 60/d, so there are C(60/d - 1, 2) of them. Möbius inversion over the divisors of 60 therefore gives the number of ordered triples with no common factor as the sum of μ(d)·C(60/d - 1, 2) over the squarefree divisors d = 1, 2, 3, 5, 6, 10, 15, 30: 1711 - 406 - 171 - 55 + 36 + 10 + 3 - 0 = 1128. Now pass to unordered triples. All three entries equal would force a = b = c = 20, whose common factor is 20, so that never happens. Exactly two entries equal means the triple is (a, a, 60 - 2a) with 1 ≤ a ≤ 29, and its common factor is gcd(a, 60 - 2a) = gcd(a, 60), so we need a coprime to 60: a ∈ {1, 7, 11, 13, 17, 19, 23, 29}, which is 8 multisets contributing 3 ordered triples each, i.e. 24 of the 1128. The remaining 1128 - 24 = 1104 ordered triples have three distinct entries and come in groups of 6. Hence the count of unordered triples is 1104/6 + 8 = 184 + 8 = 192. (Exhaustive enumeration over all a ≤ b ≤ c with a + b + c = 60 confirms 192.)",
+    hints: [
+      "Ordered triples are much easier to count than sorted ones, so count those first and fix the overcounting at the very end.",
+      "For each divisor d of 60, count the ordered triples in which every entry is a multiple of d — it is the same stars-and-bars count for the sum 60/d. Then sieve the common factor away with an inclusion-exclusion over the squarefree divisors of 60.",
+      "Converting ordered to sorted is not just a division by 6: find the triples with two equal entries (they are of the form (a, a, 60 - 2a)) and check which of those survive the no-common-factor condition before dividing.",
+    ],
+    difficulty: 9,
+    topicSlug: "number-theory",
+    competitionSlug: "stanford-math-tournament",
+  },
+  {
+    slug: "smt-53",
+    question:
+      "Real numbers x and y satisfy x^2 + y^2 = 4x + 6y. Find the largest possible value of x^2 + y^2.",
+    format: "INTEGER",
+    answer: "52",
+    solution:
+      "Complete the square: x² - 4x + y² - 6y = 0 becomes (x-2)² + (y-3)² = 13, a circle with center C = (2,3) and radius √13. The quantity x² + y² is the squared distance from the origin O to the point (x,y). The distance from O to C is √(4+9) = √13, which equals the radius — the origin lies on the circle itself. The maximum distance from a point to a circle is (distance to center) + radius = √13 + √13 = 2√13, attained at the point of the circle diametrically opposite the origin, namely (4,6). Hence the maximum of x² + y² is (2√13)² = 52. Check: (x,y) = (4,6) satisfies the constraint, since 4² + 6² = 52 and 4(4) + 6(6) = 52, and x² + y² = 52 there.",
+    hints: [
+      "Rewrite the constraint by completing the square in both variables; it describes a familiar curve.",
+      "Notice what x^2 + y^2 measures geometrically, and compute the distance from the origin to the center of that curve — compare it to the radius.",
+      "The farthest point of a circle from an external (or on-circle) point lies on the line through that point and the center.",
+    ],
+    difficulty: 8,
+    topicSlug: "coordinate-geometry",
+    competitionSlug: "stanford-math-tournament",
+  },
+  {
+    slug: "smt-60",
+    question:
+      "A sequence is defined by a_1 = 2 and a_{n+1} = (a_n - 1)/(a_n + 1) for all n ≥ 1. Find a_2026.",
+    format: "SHORT_ANSWER",
+    answer: "1/3",
+    solution:
+      "Compute the first several terms: a_1 = 2; a_2 = (2-1)/(2+1) = 1/3; a_3 = (1/3 - 1)/(1/3 + 1) = (-2/3)/(4/3) = -1/2; a_4 = (-1/2 - 1)/(-1/2 + 1) = (-3/2)/(1/2) = -3; a_5 = (-3-1)/(-3+1) = (-4)/(-2) = 2 = a_1. So the sequence is periodic with period 4. (The reason is structural: the map t ↦ (t-1)/(t+1) corresponds to the matrix [[1,-1],[1,1]], whose square is -2·[[0,1],[-1,0]] and whose fourth power is a scalar matrix, so the map has order 4; equivalently, writing t = tan θ, the map sends θ to θ - 45°.) Since 2026 = 4·506 + 2, we have a_2026 = a_2 = 1/3.",
+    hints: [
+      "Just compute a_2, a_3, a_4, a_5 by hand and look at what happens.",
+      "Once you spot that the sequence repeats, determine the exact period and reduce the index 2026 modulo it.",
+      "Be careful with the offset: the sequence starts at n = 1, not n = 0, so match 2026 to the correct residue.",
+    ],
+    difficulty: 8,
+    topicSlug: "sequences",
+    competitionSlug: "stanford-math-tournament",
+  },
+  {
+    slug: "smt-54",
+    question:
+      "In how many ways can the numbers 1, 2, ..., 8 be arranged in a row so that no two consecutive integers (that is, no pair k and k+1) occupy adjacent positions?",
+    format: "INTEGER",
+    answer: "5242",
+    solution:
+      "Call the 7 pairs {k, k+1} the bonds. Use inclusion-exclusion over which bonds are actually realized as adjacencies. Fix a set of j bonds. Those bonds, viewed as edges on the path 1-2-...-8, break into some number b of maximal runs, and each maximal run glues its numbers into one rigid block which may appear in 2 orders (increasing or decreasing). Gluing j bonds leaves 8 - j objects to permute freely, so the number of arrangements containing all j chosen bonds is 2^b·(8-j)!. The number of ways to choose j bonds from the path of 7 forming exactly b maximal runs is C(j-1, b-1)·C(8-j, b). Hence the answer is Σ_{j=0}^{7} (-1)^j (8-j)! Σ_{b=1}^{j} C(j-1,b-1)C(8-j,b)2^b, with the j = 0 term being 8! = 40320. Evaluating term by term for j = 0 through 7 gives 40320, -70560, 51840, -20400, 4608, -612, 48, -2, and these sum to 5242. An exhaustive check of all 40320 permutations confirms exactly 5242 valid arrangements.",
+    hints: [
+      "Complementary counting alone isn't enough — use inclusion-exclusion over the seven 'bad' adjacencies {1,2}, {2,3}, ..., {7,8}.",
+      "When you force several of those adjacencies at once, consecutive forced bonds merge into a single block; a block of size 2 or more can be laid down in 2 directions, so count maximal runs of chosen bonds, not just the number of bonds.",
+      "You need the count of ways to pick j bonds from a path of 7 that form exactly b maximal runs — that is C(j-1, b-1)·C(8-j, b). Then sum (-1)^j·2^b·(8-j)! over all j and b.",
+    ],
+    difficulty: 9,
+    topicSlug: "advanced-combinatorics",
+    competitionSlug: "stanford-math-tournament",
+  },
+  {
+    slug: "smt-59",
+    question:
+      "A bag contains 6 red marbles and 4 blue marbles, all distinguishable. Marbles are drawn one at a time without replacement until every red marble has been drawn. Find the expected number of draws.",
+    format: "SHORT_ANSWER",
+    answer: "66/7",
+    solution:
+      "The number of draws is 10 minus the number of blue marbles that remain after the last red marble is drawn. Consider the full random ordering of all 10 marbles and, for each blue marble b, let I_b be the indicator that b comes after all 6 red marbles. Restricting the ordering to the 7 marbles consisting of b together with the 6 reds, each of those 7 is equally likely to be last, so P(I_b = 1) = 1/7. By linearity of expectation, the expected number of blue marbles drawn after the last red is 4·(1/7) = 4/7. Hence the expected number of draws is 10 - 4/7 = 66/7. (A brute-force average over all 10!/(6!4!) = 210 distinct red/blue patterns gives exactly 66/7.)",
+    hints: [
+      "Instead of the stopping time itself, think about how many marbles are left in the bag when you stop — they are all blue.",
+      "For a single blue marble, what is the probability that it comes after every red marble? Restrict attention to just that blue marble and the reds.",
+      "Add up those probabilities with linearity of expectation, and subtract from the total number of marbles.",
+    ],
+    difficulty: 9,
+    topicSlug: "expected-value",
+    competitionSlug: "stanford-math-tournament",
+  },
+  {
+    slug: "smt-55",
+    question:
+      "In triangle ABC, AB = AC = 10 and BC = 12. A circle passes through C and is tangent to line AB at B. Find the radius of this circle.",
+    format: "SHORT_ANSWER",
+    answer: "15/2",
+    solution:
+      "Place B = (0,0) and C = (12,0). Since AB = AC = 10, the apex A is above the midpoint of BC at A = (6,8) (as 6² + 8² = 100). Because the circle is tangent to line AB at B, its center O lies on the line through B perpendicular to AB. The unit vector along BA is (6,8)/10 = (3/5, 4/5), so a perpendicular direction is (4/5, -3/5), and O = (4t/5, -3t/5) for some t, with radius R = |OB| = |t|. Imposing |OC| = R gives (4t/5 - 12)² + (3t/5)² = t², i.e. (16/25)t² - (96/5)t + 144 + (9/25)t² = t², which simplifies to -(96/5)t + 144 = 0, so t = 15/2. Hence R = 15/2. (Alternatively, the tangent-chord angle at B between BA and chord BC equals the inscribed angle in the alternate segment; combining this with the law of sines on chord BC gives BC = 2R·sin(angle ABC), and sin(angle ABC) = 8/10 = 4/5, so R = 12/(2·4/5) = 15/2.)",
+    hints: [
+      "Set up coordinates with B and C on the x-axis and find A using the two equal sides.",
+      "Tangency at B means the radius drawn to B is perpendicular to line AB — that pins the center to a single line, leaving one unknown.",
+      "Impose that the center is equidistant from B and C; the quadratic terms cancel and you are left with a linear equation.",
+    ],
+    difficulty: 9,
+    topicSlug: "circles",
+    competitionSlug: "stanford-math-tournament",
+  },
+  {
+    slug: "smt-56",
+    question:
+      "A rectangular sheet of paper ABCD has AB = 9 and BC = 6. The sheet is folded once so that vertex A lands exactly on vertex C. Find the length of the crease.",
+    format: "SHORT_ANSWER",
+    answer: "2√13",
+    solution:
+      "A fold that carries A to C is a reflection swapping A and C, so the crease is the perpendicular bisector of segment AC, restricted to the rectangle. Put A = (0,0), B = (9,0), C = (9,6), D = (0,6). The midpoint of AC is (4.5, 3), and AC has slope 6/9 = 2/3, so the crease has slope -3/2: y - 3 = -(3/2)(x - 4.5). Setting y = 0 gives x = 4.5 + 2 = 6.5, so the crease meets AB at (6.5, 0); setting y = 6 gives x = 4.5 - 2 = 2.5, so it meets DC at (2.5, 6). Both points lie on the rectangle's sides, so the crease is the segment between them, of length √((6.5 - 2.5)² + 6²) = √(16 + 36) = √52 = 2√13.",
+    hints: [
+      "A fold is a reflection. If it sends A to C, what line must it be?",
+      "Put the rectangle on coordinate axes and write the equation of that line through the midpoint of AC.",
+      "Find where the line exits the rectangle (check both the horizontal and vertical sides to see which pair it actually hits), then compute the distance between those two exit points.",
+    ],
+    difficulty: 8,
+    topicSlug: "quadrilaterals",
+    competitionSlug: "stanford-math-tournament",
+  },
+  {
+    slug: "smt-57",
+    question:
+      "Find the smallest positive integer that can be written as a sum of two or more consecutive positive integers in exactly 15 ways.",
+    format: "INTEGER",
+    answer: "945",
+    solution:
+      "A run of k ≥ 2 consecutive positive integers starting at a has sum ka + k(k-1)/2, so the condition is 2n = k(2a + k - 1) with k ≥ 2 and a ≥ 1. The two factors k and 2a + k - 1 have opposite parities and their product is 2n, so writing n = 2^e·m with m odd, one factor is the odd part of a divisor pairing and the other carries the whole power 2^(e+1). Concretely, for each divisor d of m there is exactly one factorization 2n = k·(2a + k - 1) in which the odd factor equals d, namely {k, 2a + k - 1} = {d, 2^(e+1)·(m/d)}, with k the smaller of the two and 2a + k - 1 the larger; this always yields an integer a, and a ≥ 1 exactly when the two factors are unequal, which is automatic since they have opposite parities. Distinct divisors d give distinct runs, and the divisor d = m paired with k = 1 is the trivial one-term 'run', which the problem excludes. So the number of valid representations is (number of odd divisors of n) - 1. We therefore need the odd part m to have exactly 16 divisors. Since n ≥ m, the answer is the smallest odd number with exactly 16 divisors. Writing 16 as a product of exponent-plus-one factors and using the smallest odd primes 3, 5, 7, 11 in decreasing exponent order gives the candidates 3^15, 3^7·5 = 10935, 3^3·5^3 = 3375, 3^3·5·7 = 945, and 3·5·7·11 = 1155. The smallest is 945, and n = 945 works: 945 = 3^3·5·7 is odd with 4·2·2 = 16 divisors, so it has exactly 15 representations (for example 945 = 472 + 473 = 314 + 315 + 316 = ... = 2 + 3 + ... + 43). No smaller n can work, because its odd part would be an odd number below 945 with 16 divisors. (A brute-force scan over all n confirms 945 is the first integer with exactly 15 representations.)",
+    hints: [
+      "Write the sum of k consecutive integers starting at a in closed form and clear denominators to get 2n as a product of two factors, one of which is k.",
+      "Those two factors always have opposite parities, so each odd divisor of n determines exactly one way to split 2n — count how many splits give a genuine run of at least two terms.",
+      "That turns the problem into finding the smallest odd number with a prescribed divisor count; test the few ways of distributing exponents over 3, 5, 7, 11.",
+    ],
+    difficulty: 9,
+    topicSlug: "integer-properties",
+    competitionSlug: "stanford-math-tournament",
+  },
+  {
+    slug: "smt-58",
+    question:
+      "Find the sum of all positive integers n for which (n^2 + 9)/(n + 3) is an integer.",
+    format: "INTEGER",
+    answer: "24",
+    solution:
+      "Divide: n² + 9 = (n + 3)(n - 3) + 18, so (n² + 9)/(n + 3) = (n - 3) + 18/(n + 3). Since n - 3 is an integer, the quotient is an integer exactly when (n + 3) divides 18. For n a positive integer, n + 3 ≥ 4, so the admissible divisors of 18 are 6, 9, and 18, giving n = 3, 6, and 15. Checking: (9 + 9)/6 = 3, (36 + 9)/9 = 5, and (225 + 9)/18 = 13, all integers. The sum is 3 + 6 + 15 = 24.",
+    hints: [
+      "Perform polynomial division of n^2 + 9 by n + 3 and look at the remainder.",
+      "Integrality reduces to n + 3 dividing that constant remainder — list its divisors.",
+      "Use the constraint that n is a positive integer to rule out the small divisors, then add up the surviving values of n.",
+    ],
+    difficulty: 8,
+    topicSlug: "divisibility",
     competitionSlug: "stanford-math-tournament",
   },
 ];
