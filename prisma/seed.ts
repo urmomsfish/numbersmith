@@ -11,6 +11,14 @@ import { MATH_LEAGUE_EM_PROBLEMS, MATH_LEAGUE_HS_PROBLEMS } from "./seed-data/pr
 import { ARML_PROBLEMS } from "./seed-data/problems-arml";
 import { PUMAC_PROBLEMS, SMT_PROBLEMS } from "./seed-data/problems-pumac-smt";
 import { MATH_PRIZE_FOR_GIRLS_PROBLEMS } from "./seed-data/problems-math-prize-girls";
+import { AMC8_PROBLEMS } from "./seed-data/problems-amc8";
+import { AMC10_PROBLEMS } from "./seed-data/problems-amc10";
+import { AMC12_PROBLEMS } from "./seed-data/problems-amc12";
+import { MATHCOUNTS_PROBLEMS } from "./seed-data/problems-mathcounts";
+import { AIME_PROBLEMS } from "./seed-data/problems-aime";
+import { HMMT_PROBLEMS } from "./seed-data/problems-hmmt";
+import { MATH_KANGAROO_PROBLEMS } from "./seed-data/problems-kangaroo";
+import { OLYMPIAD_TIER_PROBLEMS } from "./seed-data/problems-olympiad-tier";
 import { LESSONS } from "./seed-data/lessons";
 import { ACHIEVEMENTS } from "./seed-data/achievements";
 
@@ -180,6 +188,14 @@ async function main() {
     ...PUMAC_PROBLEMS,
     ...SMT_PROBLEMS,
     ...MATH_PRIZE_FOR_GIRLS_PROBLEMS,
+    ...AMC8_PROBLEMS,
+    ...AMC10_PROBLEMS,
+    ...AMC12_PROBLEMS,
+    ...MATHCOUNTS_PROBLEMS,
+    ...AIME_PROBLEMS,
+    ...HMMT_PROBLEMS,
+    ...MATH_KANGAROO_PROBLEMS,
+    ...OLYMPIAD_TIER_PROBLEMS,
   ];
 
   const generatedRows = [...GENERATED_PROBLEMS, ...OLYMPIAD_PROBLEMS, ...HAND_WRITTEN_COMPETITION_PROBLEMS].map((p) => {

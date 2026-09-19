@@ -31,7 +31,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-linear-two-step",
     topicSlug: "linear-equations",
     difficulty: 2,
-    competitionSlug: "math-kangaroo",
     variants: 164,
     params: (r) => {
       const a = intExcept(r, 2, 12, [0]);
@@ -58,7 +57,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-linear-both-sides",
     topicSlug: "linear-equations",
     difficulty: 3,
-    competitionSlug: "amc8",
     variants: 164,
     params: (r) => {
       const a = intExcept(r, 2, 12, [0]);
@@ -88,7 +86,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-linear-distribute",
     topicSlug: "linear-equations",
     difficulty: 3,
-    competitionSlug: "mathcounts",
     variants: 120,
     params: (r) => {
       const k = intExcept(r, 2, 9, [0]);
@@ -114,7 +111,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-system-elimination",
     topicSlug: "systems-of-equations",
     difficulty: 4,
-    competitionSlug: "amc10",
     variants: 153,
     params: (r) => {
       const x = intExcept(r, -8, 10, []);
@@ -152,7 +148,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-system-substitution",
     topicSlug: "systems-of-equations",
     difficulty: 3,
-    competitionSlug: "mathcounts",
     variants: 120,
     params: (r) => {
       const x = intExcept(r, -6, 12, []);
@@ -184,7 +179,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-inequality-count",
     topicSlug: "inequalities",
     difficulty: 3,
-    competitionSlug: "amc8",
     variants: 110,
     params: (r) => {
       const a = int(r, 2, 9);
@@ -247,7 +241,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-quadratic-roots",
     topicSlug: "quadratics",
     difficulty: 4,
-    competitionSlug: "amc10",
     variants: 131,
     params: (r) => {
       const p = intExcept(r, -9, 9, [0]);
@@ -327,7 +320,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-quadratic-vertex",
     topicSlug: "quadratics",
     difficulty: 5,
-    competitionSlug: "amc12",
     variants: 88,
     params: (r) => {
       const a = pick(r, [1, 2, 3, 4]);
@@ -363,7 +355,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-exponent-product",
     topicSlug: "exponents-radicals",
     difficulty: 2,
-    competitionSlug: "amc8",
     variants: 66,
     params: (r) => {
       const base = pick(r, [2, 3, 5]);
@@ -404,7 +395,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-exponent-power",
     topicSlug: "exponents-radicals",
     difficulty: 3,
-    competitionSlug: "mathcounts",
     // 4 bases × 3 exponents × 2 exponents, minus draws that overflow the cap.
     variants: 22,
     params: (r) => {
@@ -437,7 +427,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-sequence-arithmetic",
     topicSlug: "sequences",
     difficulty: 3,
-    competitionSlug: "amc8",
     variants: 153,
     params: (r) => {
       const a1 = intExcept(r, -10, 20, []);
@@ -467,7 +456,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-sequence-geometric",
     topicSlug: "sequences",
     difficulty: 4,
-    competitionSlug: "amc10",
     variants: 50,
     params: (r) => {
       const a1 = int(r, 1, 8);
@@ -497,7 +485,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-sequence-sum",
     topicSlug: "sequences",
     difficulty: 4,
-    competitionSlug: "mathcounts",
     variants: 57,
     params: (r) => ({ n: int(r, 8, 60) }),
     build: ({ n }) => {
@@ -551,7 +538,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-function-composite",
     topicSlug: "functions",
     difficulty: 4,
-    competitionSlug: "amc10",
     variants: 120,
     params: (r) => {
       const a = intExcept(r, -5, 6, [0]);
@@ -578,7 +564,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-poly-evaluate",
     topicSlug: "polynomials",
     difficulty: 3,
-    competitionSlug: "amc8",
     variants: 153,
     params: (r) => {
       const a = intExcept(r, 1, 5, [0]);
@@ -605,7 +590,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-poly-remainder",
     topicSlug: "polynomials",
     difficulty: 5,
-    competitionSlug: "amc12",
     variants: 120,
     params: (r) => {
       const a = intExcept(r, 1, 4, [0]);
@@ -637,7 +621,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-factor-difference-squares",
     topicSlug: "factoring",
     difficulty: 4,
-    competitionSlug: "mathcounts",
     variants: 99,
     params: (r) => {
       const a = int(r, 11, 99);
@@ -662,7 +645,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-factor-sum-product",
     topicSlug: "factoring",
     difficulty: 3,
-    competitionSlug: "amc8",
     variants: 72,
     params: (r) => {
       const p = int(r, 1, 12);
@@ -703,7 +685,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-radical-simplify",
     topicSlug: "exponents-radicals",
     difficulty: 3,
-    competitionSlug: "amc8",
     variants: 131,
     params: (r) => ({ k: int(r, 2, 12), m: pick(r, SQUAREFREE) }),
     build: ({ k, m }) => {
@@ -738,7 +719,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-radical-product",
     topicSlug: "exponents-radicals",
     difficulty: 4,
-    competitionSlug: "amc10",
     variants: 120,
     params: (r) => {
       const a = int(r, 2, 40);
@@ -780,7 +760,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-exponent-fractional",
     topicSlug: "exponents-radicals",
     difficulty: 4,
-    competitionSlug: "amc10",
     // Requiring m/n in lowest terms, plus the size caps, leaves 60 instances.
     variants: 66,
     params: (r) => {
@@ -832,7 +811,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-exponent-negative-fraction",
     topicSlug: "exponents-radicals",
     difficulty: 4,
-    competitionSlug: "amc10",
     variants: 99,
     params: (r) => {
       const a = int(r, 2, 9);
@@ -868,7 +846,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-log-evaluate",
     topicSlug: "exponents-radicals",
     difficulty: 5,
-    competitionSlug: "amc12",
     variants: 110,
     params: (r) => {
       const b = int(r, 2, 9);
@@ -932,7 +909,6 @@ export const ALGEBRA: Generator[] = [
     id: "gen-exponent-equation",
     topicSlug: "exponents-radicals",
     difficulty: 5,
-    competitionSlug: "amc10",
     variants: 110,
     params: (r) => {
       const b = int(r, 2, 6);

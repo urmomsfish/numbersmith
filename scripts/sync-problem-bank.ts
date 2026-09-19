@@ -24,6 +24,14 @@ import { MATH_LEAGUE_EM_PROBLEMS, MATH_LEAGUE_HS_PROBLEMS } from "../prisma/seed
 import { ARML_PROBLEMS } from "../prisma/seed-data/problems-arml";
 import { PUMAC_PROBLEMS, SMT_PROBLEMS } from "../prisma/seed-data/problems-pumac-smt";
 import { MATH_PRIZE_FOR_GIRLS_PROBLEMS } from "../prisma/seed-data/problems-math-prize-girls";
+import { AMC8_PROBLEMS } from "../prisma/seed-data/problems-amc8";
+import { AMC10_PROBLEMS } from "../prisma/seed-data/problems-amc10";
+import { AMC12_PROBLEMS } from "../prisma/seed-data/problems-amc12";
+import { MATHCOUNTS_PROBLEMS } from "../prisma/seed-data/problems-mathcounts";
+import { AIME_PROBLEMS } from "../prisma/seed-data/problems-aime";
+import { HMMT_PROBLEMS } from "../prisma/seed-data/problems-hmmt";
+import { MATH_KANGAROO_PROBLEMS } from "../prisma/seed-data/problems-kangaroo";
+import { OLYMPIAD_TIER_PROBLEMS } from "../prisma/seed-data/problems-olympiad-tier";
 import { GENERATED_PROBLEMS, GENERATION_ISSUES } from "../prisma/seed-data/generators";
 import { toProblemRow } from "../prisma/seed-data/problem-rows";
 
@@ -77,6 +85,14 @@ async function main() {
     ...PUMAC_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
     ...SMT_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
     ...MATH_PRIZE_FOR_GIRLS_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
+    ...AMC8_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
+    ...AMC10_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
+    ...AMC12_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
+    ...MATHCOUNTS_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
+    ...AIME_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
+    ...HMMT_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
+    ...MATH_KANGAROO_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
+    ...OLYMPIAD_TIER_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
   ];
   console.log(`Seed data defines ${candidates.length} problems.`);
 

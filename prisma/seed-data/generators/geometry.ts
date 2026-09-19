@@ -38,7 +38,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-angle-supplement",
     topicSlug: "angles",
     difficulty: 1,
-    competitionSlug: "math-kangaroo",
     variants: 120,
     params: (r) => ({ a: int(r, 15, 165), kind: int(r, 0, 1) }),
     build: ({ a, kind }) => {
@@ -71,7 +70,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-angle-triangle",
     topicSlug: "angles",
     difficulty: 2,
-    competitionSlug: "amc8",
     variants: 142,
     params: (r) => {
       const a = int(r, 20, 120);
@@ -96,7 +94,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-triangle-pythagoras",
     topicSlug: "triangles",
     difficulty: 3,
-    competitionSlug: "amc8",
     variants: 55,
     params: (r) => {
       const i = int(r, 0, TRIPLES.length - 1);
@@ -165,7 +162,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-rectangle-perimeter-area",
     topicSlug: "quadrilaterals",
     difficulty: 2,
-    competitionSlug: "math-kangaroo",
     variants: 131,
     params: (r) => {
       const w = int(r, 2, 25);
@@ -207,7 +203,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-polygon-interior",
     topicSlug: "polygons",
     difficulty: 3,
-    competitionSlug: "amc8",
     variants: 28,
     params: (r) => ({ n: int(r, 3, 27) }),
     build: ({ n }) => {
@@ -232,7 +227,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-polygon-sides-from-exterior",
     topicSlug: "polygons",
     difficulty: 4,
-    competitionSlug: "amc10",
     // Only 14 divisors of 360 give an integer interior angle for n >= 3.
     variants: 16,
     params: (r) => {
@@ -262,7 +256,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-circle-area-circumference",
     topicSlug: "circles",
     difficulty: 3,
-    competitionSlug: "amc8",
     variants: 51,
     params: (r) => ({ radius: int(r, 2, 25), want: int(r, 0, 1) }),
     build: ({ radius, want }) => {
@@ -304,7 +297,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-coord-distance",
     topicSlug: "coordinate-geometry",
     difficulty: 3,
-    competitionSlug: "amc10",
     variants: 99,
     params: (r) => {
       const i = int(r, 0, 5);
@@ -361,7 +353,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-transform-reflect",
     topicSlug: "transformations",
     difficulty: 2,
-    competitionSlug: "math-kangaroo",
     variants: 99,
     params: (r) => ({
       x: intExcept(r, -9, 9, [0]),
@@ -404,7 +395,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-3d-volume",
     topicSlug: "three-d-geometry",
     difficulty: 3,
-    competitionSlug: "mathcounts",
     variants: 131,
     params: (r) => ({ a: int(r, 2, 14), b: int(r, 2, 14), c: int(r, 2, 14) }),
     build: ({ a, b, c }) => {
@@ -429,7 +419,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-3d-surface-area",
     topicSlug: "three-d-geometry",
     difficulty: 4,
-    competitionSlug: "amc10",
     variants: 120,
     params: (r) => ({ a: int(r, 2, 13), b: int(r, 2, 13), c: int(r, 2, 13) }),
     build: ({ a, b, c }) => {
@@ -450,7 +439,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-similar-triangles",
     topicSlug: "similarity-congruence",
     difficulty: 4,
-    competitionSlug: "amc10",
     variants: 99,
     params: (r) => {
       const k = int(r, 2, 6);
@@ -487,7 +475,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-circle-arc-sector",
     topicSlug: "circles",
     difficulty: 3,
-    competitionSlug: "mathcounts",
     variants: 142,
     params: (r) => ({
       radius: int(r, 2, 24),
@@ -531,7 +518,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-circle-inscribed-angle",
     topicSlug: "circles",
     difficulty: 3,
-    competitionSlug: "amc10",
     variants: 131,
     params: (r) => {
       const want = int(r, 0, 2);
@@ -587,7 +573,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-circle-chord-distance",
     topicSlug: "circles",
     difficulty: 4,
-    competitionSlug: "amc10",
     variants: 77,
     params: (r) => ({ i: int(r, 0, TRIPLES.length - 1), k: int(r, 1, 4), want: int(r, 0, 1) }),
     build: ({ i, k, want }) => {
@@ -632,7 +617,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-circle-tangent-length",
     topicSlug: "circles",
     difficulty: 5,
-    competitionSlug: "amc10",
     variants: 44,
     params: (r) => ({ i: int(r, 0, TRIPLES.length - 1), k: int(r, 1, 4) }),
     build: ({ i, k }) => {
@@ -662,7 +646,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-polygon-diagonals",
     topicSlug: "polygons",
     difficulty: 3,
-    competitionSlug: "mathcounts",
     variants: 41,
     params: (r) => ({ n: int(r, 4, 40) }),
     build: ({ n }) => {
@@ -696,7 +679,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-polygon-exterior-each",
     topicSlug: "polygons",
     difficulty: 2,
-    competitionSlug: "amc8",
     // n must divide 360 for the exterior angle to be a whole number.
     variants: 19,
     params: (r) => ({ n: pick(r, [3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60]) }),
@@ -719,7 +701,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-polygon-apothem-area",
     topicSlug: "polygons",
     difficulty: 4,
-    competitionSlug: "mathcounts",
     variants: 99,
     params: (r) => {
       const n = int(r, 5, 12);
@@ -755,7 +736,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-triangle-inequality-count",
     topicSlug: "triangles",
     difficulty: 3,
-    competitionSlug: "amc8",
     variants: 120,
     params: (r) => {
       const a = int(r, 3, 40);
@@ -792,7 +772,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-triangle-exterior-angle",
     topicSlug: "triangles",
     difficulty: 3,
-    competitionSlug: "amc8",
     variants: 120,
     params: (r) => {
       const a = int(r, 20, 110);
@@ -825,7 +804,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-triangle-isosceles-angle",
     topicSlug: "triangles",
     difficulty: 2,
-    competitionSlug: "math-kangaroo",
     variants: 120,
     params: (r) => {
       const want = int(r, 0, 1);
@@ -865,7 +843,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-triangle-centroid-median",
     topicSlug: "triangles",
     difficulty: 4,
-    competitionSlug: "amc10",
     variants: 66,
     params: (r) => ({ t: int(r, 2, 31), want: int(r, 0, 1) }),
     build: ({ t, want }) => {
@@ -898,7 +875,6 @@ export const GEOMETRY: Generator[] = [
     id: "gen-triangle-angle-bisector",
     topicSlug: "triangles",
     difficulty: 5,
-    competitionSlug: "amc10",
     variants: 99,
     params: (r) => {
       const c = int(r, 3, 24); // AB

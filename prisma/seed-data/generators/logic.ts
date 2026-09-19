@@ -79,7 +79,6 @@ export const LOGIC: Generator[] = [
     id: "gen-logic-prize-boxes",
     topicSlug: "deduction",
     difficulty: 3,
-    competitionSlug: "math-kangaroo",
     variants: 99,
     params: (r) => {
       const n = int(r, 3, 4);
@@ -150,7 +149,6 @@ export const LOGIC: Generator[] = [
     id: "gen-logic-knights-knaves",
     topicSlug: "deduction",
     difficulty: 5,
-    competitionSlug: "mathcounts",
     variants: 131,
     // Statements are about *how many* knaves there are, not about who is who.
     //
@@ -241,7 +239,6 @@ export const LOGIC: Generator[] = [
     id: "gen-logic-age-multiple",
     topicSlug: "deduction",
     difficulty: 3,
-    competitionSlug: "amc8",
     variants: 99,
     params: (r) => {
       const b = int(r, 2, 5);
@@ -320,7 +317,6 @@ export const LOGIC: Generator[] = [
     id: "gen-logic-figurate",
     topicSlug: "patterns",
     difficulty: 3,
-    competitionSlug: "mathcounts",
     variants: 110,
     params: (r) => ({ s: int(r, 3, 8), n: int(r, 5, 40) }),
     build: ({ s, n }) => {
@@ -358,7 +354,6 @@ export const LOGIC: Generator[] = [
     id: "gen-logic-invariant-sum",
     topicSlug: "invariants",
     difficulty: 5,
-    competitionSlug: "amc10",
     variants: 66,
     params: (r) => ({ n: int(r, 5, 64) }),
     build: ({ n }) => {
@@ -386,7 +381,6 @@ export const LOGIC: Generator[] = [
     id: "gen-logic-invariant-product",
     topicSlug: "invariants",
     difficulty: 6,
-    competitionSlug: "amc10",
     variants: 8,
     params: (r) => ({ n: int(r, 3, 9) }),
     build: ({ n }) => {
@@ -462,7 +456,6 @@ export const LOGIC: Generator[] = [
     id: "gen-logic-takeaway-game",
     topicSlug: "strategy",
     difficulty: 5,
-    competitionSlug: "mathcounts",
     variants: 120,
     params: (r) => {
       const k = int(r, 2, 7);
@@ -536,7 +529,6 @@ export const LOGIC: Generator[] = [
     id: "gen-logic-weighings",
     topicSlug: "logical-puzzles",
     difficulty: 4,
-    competitionSlug: "math-kangaroo",
     variants: 66,
     params: (r) => ({ n: int(r, 4, 400) }),
     build: ({ n }) => {
@@ -573,7 +565,6 @@ export const LOGIC: Generator[] = [
     id: "gen-logic-digit-reversal-sum",
     topicSlug: "logical-puzzles",
     difficulty: 4,
-    competitionSlug: "amc8",
     // s = 2 has no solution — it would need two distinct nonzero digits
     // summing to 2 — so the usable range is 3..17.
     variants: 17,
@@ -615,7 +606,6 @@ export const LOGIC: Generator[] = [
     id: "gen-logic-digit-sum-multiple",
     topicSlug: "logical-puzzles",
     difficulty: 5,
-    competitionSlug: "mathcounts",
     variants: 10,
     params: (r) => ({ k: int(r, 2, 10) }),
     build: ({ k }) => {

@@ -19,7 +19,6 @@ export const ARITHMETIC: Generator[] = [
     id: "gen-frac-add",
     topicSlug: "fractions",
     difficulty: 2,
-    competitionSlug: "math-kangaroo",
     variants: 120,
     params: (r) => {
       const b = pick(r, [2, 3, 4, 5, 6, 8, 10, 12]);
@@ -109,7 +108,6 @@ export const ARITHMETIC: Generator[] = [
     id: "gen-frac-simplify",
     topicSlug: "fractions",
     difficulty: 1,
-    competitionSlug: "math-kangaroo",
     variants: 77,
     params: (r) => {
       const k = int(r, 2, 12);
@@ -135,7 +133,6 @@ export const ARITHMETIC: Generator[] = [
     id: "gen-percent-of",
     topicSlug: "percentages",
     difficulty: 2,
-    competitionSlug: "amc8",
     variants: 88,
     params: (r) => {
       const p = pick(r, [5, 10, 12, 15, 20, 25, 30, 40, 50, 60, 75, 80]);
@@ -170,7 +167,6 @@ export const ARITHMETIC: Generator[] = [
     id: "gen-percent-reverse",
     topicSlug: "percentages",
     difficulty: 3,
-    competitionSlug: "mathcounts",
     variants: 77,
     params: (r) => {
       const p = pick(r, [10, 20, 25, 40, 50, 60, 75, 80]);
@@ -200,7 +196,6 @@ export const ARITHMETIC: Generator[] = [
     id: "gen-percent-change",
     topicSlug: "percentages",
     difficulty: 3,
-    competitionSlug: "amc8",
     variants: 88,
     params: (r) => {
       const from = int(r, 2, 40) * 5;
@@ -231,7 +226,6 @@ export const ARITHMETIC: Generator[] = [
     id: "gen-ratio-share",
     topicSlug: "ratios-proportions",
     difficulty: 3,
-    competitionSlug: "mathcounts",
     variants: 99,
     params: (r) => {
       const a = int(r, 1, 7);
@@ -294,7 +288,6 @@ export const ARITHMETIC: Generator[] = [
     id: "gen-rate-distance",
     topicSlug: "rates",
     difficulty: 2,
-    competitionSlug: "amc8",
     variants: 88,
     params: (r) => {
       const speed = pick(r, [15, 20, 25, 30, 40, 45, 50, 55, 60, 65, 70]);
@@ -326,7 +319,6 @@ export const ARITHMETIC: Generator[] = [
     id: "gen-rate-time",
     topicSlug: "rates",
     difficulty: 3,
-    competitionSlug: "mathcounts",
     variants: 88,
     params: (r) => {
       const speed = pick(r, [12, 15, 20, 24, 25, 30, 40, 50, 60]);
@@ -356,7 +348,6 @@ export const ARITHMETIC: Generator[] = [
     id: "gen-rate-work",
     topicSlug: "rates",
     difficulty: 5,
-    competitionSlug: "amc10",
     // Only 6 (a,b) pairs from the clean-number pool give an integer joint time.
     variants: 7,
     params: (r) => {
@@ -425,7 +416,6 @@ export const ARITHMETIC: Generator[] = [
     id: "gen-average-missing",
     topicSlug: "averages",
     difficulty: 4,
-    competitionSlug: "mathcounts",
     variants: 110,
     params: (r) => {
       const n = int(r, 4, 6);
@@ -468,7 +458,6 @@ export const ARITHMETIC: Generator[] = [
     id: "gen-numprop-divisorcount",
     topicSlug: "number-properties",
     difficulty: 4,
-    competitionSlug: "mathcounts",
     variants: 99,
     params: (r) => ({ n: int(r, 12, 400) }),
     build: ({ n }) => {
@@ -506,7 +495,6 @@ export const ARITHMETIC: Generator[] = [
     id: "gen-numprop-gcdlcm",
     topicSlug: "number-properties",
     difficulty: 3,
-    competitionSlug: "amc8",
     variants: 99,
     params: (r) => {
       const a = int(r, 6, 90);

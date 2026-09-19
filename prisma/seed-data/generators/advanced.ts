@@ -53,7 +53,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-fermat",
     topicSlug: "modular-arithmetic",
     difficulty: 7,
-    competitionSlug: "hmmt",
     variants: 131,
     params: (r) => {
       const p = pick(r, [7, 11, 13, 17, 19, 23, 29, 31]);
@@ -88,7 +87,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-trailing-zeros",
     topicSlug: "advanced-number-theory",
     difficulty: 6,
-    competitionSlug: "aime",
     variants: 142,
     params: (r) => ({ n: int(r, 30, 2000) }),
     build: ({ n }) => {
@@ -123,7 +121,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-unit-fraction-pairs",
     topicSlug: "advanced-number-theory",
     difficulty: 8,
-    competitionSlug: "aime",
     variants: 60,
     params: (r) => ({ n: int(r, 2, 60) }),
     build: ({ n }) => {
@@ -275,7 +272,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-grid-paths",
     topicSlug: "advanced-combinatorics",
     difficulty: 6,
-    competitionSlug: "amc12",
     variants: 66,
     params: (r) => ({ m: int(r, 2, 9), n: int(r, 2, 9) }),
     build: ({ m, n }) => {
@@ -305,7 +301,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-derangement",
     topicSlug: "advanced-combinatorics",
     difficulty: 8,
-    competitionSlug: "hmmt",
     variants: 8,
     params: (r) => ({ n: int(r, 3, 9) }),
     build: ({ n }) => {
@@ -365,7 +360,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-vieta-cubic",
     topicSlug: "polynomials",
     difficulty: 7,
-    competitionSlug: "amc12",
     variants: 120,
     params: (r) => {
       const p = intExcept(r, -7, 7, [0]);
@@ -411,7 +405,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-symmetric-sums",
     topicSlug: "factoring",
     difficulty: 6,
-    competitionSlug: "amc12",
     variants: 120,
     params: (r) => {
       const x = intExcept(r, -9, 12, []);
@@ -442,7 +435,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-infinite-geometric",
     topicSlug: "sequences",
     difficulty: 6,
-    competitionSlug: "amc12",
     variants: 99,
     params: (r) => {
       const a = int(r, 1, 20);
@@ -579,7 +571,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-power-of-point",
     topicSlug: "advanced-geometry",
     difficulty: 7,
-    competitionSlug: "hmmt",
     variants: 88,
     params: (r) => {
       const pa = int(r, 2, 15);
@@ -616,7 +607,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-inradius",
     topicSlug: "advanced-geometry",
     difficulty: 6,
-    competitionSlug: "amc12",
     variants: 60,
     params: (r) => ({ i: int(r, 0, HERONIAN.length - 1), k: int(r, 1, 4) }),
     build: ({ i, k }) => {
@@ -652,7 +642,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-binomial-prob",
     topicSlug: "counting-probability",
     difficulty: 7,
-    competitionSlug: "amc12",
     variants: 60,
     params: (r) => {
       const n = int(r, 4, 12);
@@ -736,7 +725,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-amgm-minimum",
     topicSlug: "inequalities-olympiad",
     difficulty: 8,
-    competitionSlug: "amc12",
     variants: 120,
     params: (r) => {
       // Choosing a = k·p² and b = k·q² makes ab a perfect square, so the
@@ -783,7 +771,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-functional-equation",
     topicSlug: "functional-equations",
     difficulty: 8,
-    competitionSlug: "amc12",
     variants: 120,
     params: (r) => {
       const c = intExcept(r, -4, 4, [0, 1, -1]); // c = ±1 makes the system singular
@@ -829,7 +816,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-euler-phi",
     topicSlug: "advanced-number-theory",
     difficulty: 7,
-    competitionSlug: "amc12",
     variants: 142,
     params: (r) => ({ n: int(r, 20, 300) }),
     build: ({ n }) => {
@@ -861,7 +847,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-legendre-exponent",
     topicSlug: "advanced-number-theory",
     difficulty: 8,
-    competitionSlug: "aime",
     variants: 131,
     params: (r) => ({ n: int(r, 20, 200), p: pick(r, [2, 3, 5, 7, 11, 13]) }),
     build: ({ n, p }) => {
@@ -900,7 +885,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-multiplicative-order",
     topicSlug: "advanced-number-theory",
     difficulty: 8,
-    competitionSlug: "hmmt",
     variants: 153,
     params: (r) => {
       const p = pick(r, [7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43]);
@@ -939,7 +923,6 @@ export const ADVANCED: Generator[] = [
     id: "gen-adv-catalan",
     topicSlug: "advanced-combinatorics",
     difficulty: 8,
-    competitionSlug: "amc12",
     variants: 11,
     params: (r) => ({ n: int(r, 3, 12) }),
     build: ({ n }) => {

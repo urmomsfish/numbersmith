@@ -398,4 +398,879 @@ export const MATH_PRIZE_FOR_GIRLS_PROBLEMS: ProblemSeed[] = [
     topicSlug: "inequalities",
     competitionSlug: "math-prize-for-girls",
   },
+
+{
+    slug: "mpfg-25",
+    question:
+      "The equation x^2 - mx + 24 = 0 has two positive integer roots whose difference is 5. What is m?",
+    format: "SHORT_ANSWER",
+    answer: "11",
+    solution:
+      "The roots multiply to 24 and differ by 5. Checking factor pairs of 24: (1,24) differs by 23, (2,12) by 10, (3,8) by 5, (4,6) by 2. Only (3,8) has difference 5. So the roots are 3 and 8, and m is their sum: 3 + 8 = 11.",
+    hints: [
+      "The product of the roots is 24 (the constant term) — list the factor pairs of 24.",
+      "Find the pair whose difference is exactly 5, then m is just the sum of that pair.",
+    ],
+    difficulty: 7,
+    topicSlug: "quadratics",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-26",
+    question:
+      "Isosceles triangle ABC has AB = AC = 25 and BC = 48. What is the area of triangle ABC?",
+    format: "SHORT_ANSWER",
+    answer: "168",
+    solution:
+      "Drop the altitude from A to BC; by symmetry it bisects BC, hitting it at its midpoint M with BM = 24. Then AM = √(25² − 24²) = √(625 − 576) = √49 = 7. The area is (1/2)·BC·AM = (1/2)(48)(7) = 168.",
+    hints: [
+      "The altitude from the apex of an isosceles triangle bisects the base — this creates a right triangle with legs AM and 24.",
+      "Use the Pythagorean theorem on that right triangle to find the height, then compute the area.",
+    ],
+    difficulty: 7,
+    topicSlug: "triangles",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-27",
+    question: "What is the remainder when 2^50 is divided by 13?",
+    format: "SHORT_ANSWER",
+    answer: "4",
+    solution:
+      "Compute powers of 2 mod 13: 2^1=2, 2^2=4, 2^3=8, 2^4=16≡3, 2^6=2^4·2^2≡3·4=12≡−1 (mod 13). So 2 has order 12 mod 13. Since 50 = 4·12 + 2, 2^50 ≡ (2^12)^4 · 2^2 ≡ 1^4 · 4 ≡ 4 (mod 13).",
+    hints: [
+      "Look for a small power of 2 that's congruent to ±1 mod 13 to find the order of 2 modulo 13.",
+      "Once you know the order, reduce the exponent 50 modulo that order.",
+    ],
+    difficulty: 7,
+    topicSlug: "modular-arithmetic",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-28",
+    question:
+      "A password consists of 4 characters: the first two are distinct letters chosen from {A, B, C, D, E}, and the last two are distinct digits chosen from {0, 1, ..., 9}. How many different passwords are possible?",
+    format: "SHORT_ANSWER",
+    answer: "1800",
+    solution:
+      "The first two characters: 5 choices for the first letter and 4 remaining for the second, giving 5 × 4 = 20 ways. The last two characters: 10 choices for the first digit and 9 remaining for the second, giving 10 × 9 = 90 ways. Total passwords: 20 × 90 = 1800.",
+    hints: [
+      "Count the letter part and digit part separately, using the multiplication rule for ordered selections without repetition.",
+      "Multiply the two counts together.",
+    ],
+    difficulty: 7,
+    topicSlug: "counting-principles",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-29",
+    question: "If x + y = 10 and x^2 + y^2 = 58, what is xy?",
+    format: "SHORT_ANSWER",
+    answer: "21",
+    solution:
+      "Since (x+y)^2 = x^2 + 2xy + y^2, we have 100 = 58 + 2xy, so 2xy = 42 and xy = 21.",
+    hints: [
+      "Square the equation x + y = 10 and compare it to the given value of x^2 + y^2.",
+      "The difference between (x+y)^2 and x^2+y^2 is exactly 2xy.",
+    ],
+    difficulty: 7,
+    topicSlug: "systems-of-equations",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-30",
+    question:
+      "A circle has area 100π. A chord of the circle lies 6 units from the center. What is the length of the chord?",
+    format: "SHORT_ANSWER",
+    answer: "16",
+    solution:
+      "From area 100π = πr², the radius is r = 10. The perpendicular from the center to the chord, half the chord, and the radius form a right triangle, so the half-chord length is √(10² − 6²) = √64 = 8. The full chord is 16.",
+    hints: [
+      "Find the radius from the given area first.",
+      "The radius, the distance to the chord, and half the chord form a right triangle.",
+    ],
+    difficulty: 7,
+    topicSlug: "circles",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-31",
+    question:
+      "How many ordered pairs of positive integers (x, y) satisfy 4x + 7y = 91?",
+    format: "SHORT_ANSWER",
+    answer: "3",
+    solution:
+      "Solving for x: x = (91 − 7y)/4, which requires 91 − 7y ≡ 0 (mod 4). Since 91 ≡ 3 and 7 ≡ 3 (mod 4), this becomes 3 − 3y ≡ 0 (mod 4), i.e. y ≡ 1 (mod 4). Positive y with 7y < 91 means y ranges over 1 to 12, and the values y ≡ 1 (mod 4) in that range are 1, 5, 9 — three values, giving x = 21, 14, 7 respectively, all positive integers.",
+    hints: [
+      "Solve for x in terms of y and find the congruence condition on y modulo 4 that keeps x an integer.",
+      "Count the valid positive values of y below 13 (needed to keep x positive) satisfying that congruence.",
+    ],
+    difficulty: 7,
+    topicSlug: "diophantine-equations",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-32",
+    question:
+      "How many ways can the letters of the word NUMBER be arranged so that the letters U and E are not adjacent?",
+    format: "SHORT_ANSWER",
+    answer: "480",
+    solution:
+      "NUMBER has 6 distinct letters, so there are 6! = 720 total arrangements. Treating U and E as glued together as a single block gives 5! × 2 = 240 arrangements where they are adjacent (the factor of 2 accounts for the two orders UE and EU). So the arrangements with U and E not adjacent number 720 − 240 = 480.",
+    hints: [
+      "Count all 6! arrangements, then count the arrangements where U and E are stuck together as a block.",
+      "Subtract the adjacent count from the total.",
+    ],
+    difficulty: 7,
+    topicSlug: "permutations",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-33",
+    question:
+      "An arithmetic sequence has first term 7 and 15th term 91. What is the sum of the first 15 terms?",
+    format: "SHORT_ANSWER",
+    answer: "735",
+    solution:
+      "The sum of the first n terms of an arithmetic sequence equals n times the average of the first and last terms. Here that's 15 × (7 + 91)/2 = 15 × 49 = 735.",
+    hints: [
+      "You don't need the common difference — the sum only depends on the first term, last term, and number of terms.",
+      "Use Sum = n × (first + last)/2.",
+    ],
+    difficulty: 7,
+    topicSlug: "sequences",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-34",
+    question:
+      "What is the distance from the point (3, 4) to the line 5x - 12y + 26 = 0?",
+    format: "SHORT_ANSWER",
+    answer: "7/13",
+    solution:
+      "The distance from a point (x0,y0) to a line ax+by+c=0 is |ax0+by0+c|/√(a²+b²). Here that's |5(3) − 12(4) + 26|/√(25+144) = |15 − 48 + 26|/13 = |−7|/13 = 7/13.",
+    hints: [
+      "Use the point-to-line distance formula |ax0 + by0 + c| / √(a² + b²).",
+      "Carefully compute the numerator before taking the absolute value.",
+    ],
+    difficulty: 7,
+    topicSlug: "coordinate-geometry",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-35",
+    question: "What is the units digit of 7^2023?",
+    format: "SHORT_ANSWER",
+    answer: "3",
+    solution:
+      "The units digits of powers of 7 cycle with period 4: 7, 9, 3, 1, 7, 9, 3, 1, .... Since 2023 = 4 × 505 + 3, the units digit of 7^2023 matches the 3rd term in the cycle, which is 3.",
+    hints: [
+      "Compute the units digits of 7^1, 7^2, 7^3, 7^4, ... and notice they repeat.",
+      "Find 2023 mod 4 to locate the position in the cycle.",
+    ],
+    difficulty: 7,
+    topicSlug: "number-theory",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-36",
+    question:
+      "In how many ways can 5 distinct books be distributed among 3 distinct students so that every student gets at least one book?",
+    format: "SHORT_ANSWER",
+    answer: "150",
+    solution:
+      "This counts surjections from a 5-element set to a 3-element set. The number of such surjections is 3! · S(5,3), where S(5,3) is the Stirling number of the second kind counting ways to partition 5 distinct items into 3 nonempty unlabeled groups. S(5,3) = 25, so the count is 6 × 25 = 150.",
+    hints: [
+      "First count the ways to partition the 5 books into 3 nonempty unlabeled groups (a Stirling number of the second kind).",
+      "Then multiply by 3! to account for assigning those groups to the 3 distinct students.",
+    ],
+    difficulty: 7,
+    topicSlug: "combinations",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-37",
+    question: "If 2^x = 5^y = 1000, what is 1/x + 1/y?",
+    format: "SHORT_ANSWER",
+    answer: "1/3",
+    solution:
+      "From 2^x = 1000, x = log_2(1000), so 1/x = log_1000(2). Similarly 1/y = log_1000(5). Adding, 1/x + 1/y = log_1000(2) + log_1000(5) = log_1000(10) = 1/3, since 1000 = 10^3.",
+    hints: [
+      "If a^x = N, then 1/x = log_N(a) — rewrite both reciprocals as logarithms base 1000.",
+      "Add the two logarithms using the product rule: log_1000(2) + log_1000(5) = log_1000(10).",
+    ],
+    difficulty: 7,
+    topicSlug: "exponents-radicals",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-38",
+    question:
+      "A square has diagonal length 10√2. What is the square's perimeter?",
+    format: "SHORT_ANSWER",
+    answer: "40",
+    solution:
+      "For a square with side s, the diagonal has length s√2. Setting s√2 = 10√2 gives s = 10. The perimeter is 4s = 40.",
+    hints: [
+      "Relate the diagonal to the side length using the Pythagorean theorem (or the standard diagonal = side × √2 fact).",
+      "Once you have the side length, the perimeter is just 4 times that.",
+    ],
+    difficulty: 7,
+    topicSlug: "geometry",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-39",
+    question:
+      "What is the smallest positive integer n such that n! is divisible by 2^10?",
+    format: "SHORT_ANSWER",
+    answer: "12",
+    solution:
+      "By Legendre's formula, the exponent of 2 in n! is ⌊n/2⌋ + ⌊n/4⌋ + ⌊n/8⌋ + .... For n = 11: 5 + 2 + 1 = 8, which is less than 10. For n = 12: 6 + 3 + 1 = 10, which meets the requirement. So the smallest such n is 12.",
+    hints: [
+      "Use Legendre's formula to compute the exponent of 2 dividing n! for candidate values of n.",
+      "Check n = 11 (too small) and then n = 12.",
+    ],
+    difficulty: 8,
+    topicSlug: "number-theory",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-40",
+    question:
+      "A committee of 4 people is chosen from a group of 6 men and 5 women. How many such committees include at least 2 women?",
+    format: "SHORT_ANSWER",
+    answer: "215",
+    solution:
+      "The total number of 4-person committees from 11 people is C(11,4) = 330. Committees with 0 women: C(6,4) = 15. Committees with exactly 1 woman: C(5,1)·C(6,3) = 5 × 20 = 100. Subtracting these from the total: 330 − 15 − 100 = 215.",
+    hints: [
+      "It's easier to subtract the complementary cases (0 or 1 woman) from the total number of committees.",
+      "Compute C(11,4), then C(6,4) for zero women and C(5,1)·C(6,3) for exactly one woman.",
+    ],
+    difficulty: 8,
+    topicSlug: "combinations",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-41",
+    question:
+      "The polynomial x^3 - 6x^2 + 11x - 6 has roots r, s, t. What is r^2 + s^2 + t^2?",
+    format: "SHORT_ANSWER",
+    answer: "14",
+    solution:
+      "By Vieta's formulas, r + s + t = 6 and rs + st + tr = 11. Since (r+s+t)^2 = r^2+s^2+t^2 + 2(rs+st+tr), we get r^2+s^2+t^2 = 36 − 2(11) = 36 − 22 = 14.",
+    hints: [
+      "Use Vieta's formulas to read off the sum of the roots and the sum of pairwise products from the coefficients.",
+      "Square the sum of the roots and subtract twice the pairwise-product sum.",
+    ],
+    difficulty: 8,
+    topicSlug: "polynomials",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-42",
+    question:
+      "Two parallel chords of a circle of radius 10 lie on opposite sides of the center. One chord has length 12 and the other has length 16. What is the distance between the two chords?",
+    format: "SHORT_ANSWER",
+    answer: "14",
+    solution:
+      "For a chord of length L in a circle of radius r, the distance from the center is √(r² − (L/2)²). For the length-12 chord: √(100 − 36) = 8. For the length-16 chord: √(100 − 64) = 6. Since the chords are on opposite sides of the center, the distance between them is the sum: 8 + 6 = 14.",
+    hints: [
+      "For each chord, use the right triangle formed by the radius, half the chord, and the distance from the center.",
+      "Since the chords are on opposite sides of the center, add the two distances rather than subtracting.",
+    ],
+    difficulty: 8,
+    topicSlug: "circles",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-43",
+    question:
+      "How many positive divisors of 2^3 · 3^5 · 5^2 are perfect squares?",
+    format: "SHORT_ANSWER",
+    answer: "12",
+    solution:
+      "A divisor 2^a·3^b·5^c (with 0≤a≤3, 0≤b≤5, 0≤c≤2) is a perfect square exactly when a, b, c are all even. The even values available are a ∈ {0,2} (2 choices), b ∈ {0,2,4} (3 choices), c ∈ {0,2} (2 choices). The count is 2 × 3 × 2 = 12.",
+    hints: [
+      "A divisor is a perfect square exactly when every exponent in its prime factorization is even.",
+      "Count the even choices available for each exponent separately, then multiply.",
+    ],
+    difficulty: 8,
+    topicSlug: "number-theory",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-44",
+    question:
+      "How many 5-digit numbers (from 10000 to 99999) have digits that sum to 43?",
+    format: "SHORT_ANSWER",
+    answer: "15",
+    solution:
+      "The maximum possible digit sum for a 5-digit number is 9×5 = 45 (all digits 9). We need the sum to be 43, a deficiency of 2 from the maximum. Write each digit as 9 minus a nonnegative 'deficiency' e_i, so e_1+...+e_5 = 2, where e_1 ≤ 8 (since the leading digit must stay ≥ 1) and e_2,...,e_5 ≤ 9. Since the total deficiency is only 2, none of these upper bounds can be violated, so this is an unrestricted stars-and-bars count: C(2+4,4) = C(6,4) = 15.",
+    hints: [
+      "Instead of tracking digit sums directly, track how far each digit falls short of 9 — the shortfalls must sum to 45 − 43 = 2.",
+      "With a total shortfall of only 2, none of the individual digit constraints can actually be violated, so this reduces to a simple stars-and-bars count.",
+    ],
+    difficulty: 8,
+    topicSlug: "combinations",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-45",
+    question:
+      "Find all real x satisfying log_2(x) + log_4(x) + log_8(x) = 11, and report x.",
+    format: "SHORT_ANSWER",
+    answer: "64",
+    solution:
+      "Let t = log_2(x). Then log_4(x) = t/2 and log_8(x) = t/3. The equation becomes t(1 + 1/2 + 1/3) = 11, i.e. t · (11/6) = 11, so t = 6. Then x = 2^6 = 64.",
+    hints: [
+      "Convert every logarithm to base 2 using log_{2^k}(x) = log_2(x)/k.",
+      "Combine into a single equation in t = log_2(x) and solve.",
+    ],
+    difficulty: 8,
+    topicSlug: "exponents-radicals",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-46",
+    question:
+      "In right triangle ABC, angle B = 90°, AB = 9, and BC = 12. Points D on AB and E on BC satisfy BD = 3 and BE = 4. What is the area of quadrilateral ADEC (triangle ABC with triangle BDE removed)?",
+    format: "SHORT_ANSWER",
+    answer: "48",
+    solution:
+      "The area of triangle ABC is (1/2)(9)(12) = 54. The area of triangle BDE (also right-angled at B) is (1/2)(3)(4) = 6. The quadrilateral ADEC is what remains after removing BDE from ABC: 54 − 6 = 48.",
+    hints: [
+      "Both ABC and BDE are right triangles with the right angle at B — compute each area directly.",
+      "The area of ADEC is simply the difference of the two triangle areas.",
+    ],
+    difficulty: 8,
+    topicSlug: "triangles",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-47",
+    question:
+      "What is the sum of all positive integers n ≤ 100 such that n^2 ≡ 1 (mod 24)?",
+    format: "SHORT_ANSWER",
+    answer: "1633",
+    solution:
+      "Since 24 = 8·3, n^2 ≡ 1 (mod 8) holds for every odd n (odd squares are always ≡1 mod 8), and n^2 ≡ 1 (mod 3) holds exactly when n ≡ ±1 (mod 3), i.e. n is not divisible by 3. Combining, n^2 ≡ 1 (mod 24) exactly when gcd(n, 24) = 1. Summing all n from 1 to 100 coprime to 24 gives 1633 (there are 33 such values).",
+    hints: [
+      "Break the condition mod 24 into mod 8 and mod 3 pieces using the Chinese Remainder Theorem.",
+      "Show the condition is equivalent to gcd(n,24) = 1, then sum those n from 1 to 100.",
+    ],
+    difficulty: 8,
+    topicSlug: "modular-arithmetic",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-48",
+    question:
+      "How many ways are there to tile a 2×10 rectangle using 1×2 dominoes?",
+    format: "SHORT_ANSWER",
+    answer: "89",
+    solution:
+      "Let f(n) be the number of tilings of a 2×n rectangle. Conditioning on how the rightmost column is covered gives the recurrence f(n) = f(n-1) + f(n-2), with f(1)=1 and f(2)=2 — this is the Fibonacci recurrence shifted by one index. Computing forward: f(3)=3, f(4)=5, f(5)=8, f(6)=13, f(7)=21, f(8)=34, f(9)=55, f(10)=89.",
+    hints: [
+      "Set up a recurrence by considering whether the last column is covered by one vertical domino or two horizontal dominoes.",
+      "The recurrence is the Fibonacci relation; just compute the first 10 terms.",
+    ],
+    difficulty: 8,
+    topicSlug: "combinations",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-49",
+    question:
+      "For how many integers k does x^2 + kx + 2016 = 0 have two integer roots?",
+    format: "SHORT_ANSWER",
+    answer: "36",
+    solution:
+      "If the roots are integers p and q, then pq = 2016 and k = −(p+q). Since 2016 = 2^5·3^2·7 has 36 divisors and is not a perfect square, its divisors pair up into 18 pairs (d, 2016/d) with d < √2016. The function d + 2016/d is strictly decreasing for d < √2016, so these 18 pairs give 18 distinct positive sums. Roots can also both be negative (giving the negatives of these same products but sums that are negatives of the positive-pair sums), yielding 18 more distinct values of p+q, and hence 18 more values of k. In total there are 36 distinct values of k.",
+    hints: [
+      "If the two integer roots multiply to 2016, k is minus their sum — count the distinct sums achievable over all integer factor pairs of 2016 (both positive and both negative).",
+      "2016 is not a perfect square, so its divisors pair up; the function d + 2016/d is strictly decreasing for d below √2016, guaranteeing all these sums are distinct.",
+    ],
+    difficulty: 8,
+    topicSlug: "quadratics",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-50",
+    question:
+      "A right circular cylinder has volume 250π and height 10. What is its lateral surface area?",
+    format: "SHORT_ANSWER",
+    answer: "100π",
+    solution:
+      "From V = πr²h = 250π with h=10, we get r² = 25, so r = 5. The lateral surface area is 2πrh = 2π(5)(10) = 100π.",
+    hints: [
+      "Use the volume formula to solve for the radius first.",
+      "Then apply the lateral surface area formula 2πrh.",
+    ],
+    difficulty: 8,
+    topicSlug: "area-volume",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-51",
+    question: "What is the remainder when 12! is divided by 13?",
+    format: "SHORT_ANSWER",
+    answer: "12",
+    solution:
+      "By Wilson's theorem, for a prime p, (p-1)! ≡ −1 (mod p). With p = 13, 12! ≡ −1 ≡ 12 (mod 13).",
+    hints: [
+      "13 is prime — recall Wilson's theorem about (p-1)! modulo a prime p.",
+      "Convert −1 to a remainder in the range 0 to 12.",
+    ],
+    difficulty: 8,
+    topicSlug: "modular-arithmetic",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-52",
+    question:
+      "How many distinct arrangements of the letters of MISSISSIPPI have no two I's adjacent?",
+    format: "SHORT_ANSWER",
+    answer: "7350",
+    solution:
+      "MISSISSIPPI has 11 letters: M(1), I(4), S(4), P(2). First arrange the 7 non-I letters (M, S, S, S, S, P, P): this can be done in 7!/(4!·2!) = 105 ways. These 7 letters create 8 gaps (including the two ends) in which to place the 4 I's, at most one per gap to keep them non-adjacent: C(8,4) = 70 ways. The total is 105 × 70 = 7350.",
+    hints: [
+      "Arrange the non-I letters first, then insert the I's into the gaps between them so no two land in the same gap.",
+      "Count the non-I arrangements (accounting for repeated S's and P's), count the gap choices, and multiply.",
+    ],
+    difficulty: 9,
+    topicSlug: "permutations",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-53",
+    question:
+      "Positive reals a and b satisfy a + b = 10 and a^3 + b^3 = 370. What is ab?",
+    format: "SHORT_ANSWER",
+    answer: "21",
+    solution:
+      "Using a^3+b^3 = (a+b)^3 - 3ab(a+b): 370 = 1000 - 30ab, so 30ab = 630 and ab = 21.",
+    hints: [
+      "Expand (a+b)^3 in terms of a^3+b^3 and ab(a+b).",
+      "Substitute the known values of a+b and a^3+b^3 and solve for ab.",
+    ],
+    difficulty: 9,
+    topicSlug: "algebra",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-54",
+    question:
+      "In triangle ABC, AB = 7, AC = 9, and BC = 12. What is the length of the angle bisector from A to side BC?",
+    format: "SHORT_ANSWER",
+    answer: "21/4",
+    solution:
+      "The angle bisector length formula gives AD² = AB·AC·[1 − (BC/(AB+AC))²]. Substituting: AD² = 7·9·[1 − (12/16)²] = 63·[1 − 9/16] = 63·(7/16) = 441/16. So AD = 21/4.",
+    hints: [
+      "Use the angle bisector length formula AD² = AB·AC·[1 − (BC/(AB+AC))²].",
+      "Simplify the fraction inside the brackets before taking the square root.",
+    ],
+    difficulty: 9,
+    topicSlug: "triangles",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-55",
+    question:
+      "What is the smallest positive integer n such that n^2 + n + 41 is not prime?",
+    format: "SHORT_ANSWER",
+    answer: "40",
+    solution:
+      "Euler's famous polynomial n^2 + n + 41 produces a prime for every n = 0, 1, ..., 39. At n = 40: 40^2 + 40 + 41 = 1600 + 40 + 41 = 1681 = 41^2, which is composite. So the smallest such n is 40.",
+    hints: [
+      "This is a well-known 'prime-generating' polynomial — it stays prime for a surprisingly long stretch of small n.",
+      "Try n = 40 and notice the expression factors nicely.",
+    ],
+    difficulty: 9,
+    topicSlug: "number-theory",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-56",
+    question:
+      "A fair 6-sided die is rolled repeatedly until a 6 appears. Let X be the sum of all rolls, including the final 6. What is E[X]?",
+    format: "SHORT_ANSWER",
+    answer: "21",
+    solution:
+      "The number of rolls N is a stopping time (whether to stop depends only on rolls seen so far), and each roll is i.i.d. uniform on {1,...,6} with mean 3.5. By Wald's identity, E[X] = E[N]·E[single roll] = E[N]·3.5. Since N is geometric with success probability 1/6, E[N] = 6. So E[X] = 6 × 3.5 = 21.",
+    hints: [
+      "The number of rolls until the first 6 is a geometric random variable — find its expected value.",
+      "Wald's identity says the expected sum equals the expected number of rolls times the expected value of a single roll (3.5), even though the last roll is always a 6.",
+    ],
+    difficulty: 9,
+    topicSlug: "expected-value",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-57",
+    question:
+      "The roots of x^3 - 9x^2 + 24x - 20 = 0 are p, q, r. What is p^2q + p^2r + q^2p + q^2r + r^2p + r^2q?",
+    format: "SHORT_ANSWER",
+    answer: "156",
+    solution:
+      "By Vieta's formulas, p+q+r = 9, pq+qr+rp = 24, pqr = 20. The requested symmetric sum equals (p+q+r)(pq+qr+rp) − 3pqr, since expanding (p+q+r)(pq+qr+rp) produces every term p²q (summed over all ordered pairs of distinct roots) plus 3pqr. So the answer is 9(24) − 3(20) = 216 − 60 = 156.",
+    hints: [
+      "Expand (p+q+r)(pq+qr+rp) and notice it equals the requested sum plus 3pqr.",
+      "Read off p+q+r, pq+qr+rp, and pqr from the coefficients via Vieta's formulas.",
+    ],
+    difficulty: 9,
+    topicSlug: "polynomials",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-58",
+    question:
+      "A circle passes through the points (0,0), (8,0), and (0,6). What is the radius of the circle?",
+    format: "SHORT_ANSWER",
+    answer: "5",
+    solution:
+      "The angle at the origin between the segments to (8,0) and (0,6) is 90° (the segments lie along the two axes). By Thales's theorem, the side opposite a right angle inscribed in a circle is a diameter, so the segment from (8,0) to (0,6) is a diameter. Its length is √(8² + 6²) = √100 = 10, so the diameter is 10 and the radius is 5.",
+    hints: [
+      "Notice the angle at the origin, between the two given points, is a right angle.",
+      "An inscribed right angle means the side opposite it (from (8,0) to (0,6)) is a diameter of the circle.",
+    ],
+    difficulty: 9,
+    topicSlug: "circles",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-59",
+    question:
+      "How many ordered triples of positive integers (x, y, z) with x ≤ y ≤ z satisfy x + y + z = xyz?",
+    format: "SHORT_ANSWER",
+    answer: "1",
+    solution:
+      "Since x ≤ y ≤ z, we have x + y + z ≤ 3z, so xyz ≤ 3z, meaning xy ≤ 3. This restricts (x,y) to (1,1), (1,2), or (1,3). Testing (1,1): 1+1+z = z gives 2=0, impossible. Testing (1,2): 1+2+z = 2z gives z=3, which does satisfy 1 ≤ 2 ≤ 3, and indeed 1+2+3=6=1·2·3. Testing (1,3): 1+3+z=3z gives 2z=4, z=2, but this violates y ≤ z (3 > 2). So the only solution is (x,y,z) = (1,2,3), giving exactly 1 triple.",
+    hints: [
+      "Use x ≤ y ≤ z to bound xy: since x+y+z ≤ 3z, you get xy ≤ 3, which leaves only a few cases for (x,y) to check.",
+      "Check each small case (1,1), (1,2), (1,3) for x and y, solving for z and verifying the ordering constraint.",
+    ],
+    difficulty: 9,
+    topicSlug: "diophantine-equations",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-60",
+    question:
+      "What is the smallest number of points that must be placed inside (or on the boundary of) a 6×6 square to guarantee that two of them lie within distance √8 of each other?",
+    format: "SHORT_ANSWER",
+    answer: "10",
+    solution:
+      "Divide the 6×6 square into a 3×3 grid of 2×2 subsquares, giving 9 subsquares total. Any two points within the same 2×2 subsquare are at most the diagonal distance apart, which is √(2²+2²) = √8. By the pigeonhole principle, placing 10 points among 9 subsquares forces two points into the same subsquare, guaranteeing a pair within distance √8. With only 9 points, one point could be placed in each subsquare's corner in a way that avoids this, so 10 is the minimum guarantee.",
+    hints: [
+      "Partition the square into 9 smaller 2×2 subsquares and think about the maximum distance between two points inside the same subsquare.",
+      "Apply the pigeonhole principle: how many points force two into the same subsquare?",
+    ],
+    difficulty: 9,
+    topicSlug: "pigeonhole",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-61",
+    question:
+      "A sequence satisfies a_1 = 1, a_2 = 1, and a_{n+2} = a_{n+1} + a_n + n for n ≥ 1. What is a_10?",
+    format: "SHORT_ANSWER",
+    answer: "188",
+    solution:
+      "Computing term by term: a_3 = a_2+a_1+1 = 3, a_4 = a_3+a_2+2 = 6, a_5 = a_4+a_3+3 = 12, a_6 = a_5+a_4+4 = 22, a_7 = a_6+a_5+5 = 39, a_8 = a_7+a_6+6 = 67, a_9 = a_8+a_7+7 = 113, a_10 = a_9+a_8+8 = 188.",
+    hints: [
+      "There's no shortcut needed here — just apply the recurrence step by step from n=1 up to n=8.",
+      "Keep careful track of both a_n and a_{n+1} as you go, and don't forget the '+n' term at each step.",
+    ],
+    difficulty: 9,
+    topicSlug: "sequences",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-62",
+    question:
+      "The incircle of triangle ABC has radius 6 and touches side BC at point D, with BD = 8 and DC = 12. What is the perimeter of triangle ABC?",
+    format: "SHORT_ANSWER",
+    answer: "64",
+    solution:
+      "Let the tangent length from A to the incircle be x; the tangent lengths from B and C are BD = 8 and DC = 12 respectively (equal tangent segments from each vertex). Then the semi-perimeter is s = x + 8 + 12 = x + 20, and there's a known identity r²s = (s-a)(s-b)(s-c) where s-a, s-b, s-c are exactly the three tangent lengths x, 8, 12. So 6²(x+20) = x·8·12 = 96x, i.e. 36x + 720 = 96x, giving 60x = 720, so x = 12. Then s = 32, and the perimeter is 2s = 64.",
+    hints: [
+      "The tangent length from each vertex to the incircle equals s minus the opposite side; here those tangent lengths are exactly x (unknown, from A), 8 (from B), and 12 (from C).",
+      "Use the identity r²s = (s-a)(s-b)(s-c), where the right side is just the product of the three tangent lengths, to solve for the unknown tangent length.",
+    ],
+    difficulty: 9,
+    topicSlug: "advanced-geometry",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-63",
+    question:
+      "How many positive integers less than 1000 are relatively prime to 30?",
+    format: "SHORT_ANSWER",
+    answer: "266",
+    solution:
+      "Use inclusion-exclusion on divisibility by 2, 3, and 5 among the integers 1 to 999. Total: 999. Divisible by 2: 499; by 3: 333; by 5: 199. Divisible by 6: 166; by 10: 99; by 15: 66. Divisible by 30: 33. The count divisible by 2, 3, or 5 is 499+333+199 − 166−99−66 + 33 = 1031 − 331 + 33 = 733. The count coprime to 30 is 999 − 733 = 266.",
+    hints: [
+      "Apply inclusion-exclusion to count numbers from 1 to 999 divisible by 2, 3, or 5, then subtract from 999.",
+      "Don't forget the pairwise overlaps (6, 10, 15) and the triple overlap (30).",
+    ],
+    difficulty: 9,
+    topicSlug: "advanced-number-theory",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-64",
+    question:
+      "How many ways are there to distribute 8 identical balls into 4 distinct boxes so that every box gets at least 1 ball and no box gets more than 4 balls?",
+    format: "SHORT_ANSWER",
+    answer: "31",
+    solution:
+      "Substitute y_i = x_i − 1 ≥ 0 (so each box has between 0 and 3 'extra' balls beyond its guaranteed one), turning the problem into: count nonnegative integer solutions to y_1+y_2+y_3+y_4 = 4 with each y_i ≤ 3. Without the upper bound, there are C(4+3,3) = C(7,3) = 35 solutions. Subtract the cases where some y_i ≥ 4: if y_i ≥ 4, set y_i' = y_i − 4 ≥ 0, so y_i' plus the rest sum to 0, forcing all other variables to 0 — this gives exactly 1 solution per choice of which variable is ≥ 4, and only one variable can exceed the bound at a time since the total is only 4. There are 4 such variables, so subtract 4: 35 − 4 = 31.",
+    hints: [
+      "Shift each box's count down by 1 (the guaranteed ball) and use stars and bars on the remainder, which must sum to 4 with each box capped at 3 extra.",
+      "Use inclusion-exclusion to remove the cases where some box's extra count exceeds 3 — only one box can violate the cap at a time here.",
+    ],
+    difficulty: 9,
+    topicSlug: "advanced-combinatorics",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-65",
+    question:
+      "Positive reals x and y satisfy xy = 16. What is the minimum possible value of x + 4y?",
+    format: "SHORT_ANSWER",
+    answer: "16",
+    solution:
+      "By AM-GM, x + 4y ≥ 2√(x·4y) = 2√(4xy) = 2√(64) = 16. Equality holds when x = 4y; combined with xy=16, this gives 4y² = 16, y = 2, x = 8, confirming the bound is achieved. So the minimum value is 16.",
+    hints: [
+      "Apply AM-GM to the two terms x and 4y.",
+      "Check that equality (x = 4y) is actually achievable given the constraint xy = 16.",
+    ],
+    difficulty: 9,
+    topicSlug: "inequalities",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-66",
+    question:
+      "Rectangle ABCD has point P inside it with PA = 13, PB = 14, and PC = 15. What is PD?",
+    format: "SHORT_ANSWER",
+    answer: "3√22",
+    solution:
+      "By the British Flag Theorem, for any point P and any rectangle ABCD, PA² + PC² = PB² + PD². So PD² = PA² + PC² − PB² = 169 + 225 − 196 = 198. Thus PD = √198 = 3√22.",
+    hints: [
+      "Recall the British Flag Theorem: for a point P and rectangle ABCD, PA² + PC² = PB² + PD², regardless of the rectangle's dimensions.",
+      "Solve for PD² and simplify the resulting square root.",
+    ],
+    difficulty: 10,
+    topicSlug: "advanced-geometry",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-67",
+    question: "What is the remainder when 3^400 is divided by 1000?",
+    format: "SHORT_ANSWER",
+    answer: "1",
+    solution:
+      "Since gcd(3,1000)=1, Euler's theorem applies: 3^φ(1000) ≡ 1 (mod 1000). Here φ(1000) = 1000·(1−1/2)·(1−1/5) = 1000 · 1/2 · 4/5 = 400, which is exactly the given exponent. So 3^400 ≡ 1 (mod 1000).",
+    hints: [
+      "Compute φ(1000) using the prime factorization 1000 = 2^3 · 5^3.",
+      "Notice the exponent 400 exactly equals φ(1000), so Euler's theorem applies directly.",
+    ],
+    difficulty: 10,
+    topicSlug: "modular-arithmetic",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-68",
+    question:
+      "Every edge of the complete graph on 6 vertices (K6) is colored either red or blue. What is the minimum possible number of monochromatic triangles (triangles whose three edges are all the same color) over all such colorings?",
+    format: "SHORT_ANSWER",
+    answer: "2",
+    solution:
+      "It's a classical fact (a refinement of the Ramsey number R(3,3)=6) that every 2-coloring of K6's edges contains at least one monochromatic triangle, but in fact the minimum count over all colorings is exactly 2, achieved for instance by a coloring built from two disjoint red triangles connected by blue edges in a suitable pattern (an explicit case-check over the small number of essentially different colorings confirms no coloring achieves only 1 or 0 monochromatic triangles, while a construction achieving exactly 2 exists).",
+    hints: [
+      "This is stronger than the fact that R(3,3)=6 (that only guarantees at least 1 monochromatic triangle) — the true minimum count is a specific small number greater than 1.",
+      "Try to construct a coloring with as few monochromatic triangles as possible, and convince yourself you can't avoid a second one.",
+    ],
+    difficulty: 10,
+    topicSlug: "graph-theory",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-69",
+    question:
+      "A function f: R → R satisfies f(x)f(y) - f(xy) = x + y for all real x, y. What is f(3)?",
+    format: "SHORT_ANSWER",
+    answer: "4",
+    solution:
+      "Set x=y=0: f(0)² − f(0) = 0, so f(0) = 0 or f(0) = 1. If f(0)=0, setting y=0 gives f(x)·0 − 0 = x, i.e. 0 = x for all x, a contradiction. So f(0) = 1. Setting y=0 now gives f(x)·1 − 1 = x, so f(x) = x + 1 for all x. Checking: f(x)f(y) − f(xy) = (x+1)(y+1) − (xy+1) = xy+x+y+1−xy−1 = x+y, which matches. So f(3) = 4.",
+    hints: [
+      "Plug in x = y = 0 to find the possible values of f(0), then rule one out using y = 0 with general x.",
+      "Once you know f(0), set y = 0 again to derive a closed form for f(x).",
+    ],
+    difficulty: 10,
+    topicSlug: "functional-equations",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-70",
+    question:
+      "A regular tetrahedron has edge length 6. What is the distance from the tetrahedron's centroid to one of its faces?",
+    format: "SHORT_ANSWER",
+    answer: "√6/2",
+    solution:
+      "The height of a regular tetrahedron with edge length a is H = a√(2/3) = a√6/3. For a=6, H = 6√6/3 = 2√6. The centroid (average of the 4 vertices) lies at 1/4 of the height above each face, since it divides the segment from any vertex to the centroid of the opposite face in ratio 3:1. So the distance from the centroid to a face is H/4 = 2√6/4 = √6/2.",
+    hints: [
+      "First find the height of the tetrahedron (distance from a vertex to the opposite face).",
+      "The centroid sits at exactly 1/4 of that height above each face — this follows from the centroid being the average of all 4 vertices.",
+    ],
+    difficulty: 10,
+    topicSlug: "three-d-geometry",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-71",
+    question:
+      "How many ordered pairs of integers (x, y) satisfy x^2 - y^2 = 2024?",
+    format: "SHORT_ANSWER",
+    answer: "16",
+    solution:
+      "Factor as (x-y)(x+y) = 2024. Writing x−y = d1 and x+y = d2, we need d1·d2 = 2024 with d1, d2 of the same parity (so that x=(d1+d2)/2 and y=(d2-d1)/2 are integers). Since 2024 is even but not the product of two odd numbers, both d1 and d2 must be even. Write d1=2a, d2=2b, so 4ab = 2024, giving ab = 506 = 2·11·23. Since 506 has three distinct prime factors, it has 8 positive divisors, giving 8 ordered pairs (a,b) with a,b>0, plus 8 more with a,b both negative (equally valid since ab=506>0). Each distinct (a,b) gives a distinct (x,y). Total: 16 ordered pairs.",
+    hints: [
+      "Factor the difference of squares and set d1 = x−y, d2 = x+y with d1·d2 = 2024, noting d1 and d2 must share the same parity.",
+      "Show both factors must be even, reduce to a smaller product ab = 506, and count its divisors (including negative pairs).",
+    ],
+    difficulty: 10,
+    topicSlug: "diophantine-equations",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-72",
+    question:
+      "Each cell of a 5×5 grid contains either +1 or −1. For each of the 5 rows, compute the product of its entries, and for each of the 5 columns, compute the product of its entries — 10 numbers total. What is the product of all 10 of these numbers?",
+    format: "SHORT_ANSWER",
+    answer: "1",
+    solution:
+      "Let Q be the product of all 25 entries in the grid. The product of the 5 row-products equals Q (every cell is counted exactly once across the rows), and likewise the product of the 5 column-products also equals Q. So the product of all 10 numbers is Q · Q = Q². Since each entry is ±1, Q is also ±1, and Q² = 1 regardless of the grid's actual contents. So the answer is always 1.",
+    hints: [
+      "The product of the 5 row-products, and separately the product of the 5 column-products, both equal the product of all 25 entries.",
+      "So the final answer is that product squared — and a square of ±1 is always 1, no matter what's in the grid.",
+    ],
+    difficulty: 10,
+    topicSlug: "invariants",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-73",
+    question:
+      "Real numbers x, y, z satisfy x+y+z=6, x²+y²+z²=14, and x³+y³+z³=36. What is xyz?",
+    format: "SHORT_ANSWER",
+    answer: "6",
+    solution:
+      "Let e1=x+y+z=6, e2=xy+yz+zx, e3=xyz. From x²+y²+z² = e1² − 2e2: 14 = 36 − 2e2, so e2 = 11. Using the identity x³+y³+z³ = e1³ − 3e1e2 + 3e3: 36 = 216 − 3(6)(11) + 3e3 = 216 − 198 + 3e3 = 18 + 3e3, so 3e3 = 18 and e3 = 6. (Indeed, x,y,z are the roots of t³−6t²+11t−6=0, which factors as (t−1)(t−2)(t−3), matching 1+2+3=6, and 1·2·3=6.) So xyz = 6.",
+    hints: [
+      "Use the identity x²+y²+z² = (x+y+z)² − 2(xy+yz+zx) to find the pairwise sum.",
+      "Then use the identity x³+y³+z³ = (x+y+z)³ − 3(x+y+z)(xy+yz+zx) + 3xyz to solve for xyz.",
+    ],
+    difficulty: 10,
+    topicSlug: "systems-of-equations",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-74",
+    question:
+      "A sphere is inscribed in a cube of side length 6 (tangent to all 6 faces). A plane through the center of the cube, parallel to one face, cuts both the cube and the sphere. What is the area of the region inside the cube's cross-section but outside the sphere's cross-section?",
+    format: "SHORT_ANSWER",
+    answer: "36 - 9π",
+    solution:
+      "The cube's cross-section (parallel to a face, through the center) is a 6×6 square with area 36. The inscribed sphere has radius 3 (half the cube's side length), and a plane through its center produces a great circle of radius 3, with area 9π. The requested region is the square minus the circle: 36 − 9π.",
+    hints: [
+      "The cube's cross-section through the center, parallel to a face, is just a 6×6 square.",
+      "The sphere's cross-section through its center is a great circle with the sphere's full radius — find that radius from the cube's dimensions.",
+    ],
+    difficulty: 10,
+    topicSlug: "area-volume",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-75",
+    question:
+      "How many positive integers n with 1 ≤ n ≤ 2024 satisfy 2024 | n(n-1)?",
+    format: "SHORT_ANSWER",
+    answer: "8",
+    solution:
+      "Factor 2024 = 2^3 · 11 · 23. Since n and n−1 are coprime, for each prime power in the factorization (8, 11, 23), it must divide entirely into n or entirely into n−1 (it can't split between them). This gives 2 independent choices for each of the 3 prime-power factors, so by the Chinese Remainder Theorem there are 2^3 = 8 distinct residues mod 2024 satisfying the condition. Since the range 1 to 2024 contains exactly one representative of each residue class mod 2024, there are exactly 8 valid values of n.",
+    hints: [
+      "Factor 2024 into prime power components 8, 11, 23 — since n and n−1 share no common factor, each component must divide entirely into one of them.",
+      "Use the Chinese Remainder Theorem to count the number of valid residues mod 2024, then note the range given has exactly one representative per residue.",
+    ],
+    difficulty: 10,
+    topicSlug: "advanced-number-theory",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-76",
+    question:
+      "How many sequences of length 10 using the letters A, B, C have no two consecutive letters equal and do not contain the consecutive substring 'ABC'?",
+    format: "SHORT_ANSWER",
+    answer: "685",
+    solution:
+      "Track the state of the last two letters (6 possible pairs, since adjacent letters must differ: AB, AC, BA, BC, CA, CB). From state (X,Y), the next letter Z can be either of the two letters different from Y, except from state (A,B) the letter C is additionally forbidden (to avoid the substring 'ABC'), leaving only Z=A. Starting with all 6 length-2 states at count 1, this recurrence is applied 8 more times to reach length 10, where at each step the count in each new state (Y,Z) accumulates contributions from all valid predecessor states (X,Y). Carrying out this computation (by hand or with careful bookkeeping) through length 10 gives a total of 685 valid sequences across all 6 final states.",
+    hints: [
+      "Set up a state machine tracking the last two letters, since you need to know whether they're 'AB' to decide if the next letter is restricted.",
+      "Propagate counts through all 6 states for 8 more steps (from length 2 up to length 10), applying the extra restriction only when leaving an 'AB' state.",
+    ],
+    difficulty: 10,
+    topicSlug: "advanced-combinatorics",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-77",
+    question:
+      "For positive reals a, b, c with a+b+c=9, what is the minimum possible value of a²/b + b²/c + c²/a?",
+    format: "SHORT_ANSWER",
+    answer: "9",
+    solution:
+      "By the Cauchy-Schwarz inequality in Engel form (Titu's Lemma): a²/b + b²/c + c²/a ≥ (a+b+c)² / (a+b+c) = a+b+c = 9. Equality holds when a/b = b/c = c/a, which forces a=b=c=3 (consistent with a+b+c=9), and indeed 3²/3 + 3²/3 + 3²/3 = 3+3+3 = 9. So the minimum value is 9.",
+    hints: [
+      "Apply Titu's Lemma (Cauchy-Schwarz in Engel form) to the sum a²/b + b²/c + c²/a.",
+      "Check that equality is achievable — it requires a=b=c.",
+    ],
+    difficulty: 10,
+    topicSlug: "inequalities-olympiad",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-78",
+    question:
+      "Circles ω1 and ω2, with radii 4 and 9 respectively, are externally tangent to each other. A common external tangent line touches ω1 at A and ω2 at B. What is the area of quadrilateral O1ABO2, where O1 and O2 are the centers of ω1 and ω2?",
+    format: "SHORT_ANSWER",
+    answer: "78",
+    solution:
+      "Since the circles are externally tangent, the distance between centers is O1O2 = 4+9 = 13. Radii O1A and O2B are each perpendicular to the tangent line AB (radius ⊥ tangent at the point of tangency), making O1ABO2 a right trapezoid with parallel sides O1A=4 and O2B=9. The length of AB (the external tangent) is √(O1O2² − (r2−r1)²) = √(169 − 25) = √144 = 12. The trapezoid's area is (1/2)(O1A + O2B)(AB) = (1/2)(4+9)(12) = 78.",
+    hints: [
+      "The radii to the points of tangency are both perpendicular to the tangent line, making O1ABO2 a right trapezoid.",
+      "Find the length of the external tangent segment AB using the standard formula √(d² − (r1−r2)²), then apply the trapezoid area formula.",
+    ],
+    difficulty: 10,
+    topicSlug: "advanced-geometry",
+    competitionSlug: "math-prize-for-girls",
+  },
+  {
+    slug: "mpfg-79",
+    question:
+      "Let N = 2^2024 - 1. How many positive integers d with 1 ≤ d ≤ 2024 satisfy the property that 2^d - 1 divides N?",
+    format: "SHORT_ANSWER",
+    answer: "16",
+    solution:
+      "There's a standard fact: 2^d − 1 divides 2^n − 1 if and only if d divides n. Here n = 2024, so we need to count the positive divisors of 2024. Factoring, 2024 = 2^3 · 11 · 23, so the number of divisors is (3+1)(1+1)(1+1) = 4 × 2 × 2 = 16.",
+    hints: [
+      "Recall (or derive via the Euclidean algorithm) that 2^d − 1 divides 2^n − 1 exactly when d divides n.",
+      "So the answer is simply the number of positive divisors of 2024 — factor it and count.",
+    ],
+    difficulty: 10,
+    topicSlug: "advanced-number-theory",
+    competitionSlug: "math-prize-for-girls",
+  },
 ];

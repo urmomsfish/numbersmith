@@ -260,4 +260,617 @@ export const ARML_PROBLEMS: ProblemSeed[] = [
     topicSlug: "number-patterns",
     competitionSlug: "arml",
   },
+
+{
+    slug: "arml-17",
+    question: "Real numbers x and y satisfy x + y = 7 and x² + y² = 25. Find x³ + y³.",
+    format: "SHORT_ANSWER",
+    answer: "91",
+    solution:
+      "From (x+y)² = x²+y²+2xy, we get 49 = 25 + 2xy, so xy = 12. Then x³+y³ = (x+y)³ − 3xy(x+y) = 343 − 3(12)(7) = 343 − 252 = 91.",
+    hints: [
+      "First find xy using the identity (x+y)² = x² + y² + 2xy.",
+      "Then use the identity x³+y³ = (x+y)³ − 3xy(x+y).",
+    ],
+    difficulty: 5,
+    topicSlug: "systems-of-equations",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-18",
+    question: "A right triangle has legs of length 9 and 12. Find the radius of its inscribed circle.",
+    format: "SHORT_ANSWER",
+    answer: "3",
+    solution:
+      "The hypotenuse is √(9²+12²) = √225 = 15. For a right triangle with legs a, b and hypotenuse c, the inradius is r = (a+b−c)/2. So r = (9+12−15)/2 = 6/2 = 3.",
+    hints: [
+      "Find the hypotenuse first using the Pythagorean theorem.",
+      "For a right triangle, the inradius equals (leg + leg − hypotenuse)/2.",
+    ],
+    difficulty: 5,
+    topicSlug: "triangles",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-19",
+    question: "Find the number of positive integers n ≤ 150 such that n² − n is divisible by 12.",
+    format: "SHORT_ANSWER",
+    answer: "50",
+    solution:
+      "n² − n = n(n−1) is a product of consecutive integers, so it's always even; divisibility by 12 = 4·3 requires the extra factors of 2 and 3. Divisibility by 4 requires n ≡ 0 or 1 (mod 4) (so the even one of n, n−1 is itself divisible by 4), and divisibility by 3 requires n ≡ 0 or 1 (mod 3). By CRT, checking all 12 residues mod 12 shows exactly n ≡ 0, 1, 4, 9 (mod 12) work. Counting these up to 150: n≡0 gives 12 values (12,...,144), n≡1 gives 13 values (1,...,145), n≡4 gives 13 values (4,...,148), n≡9 gives 12 values (9,...,141). Total: 12+13+13+12 = 50.",
+    hints: [
+      "n(n−1) is automatically even, so focus on when it's divisible by 4 and by 3 separately.",
+      "Translate each condition into allowed residues of n modulo 4 and modulo 3, combine via CRT into residues mod 12, then count.",
+    ],
+    difficulty: 5,
+    topicSlug: "divisibility",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-20",
+    question:
+      "A committee of 4 people is chosen from a group of 6 men and 5 women. Find the number of ways to choose the committee so that it contains at least 2 women.",
+    format: "SHORT_ANSWER",
+    answer: "215",
+    solution:
+      "Sum over the number of women w = 2, 3, 4: w=2 gives C(5,2)C(6,2) = 10·15 = 150; w=3 gives C(5,3)C(6,1) = 10·6 = 60; w=4 gives C(5,4)C(6,0) = 5·1 = 5. Total: 150+60+5 = 215.",
+    hints: [
+      "Split into cases based on the exact number of women (2, 3, or 4) on the committee.",
+      "In each case, choose the women and the remaining men independently and multiply, then add the cases.",
+    ],
+    difficulty: 5,
+    topicSlug: "combinations",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-21",
+    question:
+      "Find the number of distinct integer values of k for which x² − kx + 36 = 0 has two distinct positive integer roots.",
+    format: "SHORT_ANSWER",
+    answer: "4",
+    solution:
+      "If the roots are positive integers p ≠ q, then pq = 36 and k = p+q. The unordered factor pairs of 36 with p ≠ q are (1,36), (2,18), (3,12), (4,9) — the pair (6,6) is excluded since the roots must be distinct. These give k = 37, 20, 15, 13 respectively, all distinct. So there are 4 valid values of k.",
+    hints: [
+      "If the roots are p and q, then pq = 36 (product of roots) and k = p+q (sum of roots).",
+      "List the factor pairs of 36 with distinct factors, then compute the sum for each and check none coincide.",
+    ],
+    difficulty: 5,
+    topicSlug: "quadratics",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-22",
+    question: "A rectangle has diagonal length 17 and one side of length 8. Find its area.",
+    format: "SHORT_ANSWER",
+    answer: "120",
+    solution:
+      "The other side has length √(17² − 8²) = √(289 − 64) = √225 = 15. The area is 8 · 15 = 120.",
+    hints: [
+      "The two sides and the diagonal form a right triangle — use the Pythagorean theorem to find the missing side.",
+      "Multiply the two side lengths to get the area.",
+    ],
+    difficulty: 5,
+    topicSlug: "area-volume",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-23",
+    question: "Find the remainder when 7^45 is divided by 11.",
+    format: "SHORT_ANSWER",
+    answer: "10",
+    solution:
+      "By Fermat's little theorem, 7^10 ≡ 1 (mod 11), so the order of 7 divides 10. Computing powers: 7¹≡7, 7²≡5, 7³≡2, 7⁴≡3, 7⁵≡10 (mod 11), so the order is 10 (since 7⁵ ≡ −1, not 1). Since 45 = 10·4 + 5, 7^45 ≡ 7^5 ≡ 10 (mod 11).",
+    hints: [
+      "By Fermat's little theorem, 7^10 ≡ 1 (mod 11), so only the exponent mod 10 matters.",
+      "Reduce 45 modulo 10 and compute the resulting smaller power of 7 mod 11 directly.",
+    ],
+    difficulty: 5,
+    topicSlug: "modular-arithmetic",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-24",
+    question: "Find the number of 3-digit positive integers (100 to 999) with all distinct digits that are even.",
+    format: "SHORT_ANSWER",
+    answer: "328",
+    solution:
+      "Split by the last digit. If the last digit is 0: the first digit has 9 choices (1–9) and the middle digit has 8 remaining choices, giving 9·8 = 72. If the last digit is 2, 4, 6, or 8 (4 choices): the first digit can't be 0 or equal to the last digit, giving 8 choices, and the middle digit has 8 remaining choices (10 total minus the two used digits), giving 8·8 = 64 per last-digit choice, or 4·64 = 256 total. Grand total: 72 + 256 = 328.",
+    hints: [
+      "Split into cases based on whether the last (even) digit is 0 or one of 2, 4, 6, 8, since the digit 0 restricts the first-digit count differently.",
+      "In each case count choices for the first digit, then the middle digit, left to right, respecting 'no leading zero' and 'all distinct.'",
+    ],
+    difficulty: 5,
+    topicSlug: "counting-principles",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-25",
+    question: "A polynomial p(x) = x³ + ax² + bx + c has roots 2, 3, and −5. Find a + b + c.",
+    format: "SHORT_ANSWER",
+    answer: "11",
+    solution:
+      "By Vieta's formulas: sum of roots = 2+3+(−5) = 0 = −a, so a = 0. Sum of pairwise products = 2·3 + 2·(−5) + 3·(−5) = 6−10−15 = −19 = b. Product of roots = 2·3·(−5) = −30 = −c, so c = 30. Then a+b+c = 0 + (−19) + 30 = 11.",
+    hints: [
+      "Use Vieta's formulas to relate a, b, c directly to the sum, sum of pairwise products, and product of the roots.",
+      "Compute each symmetric sum of {2, 3, −5} carefully, watching signs.",
+    ],
+    difficulty: 6,
+    topicSlug: "polynomials",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-26",
+    question:
+      "Two circles with radii 5 and 3 are externally tangent to each other. Find the length of their common external tangent segment (between the two points of tangency), as an exact radical.",
+    format: "SHORT_ANSWER",
+    answer: "2√15",
+    solution:
+      "Since the circles are externally tangent, the distance between their centers is d = 5+3 = 8. The length of a common external tangent between two circles with radii r₁, r₂ and center distance d is √(d² − (r₁−r₂)²). Here that's √(64 − (5−3)²) = √(64−4) = √60 = 2√15.",
+    hints: [
+      "The distance between the centers of two externally tangent circles equals the sum of their radii.",
+      "Use the external tangent length formula √(d² − (r₁−r₂)²).",
+    ],
+    difficulty: 6,
+    topicSlug: "circles",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-27",
+    question: "Find the sum of all positive divisors of 720 that are perfect squares.",
+    format: "SHORT_ANSWER",
+    answer: "210",
+    solution:
+      "720 = 2⁴·3²·5. A divisor 2^a·3^b·5^c is a perfect square exactly when a, b, c are all even, which forces c = 0 (since 5 appears to only the first power), a ∈ {0,2,4}, b ∈ {0,2}. The resulting square divisors are 1, 4, 16 (from a=0,2,4, b=0) and 9, 36, 144 (from a=0,2,4, b=2). Their sum is 1+4+16+9+36+144 = 210.",
+    hints: [
+      "Write 720 in prime factorization form and think about which exponent combinations give a perfect square divisor.",
+      "List the qualifying divisors explicitly and add them up.",
+    ],
+    difficulty: 6,
+    topicSlug: "divisibility",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-28",
+    question: "In how many ways can 10 identical candies be distributed among 4 distinguishable children so that each child gets at least 1 candy?",
+    format: "SHORT_ANSWER",
+    answer: "84",
+    solution:
+      "Give each child 1 candy first, leaving 6 candies to distribute freely among 4 children (0 or more each). By stars and bars, the number of ways is C(6+4−1, 4−1) = C(9,3) = 84.",
+    hints: [
+      "First guarantee each child gets 1 candy, reducing the problem to distributing the remaining candies with no restriction.",
+      "Apply the stars-and-bars formula C(n+k−1, k−1) for distributing n identical items among k people.",
+    ],
+    difficulty: 6,
+    topicSlug: "combinations",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-29",
+    question: "If x + 1/x = 4, find x³ + 1/x³.",
+    format: "SHORT_ANSWER",
+    answer: "52",
+    solution:
+      "Using the identity x³+1/x³ = (x+1/x)³ − 3(x+1/x): substituting x+1/x = 4 gives 4³ − 3(4) = 64 − 12 = 52.",
+    hints: [
+      "There's a direct identity expressing x³+1/x³ in terms of x+1/x.",
+      "Cube the given value and subtract three times the given value.",
+    ],
+    difficulty: 6,
+    topicSlug: "exponents-radicals",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-30",
+    question: "Find the distance from the point (3, 4) to the line 3x − 4y − 1 = 0, as a fraction.",
+    format: "SHORT_ANSWER",
+    answer: "8/5",
+    solution:
+      "Using the point-to-line distance formula |Ax₀+By₀+C|/√(A²+B²) with A=3, B=−4, C=−1, x₀=3, y₀=4: distance = |3(3) − 4(4) − 1| / √(9+16) = |9 − 16 − 1| / 5 = 8/5.",
+    hints: [
+      "Recall the point-to-line distance formula |Ax₀+By₀+C|/√(A²+B²).",
+      "Substitute carefully and simplify the absolute value in the numerator before dividing.",
+    ],
+    difficulty: 6,
+    topicSlug: "coordinate-geometry",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-31",
+    question: "Find the smallest positive integer n such that n! is divisible by 2^10.",
+    format: "SHORT_ANSWER",
+    answer: "12",
+    solution:
+      "By Legendre's formula, the exponent of 2 in n! is ⌊n/2⌋+⌊n/4⌋+⌊n/8⌋+⋯. For n=11: 5+2+1 = 8 < 10. For n=12: 6+3+1 = 10 ≥ 10. So the smallest such n is 12.",
+    hints: [
+      "Use Legendre's formula to compute the exponent of 2 in n! as a sum of floor divisions.",
+      "Test consecutive values of n until the exponent first reaches 10.",
+    ],
+    difficulty: 6,
+    topicSlug: "integer-properties",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-32",
+    question: "A bag contains 4 red and 6 blue marbles. Two marbles are drawn without replacement. Find the probability that both drawn marbles are the same color.",
+    format: "SHORT_ANSWER",
+    answer: "7/15",
+    solution:
+      "Total ways to draw 2 marbles from 10: C(10,2) = 45. Same-color ways: C(4,2) + C(6,2) = 6 + 15 = 21. Probability = 21/45 = 7/15.",
+    hints: [
+      "Count ways to draw 2 red or 2 blue marbles separately, then add.",
+      "Divide by the total number of ways to draw any 2 marbles from the bag, and simplify.",
+    ],
+    difficulty: 6,
+    topicSlug: "probability",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-33",
+    question:
+      "A sequence satisfies a₁ = 2, a₂ = 5, and a_{n+2} = 3a_{n+1} − 2a_n for n ≥ 1. Find a₈.",
+    format: "SHORT_ANSWER",
+    answer: "383",
+    solution:
+      "Iterating directly: a3 = 3(5)−2(2) = 11, a4 = 3(11)−2(5) = 23, a5 = 3(23)−2(11) = 47, a6 = 3(47)−2(23) = 95, a7 = 3(95)−2(47) = 191, a8 = 3(191)−2(95) = 573−190 = 383.",
+    hints: [
+      "Each term depends only on the previous two terms — iterate the recursion step by step.",
+      "Keep careful track of each computed term; a slip anywhere propagates through the rest.",
+    ],
+    difficulty: 7,
+    topicSlug: "sequences",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-34",
+    question:
+      "In triangle ABC, AB = 7, AC = 9, and BC = 10. The angle bisector from A meets BC at D. Find BD, as a fraction.",
+    format: "SHORT_ANSWER",
+    answer: "35/8",
+    solution:
+      "By the angle bisector theorem, BD/DC = AB/AC = 7/9. Since BD+DC = BC = 10, BD = (7/16)·10 = 70/16 = 35/8.",
+    hints: [
+      "The angle bisector theorem gives BD/DC = AB/AC.",
+      "Combine that ratio with BD + DC = BC to solve for BD.",
+    ],
+    difficulty: 7,
+    topicSlug: "triangles",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-35",
+    question:
+      "Find the number of ordered pairs of positive integers (x, y) with x ≤ y satisfying 1/x + 1/y = 1/12.",
+    format: "SHORT_ANSWER",
+    answer: "8",
+    solution:
+      "Multiplying out: 12y + 12x = xy, so xy − 12x − 12y = 0, and adding 144 to both sides: (x−12)(y−12) = 144. Since x, y are positive with 1/x+1/y=1/12, both x, y > 12, so x−12 and y−12 are positive divisors of 144 with (x−12) ≤ (y−12). 144 = 2⁴·3² has 15 divisors, and since √144 = 12, the divisors ≤ 12 are 1, 2, 3, 4, 6, 8, 9, 12 — exactly 8 of them, each giving one valid pair.",
+    hints: [
+      "Clear denominators and rearrange into the form (x−12)(y−12) = constant using Simon's Favorite Factoring Trick.",
+      "Count divisor pairs of that constant with the smaller factor at most √(constant), since x ≤ y.",
+    ],
+    difficulty: 7,
+    topicSlug: "diophantine-equations",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-36",
+    question: "How many integers from 1 to 300 (inclusive) are divisible by 3 or 5, but not by 7?",
+    format: "SHORT_ANSWER",
+    answer: "120",
+    solution:
+      "Let A = multiples of 3 (100 of them), B = multiples of 5 (60 of them), A∩B = multiples of 15 (20 of them). By inclusion-exclusion, |A∪B| = 100+60−20 = 140. Now remove those in A∪B that are also multiples of 7: multiples of 21 (14 of them), multiples of 35 (8 of them), multiples of 105 (2 of them, in both). By inclusion-exclusion, multiples of 7 within A∪B number 14+8−2 = 20. So the final count is 140 − 20 = 120.",
+    hints: [
+      "First use inclusion-exclusion to count integers divisible by 3 or 5.",
+      "Then subtract those among them that are also divisible by 7, again using inclusion-exclusion on multiples of 21 and 35.",
+    ],
+    difficulty: 7,
+    topicSlug: "inclusion-exclusion",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-37",
+    question: "Real numbers x and y satisfy 3x + 4y = 25. Find the minimum possible value of x² + y².",
+    format: "SHORT_ANSWER",
+    answer: "25",
+    solution:
+      "x²+y² is the squared distance from the origin to the point (x,y), which is minimized when (x,y) is the foot of the perpendicular from the origin to the line 3x+4y=25. That minimum squared distance equals (distance from origin to line)² = (|25|/√(3²+4²))² = (25/5)² = 5² = 25.",
+    hints: [
+      "x²+y² is the squared distance from (x,y) to the origin, and (x,y) is constrained to a line.",
+      "The minimum distance from a point to a line ax+by=c is |c|/√(a²+b²) — square it to get the minimum of x²+y².",
+    ],
+    difficulty: 7,
+    topicSlug: "inequalities",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-38",
+    question:
+      "A sphere is inscribed in a cube of side length 6, tangent to all six faces. Find the volume inside the cube but outside the sphere, in terms of π.",
+    format: "SHORT_ANSWER",
+    answer: "216 - 36π",
+    solution:
+      "The inscribed sphere has radius 3 (half the side length), so its volume is (4/3)π(3³) = 36π. The cube's volume is 6³ = 216. The volume inside the cube but outside the sphere is 216 − 36π.",
+    hints: [
+      "The sphere inscribed in a cube tangent to all faces has radius equal to half the cube's side length.",
+      "Subtract the sphere's volume from the cube's volume.",
+    ],
+    difficulty: 7,
+    topicSlug: "three-d-geometry",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-39",
+    question: "Find the number of trailing zeros in the decimal representation of 50!.",
+    format: "SHORT_ANSWER",
+    answer: "12",
+    solution:
+      "The number of trailing zeros equals the exponent of 5 in the prime factorization of 50! (since 2's are more plentiful), given by Legendre's formula: ⌊50/5⌋+⌊50/25⌋ = 10+2 = 12.",
+    hints: [
+      "Trailing zeros come from factors of 10 = 2·5, and factors of 5 are the bottleneck in n!.",
+      "Use Legendre's formula ⌊n/5⌋+⌊n/25⌋+⋯ to count the total power of 5 dividing 50!.",
+    ],
+    difficulty: 7,
+    topicSlug: "integer-properties",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-40",
+    question: "Find the number of distinguishable arrangements of the letters of MISSISSIPPI in which no two I's are adjacent.",
+    format: "SHORT_ANSWER",
+    answer: "7350",
+    solution:
+      "MISSISSIPPI has 1 M, 4 I's, 4 S's, 2 P's (11 letters). First arrange the non-I letters (M, S,S,S,S, P,P — 7 letters): 7!/(4!·2!) = 105 ways. This creates 8 gaps (including ends); choose 4 of them for the I's (no two adjacent since each gap holds at most one I): C(8,4) = 70 ways. Total: 105 · 70 = 7350.",
+    hints: [
+      "Arrange the non-I letters first, then insert the I's into the gaps between them (and at the ends) so no two I's land in the same gap.",
+      "Multiply the number of arrangements of the non-I letters by the number of ways to choose gaps for the I's.",
+    ],
+    difficulty: 7,
+    topicSlug: "permutations",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-41",
+    question:
+      "A monic quartic polynomial p(x) satisfies p(1)=1, p(2)=4, p(3)=9, p(4)=16. Find p(5).",
+    format: "SHORT_ANSWER",
+    answer: "49",
+    solution:
+      "Let q(x) = p(x) − x². Then q is a monic quartic (since p is monic quartic and x² has lower degree) with q(1)=q(2)=q(3)=q(4)=0, so q(x) = (x−1)(x−2)(x−3)(x−4). Thus p(x) = x² + (x−1)(x−2)(x−3)(x−4). Then p(5) = 25 + (4)(3)(2)(1) = 25+24 = 49.",
+    hints: [
+      "Consider q(x) = p(x) − x², which vanishes at x = 1, 2, 3, 4 and is still monic of degree 4.",
+      "Write q(x) as a product of its known linear factors, then evaluate p(5) = 25 + q(5).",
+    ],
+    difficulty: 8,
+    topicSlug: "polynomials",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-42",
+    question:
+      "In triangle ABC, cevians AD, BE, CF are concurrent at point P. If AP/PD = 3 and BP/PE = 4, find CP/PF, as a fraction.",
+    format: "SHORT_ANSWER",
+    answer: "9/11",
+    solution:
+      "Write P in barycentric coordinates (u,v,w) with u+v+w=1, u,v,w>0. A standard mass-point computation gives AP/PD = (v+w)/u, BP/PE = (u+w)/v, CP/PF = (u+v)/w. Setting x=AP/PD, y=BP/PE, z=CP/PF, one can verify the identity xyz = x+y+z+2 holds for any point of concurrency (check with the centroid: x=y=z=2 gives 8 = 6+2 ✓). With x=3, y=4: 12z = 3+4+z+2 = 9+z, so 11z = 9, giving z = 9/11.",
+    hints: [
+      "There's a known identity relating the three cevian ratios at a point of concurrency: xyz = x+y+z+2 (verify it on the centroid, where all three ratios equal 2, as a sanity check).",
+      "Plug in the two given ratios and solve the resulting linear equation for the third.",
+    ],
+    difficulty: 8,
+    topicSlug: "advanced-geometry",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-43",
+    question: "Find the number of ordered triples of positive integers (a, b, c) with a+b+c = 15 and gcd(a,b,c) = 1.",
+    format: "SHORT_ANSWER",
+    answer: "84",
+    solution:
+      "Let N(n) be the number of ordered triples of positive integers summing to n; N(n) = C(n−1,2). By Möbius inversion, the count with gcd exactly 1 is Σ_{d|15} μ(d)·N(15/d). Divisors of 15: 1,3,5,15 with μ(1)=1, μ(3)=−1, μ(5)=−1, μ(15)=1. So the count is N(15) − N(5) − N(3) + N(1) = C(14,2) − C(4,2) − C(2,2) + C(0,2) = 91 − 6 − 1 + 0 = 84.",
+    hints: [
+      "First count all ordered triples of positive integers summing to 15 (a stars-and-bars count), ignoring the gcd condition.",
+      "Use Möbius inversion over the divisors of 15 to subtract out triples whose gcd is a proper divisor of 15.",
+    ],
+    difficulty: 8,
+    topicSlug: "advanced-number-theory",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-44",
+    question: "A fair coin is flipped repeatedly until two consecutive heads appear. Find the expected number of flips.",
+    format: "SHORT_ANSWER",
+    answer: "6",
+    solution:
+      "Let E₀ be the expected number of additional flips needed from a state with no recent head, and E₁ from a state where the previous flip was heads. From state 0: flip once (1 flip used); with probability 1/2 we move to state 1, with probability 1/2 we stay in state 0. So E₀ = 1 + (1/2)E₁ + (1/2)E₀, giving E₀ = 2 + E₁. From state 1: flip once; with probability 1/2 we're done, with probability 1/2 we return to state 0. So E₁ = 1 + (1/2)(0) + (1/2)E₀ = 1 + (1/2)E₀. Substituting: E₀ = 2 + 1 + (1/2)E₀ = 3 + (1/2)E₀, so (1/2)E₀ = 3, giving E₀ = 6.",
+    hints: [
+      "Set up expected-value equations for two states: 'no recent head' and 'previous flip was heads.'",
+      "Each state's equation involves one flip plus a weighted average of expected values from the resulting states — solve the resulting linear system.",
+    ],
+    difficulty: 8,
+    topicSlug: "expected-value",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-45",
+    question: "Find the minimum value of (x² + 2)/√(x² + 1) for real x.",
+    format: "SHORT_ANSWER",
+    answer: "2",
+    solution:
+      "Let t = √(x²+1), so t ≥ 1. The expression becomes (t²+1)/t = t + 1/t. For t ≥ 1, the function t + 1/t is increasing (its derivative 1 − 1/t² ≥ 0 there), so it's minimized at t = 1, giving value 1+1 = 2. This occurs at x = 0, and indeed (0+2)/√1 = 2.",
+    hints: [
+      "Substitute t = √(x²+1) (which satisfies t ≥ 1) to rewrite the expression purely in terms of t.",
+      "Analyze t + 1/t for t ≥ 1 to find where it's minimized.",
+    ],
+    difficulty: 8,
+    topicSlug: "inequalities-olympiad",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-46",
+    question: "A regular tetrahedron has edge length 6. Find the distance from its centroid to one of its faces, as an exact radical.",
+    format: "SHORT_ANSWER",
+    answer: "√6/2",
+    solution:
+      "The height of a regular tetrahedron with edge length a is h = a√(2/3) = a√6/3. For a=6, h = 6√6/3 = 2√6. The centroid (average of the 4 vertices) lies at 1/4 of the height from each face, so the distance from the centroid to a face is h/4 = 2√6/4 = √6/2.",
+    hints: [
+      "Recall (or derive) that a regular tetrahedron's height is h = a√6/3.",
+      "The centroid divides the segment from a vertex to the opposite face's centroid in ratio 3:1, so it sits 1/4 of the height above each face.",
+    ],
+    difficulty: 8,
+    topicSlug: "three-d-geometry",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-47",
+    question: "Find the sum of all prime numbers p such that p² + 2 is also prime.",
+    format: "SHORT_ANSWER",
+    answer: "3",
+    solution:
+      "If p ≠ 3, then p is not divisible by 3, so p ≡ 1 or 2 (mod 3), and in either case p² ≡ 1 (mod 3). Then p²+2 ≡ 1+2 ≡ 0 (mod 3), and since p²+2 > 3, it cannot be prime. So p must equal 3, and indeed 3²+2 = 11 is prime. The sum of all such primes is just 3.",
+    hints: [
+      "Consider what p² is modulo 3 when p is a prime other than 3.",
+      "Show that for any prime p ≠ 3, p²+2 is a multiple of 3 greater than 3, hence not prime — leaving only one candidate to check.",
+    ],
+    difficulty: 8,
+    topicSlug: "primes",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-48",
+    question: "Find the number of subsets of {1, 2, ..., 12} that contain no two consecutive integers (the empty set counts as a valid subset).",
+    format: "SHORT_ANSWER",
+    answer: "377",
+    solution:
+      "Let f(n) be the number of subsets of {1,...,n} with no two consecutive elements. Conditioning on whether n is included: if not, there are f(n−1) such subsets of {1,...,n−1}; if n is included, n−1 cannot be, leaving f(n−2) choices for a no-two-consecutive subset of {1,...,n−2}. So f(n) = f(n−1)+f(n−2), the Fibonacci recursion, with f(0)=1, f(1)=2. This gives f(2)=3, f(3)=5, f(4)=8, f(5)=13, f(6)=21, f(7)=34, f(8)=55, f(9)=89, f(10)=144, f(11)=233, f(12)=377.",
+    hints: [
+      "Set up a Fibonacci-style recursion by conditioning on whether the largest element, n, is included in the subset.",
+      "Compute the base cases f(0) and f(1), then iterate up to f(12).",
+    ],
+    difficulty: 8,
+    topicSlug: "advanced-combinatorics",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-49",
+    question:
+      "The roots of x³ − 9x² + 24x − 20 = 0 are r, s, t. Find 1/r + 1/s + 1/t + 1/(rs) + 1/(rt) + 1/(st), as a fraction.",
+    format: "SHORT_ANSWER",
+    answer: "33/20",
+    solution:
+      "By Vieta's formulas, r+s+t=9, rs+rt+st=24, rst=20. Then 1/r+1/s+1/t = (rs+rt+st)/(rst) = 24/20 = 6/5, and 1/(rs)+1/(rt)+1/(st) = (r+s+t)/(rst) = 9/20. Their sum is 6/5 + 9/20 = 24/20 + 9/20 = 33/20.",
+    hints: [
+      "Extract the elementary symmetric sums r+s+t, rs+rt+st, rst directly from the polynomial's coefficients using Vieta's formulas.",
+      "Express both requested sums as ratios of these symmetric sums (no need to find r, s, t individually).",
+    ],
+    difficulty: 9,
+    topicSlug: "polynomials",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-50",
+    question:
+      "Cyclic quadrilateral ABCD has AB = 4, BC = 5, CD = 7, DA = 10. Find the length of diagonal AC, as an exact radical.",
+    format: "SHORT_ANSWER",
+    answer: "√65",
+    solution:
+      "Since ABCD is cyclic, ∠B + ∠D = 180°, so cos(∠D) = −cos(∠B). Applying the law of cosines to triangles ABC and ACD along diagonal AC: AC² = AB²+BC²−2·AB·BC·cos(∠B) = 16+25−40cos(∠B), and AC² = CD²+DA²−2·CD·DA·cos(∠D) = 49+100+140cos(∠B). Setting these equal: 41−40cos(∠B) = 149+140cos(∠B), so −108 = 180cos(∠B), giving cos(∠B) = −3/5. Then AC² = 41 − 40(−3/5) = 41+24 = 65, so AC = √65.",
+    hints: [
+      "Use the fact that opposite angles of a cyclic quadrilateral are supplementary, so cos(∠D) = −cos(∠B).",
+      "Write AC² two ways via the law of cosines (once in triangle ABC, once in triangle ACD) and set them equal to solve for cos(∠B), then AC².",
+    ],
+    difficulty: 9,
+    topicSlug: "advanced-geometry",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-51",
+    question: "Find the number of ordered pairs of integers (x, y) satisfying x² − y² = 2023.",
+    format: "SHORT_ANSWER",
+    answer: "12",
+    solution:
+      "Factor 2023 = 7·17² and write x²−y² = (x−y)(x+y) = 2023. Let m=x−y, n=x+y, so mn = 2023. Since 2023 is odd, both m and n must be odd in any integer factorization, and then x=(m+n)/2, y=(n−m)/2 are automatically integers. The number of positive divisors of 2023 = 7¹·17² is (1+1)(2+1) = 6, so there are 6 positive factor pairs (m,n) and 6 negative factor pairs (−m,−n) — 12 total ordered factorizations mn=2023 over the integers, each giving a distinct ordered pair (x,y).",
+    hints: [
+      "Factor 2023 = 7·17² and write x²−y² as a product of two integers (x−y)(x+y) whose product is 2023.",
+      "Count all integer factorizations of 2023 (including with negative factors), each of which determines a unique (x,y) pair.",
+    ],
+    difficulty: 9,
+    topicSlug: "diophantine-equations",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-52",
+    question: "Find the number of ways to tile a 3×4 rectangle using 1×2 dominoes.",
+    format: "SHORT_ANSWER",
+    answer: "11",
+    solution:
+      "Let T(n) denote the number of domino tilings of a 3×n rectangle (n must be even for a tiling to exist, by a parity/coloring argument). A transfer-matrix analysis of how tilings extend column by column gives the recursion T(n) = 4T(n−2) − T(n−4) for even n ≥ 4, with base values T(0) = 1 and T(2) = 3. Then T(4) = 4(3) − 1 = 11.",
+    hints: [
+      "The number of domino tilings of a 3×n rectangle (n even) satisfies a linear recursion in terms of smaller even widths.",
+      "Use T(0)=1, T(2)=3, and the recursion T(n) = 4T(n−2) − T(n−4) to compute T(4).",
+    ],
+    difficulty: 9,
+    topicSlug: "advanced-combinatorics",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-53",
+    question: "Positive real numbers x and y satisfy x^y = y^x and y = 3x, with x ≠ y. Find x, as an exact radical.",
+    format: "SHORT_ANSWER",
+    answer: "√3",
+    solution:
+      "Substituting y=3x into x^y = y^x gives x^(3x) = (3x)^x. Raising both sides to the power 1/x (valid since x>0): x³ = 3x, so x² = 3 (dividing by x ≠ 0), giving x = √3 (taking the positive root since x is a positive real). One can check this is consistent: with x=√3, y=3√3, the equation ln(x)/x = ln(y)/y (equivalent to x^y=y^x) holds since both sides equal the same value on the curve ln(t)/t.",
+    hints: [
+      "Substitute y = 3x into the equation x^y = y^x and raise both sides to the power 1/x to simplify.",
+      "Solve the resulting equation x³ = 3x for the positive value of x.",
+    ],
+    difficulty: 9,
+    topicSlug: "exponents-radicals",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-54",
+    question:
+      "A sphere is inscribed in a right circular cone with base radius 5 and height 12, tangent to the base and the lateral surface. Find the radius of the sphere, as a fraction.",
+    format: "SHORT_ANSWER",
+    answer: "10/3",
+    solution:
+      "Consider the axial cross-section: an isosceles triangle with base 2(5)=10 and height 12, so the equal sides (slant heights) have length √(5²+12²) = 13 each. The inscribed sphere's great circle in this cross-section is exactly the incircle of this triangle. The triangle's area is (1/2)(10)(12) = 60, and its semiperimeter is (10+13+13)/2 = 18. The inradius (= sphere radius) is Area/semiperimeter = 60/18 = 10/3.",
+    hints: [
+      "Take the cross-section of the cone through its axis — it's an isosceles triangle, and the inscribed sphere becomes the incircle of that triangle.",
+      "Use r = Area/semiperimeter for the triangle's incircle.",
+    ],
+    difficulty: 9,
+    topicSlug: "three-d-geometry",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-55",
+    question: "Find the smallest positive integer n that is divisible by 2023 and has exactly 12 positive divisors.",
+    format: "SHORT_ANSWER",
+    answer: "4046",
+    solution:
+      "2023 = 7·17², so any multiple of 2023 has prime factorization including 7^a·17^b with a≥1, b≥2 (possibly other primes too). The divisor count contributed by these two primes alone is at least (1+1)(2+1) = 6, and we need the total divisor count to be 12 = 6·2. The cheapest way to double the divisor count is to introduce one new prime factor to the first power — using the smallest available prime, 2, multiplies n by only 2 while multiplying the divisor count by (1+1)=2. This gives n = 2·7·17² = 2·2023 = 4046, with τ(4046) = 2·2·3 = 12. Any alternative (e.g., raising the exponent of 7 from 1 to 3, or of 17 from 2 to 5) multiplies n by a much larger factor (49 or over 4900 respectively), so 4046 is smallest.",
+    hints: [
+      "Factor 2023 = 7·17² and note any multiple of 2023 must include these prime powers, contributing at least (1+1)(2+1)=6 to the divisor count.",
+      "To reach exactly 12 divisors as cheaply as possible (in terms of minimizing n), compare introducing a new smallest prime factor versus raising an existing exponent.",
+    ],
+    difficulty: 9,
+    topicSlug: "advanced-number-theory",
+    competitionSlug: "arml",
+  },
+  {
+    slug: "arml-56",
+    question: "Find the number of functions f: {1,2,...,10} → {1,2,...,10} such that f(f(x)) = x for all x.",
+    format: "SHORT_ANSWER",
+    answer: "9496",
+    solution:
+      "Such functions are exactly the involutions on a 10-element set (permutations composed of fixed points and disjoint 2-cycles). Let I(n) be the number of involutions on n elements. Conditioning on where element n maps: either f(n)=n (a fixed point, contributing I(n−1) ways for the rest) or f(n)=j for some j≠n with f(j)=n (a 2-cycle, with n−1 choices for j and I(n−2) ways for the rest), giving I(n) = I(n−1) + (n−1)I(n−2), with I(0)=I(1)=1. Computing: I(2)=2, I(3)=4, I(4)=10, I(5)=26, I(6)=76, I(7)=232, I(8)=764, I(9)=2620, I(10) = I(9) + 9·I(8) = 2620 + 9(764) = 2620 + 6876 = 9496.",
+    hints: [
+      "The condition f(f(x))=x for all x means f is an involution: every element is either a fixed point or paired with exactly one other element.",
+      "Set up the recursion I(n) = I(n−1) + (n−1)I(n−2) by considering whether element n is a fixed point or part of a 2-cycle, and iterate up to n=10.",
+    ],
+    difficulty: 9,
+    topicSlug: "permutations",
+    competitionSlug: "arml",
+  },
 ];

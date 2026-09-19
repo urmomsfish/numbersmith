@@ -13,7 +13,6 @@ export const NUMBER_THEORY: Generator[] = [
     id: "gen-nt-modular",
     topicSlug: "modular-arithmetic",
     difficulty: 3,
-    competitionSlug: "mathcounts",
     variants: 164,
     params: (r) => ({ n: int(r, 20, 900), m: int(r, 3, 19) }),
     build: ({ n, m }) => {
@@ -38,7 +37,6 @@ export const NUMBER_THEORY: Generator[] = [
     id: "gen-nt-units-digit",
     topicSlug: "modular-arithmetic",
     difficulty: 5,
-    competitionSlug: "amc10",
     variants: 120,
     params: (r) => ({ base: intExcept(r, 2, 9, [1]), exp: int(r, 10, 200) }),
     build: ({ base, exp }) => {
@@ -67,7 +65,6 @@ export const NUMBER_THEORY: Generator[] = [
     id: "gen-nt-primes-between",
     topicSlug: "primes",
     difficulty: 3,
-    competitionSlug: "amc8",
     variants: 120,
     params: (r) => {
       const lo = int(r, 2, 160);
@@ -102,7 +99,6 @@ export const NUMBER_THEORY: Generator[] = [
     id: "gen-nt-divisible-count",
     topicSlug: "divisibility",
     difficulty: 3,
-    competitionSlug: "mathcounts",
     variants: 142,
     params: (r) => ({ limit: int(r, 40, 600), d: int(r, 3, 19) }),
     build: ({ limit, d }) => {
@@ -151,7 +147,6 @@ export const NUMBER_THEORY: Generator[] = [
     id: "gen-nt-diophantine",
     topicSlug: "diophantine-equations",
     difficulty: 5,
-    competitionSlug: "amc10",
     variants: 99,
     params: (r) => {
       const a = pick(r, [2, 3, 4, 5, 7]);
@@ -187,7 +182,6 @@ export const NUMBER_THEORY: Generator[] = [
     id: "gen-nt-factorization-sum",
     topicSlug: "factorization",
     difficulty: 4,
-    competitionSlug: "mathcounts",
     variants: 120,
     params: (r) => ({ n: int(r, 12, 300) }),
     build: ({ n }) => {
@@ -218,7 +212,6 @@ export const NUMBER_THEORY: Generator[] = [
     id: "gen-nt-perfect-squares",
     topicSlug: "integer-properties",
     difficulty: 3,
-    competitionSlug: "amc8",
     variants: 88,
     params: (r) => ({ limit: int(r, 30, 900) }),
     build: ({ limit }) => {
@@ -248,7 +241,6 @@ export const COMBINATORICS: Generator[] = [
     id: "gen-combo-multiply",
     topicSlug: "counting-principles",
     difficulty: 2,
-    competitionSlug: "math-kangaroo",
     variants: 99,
     params: (r) => ({ a: int(r, 2, 9), b: int(r, 2, 9), c: int(r, 1, 6) }),
     build: ({ a, b, c }) => {
@@ -279,7 +271,6 @@ export const COMBINATORICS: Generator[] = [
     id: "gen-combo-permutation",
     topicSlug: "permutations",
     difficulty: 3,
-    competitionSlug: "amc8",
     variants: 23,
     params: (r) => {
       const n = int(r, 4, 10);
@@ -305,7 +296,6 @@ export const COMBINATORICS: Generator[] = [
     id: "gen-combo-combination",
     topicSlug: "combinations",
     difficulty: 4,
-    competitionSlug: "amc10",
     variants: 43,
     params: (r) => {
       const n = int(r, 5, 14);
@@ -337,7 +327,6 @@ export const COMBINATORICS: Generator[] = [
     id: "gen-combo-inclusion-exclusion",
     topicSlug: "inclusion-exclusion",
     difficulty: 4,
-    competitionSlug: "mathcounts",
     variants: 120,
     params: (r) => {
       const total = int(r, 20, 60);
@@ -369,7 +358,6 @@ export const COMBINATORICS: Generator[] = [
     id: "gen-combo-pigeonhole",
     topicSlug: "pigeonhole",
     difficulty: 3,
-    competitionSlug: "amc8",
     variants: 62,
     params: (r) => ({ boxes: int(r, 3, 30), want: int(r, 0, 1) }),
     build: ({ boxes, want }) => {
@@ -402,7 +390,6 @@ export const COMBINATORICS: Generator[] = [
     id: "gen-combo-arrangements-repeats",
     topicSlug: "permutations",
     difficulty: 5,
-    competitionSlug: "amc10",
     variants: 44,
     params: (r) => {
       const a = int(r, 1, 4);
@@ -434,7 +421,6 @@ export const COMBINATORICS: Generator[] = [
     id: "gen-combo-handshake",
     topicSlug: "graph-theory",
     difficulty: 3,
-    competitionSlug: "mathcounts",
     variants: 43,
     params: (r) => ({ n: int(r, 4, 42) }),
     build: ({ n }) => {
@@ -459,7 +445,6 @@ export const COMBINATORICS: Generator[] = [
     id: "gen-combo-staircase",
     topicSlug: "recursion-in-counting",
     difficulty: 4,
-    competitionSlug: "amc10",
     variants: 28,
     params: (r) => ({ n: int(r, 4, 28) }),
     build: ({ n }) => {
@@ -493,7 +478,6 @@ export const COMBINATORICS: Generator[] = [
     id: "gen-combo-casework-coins",
     topicSlug: "casework",
     difficulty: 4,
-    competitionSlug: "mathcounts",
     variants: 93,
     params: (r) => ({ n: int(r, 15, 99) }),
     build: ({ n }) => {
@@ -529,7 +513,6 @@ export const COMBINATORICS: Generator[] = [
     id: "gen-combo-casework-digit-sum",
     topicSlug: "casework",
     difficulty: 4,
-    competitionSlug: "amc10",
     variants: 77,
     params: (r) => {
       const d = int(r, 2, 4);
@@ -579,7 +562,6 @@ export const COMBINATORICS: Generator[] = [
     id: "gen-combo-casework-triangles",
     topicSlug: "casework",
     difficulty: 5,
-    competitionSlug: "amc10",
     variants: 54,
     params: (r) => ({ n: int(r, 12, 60) }),
     build: ({ n }) => {
@@ -622,7 +604,6 @@ export const COMBINATORICS: Generator[] = [
     id: "gen-combo-graph-degree-edges",
     topicSlug: "graph-theory",
     difficulty: 3,
-    competitionSlug: "mathcounts",
     variants: 99,
     params: (r) => {
       const n = int(r, 4, 24);
@@ -656,7 +637,6 @@ export const COMBINATORICS: Generator[] = [
     id: "gen-combo-graph-bipartite",
     topicSlug: "graph-theory",
     difficulty: 3,
-    competitionSlug: "amc8",
     variants: 99,
     params: (r) => ({ m: int(r, 2, 15), n: int(r, 2, 15) }),
     build: ({ m, n }) => {
@@ -684,7 +664,6 @@ export const COMBINATORICS: Generator[] = [
     id: "gen-combo-graph-forest-edges",
     topicSlug: "graph-theory",
     difficulty: 3,
-    competitionSlug: "mathcounts",
     variants: 66,
     params: (r) => {
       const n = int(r, 6, 40);
@@ -719,7 +698,6 @@ export const COMBINATORICS: Generator[] = [
     id: "gen-combo-graph-euler-faces",
     topicSlug: "graph-theory",
     difficulty: 5,
-    competitionSlug: "amc10",
     variants: 99,
     params: (r) => {
       const v = int(r, 4, 20);
@@ -754,7 +732,6 @@ export const COMBINATORICS: Generator[] = [
     id: "gen-combo-recursion-three-steps",
     topicSlug: "recursion-in-counting",
     difficulty: 4,
-    competitionSlug: "mathcounts",
     variants: 26,
     params: (r) => ({ n: int(r, 3, 25) }),
     build: ({ n }) => {
@@ -791,7 +768,6 @@ export const COMBINATORICS: Generator[] = [
     id: "gen-combo-recursion-no-three-heads",
     topicSlug: "recursion-in-counting",
     difficulty: 5,
-    competitionSlug: "amc10",
     variants: 23,
     params: (r) => ({ n: int(r, 4, 24) }),
     build: ({ n }) => {
@@ -831,7 +807,6 @@ export const COMBINATORICS: Generator[] = [
     id: "gen-combo-committee-chair",
     topicSlug: "combinations",
     difficulty: 4,
-    competitionSlug: "amc10",
     // 14 club sizes × the committee sizes each allows exhausts the space.
     variants: 74,
     params: (r) => {
@@ -862,7 +837,6 @@ export const COMBINATORICS: Generator[] = [
     id: "gen-combo-at-least-one",
     topicSlug: "combinations",
     difficulty: 5,
-    competitionSlug: "amc10",
     variants: 99,
     params: (r) => {
       const b = int(r, 3, 12);
@@ -900,7 +874,6 @@ export const COMBINATORICS: Generator[] = [
     id: "gen-combo-circular-arrangements",
     topicSlug: "permutations",
     difficulty: 4,
-    competitionSlug: "mathcounts",
     variants: 18,
     params: (r) => ({ n: int(r, 4, 11), together: int(r, 0, 1) }),
     build: ({ n, together }) => {
@@ -939,7 +912,6 @@ export const PROBABILITY: Generator[] = [
     id: "gen-prob-marbles",
     topicSlug: "basic-probability",
     difficulty: 2,
-    competitionSlug: "amc8",
     variants: 120,
     params: (r) => ({ a: int(r, 1, 12), b: int(r, 1, 12) }),
     build: ({ a, b }) => {
@@ -969,7 +941,6 @@ export const PROBABILITY: Generator[] = [
     id: "gen-prob-two-dice",
     topicSlug: "counting-probability",
     difficulty: 4,
-    competitionSlug: "amc10",
     variants: 12,
     params: (r) => ({ target: int(r, 2, 12) }),
     build: ({ target }) => {
@@ -996,7 +967,6 @@ export const PROBABILITY: Generator[] = [
     id: "gen-prob-complement",
     topicSlug: "counting-probability",
     difficulty: 5,
-    competitionSlug: "amc10",
     variants: 14,
     params: (r) => ({ sides: pick(r, [4, 6, 8, 10]), rolls: int(r, 2, 4) }),
     build: ({ sides, rolls }) => {
@@ -1029,7 +999,6 @@ export const PROBABILITY: Generator[] = [
     id: "gen-prob-expected-value",
     topicSlug: "expected-value",
     difficulty: 4,
-    competitionSlug: "mathcounts",
     variants: 23,
     params: (r) => ({ n: int(r, 2, 20), p: pick(r, [2, 4, 5, 10]) }),
     build: ({ n, p }) => {
@@ -1055,7 +1024,6 @@ export const PROBABILITY: Generator[] = [
     id: "gen-prob-conditional",
     topicSlug: "conditional-probability",
     difficulty: 5,
-    competitionSlug: "amc12",
     variants: 70,
     params: (r) => {
       const red = int(r, 2, 9);
@@ -1094,7 +1062,6 @@ export const PROBABILITY: Generator[] = [
     id: "gen-prob-expected-dice-sum",
     topicSlug: "expected-value",
     difficulty: 4,
-    competitionSlug: "mathcounts",
     // 5 dice counts × 6 die shapes exhausts the parameter space.
     variants: 33,
     params: (r) => ({ dice: int(r, 1, 5), faces: pick(r, [4, 6, 8, 10, 12, 20]) }),
@@ -1138,7 +1105,6 @@ export const PROBABILITY: Generator[] = [
     id: "gen-prob-expected-chip-value",
     topicSlug: "expected-value",
     difficulty: 4,
-    competitionSlug: "amc10",
     variants: 99,
     params: (r) => {
       const a = int(r, 2, 15);
@@ -1176,7 +1142,6 @@ export const PROBABILITY: Generator[] = [
     id: "gen-prob-expected-binomial",
     topicSlug: "expected-value",
     difficulty: 5,
-    competitionSlug: "amc10",
     variants: 66,
     params: (r) => {
       const n = int(r, 2, 8);
@@ -1214,7 +1179,6 @@ export const PROBABILITY: Generator[] = [
     id: "gen-prob-fair-price",
     topicSlug: "games-and-strategies",
     difficulty: 4,
-    competitionSlug: "mathcounts",
     variants: 99,
     params: (r) => {
       const faces = 6;
@@ -1251,7 +1215,6 @@ export const PROBABILITY: Generator[] = [
     id: "gen-prob-game-alternating",
     topicSlug: "games-and-strategies",
     difficulty: 6,
-    competitionSlug: "amc10",
     variants: 44,
     params: (r) => {
       const den = pick(r, [2, 3, 4, 5, 6]);
