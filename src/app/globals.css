@@ -7,16 +7,16 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #f8fafc;
+  --background: #f7f6f2;
   /* Chrome surfaces (sidebar, topbar, marketing header). Neutral by
    * default; tints give this the strongest colour because its text is
    * slate-600/700, which has far more headroom than the shell's slate-500. */
-  --surface: #ffffff;
+  --surface: #fbfaf7;
   /* Content cards (dashboard boxes, settings panels, problem cards, ...).
    * Off-white default; each tint overrides this with its own darker shade —
    * see the "Card colour" comment further down. */
-  --card: #f9f9fa;
-  --foreground: #0f172a;
+  --card: #ffffff;
+  --foreground: #171a24;
 
   /* Brand: deep indigo — "forge" primary */
   --brand-50: #eef2ff;
@@ -25,11 +25,11 @@
   --brand-300: #a5b4fc;
   --brand-400: #818cf8;
   --brand-500: #6366f1;
-  --brand-600: #4f46e5;
-  --brand-700: #4338ca;
-  --brand-800: #3730a3;
-  --brand-900: #312e81;
-  --brand-950: #1e1b4b;
+  --brand-600: #4c46c7;
+  --brand-700: #3f3aa5;
+  --brand-800: #343180;
+  --brand-900: #2d2a66;
+  --brand-950: #201e46;
 
   /* Accent: forge ember (amber/orange) — XP, streaks, energy */
   --ember-400: #fb923c;
@@ -237,8 +237,8 @@
   --color-surface: var(--surface);
   --color-card: var(--card);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-dm-sans);
+  --font-mono: var(--font-dm-mono);
 
   --color-brand-50: var(--brand-50);
   --color-brand-100: var(--brand-100);
@@ -266,7 +266,31 @@
 body {
   background: var(--background);
   color: var(--foreground);
+  font-family: var(--font-dm-sans), sans-serif;
   transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-space-grotesk), sans-serif;
+  letter-spacing: -0.025em;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: #c9c6f4;
+  color: #211e46;
 }
 
 @layer utilities {

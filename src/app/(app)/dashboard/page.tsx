@@ -59,20 +59,20 @@ export default async function DashboardPage() {
   const problemCount = today?.problemCount ?? Math.max(3, Math.round((profile?.dailyPracticeMinutes ?? 30) / 6));
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
-      <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50 sm:text-3xl">
+    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+      <h1 className="text-3xl font-semibold text-slate-900 dark:text-slate-50 sm:text-4xl">
         Welcome back, {user.name.split(" ")[0]}!
       </h1>
       <p className="mt-1 text-slate-600 dark:text-slate-300">Here&apos;s what NumberSmith recommends for today.</p>
 
-      <div className="mt-6 grid gap-5 lg:grid-cols-3">
-        <div className="space-y-5 lg:col-span-2">
+      <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
+        <div className="space-y-6">
           <Card>
             <CardBody>
               <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-500">
                 Today&apos;s Goal
               </p>
-              <div className="mt-3 grid grid-cols-3 gap-3 text-center">
+              <div className="mt-4 grid grid-cols-3 divide-x divide-slate-200 text-center dark:divide-slate-700">
                 <div>
                   <p className="text-2xl font-extrabold text-slate-900 dark:text-slate-50">{problemCount}</p>
                   <p className="text-xs text-slate-700 dark:text-slate-500">problems</p>
@@ -102,7 +102,7 @@ export default async function DashboardPage() {
                 Continue Training
               </p>
               <p className="mt-2 text-xl font-bold text-slate-900 dark:text-slate-50">{priorityTopic.name}</p>
-              <div className="mt-2 flex items-center gap-2">
+              <div className="mt-3 flex items-center gap-3">
                 <ProgressBar value={priorityMastery} tone="brand" className="max-w-[200px]" />
                 <span className="text-xs font-medium text-slate-700 dark:text-slate-500">{priorityMastery}% mastered</span>
               </div>
@@ -143,7 +143,7 @@ export default async function DashboardPage() {
           </Card>
         </div>
 
-        <div className="space-y-5">
+        <div className="space-y-6">
           <Card>
             <CardBody className="text-center">
               <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-500">
@@ -169,7 +169,7 @@ export default async function DashboardPage() {
             </CardBody>
           </Card>
 
-          <div className="rounded-2xl border border-brand-900 bg-brand-950 p-5">
+          <div className="rounded-lg border border-brand-900 bg-brand-950 p-5">
             <p className="text-xs font-semibold uppercase tracking-wide text-brand-200">
               Recommended
             </p>

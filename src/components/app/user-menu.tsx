@@ -28,14 +28,15 @@ export function UserMenu({ name, email }: { name: string; email: string }) {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-600 text-xs font-bold text-white"
+        aria-label="Open account menu"
+        className="flex h-9 w-9 items-center justify-center rounded-md bg-brand-600 text-xs font-bold text-white transition-colors hover:bg-brand-700"
       >
         {initials}
       </button>
       {open && (
         <div
           className={cn(
-            "absolute right-0 z-50 mt-2 w-52 rounded-xl border border-slate-200 bg-white p-1.5 shadow-lg dark:border-slate-700 dark:bg-slate-800"
+            "absolute right-0 z-50 mt-2 w-56 rounded-lg border border-slate-200 bg-white p-1.5 shadow-lg dark:border-slate-700 dark:bg-slate-800"
           )}
         >
           <div className="px-3 py-2">

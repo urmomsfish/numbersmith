@@ -94,7 +94,7 @@ export function ProblemSolver({
   }
 
   return (
-    <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-6 sm:p-8">
+    <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-card p-6 sm:p-8">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <Badge tone="brand">{problem.topicName}</Badge>
@@ -122,7 +122,7 @@ export function ProblemSolver({
                   disabled={pending || !!result}
                   onClick={() => setSelected(letter)}
                   className={cn(
-                    "flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm font-medium transition-colors",
+                    "flex w-full items-center gap-3 rounded-md border px-4 py-3 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40",
                     result
                       ? isCorrectChoice
                         ? "border-success-500 bg-emerald-50 text-emerald-800 dark:border-emerald-500 dark:bg-emerald-950 dark:text-emerald-300"
@@ -192,7 +192,7 @@ export function ProblemSolver({
         <div className="mt-6 space-y-3">
           <div
             className={cn(
-              "rounded-xl px-4 py-3 text-sm font-semibold",
+              "rounded-md px-4 py-3 text-sm font-semibold",
               result.correct ? "bg-emerald-50 text-success-600 dark:bg-emerald-950 dark:text-emerald-400" : "bg-red-50 text-danger-600 dark:bg-red-950 dark:text-red-400"
             )}
           >
@@ -212,12 +212,12 @@ export function ProblemSolver({
               )}
             </span>
           </div>
-          <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4">
+          <div className="rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4">
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-500">Solution</p>
             <p className="mt-1.5 text-sm leading-relaxed text-slate-700 dark:text-slate-200">{result.solution}</p>
           </div>
           {result.newlyUnlocked.length > 0 && (
-            <div className="rounded-xl border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950 p-4">
+            <div className="rounded-md border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950 p-4">
               {result.newlyUnlocked.map((a, i) => (
                 <p key={i} className="text-sm font-semibold text-amber-800 dark:text-amber-400">
                   {a.icon} Achievement unlocked: {a.name} (+{a.xpReward} XP)
@@ -252,7 +252,7 @@ export function ProblemSolver({
 
 export function DailyCapUpsell() {
   return (
-    <div className="rounded-2xl border border-brand-100 bg-card p-8 text-center">
+    <div className="rounded-lg border border-brand-100 bg-card p-8 text-center">
       <p className="text-3xl">🎉</p>
       <h2 className="mt-3 text-xl font-bold text-slate-900 dark:text-slate-50">You&apos;ve completed today&apos;s training!</h2>
       <p className="mt-2 text-sm text-slate-700 dark:text-slate-400">
