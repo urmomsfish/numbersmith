@@ -75,17 +75,17 @@ export default async function LandingPage() {
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="border-b border-slate-200 dark:border-slate-700">
-          <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-            <h1 className="max-w-3xl text-balance text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-5xl">
+        <section className="border-b border-slate-200 bg-surface dark:border-slate-700">
+          <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+            <h1 className="max-w-3xl text-balance text-5xl font-semibold tracking-[-0.055em] text-slate-900 dark:text-slate-50 sm:text-6xl">
               Train Smarter. Compete Better.
             </h1>
-            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+            <p className="mt-6 max-w-2xl text-[17px] leading-8 text-slate-600 dark:text-slate-300">
               Take a placement test, add the contests you&apos;re actually sitting, and NumberSmith
               builds the practice backwards from those dates — {problemCount.toLocaleString()}{" "}
               problems across {competitions.length} competitions, from Math Kangaroo to the IMO.
             </p>
-            <div className="mt-8 flex flex-wrap items-center gap-5">
+            <div className="mt-9 flex flex-wrap items-center gap-4">
               <LinkButton href="/signup" size="lg">
                 Take the Free Assessment
               </LinkButton>
@@ -100,8 +100,8 @@ export default async function LandingPage() {
         </section>
 
         {/* How it works */}
-        <section id="how-it-works" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-          <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-50">Getting started</h2>
+        <section id="how-it-works" className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
+          <h2 className="text-3xl font-semibold text-slate-900 dark:text-slate-50">Getting started</h2>
           {/* A real ordered list rather than four cards with decorative "01"
               numerals — the steps are sequential, so the markup should say so
               and the browser can number them. */}
@@ -121,8 +121,8 @@ export default async function LandingPage() {
         </section>
 
         {/* Competitions */}
-        <section id="competitions" className="border-y border-slate-200 dark:border-slate-700">
-          <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+        <section id="competitions" className="border-y border-slate-200 bg-surface dark:border-slate-700">
+          <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
             <div>
               <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-50">Choose Your Competition</h2>
               <p className="mt-3 text-lg text-slate-700 dark:text-slate-400">
@@ -139,14 +139,14 @@ export default async function LandingPage() {
                 ] as const
               ).map(([category, label]) => (
                 <div key={category}>
-                  <p className="text-xs font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">{label}</p>
+                  <p className="text-sm font-semibold text-slate-700 dark:text-slate-400">{label}</p>
                   <div className="mt-2.5 flex flex-wrap gap-2">
                     {competitions
                       .filter((c) => c.category === category)
                       .map((c) => (
                         <span
                           key={c.slug}
-                          className="rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3.5 py-1.5 text-sm font-medium text-slate-700 dark:text-slate-200"
+                          className="rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3.5 py-1.5 text-sm font-medium text-slate-700 dark:text-slate-200"
                         >
                           {c.shortName}
                         </span>
@@ -159,7 +159,7 @@ export default async function LandingPage() {
         </section>
 
         {/* Product preview: practice + progress */}
-        <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+        <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
           <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
             <div>
               <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-50">
@@ -188,7 +188,7 @@ export default async function LandingPage() {
             {/* A real problem from the database, rendered by the same markup the
                 practice interface uses. Not a mockup. */}
             {sampleProblem && (
-              <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-6">
+              <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-card p-6">
                 <div className="flex items-center gap-2">
                   <Badge tone="brand">{sampleProblem.topic.name}</Badge>
                   <Badge tone="slate">{difficultyLabel(sampleProblem.difficulty)}</Badge>
@@ -200,7 +200,7 @@ export default async function LandingPage() {
                   {parseChoices(sampleProblem.choices).map((choice, i) => (
                     <div
                       key={choice}
-                      className="flex items-center gap-3 rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-200"
+                      className="flex items-center gap-3 rounded-md border border-slate-200 dark:border-slate-700 px-4 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-200"
                     >
                       <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-400">
                         {["A", "B", "C", "D", "E"][i]}
@@ -219,12 +219,12 @@ export default async function LandingPage() {
         </section>
 
         {/* Track improvement */}
-        <section className="border-y border-slate-200 dark:border-slate-700">
-          <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+        <section className="border-y border-slate-200 bg-surface dark:border-slate-700">
+          <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
             <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
               {/* The real rating scale the product uses, not a sample student's
                   numbers. */}
-              <div className="order-2 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 lg:order-1">
+              <div className="order-2 rounded-lg border border-slate-200 dark:border-slate-700 p-6 lg:order-1">
                 <p className="text-sm font-semibold text-slate-900 dark:text-slate-50">The NumberSmith rating scale</p>
                 <dl className="mt-4 divide-y divide-slate-100 dark:divide-slate-800">
                   {RATING_TIERS.filter((t) => t.min >= 1000).map((tier) => (
@@ -266,7 +266,7 @@ export default async function LandingPage() {
         </section>
 
         {/* Free vs Pro */}
-        <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
+        <section className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-24">
           <div>
             <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-50">Free vs Pro</h2>
             <p className="mt-3 text-lg text-slate-700 dark:text-slate-400">
@@ -275,7 +275,7 @@ export default async function LandingPage() {
           </div>
 
           <div className="mt-10 grid gap-5 lg:grid-cols-2">
-            <div className="flex flex-col rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-7">
+            <div className="flex flex-col rounded-lg border border-slate-200 dark:border-slate-700 bg-card p-7">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50">NumberSmith Free</h3>
               <p className="mt-1 text-3xl font-extrabold text-slate-900 dark:text-slate-50">
                 $0 <span className="text-sm font-normal text-slate-700 dark:text-slate-500">forever</span>
@@ -304,7 +304,7 @@ export default async function LandingPage() {
             {/* Emphasised with a ring rather than a thicker border: border-2
                 shrinks the content box by a pixel each side, which made the two
                 columns' buttons render at different heights side by side. */}
-            <div className="relative flex flex-col rounded-2xl border border-brand-600 ring-1 ring-brand-600 bg-card p-7">
+            <div className="relative flex flex-col rounded-lg border border-brand-600 ring-1 ring-brand-600 bg-card p-7">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50">NumberSmith Pro</h3>
               <p className="mt-1 text-3xl font-extrabold text-slate-900 dark:text-slate-50">
                 ${PRO_PRICING.YEARLY} <span className="text-sm font-normal text-slate-700 dark:text-slate-500">/year</span>
@@ -341,13 +341,13 @@ export default async function LandingPage() {
 
         {/* FAQ */}
         <section id="faq" className="border-t border-slate-200 dark:border-slate-700">
-          <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+          <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
             <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-50">Frequently Asked Questions</h2>
             <div className="mt-8 space-y-3">
               {FAQ.map((item) => (
                 <details
                   key={item.q}
-                  className="group rounded-xl border border-slate-200 dark:border-slate-700 bg-card p-5"
+                  className="group rounded-lg border border-slate-200 dark:border-slate-700 bg-card p-5"
                 >
                   <summary className="cursor-pointer list-none text-sm font-semibold text-slate-900 dark:text-slate-50">
                     <span className="flex items-center justify-between gap-3">

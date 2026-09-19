@@ -23,16 +23,16 @@ export function Topbar({
   canBuy: boolean;
 }) {
   return (
-    <header className="flex items-center justify-between border-b border-slate-200 bg-surface px-4 py-3 dark:border-slate-800 sm:px-6">
+    <header className="flex min-h-16 items-center justify-between border-b border-slate-200 bg-surface px-4 py-3 dark:border-slate-800 sm:px-6">
       <div className="flex items-center gap-3">
         <MobileNav isPro={isPro} />
       </div>
       <div className="flex items-center gap-2 sm:gap-3">
-        <div className="hidden items-center gap-1.5 rounded-full bg-orange-50 px-3 py-1.5 text-sm font-semibold text-ember-600 dark:bg-orange-950 dark:text-ember-400 sm:flex">
+        <div className="hidden items-center gap-1.5 border-r border-slate-200 pr-3 text-sm font-semibold text-ember-600 dark:border-slate-800 dark:text-ember-400 sm:flex">
           <IconFlame className="h-4 w-4" />
           {streak}
         </div>
-        <div className="hidden items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1.5 text-sm font-semibold text-amber-700 dark:bg-amber-950 dark:text-amber-400 sm:flex">
+        <div className="hidden items-center gap-1.5 border-r border-slate-200 pr-3 text-sm font-semibold text-amber-700 dark:border-slate-800 dark:text-amber-400 sm:flex">
           <IconBolt className="h-4 w-4" />
           {xp.toLocaleString()} XP
         </div>

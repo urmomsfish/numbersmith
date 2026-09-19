@@ -7,9 +7,9 @@ type Size = "sm" | "md" | "lg";
 
 const variantClasses: Record<Variant, string> = {
   primary:
-    "bg-brand-600 text-white hover:bg-brand-700 disabled:bg-brand-300 dark:disabled:bg-brand-900",
+    "bg-brand-600 text-white shadow-sm hover:bg-brand-700 disabled:bg-brand-300 dark:disabled:bg-brand-900",
   secondary:
-    "bg-white text-brand-700 border border-brand-200 hover:bg-brand-50 disabled:text-brand-300 dark:bg-slate-900 dark:text-brand-300 dark:border-brand-800 dark:hover:bg-slate-800 dark:disabled:text-brand-800",
+    "bg-white text-brand-700 shadow-sm hover:bg-brand-50 disabled:text-brand-300 dark:bg-slate-900 dark:text-brand-300 dark:border-brand-800 dark:hover:bg-slate-800 dark:disabled:text-brand-800",
   outline:
     "bg-transparent text-slate-700 border border-slate-300 hover:bg-slate-50 disabled:text-slate-300 dark:text-slate-300 dark:border-slate-600 dark:hover:bg-slate-800 dark:disabled:text-slate-600",
   ghost:
@@ -19,9 +19,9 @@ const variantClasses: Record<Variant, string> = {
 };
 
 const sizeClasses: Record<Size, string> = {
-  sm: "px-3 py-1.5 text-sm rounded-lg gap-1.5",
-  md: "px-4 py-2.5 text-sm rounded-xl gap-2",
-  lg: "px-6 py-3.5 text-base rounded-xl gap-2",
+  sm: "px-3 py-1.5 text-sm rounded-md gap-1.5",
+  md: "px-4 py-2.5 text-sm rounded-md gap-2",
+  lg: "px-6 py-3 text-base rounded-md gap-2",
 };
 
 // `border border-transparent` is on the base so every variant has the same box
@@ -30,7 +30,7 @@ const sizeClasses: Record<Size, string> = {
 // side by side — the Free and Pro columns on the landing page rendered their
 // calls to action at 54px and 52px.
 const base =
-  "inline-flex items-center justify-center border border-transparent font-semibold transition-colors disabled:cursor-not-allowed whitespace-nowrap";
+  "inline-flex items-center justify-center border border-transparent font-semibold transition-colors duration-150 disabled:cursor-not-allowed whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2";
 
 export function Button({
   variant = "primary",

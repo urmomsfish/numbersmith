@@ -25,6 +25,7 @@ export function ChatPanel({
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const bottomRef = useRef<HTMLDivElement>(null);
+  const localMessageId = useRef(0);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -34,14 +35,16 @@ export function ChatPanel({
     const text = content.trim();
     if (!text || pending) return;
     setError(null);
-    const optimisticUser: Message = { id: `local-${Date.now()}`, role: "user", content: text };
+    localMessageId.current += 1;
+    const optimisticUser: Message = { id: `local-${localMessageId.current}`, role: "user", content: text };
     setMessages((prev) => [...prev, optimisticUser]);
     setInput("");
 
     startTransition(async () => {
       try {
         const { reply } = await sendAiMessageAction({ content: text });
-        setMessages((prev) => [...prev, { id: `local-${Date.now()}-a`, role: "assistant", content: reply }]);
+        localMessageId.current += 1;
+        setMessages((prev) => [...prev, { id: `local-${localMessageId.current}`, role: "assistant", content: reply }]);
       } catch (e) {
         setError(e instanceof Error ? e.message : "Something went wrong.");
       }
