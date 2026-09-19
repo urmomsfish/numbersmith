@@ -8,6 +8,7 @@ import { parseChoices } from "@/lib/engine/scoring";
 export type PlacementQuestionPayload = {
   id: string;
   question: string;
+  diagram: string | null;
   format: string;
   choices: string[];
   difficulty: number;
@@ -66,6 +67,7 @@ export async function submitPlacementAnswerAction(input: {
     next: {
       id: next.problem.id,
       question: next.problem.question,
+      diagram: next.problem.diagram,
       format: next.problem.format,
       choices: parseChoices(next.problem.choices),
       difficulty: next.problem.difficulty,

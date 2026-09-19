@@ -264,6 +264,10 @@ model Problem {
   id                   String       @id @default(cuid())
   slug                 String       @unique
   question             String
+  /// Optional inline SVG figure shown above the question. Authored by us in the
+  /// seed data, never user-supplied — see ProblemFigure for the render-side
+  /// constraints this is trusted under.
+  diagram              String?
   format               String
   choices              String? // JSON string array, only for MULTIPLE_CHOICE
   answer               String // canonical answer, e.g. "C" or "13" or "042"

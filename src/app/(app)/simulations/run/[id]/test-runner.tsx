@@ -6,6 +6,7 @@ import { cn } from "@/lib/cn";
 import { AnswerInput } from "@/components/practice/answer-input";
 import { Button } from "@/components/ui/button";
 import { submitSimulationAction } from "@/lib/actions/simulation-actions";
+import { ProblemStatement } from "@/components/practice/problem-figure";
 
 const CHOICE_LETTERS = ["A", "B", "C", "D", "E", "F"];
 
@@ -13,6 +14,7 @@ type Item = {
   id: string;
   order: number;
   question: string;
+  diagram: string | null;
   format: string;
   choices: string[];
 };
@@ -128,7 +130,7 @@ export function TestRunner({
               </button>
             </div>
 
-            <p className="text-lg font-medium leading-relaxed text-slate-900 dark:text-slate-50">{current.question}</p>
+            <ProblemStatement question={current.question} diagram={current.diagram} className="text-lg sm:text-lg" />
 
             <div className="mt-7">
               {current.format === "MULTIPLE_CHOICE" ? (

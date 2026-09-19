@@ -38,6 +38,7 @@ export default async function SimulationRunPage({ params }: { params: Promise<{ 
         id: item.id,
         order: item.order,
         question: item.problem.question,
+        diagram: item.problem.diagram,
         format: item.problem.format,
         choices: parseChoices(item.problem.choices),
       }))}

@@ -187,7 +187,15 @@ export async function pickNextPracticeProblems(
     });
   }
 
-  const shuffled = problems.sort(() => Math.random() - 0.5).slice(0, count);
+  // Fisher-Yates, not `sort(() => Math.random() - 0.5)`: a random comparator
+  // leaves elements close to where they started, so with the `.slice(0, count)`
+  // below the front of the list would be served far more often than the back.
+  const shuffled = [...problems];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  shuffled.length = Math.min(shuffled.length, count);
 
   return { problems: shuffled, topic: domainTopic, focus, difficulty };
 }

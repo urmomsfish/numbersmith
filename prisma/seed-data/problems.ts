@@ -1,6 +1,21 @@
 export type ProblemSeed = {
   slug: string;
   question: string;
+  /**
+   * Optional figure, as a raw inline `<svg>` element, drawn above the question.
+   *
+   * Geometry questions that describe a configuration in words alone ("points D
+   * and E lie on AB and AC…") ask the student to spend their time rebuilding a
+   * picture the real contest would have handed them. A figure here puts that
+   * back. The question text must still stand on its own — a student reading
+   * without the figure, or with images off, should be able to solve it — so the
+   * figure clarifies rather than carries the information.
+   *
+   * Authored by us, never user-supplied, and rendered inline; see
+   * `ProblemFigure` for the constraints enforced at render time. Use
+   * `currentColor` for strokes and text so the figure follows the page theme.
+   */
+  diagram?: string;
   format: "MULTIPLE_CHOICE" | "SHORT_ANSWER" | "INTEGER";
   choices?: string[];
   answer: string;

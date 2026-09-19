@@ -8,12 +8,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button, LinkButton } from "@/components/ui/button";
 import { submitDailyChallengeAction } from "@/lib/actions/daily-challenge-actions";
 import { difficultyLabel } from "@/lib/types";
+import { ProblemStatement } from "@/components/practice/problem-figure";
 
 const CHOICE_LETTERS = ["A", "B", "C", "D", "E", "F"];
 
 type Problem = {
   id: string;
   question: string;
+  diagram: string | null;
   format: string;
   choices: string[];
   hints: string[];
@@ -82,7 +84,7 @@ export function DailyChallengeRunner({
         <Badge tone="ember">Bonus XP</Badge>
       </div>
 
-      <p className="text-lg font-medium leading-relaxed text-slate-900 dark:text-slate-50 sm:text-xl">{problem.question}</p>
+      <ProblemStatement question={problem.question} diagram={problem.diagram} />
 
       <div className="mt-7">
         {problem.format === "MULTIPLE_CHOICE" ? (

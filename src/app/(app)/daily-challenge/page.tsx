@@ -79,6 +79,7 @@ export default async function DailyChallengePage() {
         problem={{
           id: challenge.problem.id,
           question: challenge.problem.question,
+          diagram: challenge.problem.diagram,
           format: challenge.problem.format,
           choices: parseChoices(challenge.problem.choices),
           hints: parseHints(challenge.problem.hints),

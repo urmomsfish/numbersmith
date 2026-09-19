@@ -62,6 +62,7 @@ export default async function PracticeSessionPage({
       problems={problems.map((p) => ({
         id: p.id,
         question: p.question,
+        diagram: p.diagram,
         format: p.format,
         choices: parseChoices(p.choices),
         hints: parseHints(p.hints),

@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { ProgressBar } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
+import { ProblemStatement } from "@/components/practice/problem-figure";
 import {
   submitPlacementAnswerAction,
   type PlacementQuestionPayload,
@@ -129,9 +130,7 @@ function QuestionCard({
         </div>
 
         <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-6 sm:p-8">
-          <p className="text-lg font-medium leading-relaxed text-slate-900 dark:text-slate-50 sm:text-xl">
-            {question.question}
-          </p>
+          <ProblemStatement question={question.question} diagram={question.diagram} />
 
           <div className="mt-8">
             {question.format === "MULTIPLE_CHOICE" ? (

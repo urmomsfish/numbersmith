@@ -45,6 +45,7 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
           problem={{
             id: problem.id,
             question: problem.question,
+            diagram: problem.diagram,
             format: problem.format,
             choices: parseChoices(problem.choices),
             hints: parseHints(problem.hints),

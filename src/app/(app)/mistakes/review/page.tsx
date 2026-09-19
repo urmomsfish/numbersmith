@@ -33,6 +33,7 @@ export default async function MistakeReviewPage() {
       problems={mistakes.map((m) => ({
         id: m.problem.id,
         question: m.problem.question,
+        diagram: m.problem.diagram,
         format: m.problem.format,
         choices: parseChoices(m.problem.choices),
         hints: parseHints(m.problem.hints),

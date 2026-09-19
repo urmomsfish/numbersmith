@@ -28,6 +28,7 @@ export function secondsForDifficulty(difficulty: number): number {
 export type ProblemRow = {
   slug: string;
   question: string;
+  diagram: string | null;
   format: ProblemSeed["format"];
   choices: string | null;
   answer: string;
@@ -57,6 +58,7 @@ export function toProblemRow(
   return {
     slug: p.slug,
     question: p.question,
+    diagram: p.diagram ?? null,
     format: p.format,
     choices: p.choices ? JSON.stringify(p.choices) : null,
     answer: p.answer,

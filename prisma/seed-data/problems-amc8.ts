@@ -10,9 +10,12 @@ import type { ProblemSeed } from "./problems";
  * is an original NumberSmith problem, written to match that phrasing,
  * tone, and increasing difficulty ramp; none are transcribed, closely
  * paraphrased, or numerically reskinned from any real AMC 8 contest.
- * Difficulty rises roughly from 2 (problem 1) to 7 (problem 30), mirroring
- * how the real 25-question, 40-minute contest escalates from one-step
- * arithmetic to problems that combine two or three ideas.
+ * Difficulty spans 2 through 8. Simulations draw 25 problems uniformly from
+ * this pool and then sort them by difficulty, so the shape of the pool *is*
+ * the shape of the paper's ramp: the counts at each difficulty are chosen so
+ * a generated contest opens with one-step arithmetic and closes on problems
+ * (difficulty 7-8) that combine three ideas, the way questions 21-25 of the
+ * real contest do. Changing the counts here changes every simulated paper.
  *
  * Seeded as practice (isPlacement: false), same as the other
  * competition-tagged problem sets.
@@ -1514,6 +1517,553 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
     hints: ["Write 32 as a power of 2 and 81 as a power of 3.", "Read off each exponent, then add."],
     difficulty: 5,
     topicSlug: "exponents-radicals",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-111",
+    question:
+      "The Hollis Community Garden is a rectangle measuring 12 meters along its north and south fences and 8 meters along its east and west fences. At the spring meeting the committee votes to fence off a single tomato plot inside the garden. Its boundary runs from the northwest corner of the garden east to the midpoint of the north fence, then straight to the midpoint of the east fence, then straight to the southwest corner, and finally north along the west fence back to where it started. How many square meters does the tomato plot cover?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"-24 0 364 172\" width=\"364\" height=\"172\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"20,20 140,20 260,80 20,140\" fill=\"currentColor\" fill-opacity=\"0.12\" /><rect x=\"20\" y=\"20\" width=\"240\" height=\"120\" /><circle cx=\"140\" cy=\"20\" r=\"3\" fill=\"currentColor\" /><circle cx=\"260\" cy=\"80\" r=\"3\" fill=\"currentColor\" /><text x=\"140\" y=\"14\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">midpoint</text><text x=\"272\" y=\"84\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">midpoint</text><text x=\"140\" y=\"158\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">12 m</text><text x=\"12\" y=\"84\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">8 m</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["48", "54", "60", "64", "72"],
+    answer: "C",
+    solution:
+      "Put the southwest corner at the origin, so the garden's corners are (0,0), (12,0), (12,8) and (0,8). The plot's corners are then (0,8), (6,8), (12,4) and (0,0). The shoelace formula gives area = ½|(0·8 − 6·8) + (6·4 − 12·8) + (12·0 − 0·4) + (0·8 − 0·0)| = ½·120 = 60 square meters.",
+    hints: [
+      "Set up coordinates with a corner of the garden at the origin and write down the four corners of the plot.",
+      "Either use the shoelace formula, or subtract the two right triangles that the plot leaves out of the rectangle.",
+    ],
+    difficulty: 6,
+    topicSlug: "area-volume",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-112",
+    question:
+      "Northgate Middle School has lockers numbered 1 through 200. On the first day of school the custodian puts a blue sticker on every locker whose number is a multiple of 3, a red sticker on every locker whose number is a multiple of 5, and a green sticker on every locker whose number is a multiple of 7. A locker can end up with no stickers, one sticker, two stickers, or all three. How many of the 200 lockers end up with exactly two stickers?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["15", "18", "20", "22", "24"],
+    answer: "E",
+    solution:
+      "Lockers with exactly two stickers are the multiples of exactly two of 3, 5 and 7. Multiples of 15 up to 200: 13, of which 1 (namely 105) is also a multiple of 7, leaving 12. Multiples of 21: 9, minus the same 1, leaving 8. Multiples of 35: 5, minus 1, leaving 4. In total 12 + 8 + 4 = 24.",
+    hints: [
+      "A locker gets exactly two stickers when its number is divisible by exactly two of 3, 5 and 7.",
+      "Count multiples of 15, of 21 and of 35, then remove the multiples of 105, which were given all three stickers.",
+    ],
+    difficulty: 6,
+    topicSlug: "divisibility",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-113",
+    question:
+      "The door to the Ridgeview Middle School science lab opens with a four-character code. Each character is one of the ten digits 0 through 9 or one of the three letters A, B and C, and characters may repeat. Because students kept choosing codes like 2024, the lab supervisor now requires that every code contain at least one digit and at least one letter. How many different codes meet the supervisor's requirement?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["10,081", "18,400", "18,480", "18,561", "28,561"],
+    answer: "C",
+    solution:
+      "There are 13 choices for each of the 4 characters, so 13⁴ = 28,561 codes in all. Codes with no letter are the all-digit codes, 10⁴ = 10,000 of them; codes with no digit are the all-letter codes, 3⁴ = 81 of them. These two groups do not overlap, so 28,561 − 10,000 − 81 = 18,480 codes remain.",
+    hints: [
+      "Count all possible codes first, ignoring the requirement.",
+      "Subtract the codes that use only digits and the codes that use only letters — no code is in both groups.",
+    ],
+    difficulty: 7,
+    topicSlug: "counting-principles",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-114",
+    question:
+      "Mira has a rectangular sheet of cardboard measuring 10 inches across and 6 inches down. She cuts a 2-inch by 2-inch square out of the upper-left corner and another 2-inch by 2-inch square out of the lower-right corner, throwing both scraps away. She then traces around the outside of the piece that is left, as shown. What is the perimeter, in inches, of the outline she traces?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"-24 0 364 186\" width=\"364\" height=\"186\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"60,20 260,20 260,110 220,110 220,150 20,150 20,60 60,60\" fill=\"currentColor\" fill-opacity=\"0.12\" /><text x=\"140\" y=\"170\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">10 in</text><text x=\"12\" y=\"100\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">6 in</text><text x=\"40\" y=\"44\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">2</text><text x=\"240\" y=\"134\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">2</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["24", "28", "30", "32", "36"],
+    answer: "D",
+    solution:
+      "Each cut removes a 2-inch segment from one side of the rectangle but adds two new 2-inch segments along the notch, so each cut adds 2 + 2 − 2 − 2 = 0 inches to the perimeter. The outline therefore has the same perimeter as the original rectangle, 2(10 + 6) = 32 inches.",
+    hints: [
+      "Do not compute the area — trace the boundary segment by segment.",
+      "Each notch replaces two 2-inch pieces of the old boundary with two 2-inch pieces of new boundary.",
+    ],
+    difficulty: 6,
+    topicSlug: "polygons",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-115",
+    question:
+      "The Fairmont town pool is drained every autumn and refilled every spring. Pump A, working alone, can fill the empty pool in 6 hours; pump B, working alone, takes 9 hours. One spring morning the groundskeeper switches on both pumps at the same moment. They run together for 2 hours, at which point pump A breaks down and stops. Pump B keeps running by itself until the pool is completely full. For how many additional hours does pump B run after pump A breaks down?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["2", "3", "3.5", "4", "4.5"],
+    answer: "D",
+    solution:
+      "Pump A fills 1/6 of the pool per hour and pump B fills 1/9 per hour, so together they fill 1/6 + 1/9 = 5/18 per hour. In 2 hours they fill 10/18 = 5/9 of the pool, leaving 4/9. Pump B alone fills 1/9 per hour, so it needs (4/9) ÷ (1/9) = 4 more hours.",
+    hints: [
+      "Work in pool-per-hour rates rather than in hours.",
+      "Find the fraction of the pool still empty when pump A stops, then divide by pump B's rate.",
+    ],
+    difficulty: 6,
+    topicSlug: "rates",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-116",
+    question:
+      "In Mr. Alvarez's number theory unit, a two-digit number is called balanced if it is exactly four times the sum of its own two digits. For instance, 12 is balanced, because the sum of its digits is 1 + 2 = 3 and 4 × 3 = 12. Mr. Alvarez asks the class to find every balanced two-digit number and add them all together. What total should the class get?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["96", "108", "120", "132", "144"],
+    answer: "C",
+    solution:
+      "Write the number as 10a + b with a from 1 to 9 and b from 0 to 9. The condition 10a + b = 4(a + b) becomes 6a = 3b, so b = 2a. Since b ≤ 9 we need a ≤ 4, giving 12, 24, 36 and 48. Their sum is 12 + 24 + 36 + 48 = 120.",
+    hints: [
+      "Write the number as 10a + b and turn the condition into an equation in a and b.",
+      "The equation simplifies to b = 2a; now see which values of a keep b a single digit.",
+    ],
+    difficulty: 7,
+    topicSlug: "number-properties",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-117",
+    question:
+      "A carnival booth keeps a cloth bag holding nine marbles that are identical except for color: 4 are red, 3 are blue, and 2 are green. A player pays a ticket, reaches into the bag without looking, and pulls out two marbles at the same time. The player wins a stuffed animal exactly when the two marbles drawn are the same color as each other. What is the probability that a player wins?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["2/9", "5/18", "1/3", "7/18", "5/9"],
+    answer: "B",
+    solution:
+      "There are C(9,2) = 36 equally likely pairs. Same-color pairs number C(4,2) + C(3,2) + C(2,2) = 6 + 3 + 1 = 10. The probability is 10/36 = 5/18.",
+    hints: [
+      "Count the total number of two-marble pairs with a combination, not an ordered count.",
+      "Count the same-color pairs one color at a time and add.",
+    ],
+    difficulty: 7,
+    topicSlug: "counting-probability",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-118",
+    question:
+      "A surveyor's map shows two parallel roads, Oak Street and Pine Street, both running exactly east–west, with Oak Street the northern of the two. A cell tower stands at a point P strictly between the two roads. The surveyor sights from P to a marker A on Oak Street and finds that the sightline PA makes a 38° angle with Oak Street. She then sights from P to a marker B on Pine Street and finds that PB makes a 27° angle with Pine Street. Both markers lie west of the tower, as shown. What is the measure, in degrees, of angle APB?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 176\" width=\"340\" height=\"176\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><line x1=\"20\" y1=\"30\" x2=\"320\" y2=\"30\" /><line x1=\"20\" y1=\"150\" x2=\"320\" y2=\"150\" /><line x1=\"133\" y1=\"30\" x2=\"210\" y2=\"90\" /><line x1=\"92\" y1=\"150\" x2=\"210\" y2=\"90\" /><line x1=\"120\" y1=\"90\" x2=\"300\" y2=\"90\" stroke-dasharray=\"5 4\" stroke-opacity=\"0.55\" /><circle cx=\"210\" cy=\"90\" r=\"3\" fill=\"currentColor\" /><circle cx=\"133\" cy=\"30\" r=\"3\" fill=\"currentColor\" /><circle cx=\"92\" cy=\"150\" r=\"3\" fill=\"currentColor\" /><text x=\"330\" y=\"34\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">Oak</text><text x=\"330\" y=\"166\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">Pine</text><text x=\"218\" y=\"86\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">P</text><text x=\"125\" y=\"24\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">A</text><text x=\"84\" y=\"164\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">B</text><text x=\"146\" y=\"46\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">38°</text><text x=\"106\" y=\"140\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">27°</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["52", "58", "65", "71", "75"],
+    answer: "C",
+    solution:
+      "Draw the east–west line through P. Because it is parallel to both roads, the alternate interior angles it makes are equal to the given ones: the part of angle APB above that line measures 38° and the part below it measures 27°. So angle APB = 38° + 27° = 65°.",
+    hints: [
+      "Draw a line through P parallel to the two roads.",
+      "Alternate interior angles split angle APB into a 38° piece and a 27° piece.",
+    ],
+    difficulty: 6,
+    topicSlug: "angles",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-119",
+    question:
+      "A biologist monitoring an island colony records 3 animals in week 1 and 7 animals in week 2. From week 3 onward the colony's population each week turns out to equal the sum of the two previous weeks' populations. To keep her field notes compact, the biologist writes down only the remainder when each week's population is divided by 5. What remainder does she write down for week 20?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["0", "1", "2", "3", "4"],
+    answer: "E",
+    solution:
+      "Reducing each term modulo 5 as you go, the remainders from week 1 are 3, 2, 0, 2, 2, 4, 1, 0, 1, 1, 2, 3, 0, 3, 3, 1, 4, 0, 4, 4. The twentieth entry is 4.",
+    hints: [
+      "You never need the actual populations — reduce modulo 5 at every step.",
+      "Write out the remainders in order; each is the sum of the previous two, reduced mod 5.",
+    ],
+    difficulty: 7,
+    topicSlug: "sequences",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-120",
+    question:
+      "The Kestrel Library's reading room has a floor shaped like the letter L. The room measures 14 feet along its north wall and 10 feet along its west wall, but a rectangular storage closet measuring 6 feet by 4 feet has been built into the northeast corner, so that corner of the room is walled off and is not part of the reading room floor. The librarian plans to cover the entire reading room floor with square tiles measuring 2 feet on a side, laying them edge to edge and cutting no tiles. How many tiles does she need?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"-24 0 364 200\" width=\"364\" height=\"200\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"20,30 174,30 174,86 290,86 290,170 20,170\" fill=\"currentColor\" fill-opacity=\"0.12\" /><rect x=\"174\" y=\"30\" width=\"116\" height=\"56\" stroke-dasharray=\"5 4\" stroke-opacity=\"0.55\" /><text x=\"232\" y=\"62\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">closet</text><text x=\"155\" y=\"190\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">14 ft</text><text x=\"12\" y=\"100\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">10 ft</text><text x=\"232\" y=\"24\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">6 ft</text><text x=\"302\" y=\"62\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">4 ft</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["20", "26", "27", "29", "32"],
+    answer: "D",
+    solution:
+      "The full rectangle would be 14 × 10 = 140 square feet, and the closet removes 6 × 4 = 24, leaving 116 square feet of floor. Each tile covers 2 × 2 = 4 square feet, and 116 ÷ 4 = 29. Because every dimension of the L is even, the tiles fit exactly with none cut.",
+    hints: [
+      "Find the L-shaped area as a big rectangle minus the closet.",
+      "Each tile covers 4 square feet, not 2.",
+    ],
+    difficulty: 7,
+    topicSlug: "area-volume",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-121",
+    question:
+      "Ms. Ortega has recorded nine quiz scores for Jordan this term, and their average is exactly 82. Jordan's lowest score of the term was a 46 on the quiz given the morning after the band trip. The department's policy lets a teacher drop each student's single lowest quiz score, and Ms. Ortega decides to apply it. What is the average of Jordan's eight remaining scores?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["84", "85.5", "86.5", "87", "88.5"],
+    answer: "C",
+    solution:
+      "Nine scores averaging 82 total 9 × 82 = 738. Dropping the 46 leaves 738 − 46 = 692 points spread over 8 scores, and 692 ÷ 8 = 86.5.",
+    hints: [
+      "Turn the average into a total before removing anything.",
+      "Subtract the dropped score from the total, then divide by the new count of 8.",
+    ],
+    difficulty: 6,
+    topicSlug: "averages",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-122",
+    question:
+      "The Westbrook cryptography club generates each week's door key by computing the enormous number 7²⁰²⁴ + 3²⁰²⁴ and then using only its units digit. No one in the club ever writes the whole number down. What is the units digit of 7²⁰²⁴ + 3²⁰²⁴?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["0", "2", "4", "6", "8"],
+    answer: "B",
+    solution:
+      "The units digits of powers of 7 cycle 7, 9, 3, 1 with period 4, and 2024 is a multiple of 4, so 7²⁰²⁴ ends in 1. The units digits of powers of 3 cycle 3, 9, 7, 1, also with period 4, so 3²⁰²⁴ ends in 1 as well. The sum ends in 1 + 1 = 2.",
+    hints: [
+      "List the units digits of the first few powers of 7 and of 3 and find the repeating cycle.",
+      "Both cycles have length 4, and 2024 is divisible by 4.",
+    ],
+    difficulty: 7,
+    topicSlug: "modular-arithmetic",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-123",
+    question:
+      "Troop 214 earned 10 identical merit patches at the regional jamboree, and the scoutmaster will hand all 10 of them out among the troop's four patrol leaders. Troop rules say that every patrol leader must receive at least one patch, and that no patrol leader may receive more than four. The patrol leaders are four different people, so who gets how many matters. In how many different ways can the scoutmaster hand out the patches?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["30", "36", "44", "48", "56"],
+    answer: "C",
+    solution:
+      "Give each leader one patch first; 6 patches remain to be split among 4 leaders with each receiving at most 3 more. Without the upper limit there are C(9,3) = 84 ways. Subtract the cases where some leader takes at least 4 of the 6: choosing that leader in 4 ways and distributing the remaining 2 in C(5,3) = 10 ways gives 40, and no case is double counted because two leaders cannot each take 4 out of 6. So 84 − 40 = 44.",
+    hints: [
+      "Hand each leader one patch up front so the 'at least one' rule takes care of itself.",
+      "Count the unrestricted distributions of what is left, then subtract the ones that break the maximum of four.",
+    ],
+    difficulty: 8,
+    topicSlug: "counting-principles",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-124",
+    question:
+      "A roof truss is built in the shape of triangle ABC, with the peak at A and the horizontal base BC resting on the walls. To stiffen the truss, a carpenter installs a straight horizontal support beam DE parallel to the base, with D on side AB and E on side AC. Measuring down the rafter from the peak, the distance AD is 4 feet and the remaining distance DB is 6 feet. The support beam DE measures 8 feet. How many feet long is the base BC?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 194\" width=\"340\" height=\"194\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"170,20 40,160 300,160\" /><line x1=\"118\" y1=\"76\" x2=\"222\" y2=\"76\" /><circle cx=\"118\" cy=\"76\" r=\"3\" fill=\"currentColor\" /><circle cx=\"222\" cy=\"76\" r=\"3\" fill=\"currentColor\" /><text x=\"170\" y=\"14\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">A</text><text x=\"32\" y=\"174\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">B</text><text x=\"308\" y=\"174\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">C</text><text x=\"108\" y=\"72\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">D</text><text x=\"232\" y=\"72\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">E</text><text x=\"134\" y=\"48\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">4</text><text x=\"72\" y=\"126\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">6</text><text x=\"170\" y=\"70\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">8</text><text x=\"170\" y=\"180\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">BC = ?</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["12", "16", "20", "24", "26"],
+    answer: "C",
+    solution:
+      "Because DE ∥ BC, triangle ADE is similar to triangle ABC. The ratio of similarity is AD/AB = 4/(4 + 6) = 2/5, so DE/BC = 2/5. From 8/BC = 2/5 we get BC = 20 feet.",
+    hints: [
+      "A line parallel to one side of a triangle cuts off a triangle similar to the whole.",
+      "The ratio is AD to the whole side AB, which is 4 to 10 — not 4 to 6.",
+    ],
+    difficulty: 7,
+    topicSlug: "similarity-congruence",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-125",
+    question:
+      "At the start of the year the ratio of boys to girls enrolled at Linden Academy was exactly 4 to 5. Over the winter a new housing development opened nearby, and 30 additional boys enrolled at the school. No girls joined or left, and no boys left. After those 30 boys enrolled, the ratio of boys to girls became exactly 7 to 8. How many students were enrolled at Linden Academy at the start of the year?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["360", "450", "540", "630", "720"],
+    answer: "E",
+    solution:
+      "Write the original counts as 4k boys and 5k girls. Then (4k + 30)/(5k) = 7/8, so 8(4k + 30) = 35k, giving 32k + 240 = 35k and k = 80. Originally there were 320 boys and 400 girls, a total of 720 students.",
+    hints: [
+      "Let the original counts be 4k and 5k so the first ratio is automatic.",
+      "Only the boys' count changes; cross-multiply the new ratio and solve for k.",
+    ],
+    difficulty: 6,
+    topicSlug: "ratios-proportions",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-126",
+    question:
+      "A circular stained-glass window has radius 5 inches. Two straight horizontal glazing bars run across the window, each one a chord of the circle, and the two bars are parallel to each other. The upper bar is 6 inches long and the lower bar is 8 inches long, and both bars lie strictly above the center of the window, as shown. How many inches apart are the two bars?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 196\" width=\"340\" height=\"196\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><circle cx=\"170\" cy=\"100\" r=\"80\" /><line x1=\"122\" y1=\"36\" x2=\"218\" y2=\"36\" stroke-width=\"3\" /><line x1=\"106\" y1=\"52\" x2=\"234\" y2=\"52\" stroke-width=\"3\" /><line x1=\"170\" y1=\"36\" x2=\"170\" y2=\"100\" stroke-dasharray=\"4 4\" stroke-opacity=\"0.55\" /><circle cx=\"170\" cy=\"100\" r=\"3\" fill=\"currentColor\" /><text x=\"228\" y=\"30\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">6 in</text><text x=\"244\" y=\"50\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">8 in</text><text x=\"178\" y=\"110\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">center</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["1", "2", "3", "5", "7"],
+    answer: "A",
+    solution:
+      "A chord of length 2c in a circle of radius r sits at distance √(r² − c²) from the center. The 6-inch bar has c = 3 and sits √(25 − 9) = 4 inches above the center; the 8-inch bar has c = 4 and sits √(25 − 16) = 3 inches above the center. Since both are on the same side, they are 4 − 3 = 1 inch apart.",
+    hints: [
+      "Drop a perpendicular from the center to a chord; it bisects the chord and makes a right triangle.",
+      "Find each bar's distance from the center, then remember both are above the center, so subtract.",
+    ],
+    difficulty: 7,
+    topicSlug: "circles",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-127",
+    question:
+      "At the end of a school raffle, five prize tickets numbered 1 through 5 are dropped into a hat, shuffled thoroughly, and then drawn out one at a time and placed left to right into five slots on the prize board, which are also labeled 1 through 5 from left to right. Every arrangement of the five tickets in the five slots is equally likely. What is the probability that no ticket ends up in the slot bearing its own number?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["1/5", "3/10", "44/125", "11/30", "13/30"],
+    answer: "D",
+    solution:
+      "There are 5! = 120 equally likely arrangements. Arrangements in which nothing sits in its own slot are derangements, and by inclusion–exclusion the number of derangements of 5 objects is 120(1 − 1 + 1/2 − 1/6 + 1/24 − 1/120) = 44. The probability is 44/120 = 11/30.",
+    hints: [
+      "Count the arrangements in which at least one ticket does match its slot, using inclusion–exclusion.",
+      "Subtract that count from 120 to get 44, then divide.",
+    ],
+    difficulty: 8,
+    topicSlug: "counting-probability",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-128",
+    question:
+      "The number theory club at Halstead has exactly 100 members, and at the first meeting each member is handed a badge showing a different whole number n from 1 to 100. Each member then computes the value n² + n + 1 from their own badge number. Any member whose result is divisible by 3 is assigned to the Triad team. How many of the 100 members are assigned to the Triad team?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["33", "34", "50", "66", "67"],
+    answer: "B",
+    solution:
+      "Check n² + n + 1 by the remainder of n modulo 3. If n ≡ 0, the value is ≡ 1; if n ≡ 1, it is 1 + 1 + 1 = 3 ≡ 0; if n ≡ 2, it is 4 + 2 + 1 = 7 ≡ 1. So only n ≡ 1 (mod 3) works: n = 1, 4, 7, …, 100, which is 34 values.",
+    hints: [
+      "Only the remainder of n on division by 3 matters, so test n ≡ 0, 1 and 2.",
+      "Exactly one of the three cases works; count how many n from 1 to 100 fall in it.",
+    ],
+    difficulty: 7,
+    topicSlug: "divisibility",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-129",
+    question:
+      "The Maplewood drama club sold tickets to its spring musical at two prices: $9 for an adult ticket and $5 for a child ticket. Every ticket sold was one of those two kinds. By closing night the club had sold exactly 120 tickets and collected exactly $880. The treasurer now needs to report how many of the tickets sold were child tickets. What number should she report?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["40", "45", "50", "55", "70"],
+    answer: "C",
+    solution:
+      "Let c be the number of child tickets, so 120 − c adult tickets were sold. Then 9(120 − c) + 5c = 880, so 1080 − 4c = 880 and 4c = 200, giving c = 50.",
+    hints: [
+      "Name one unknown and write the other count in terms of it.",
+      "Set the total money collected equal to $880 and solve the resulting linear equation.",
+    ],
+    difficulty: 6,
+    topicSlug: "linear-equations",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-130",
+    question:
+      "A square garden plot ABCD measures 6 meters on each side. Its corners are labeled clockwise with A at the northwest corner, B at the northeast, C at the southeast, and D at the southwest. A gardener drives one stake at M, the midpoint of the east side BC, and a second stake at N, the midpoint of the south side CD. She then runs a taut line of twine from A to M, from M to N, and from N back to A, enclosing a triangular bed. What is the area, in square meters, of that triangular bed?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 206\" width=\"340\" height=\"206\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><rect x=\"70\" y=\"20\" width=\"160\" height=\"160\" /><polygon points=\"70,20 230,100 150,180\" fill=\"currentColor\" fill-opacity=\"0.12\" /><circle cx=\"230\" cy=\"100\" r=\"3\" fill=\"currentColor\" /><circle cx=\"150\" cy=\"180\" r=\"3\" fill=\"currentColor\" /><text x=\"62\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">A</text><text x=\"238\" y=\"16\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">B</text><text x=\"238\" y=\"194\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">C</text><text x=\"62\" y=\"194\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">D</text><text x=\"240\" y=\"104\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">M</text><text x=\"150\" y=\"196\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">N</text><text x=\"150\" y=\"14\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">6 m</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["9", "10.5", "12", "13.5", "15"],
+    answer: "D",
+    solution:
+      "Place D at the origin, so A = (0,6), B = (6,6), C = (6,0) and D = (0,0). Then M = (6,3) and N = (3,0). The shoelace formula gives area = ½|(0·3 − 6·6) + (6·0 − 3·3) + (3·6 − 0·0)| = ½·27 = 13.5 square meters. (Equivalently, subtract the three corner right triangles of areas 9, 4.5 and 9 from the square's 36.)",
+    hints: [
+      "Set up coordinates on the square and read off M and N.",
+      "Either use the shoelace formula, or subtract the three right triangles at corners B, C and D from the whole square.",
+    ],
+    difficulty: 8,
+    topicSlug: "area-volume",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-131",
+    question:
+      "A boutique buys a winter jacket from its supplier and marks the price up by 40% above what it paid, putting that marked-up figure on the tag. The jacket does not sell, so in February the boutique holds a clearance sale and takes 25% off the tagged price. A customer buys the jacket at the sale price and pays exactly $94.50, with no tax. How many dollars did the boutique originally pay the supplier for the jacket?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["70", "75", "84", "88", "90"],
+    answer: "E",
+    solution:
+      "If the boutique paid p dollars, the tag read 1.40p and the sale price was 0.75 × 1.40p = 1.05p. So 1.05p = 94.50 and p = 94.50 ÷ 1.05 = 90 dollars.",
+    hints: [
+      "Apply the two percentage changes one after the other as multipliers, not by adding 40% and −25%.",
+      "The combined multiplier is 1.40 × 0.75 = 1.05; divide the sale price by it.",
+    ],
+    difficulty: 7,
+    topicSlug: "percentages",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-132",
+    question:
+      "A museum owns a number of identical cube-shaped display cases and wants to arrange all of them on the gallery floor in a single rectangular grid with no gaps. The curator discovers that there are exactly 14 different grids that use every case, where a grid that is a rows by b columns counts as different from one that is b rows by a columns. What is the smallest number of display cases the museum could own?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["128", "162", "192", "288", "384"],
+    answer: "C",
+    solution:
+      "The number of ordered pairs (a, b) with ab = N is exactly the number of divisors of N, so N has 14 divisors. Since 14 = 14 or 2 × 7, N is either p¹³ or p·q⁶ for distinct primes p and q. The smallest of the first kind is 2¹³ = 8192, and the smallest of the second kind is 2⁶ × 3 = 192. So N = 192.",
+    hints: [
+      "The number of a-by-b grids using all N cases equals the number of divisors of N.",
+      "Write 14 as a product of one or more factors each at least 2, and match those to exponents-plus-one in a prime factorization.",
+    ],
+    difficulty: 8,
+    topicSlug: "number-theory",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-133",
+    question:
+      "An irrigation channel is dug so that every cross-section perpendicular to the flow is the same isosceles trapezoid. Measured across that cross-section, the channel is 22 feet wide at the top, 10 feet wide at the flat bottom, and each of the two slanted sides measures 10 feet. An engineer needs the area of the cross-section in order to estimate the channel's capacity. What is that area, in square feet?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 180\" width=\"340\" height=\"180\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"38,30 302,30 230,126 110,126\" fill=\"currentColor\" fill-opacity=\"0.12\" /><line x1=\"110\" y1=\"30\" x2=\"110\" y2=\"126\" stroke-dasharray=\"4 4\" stroke-opacity=\"0.55\" /><line x1=\"230\" y1=\"30\" x2=\"230\" y2=\"126\" stroke-dasharray=\"4 4\" stroke-opacity=\"0.55\" /><text x=\"170\" y=\"22\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">22 ft</text><text x=\"170\" y=\"144\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">10 ft</text><text x=\"62\" y=\"82\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">10 ft</text><text x=\"278\" y=\"82\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">10 ft</text><text x=\"120\" y=\"82\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">h</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["128", "136", "144", "152", "160"],
+    answer: "A",
+    solution:
+      "Drop a perpendicular from each end of the 10-foot bottom to the 22-foot top. The two equal overhangs total 22 − 10 = 12 feet, so each is 6 feet. Each slanted side is then the hypotenuse of a right triangle with legs 6 and h, and 6² + h² = 10² gives h = 8. The trapezoid's area is ½(22 + 10)(8) = 128 square feet.",
+    hints: [
+      "Drop perpendiculars from the ends of the shorter base to split the trapezoid into a rectangle and two congruent right triangles.",
+      "Each right triangle has a horizontal leg of (22 − 10)/2 = 6 and hypotenuse 10.",
+    ],
+    difficulty: 7,
+    topicSlug: "quadrilaterals",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-134",
+    question:
+      "Five runners — Ama, Beto, Cai, Dia and Enzo — competed in a cross-country race that ended with no ties, so there is a definite first through fifth place. The coach lost the results sheet and can remember only two things for certain: Ama finished somewhere ahead of Beto, and Cai finished somewhere ahead of Dia. Nothing is known about where Enzo placed. How many different finishing orders of the five runners are consistent with everything the coach remembers?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["20", "30", "40", "60", "120"],
+    answer: "B",
+    solution:
+      "There are 5! = 120 orders in all. In exactly half of them Ama precedes Beto, and independently in exactly half Cai precedes Dia, so the fraction satisfying both is ½ × ½ = ¼. That gives 120 ÷ 4 = 30 orders.",
+    hints: [
+      "Start from all 5! orders and think about what fraction satisfies each condition.",
+      "Ama-before-Beto holds in half of all orders, and the Cai-before-Dia condition is independent of it.",
+    ],
+    difficulty: 6,
+    topicSlug: "counting-principles",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-135",
+    question:
+      "A bicycle courier starts at the corner of 1st Avenue and A Street, the southwest corner of the street grid shown, and must deliver a package at the corner of 6th Avenue and E Street, the northeast corner. The avenues run north–south and the streets run east–west, and to keep the route as short as possible the courier only ever rides one block east or one block north. This morning a water main break has closed the intersection of 3rd Avenue and C Street completely, so no route may pass through that corner. How many different routes can the courier take?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 184\" width=\"340\" height=\"184\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><line x1=\"30\" y1=\"30\" x2=\"30\" y2=\"158\" stroke-opacity=\"0.45\" /><line x1=\"86\" y1=\"30\" x2=\"86\" y2=\"158\" stroke-opacity=\"0.45\" /><line x1=\"142\" y1=\"30\" x2=\"142\" y2=\"158\" stroke-opacity=\"0.45\" /><line x1=\"198\" y1=\"30\" x2=\"198\" y2=\"158\" stroke-opacity=\"0.45\" /><line x1=\"254\" y1=\"30\" x2=\"254\" y2=\"158\" stroke-opacity=\"0.45\" /><line x1=\"310\" y1=\"30\" x2=\"310\" y2=\"158\" stroke-opacity=\"0.45\" /><line x1=\"30\" y1=\"30\" x2=\"310\" y2=\"30\" stroke-opacity=\"0.45\" /><line x1=\"30\" y1=\"62\" x2=\"310\" y2=\"62\" stroke-opacity=\"0.45\" /><line x1=\"30\" y1=\"94\" x2=\"310\" y2=\"94\" stroke-opacity=\"0.45\" /><line x1=\"30\" y1=\"126\" x2=\"310\" y2=\"126\" stroke-opacity=\"0.45\" /><line x1=\"30\" y1=\"158\" x2=\"310\" y2=\"158\" stroke-opacity=\"0.45\" /><line x1=\"136\" y1=\"90\" x2=\"150\" y2=\"104\" stroke-width=\"3\" /><line x1=\"150\" y1=\"90\" x2=\"136\" y2=\"104\" stroke-width=\"3\" /><circle cx=\"30\" cy=\"158\" r=\"4\" fill=\"currentColor\" /><circle cx=\"310\" cy=\"30\" r=\"4\" fill=\"currentColor\" /><text x=\"30\" y=\"176\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">start</text><text x=\"310\" y=\"22\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">finish</text><text x=\"160\" y=\"100\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">closed</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["60", "66", "70", "96", "126"],
+    answer: "B",
+    solution:
+      "Label the start (0,0) and the destination (5,4); the closed corner is (2,2). Every shortest route uses 5 easts and 4 norths, so there are C(9,4) = 126 routes in all. Routes through (2,2) number C(4,2) × C(5,2) = 6 × 10 = 60. That leaves 126 − 60 = 66 usable routes.",
+    hints: [
+      "Count all shortest routes first as arrangements of 5 easts and 4 norths.",
+      "Subtract the routes that pass through the closed corner: routes to it, times routes from it.",
+    ],
+    difficulty: 8,
+    topicSlug: "combinatorics",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-136",
+    question:
+      "Priya is running a 12-mile course that is divided into two 6-mile halves by a marker at the midpoint. She runs the first half at a steady 8 miles per hour. Checking her watch at the marker, she realizes she wants her average speed for the entire 12-mile course to come out to exactly 10 miles per hour. At what steady speed, in miles per hour, must she run the second 6-mile half to make that happen?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["12", "12.5", "13 1/3", "14", "16"],
+    answer: "C",
+    solution:
+      "Averaging 10 mph over 12 miles means finishing in 12/10 = 1.2 hours. The first 6 miles at 8 mph already took 6/8 = 0.75 hours, leaving 1.2 − 0.75 = 0.45 hours for the last 6 miles. That requires 6 ÷ 0.45 = 40/3 = 13⅓ miles per hour.",
+    hints: [
+      "Average speed is total distance over total time, so start by finding the total time she is allowed.",
+      "Subtract the time already spent on the first half to find the time left for the second.",
+    ],
+    difficulty: 7,
+    topicSlug: "rates",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-137",
+    question:
+      "A town clerk is cataloguing house numbers on Sycamore Ridge. Every house number there is a three-digit whole number. The clerk flags a house number as unusual when it satisfies all three of the following: its three digits add up to 14, it is divisible by 11, and it is greater than 500. She makes a list of every unusual number and then adds the numbers on her list together. What total does she get?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["1243", "1342", "2013", "2113", "2784"],
+    answer: "C",
+    solution:
+      "For a three-digit number with digits a, b, c, divisibility by 11 means a − b + c is 0 or ±11. Combined with a + b + c = 14: if a + c = b then 2b = 14, so b = 7 and a + c = 7; the possibilities above 500 are 572, 671 and 770. The case a + c = b + 11 forces 2b + 11 = 14, which has no whole-number solution. The sum is 572 + 671 + 770 = 2013.",
+    hints: [
+      "Use the alternating-sum test for divisibility by 11 alongside the digit-sum condition.",
+      "Combining the two conditions pins down the middle digit; then list the options with first digit at least 5.",
+    ],
+    difficulty: 8,
+    topicSlug: "number-properties",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-138",
+    question:
+      "A booth at the fall fair charges $2 to spin its wheel once. The wheel is divided so that a spinner lands in the blank region with probability 1/2 and pays nothing, lands in the green region with probability 1/3 and pays $3, and lands in the gold region with probability 1/6 and pays $12. A player pays the $2, spins once, and collects whatever the wheel pays. Over many plays, what is the player's expected net gain per spin, in dollars?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["0", "0.25", "0.5", "1", "1.5"],
+    answer: "D",
+    solution:
+      "The expected payout is (1/2)(0) + (1/3)(3) + (1/6)(12) = 0 + 1 + 2 = 3 dollars. Subtracting the $2 cost of the spin leaves an expected net gain of 3 − 2 = 1 dollar per spin.",
+    hints: [
+      "Compute the expected payout first: multiply each prize by its probability and add.",
+      "Then subtract the $2 the player paid to spin.",
+    ],
+    difficulty: 7,
+    topicSlug: "expected-value",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-139",
+    question:
+      "A hexagonal patio is built in the shape of a regular hexagon with an area of 96 square feet. The landscaper marks the midpoint of each of the six sides, then lays a border of paving stones connecting each midpoint to the next one around the patio, forming a smaller hexagon inside the first. What is the area, in square feet, of that smaller hexagon?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 220\" width=\"340\" height=\"220\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"170,20 248,65 248,155 170,200 92,155 92,65\" /><polygon points=\"209,42 248,110 209,177 131,177 92,110 131,42\" fill=\"currentColor\" fill-opacity=\"0.12\" /><circle cx=\"209\" cy=\"42\" r=\"3\" fill=\"currentColor\" /><circle cx=\"248\" cy=\"110\" r=\"3\" fill=\"currentColor\" /><circle cx=\"209\" cy=\"177\" r=\"3\" fill=\"currentColor\" /><circle cx=\"131\" cy=\"177\" r=\"3\" fill=\"currentColor\" /><circle cx=\"92\" cy=\"110\" r=\"3\" fill=\"currentColor\" /><circle cx=\"131\" cy=\"42\" r=\"3\" fill=\"currentColor\" /></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["64", "72", "78", "80", "84"],
+    answer: "B",
+    solution:
+      "The midpoint hexagon of a regular hexagon is itself regular. Each of its sides joins the midpoints of two sides of the original that meet at a 120° angle, and the law of cosines (or symmetry) shows the new hexagon is a copy of the old one scaled by √3/2. Areas scale by the square of that factor, (√3/2)² = 3/4, so the smaller hexagon has area 96 × 3/4 = 72 square feet.",
+    hints: [
+      "The inner hexagon is also regular, so you only need the ratio of side lengths.",
+      "Join the midpoints of two adjacent sides of length s; the segment has length s√3/2, and areas scale by the square of that ratio.",
+    ],
+    difficulty: 8,
+    topicSlug: "polygons",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-140",
+    question:
+      "A carpenter has a large supply of straight wooden rods, and she can cut them to any whole number of inches she likes. She wants to build a triangle whose three side lengths are whole numbers of inches and whose perimeter is exactly 15 inches. Two triangles count as the same if one is a copy of the other with its sides listed in a different order. How many different triangles can she build?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["6", "7", "8", "9", "12"],
+    answer: "B",
+    solution:
+      "Write the sides as a ≤ b ≤ c with a + b + c = 15; the triangle inequality reduces to a + b > c, that is c < 7.5, so c ≤ 7. Going through c = 5, 6, 7 gives (5,5,5); (4,5,6), (3,6,6); and (1,7,7), (2,6,7), (3,5,7), (4,4,7). That is 7 triangles in all.",
+    hints: [
+      "List the sides in nondecreasing order so each triangle is counted once.",
+      "With a fixed perimeter of 15, the triangle inequality is equivalent to the longest side being at most 7.",
+    ],
+    difficulty: 8,
+    topicSlug: "casework",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-141",
+    question:
+      "Two gears inside a tower clock mesh with each other, and each gear has a whole number of teeth. A repair manual states two facts about the pair: the greatest common divisor of their tooth counts is 6, and the least common multiple of their tooth counts is 180. A technician counts the teeth on the first gear and finds exactly 36. How many teeth does the second gear have?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["24", "30", "36", "45", "60"],
+    answer: "B",
+    solution:
+      "For any two positive integers, the product of the GCD and the LCM equals the product of the numbers. So 6 × 180 = 36 × n, giving 1080 = 36n and n = 30. Checking: gcd(36, 30) = 6 and lcm(36, 30) = 180.",
+    hints: [
+      "Recall that gcd(a, b) × lcm(a, b) = a × b.",
+      "Substitute the three known values and solve for the missing tooth count.",
+    ],
+    difficulty: 6,
+    topicSlug: "number-theory",
     competitionSlug: "amc8",
   },
 ];

@@ -61,6 +61,7 @@ async function main() {
       id: true,
       slug: true,
       question: true,
+      diagram: true,
       format: true,
       choices: true,
       answer: true,
@@ -122,6 +123,7 @@ async function main() {
     // Compare only the fields a student actually sees or is graded on.
     const changed =
       current.question !== row.question ||
+      current.diagram !== row.diagram ||
       current.format !== row.format ||
       current.choices !== row.choices ||
       current.answer !== row.answer ||
@@ -181,6 +183,7 @@ async function main() {
           where: { id: u.id },
           data: {
             question: u.row.question,
+            diagram: u.row.diagram,
             format: u.row.format,
             choices: u.row.choices,
             answer: u.row.answer,

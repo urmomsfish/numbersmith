@@ -76,6 +76,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
               problems={practice.map((lp) => ({
                 id: lp.problem.id,
                 question: lp.problem.question,
+                diagram: lp.problem.diagram,
                 format: lp.problem.format,
                 choices: parseChoices(lp.problem.choices),
                 hints: parseHints(lp.problem.hints),
@@ -87,6 +88,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
                   ? {
                       id: challenge.problem.id,
                       question: challenge.problem.question,
+                      diagram: challenge.problem.diagram,
                       format: challenge.problem.format,
                       choices: parseChoices(challenge.problem.choices),
                       hints: parseHints(challenge.problem.hints),

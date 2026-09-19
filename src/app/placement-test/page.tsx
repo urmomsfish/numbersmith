@@ -31,6 +31,7 @@ export default async function PlacementTestPage() {
       initialQuestion={{
         id: next.problem.id,
         question: next.problem.question,
+        diagram: next.problem.diagram,
         format: next.problem.format,
         choices: parseChoices(next.problem.choices),
         difficulty: next.problem.difficulty,

@@ -14,7 +14,13 @@ import type { ProblemSeed } from "./problems";
  * that format, phrasing, and difficulty ramp; none are transcribed,
  * paraphrased, or numerically reskinned from any real AMC contest.
  *
- * Difficulty rises from about 4 (problem 1) to about 9 (problem 32).
+ * Difficulty spans 4 through 10. Simulations draw 25 problems uniformly from
+ * this pool and then sort them by difficulty, so the shape of the pool *is*
+ * the shape of the paper's ramp: the counts at each difficulty are chosen so
+ * a generated contest opens on a single technique and closes on problems
+ * (difficulty 9-10) needing two or three chained ideas, the way questions
+ * 21-25 of the real contest do. Changing the counts here changes every
+ * simulated paper.
  */
 export const AMC10_PROBLEMS: ProblemSeed[] = [
   {
@@ -1683,6 +1689,570 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
       "Apply inclusion–exclusion, treating the horizontally/vertically adjacent block pairs (sharing two cells) separately from the diagonal pairs (sharing one cell).",
     ],
     difficulty: 8,
+    topicSlug: "casework",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-125",
+    question:
+      "A bicycle lock opens with a four-digit code. The code uses four different nonzero digits, and the manufacturer requires that the four digits appear in strictly increasing order from left to right, so a set of four digits determines exactly one legal code. A safety recall applies to every lock whose four digits add up to a multiple of 3. How many of the legal codes are covered by the recall?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["30", "34", "36", "40", "42"],
+    answer: "E",
+    solution:
+      "A legal code is just a 4-element subset of {1, 2, …, 9}, and there are C(9,4) = 126 of them. Sort the digits by remainder mod 3: {3,6,9} leave 0, {1,4,7} leave 1, and {2,5,8} leave 2, three digits in each class. Counting the subsets whose remainders sum to 0 mod 3 — four from one class is impossible, so the cases are 3+1 within classes and 2+1+1 splits — gives 42 subsets.",
+    hints: [
+      "A legal code is determined by which four digits it uses, so count 4-element subsets.",
+      "Group the digits 1–9 by their remainder on division by 3; each class has exactly three digits.",
+    ],
+    difficulty: 8,
+    topicSlug: "combinatorics",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-126",
+    question:
+      "A board game has players roll three standard six-sided dice at the start of each turn and multiply the three numbers rolled together to get that turn's score. A player draws a bonus card whenever the turn's score is a multiple of 4. All three dice are fair and are rolled independently. What is the probability that a given turn earns a bonus card?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["1/2", "9/16", "19/32", "5/8", "3/4"],
+    answer: "D",
+    solution:
+      "Track powers of 2. Each die shows an odd number (1, 3, 5) with probability 1/2, a number with exactly one factor of 2 (2, 6) with probability 1/3, and 4 with probability 1/6. The product fails to be a multiple of 4 only when all three dice are odd, which happens with probability (1/2)³ = 1/8, or when exactly one die contributes a single factor of 2 and the others are odd, which happens with probability 3 · (1/3)(1/2)² = 1/4. So the failure probability is 1/8 + 1/4 = 3/8, and the answer is 1 − 3/8 = 5/8.",
+    hints: [
+      "A product is a multiple of 4 unless it contributes fewer than two factors of 2.",
+      "Classify each die by how many factors of 2 it contributes: 0 for 1, 3, 5; one for 2 and 6; two for 4.",
+    ],
+    difficulty: 8,
+    topicSlug: "probability",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-127",
+    question:
+      "A circular pond is modeled in a survey by the circle x² + y² = 25, with distances measured in meters and the origin at the center of the pond. A straight boardwalk is built along the line y = x + 1; it enters the water at one point of the circle, crosses the pond, and leaves at another. The surveyor marks the two points where the boardwalk meets the shoreline and draws segments from each of them to the center of the pond. What is the area, in square meters, of the triangle formed by those two segments and the boardwalk between the two marks?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 252\" width=\"340\" height=\"252\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><circle cx=\"160\" cy=\"120\" r=\"90\" /><line x1=\"230\" y1=\"32\" x2=\"72\" y2=\"190\" /><polygon points=\"160,120 214,48 88,174\" fill=\"currentColor\" fill-opacity=\"0.12\" /><circle cx=\"214\" cy=\"48\" r=\"4\" fill=\"currentColor\" /><circle cx=\"88\" cy=\"174\" r=\"4\" fill=\"currentColor\" /><circle cx=\"160\" cy=\"120\" r=\"3\" fill=\"currentColor\" /><text x=\"224\" y=\"44\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">(3, 4)</text><text x=\"80\" y=\"180\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">(−4, −3)</text><text x=\"168\" y=\"132\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">O</text><text x=\"64\" y=\"206\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">y = x + 1</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["5/2", "3", "7/2", "4", "7"],
+    answer: "C",
+    solution:
+      "Substituting y = x + 1 into x² + y² = 25 gives 2x² + 2x − 24 = 0, that is x² + x − 12 = 0, so x = 3 or x = −4 and the shoreline points are (3, 4) and (−4, −3). The chord between them has length √(7² + 7²) = 7√2. The distance from the origin to the line x − y + 1 = 0 is 1/√2. The triangle's area is ½ · 7√2 · (1/√2) = 7/2 square meters.",
+    hints: [
+      "Substitute the line into the circle to find the two shoreline points.",
+      "Use the chord as the base and the distance from the center to the line as the height.",
+    ],
+    difficulty: 9,
+    topicSlug: "coordinate-geometry",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-128",
+    question:
+      "An engineering student sketches the parabola y = x² − 13x + k, where k is a positive whole number she has not yet chosen. She wants to choose k so that the parabola crosses the x-axis at two distinct points and, in addition, the x-coordinates of both crossing points are prime numbers. She finds that exactly one value of k does the job. What is that value of k?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["22", "26", "30", "36", "40"],
+    answer: "A",
+    solution:
+      "If the crossings are at x = p and x = q, then by Vieta's formulas p + q = 13 and pq = k. Since 13 is odd, one of the two primes must be even, so it is 2, forcing the other to be 11. Both are prime, so k = 2 · 11 = 22.",
+    hints: [
+      "The sum of the two roots is 13 and their product is k.",
+      "Two primes summing to an odd number must include the only even prime.",
+    ],
+    difficulty: 8,
+    topicSlug: "quadratics",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-129",
+    question:
+      "A computer science class is studying how the number 2024 looks when written in different bases. A student is asked to find every base b for which the base-b representation of 2024 has exactly four digits and ends in the digit 0. She checks every base and writes down all the values of b that work. What is the sum of the bases on her list?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["19", "22", "23", "30", "31"],
+    answer: "A",
+    solution:
+      "Having exactly four digits in base b means b³ ≤ 2024 < b⁴. Since 6⁴ = 1296 < 2024 and 7⁴ = 2401 > 2024, we need b ≥ 7; and 12³ = 1728 ≤ 2024 while 13³ = 2197 > 2024, so b ≤ 12. Ending in 0 means b divides 2024 = 2³ · 11 · 23. Among b = 7, 8, 9, 10, 11, 12 the divisors of 2024 are 8 and 11, so the sum is 8 + 11 = 19.",
+    hints: [
+      "Four digits in base b means b³ ≤ 2024 < b⁴ — this pins b to a short range.",
+      "A base-b representation ends in 0 exactly when b divides the number; factor 2024.",
+    ],
+    difficulty: 9,
+    topicSlug: "number-theory",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-130",
+    question:
+      "A decorative mosaic is laid out as a regular polygon in which every interior angle measures exactly 162°. The artist now wants to run a thin brass inlay along every diagonal of the polygon — that is, along every segment joining two vertices that are not already joined by a side. How many such diagonals does the polygon have?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 240\" width=\"320\" height=\"240\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"160.0,30.0 187.8,34.4 212.9,47.2 232.8,67.1 245.6,92.2 250.0,120.0 245.6,147.8 232.8,172.9 212.9,192.8 187.8,205.6 160.0,210.0 132.2,205.6 107.1,192.8 87.2,172.9 74.4,147.8 70.0,120.0 74.4,92.2 87.2,67.1 107.1,47.2 132.2,34.4\" /><text x=\"160\" y=\"126\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">each interior</text><text x=\"160\" y=\"142\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">angle 162°</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["150", "170", "180", "189", "190"],
+    answer: "B",
+    solution:
+      "Each exterior angle is 180° − 162° = 18°, and the exterior angles of any polygon sum to 360°, so the polygon has 360/18 = 20 sides. A polygon with n vertices has n(n − 3)/2 diagonals, giving 20 · 17/2 = 170.",
+    hints: [
+      "Work with the exterior angle, which is 180° minus the interior angle.",
+      "Exterior angles always add to 360°, which gives the number of sides; then use n(n − 3)/2.",
+    ],
+    difficulty: 8,
+    topicSlug: "polygons",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-131",
+    question:
+      "A signal processor is initialized with the value a₁ = 2. On every clock tick it replaces the current value a with the new value 1/(1 − a), producing the sequence a₁, a₂, a₃, and so on. The engineers notice the display seems to repeat itself but want a value far down the line. What value does the processor hold at a₂₀₂₅?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["-1", "1/2", "1", "2", "3"],
+    answer: "B",
+    solution:
+      "Compute the first few terms: a₁ = 2, a₂ = 1/(1 − 2) = −1, a₃ = 1/(1 − (−1)) = 1/2, and a₄ = 1/(1 − 1/2) = 2 = a₁. So the sequence has period 3. Since 2025 = 3 · 675 is a multiple of 3, a₂₀₂₅ equals a₃ = 1/2.",
+    hints: [
+      "Compute a few terms and watch for the sequence to return to its starting value.",
+      "The period is 3, so reduce the index 2025 modulo 3.",
+    ],
+    difficulty: 9,
+    topicSlug: "sequences",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-132",
+    question:
+      "A quilter is designing a square quilt block made of a 3-by-3 grid of smaller squares. Each of the nine small squares will be sewn in either red or blue fabric, and the two colors are otherwise interchangeable in the design. To keep the block from looking striped, the quilter requires that no horizontal row of three squares be all one color and that no vertical column of three squares be all one color. How many different blocks can she design?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["84", "90", "96", "102", "120"],
+    answer: "D",
+    solution:
+      "There are 2⁹ = 512 colorings in all. Use inclusion–exclusion on the six 'bad' events (a particular row or column monochromatic). Each single event has 2 · 2⁶ = 128 colorings; summing over six events gives 768. Pairs, triples and larger intersections must be counted with care — a row and a column always intersect, forcing their colors to agree. Carrying the alternating sum through leaves 102 colorings with no monochromatic row and no monochromatic column.",
+    hints: [
+      "Count all 2⁹ colorings first, then remove the ones with a monochromatic row or column.",
+      "Inclusion–exclusion over six events; note that a chosen row and a chosen column share a square, so their colors must match.",
+    ],
+    difficulty: 10,
+    topicSlug: "combinatorics",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-133",
+    question:
+      "Two pulleys in a piece of factory machinery are circular discs lying in the same plane, one of radius 3 centimeters and one of radius 5 centimeters. They are mounted so that they just touch each other at a single point, without overlapping. A straight drive belt is stretched taut so that it touches the small pulley at one point, touches the large pulley at one point, and does not cross between the two pulleys. How many centimeters long is the straight stretch of belt between its two points of contact?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 360 254\" width=\"360\" height=\"254\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><circle cx=\"110\" cy=\"150\" r=\"54\" /><circle cx=\"254\" cy=\"150\" r=\"90\" /><line x1=\"96\" y1=\"98\" x2=\"230\" y2=\"63\" stroke-width=\"3\" /><line x1=\"110\" y1=\"150\" x2=\"254\" y2=\"150\" stroke-dasharray=\"4 4\" stroke-opacity=\"0.5\" /><circle cx=\"110\" cy=\"150\" r=\"3\" fill=\"currentColor\" /><circle cx=\"254\" cy=\"150\" r=\"3\" fill=\"currentColor\" /><text x=\"104\" y=\"168\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">3</text><text x=\"254\" y=\"168\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">5</text><text x=\"150\" y=\"74\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">belt</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["4√3", "2√14", "2√15", "8", "6√2"],
+    answer: "C",
+    solution:
+      "Because the pulleys are externally tangent, the distance between their centers is 3 + 5 = 8. For a common external tangent, drop a perpendicular from the small center to the radius of the large circle at its point of contact; this makes a right triangle with hypotenuse 8 and one leg 5 − 3 = 2. The tangent length is √(8² − 2²) = √60 = 2√15 centimeters.",
+    hints: [
+      "Externally tangent circles have centers exactly r₁ + r₂ apart.",
+      "For a common external tangent the relevant right triangle has legs equal to the tangent length and the difference of the radii.",
+    ],
+    difficulty: 8,
+    topicSlug: "circles",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-134",
+    question:
+      "A biologist models two cultures with exponential growth. In her notes she records that 2ˣ = 3 for one scaling constant x, and that 3ʸ = 8 for a second scaling constant y. Her supervisor asks her for the product xy, which appears in the combined model, and points out that it can be found without ever computing x or y separately. What is the value of xy?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["2", "3", "4", "6", "8"],
+    answer: "B",
+    solution:
+      "Raise the first equation to the power y: (2ˣ)ʸ = 3ʸ, so 2ˣʸ = 3ʸ = 8. Since 8 = 2³ and the exponential function is one-to-one, xy = 3.",
+    hints: [
+      "Raise both sides of 2ˣ = 3 to the power y.",
+      "The right-hand side becomes 3ʸ, which you are told equals 8 — now write 8 as a power of 2.",
+    ],
+    difficulty: 9,
+    topicSlug: "exponents-radicals",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-135",
+    question:
+      "In a physics lab, two measured quantities x and y are known to satisfy x + y = 10 and x² + y² = 58. The next step of the analysis calls for the value of x³ + y³, but the lab's software reports only the two equations above and will not report x and y individually. What is the value of x³ + y³?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["340", "370", "400", "430", "460"],
+    answer: "B",
+    solution:
+      "From (x + y)² = x² + 2xy + y² we get 100 = 58 + 2xy, so xy = 21. Then x³ + y³ = (x + y)³ − 3xy(x + y) = 1000 − 3 · 21 · 10 = 1000 − 630 = 370.",
+    hints: [
+      "Square x + y = 10 to extract the value of xy.",
+      "Use the identity x³ + y³ = (x + y)³ − 3xy(x + y).",
+    ],
+    difficulty: 8,
+    topicSlug: "systems-of-equations",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-136",
+    question:
+      "A wheelchair ramp is built as a right triangle ABC with the right angle at C. The hypotenuse AB rests along the ground, and a vertical support post runs from C straight down to the point D on AB directly beneath it, meeting AB at a right angle. The ground measurements show that AD is 4 feet and DB is 9 feet. What is the area, in square feet, of triangle ABC?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 216\" width=\"340\" height=\"216\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"40,190 300,190 120,70\" /><line x1=\"120\" y1=\"70\" x2=\"120\" y2=\"190\" /><rect x=\"120\" y=\"178\" width=\"12\" height=\"12\" stroke-width=\"1.5\" /><text x=\"34\" y=\"204\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">A</text><text x=\"308\" y=\"204\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">B</text><text x=\"120\" y=\"62\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">C</text><text x=\"120\" y=\"206\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">D</text><text x=\"80\" y=\"206\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">4</text><text x=\"210\" y=\"206\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">9</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["26", "30", "36", "39", "45"],
+    answer: "D",
+    solution:
+      "In a right triangle the altitude to the hypotenuse satisfies CD² = AD · DB, so CD² = 4 · 9 = 36 and CD = 6. The hypotenuse is AB = 4 + 9 = 13, so the area is ½ · 13 · 6 = 39 square feet.",
+    hints: [
+      "The altitude to the hypotenuse of a right triangle is the geometric mean of the two pieces it cuts.",
+      "Find CD, then use AB as the base and CD as the height.",
+    ],
+    difficulty: 9,
+    topicSlug: "similarity-congruence",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-137",
+    question:
+      "In an electronics lab, two resistors of resistance a ohms and b ohms are wired in parallel, so the combination behaves like a single resistor R satisfying 1/a + 1/b = 1/R. A technician needs the combination to come out to exactly 20 ohms, and the parts bin contains resistors of every positive whole number of ohms. Counting the ordered pair (a, b) and the pair (b, a) as different wirings, how many wirings produce exactly 20 ohms?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["8", "9", "12", "14", "15"],
+    answer: "E",
+    solution:
+      "From 1/a + 1/b = 1/20 we get 20b + 20a = ab, so ab − 20a − 20b = 0 and, adding 400 to both sides, (a − 20)(b − 20) = 400. Each ordered pair corresponds to a way of writing 400 as an ordered product of two positive divisors, and 400 = 2⁴ · 5² has (4 + 1)(2 + 1) = 15 divisors. So there are 15 ordered pairs.",
+    hints: [
+      "Clear the denominators and move everything to one side.",
+      "Add 20² to both sides so the left-hand side factors as (a − 20)(b − 20).",
+    ],
+    difficulty: 10,
+    topicSlug: "number-theory",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-138",
+    question:
+      "A tutoring center keeps a box holding ten identical-feeling index cards: five are red and five are blue. A tutor draws three cards from the box at random, all at once and without replacement, and then reports to the class only that at least one of the three cards drawn is red — she does not say how many. Given only that report, what is the probability that all three of the cards she drew are red?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["1/12", "1/11", "1/10", "1/6", "2/11"],
+    answer: "B",
+    solution:
+      "There are C(10,3) = 120 equally likely draws. All three red happens in C(5,3) = 10 of them. 'At least one red' fails only when all three are blue, which also happens in C(5,3) = 10 ways, so it occurs in 120 − 10 = 110 draws. The conditional probability is 10/110 = 1/11.",
+    hints: [
+      "Condition by restricting to the draws in which the report could have been made.",
+      "'At least one red' fails exactly when all three cards are blue.",
+    ],
+    difficulty: 9,
+    topicSlug: "conditional-probability",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-139",
+    question:
+      "A sculptor starts with a solid wooden cube measuring 6 inches along every edge. She picks one corner of the cube and marks the three points that lie 3 inches from that corner along each of the three edges meeting there. She then makes a single straight saw cut through those three marked points, removing the small solid piece containing that corner. What is the volume, in cubic inches, of the piece that remains?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 250\" width=\"340\" height=\"250\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"60,80 200,80 200,220 60,220\" /><polygon points=\"60,80 110,30 250,30 200,80\" /><polygon points=\"200,80 250,30 250,170 200,220\" /><polygon points=\"130,80 200,150 225,55\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke-dasharray=\"5 4\" /><text x=\"165\" y=\"74\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">3</text><text x=\"212\" y=\"120\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">3</text><text x=\"96\" y=\"240\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">edge 6</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["207", "210", "211.5", "213", "214.5"],
+    answer: "C",
+    solution:
+      "The removed piece is a tetrahedron with three mutually perpendicular edges of length 3 meeting at the cube's corner. Its volume is (1/6)(3)(3)(3) = 27/6 = 4.5 cubic inches. The cube's volume is 6³ = 216, so the remainder is 216 − 4.5 = 211.5 cubic inches.",
+    hints: [
+      "The removed piece is a tetrahedron with three perpendicular edges meeting at the cube's corner.",
+      "Such a tetrahedron has volume abc/6, not abc/3 or abc/2.",
+    ],
+    difficulty: 8,
+    topicSlug: "area-volume",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-140",
+    question:
+      "An analyst is handed a function f that is defined for every nonzero real number and that satisfies the relation f(x) + 2f(1/x) = 3x for every nonzero x. No formula for f is given, and the analyst is told only that the relation above holds. Using the relation, what is the value of f(2)?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["-3", "-1", "0", "1", "3"],
+    answer: "B",
+    solution:
+      "Put x = 2: f(2) + 2f(1/2) = 6. Put x = 1/2: f(1/2) + 2f(2) = 3/2. From the second, f(1/2) = 3/2 − 2f(2); substituting into the first gives f(2) + 3 − 4f(2) = 6, so −3f(2) = 3 and f(2) = −1.",
+    hints: [
+      "Substitute x = 2, then substitute x = 1/2, to get two equations.",
+      "Treat f(2) and f(1/2) as two unknowns and solve the linear system.",
+    ],
+    difficulty: 9,
+    topicSlug: "functions",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-141",
+    question:
+      "A city plans a park on a coordinate grid whose units are hundreds of meters, with city hall at the origin. Zoning rule one says a point may be in the park only if |x| + |y| ≤ 6, which carves out a square rotated 45°. Zoning rule two says a point may be in the park only if |x| ≤ 4, a vertical strip. The park is exactly the set of points satisfying both rules. What is the area of the park, in square grid units?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 232\" width=\"340\" height=\"232\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"70,110 160,20 250,110 160,200\" stroke-opacity=\"0.5\" /><polygon points=\"160,20 220,80 220,140 160,200 100,140 100,80\" fill=\"currentColor\" fill-opacity=\"0.12\" /><line x1=\"100\" y1=\"10\" x2=\"100\" y2=\"210\" stroke-dasharray=\"5 4\" /><line x1=\"220\" y1=\"10\" x2=\"220\" y2=\"210\" stroke-dasharray=\"5 4\" /><text x=\"100\" y=\"224\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">x = −4</text><text x=\"220\" y=\"224\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">x = 4</text><text x=\"160\" y=\"14\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">|x| + |y| = 6</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["56", "64", "68", "70", "72"],
+    answer: "B",
+    solution:
+      "The region |x| + |y| ≤ 6 is a square with diagonals of length 12, so its area is ½ · 12 · 12 = 72. Rule two removes the two end pieces where |x| > 4. For x between 4 and 6 the strip has height 2(6 − x), so the removed piece on the right is a triangle with base 2 and height 4, area 4; the same on the left. The park's area is 72 − 4 − 4 = 64.",
+    hints: [
+      "Sketch |x| + |y| ≤ 6 first — it is a square standing on a vertex.",
+      "The vertical lines x = ±4 slice off one triangle at each end; find their areas and subtract.",
+    ],
+    difficulty: 10,
+    topicSlug: "coordinate-geometry",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-142",
+    question:
+      "A checksum routine in a banking system computes the enormous number 3²⁰²⁴ and then stores only its last two digits. A security auditor needs to reproduce that stored value by hand, without any computer, in order to confirm the routine is behaving correctly. What are the last two digits of 3²⁰²⁴, written as a two-digit number?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["01", "21", "41", "61", "81"],
+    answer: "E",
+    solution:
+      "Work modulo 100. Powers of 3 satisfy 3¹⁰ = 59049 ≡ 49, so 3²⁰ ≡ 49² = 2401 ≡ 1 (mod 100). Thus the last two digits repeat with period 20. Since 2024 = 20 · 101 + 4, we get 3²⁰²⁴ ≡ 3⁴ = 81 (mod 100), so the last two digits are 81.",
+    hints: [
+      "Last two digits means working modulo 100.",
+      "Find the smallest power of 3 that is congruent to 1 mod 100, then reduce the exponent 2024 by that period.",
+    ],
+    difficulty: 9,
+    topicSlug: "modular-arithmetic",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-143",
+    question:
+      "A charity stacks cans in a triangular display: the top row holds 1 can, the second row holds 2 cans, the third row holds 3 cans, and so on, with each row holding one more can than the row above it. The organizers want the finished display to hold more than 500 cans in total. What is the smallest number of rows the display can have?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["30", "31", "32", "33", "34"],
+    answer: "C",
+    solution:
+      "A display with n rows holds 1 + 2 + … + n = n(n + 1)/2 cans. We need n(n + 1)/2 > 500, that is n(n + 1) > 1000. Since 31 · 32 = 992 is not more than 1000 but 32 · 33 = 1056 is, the smallest n is 32 (giving 528 cans).",
+    hints: [
+      "The total for n rows is the triangular number n(n + 1)/2.",
+      "Solve n(n + 1) > 1000 by testing values near √1000 ≈ 31.6.",
+    ],
+    difficulty: 8,
+    topicSlug: "inequalities",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-144",
+    question:
+      "A kite maker builds a rhombus-shaped kite whose frame consists of two straight spars crossing at right angles at their midpoints; these spars are the diagonals of the rhombus. The longer spar is exactly 14 inches longer than the shorter one, and the fabric stretched over the frame covers an area of 120 square inches. The maker now needs to know how much edging tape to buy for the kite's outer border. What is the perimeter, in inches, of the rhombus?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 200\" width=\"340\" height=\"200\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"160,60 256,100 160,140 64,100\" fill=\"currentColor\" fill-opacity=\"0.12\" /><line x1=\"160\" y1=\"60\" x2=\"160\" y2=\"140\" stroke-dasharray=\"4 4\" /><line x1=\"64\" y1=\"100\" x2=\"256\" y2=\"100\" stroke-dasharray=\"4 4\" /><rect x=\"160\" y=\"88\" width=\"12\" height=\"12\" stroke-width=\"1.5\" /><text x=\"150\" y=\"80\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">d₂</text><text x=\"210\" y=\"92\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">d₁</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["40", "44", "48", "52", "56"],
+    answer: "D",
+    solution:
+      "A rhombus's area is half the product of its diagonals, so d₁d₂ = 240, and we are told d₂ = d₁ + 14. Then d₁(d₁ + 14) = 240 gives d₁ = 10 and d₂ = 24. The diagonals bisect each other at right angles, so each side is the hypotenuse of a right triangle with legs 5 and 12, namely 13. The perimeter is 4 · 13 = 52 inches.",
+    hints: [
+      "The area of a rhombus is half the product of its diagonals.",
+      "The diagonals bisect each other perpendicularly, so a side is the hypotenuse of a right triangle with legs equal to the half-diagonals.",
+    ],
+    difficulty: 9,
+    topicSlug: "quadrilaterals",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-145",
+    question:
+      "A student council of twenty members is numbered 1 through 20. A three-member subcommittee is formed by choosing three different members. The council's bylaws give a subcommittee tie-breaking power exactly when the sum of its three members' numbers is divisible by 3. How many of the possible three-member subcommittees have tie-breaking power?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["336", "350", "360", "384", "420"],
+    answer: "D",
+    solution:
+      "Sort the numbers 1–20 by remainder mod 3: seven leave remainder 1 (1, 4, …, 19), seven leave remainder 2 (2, 5, …, 20), and six leave remainder 0 (3, 6, …, 18). A triple's sum is divisible by 3 when all three come from the same class or one comes from each class. That gives C(6,3) + C(7,3) + C(7,3) + 6 · 7 · 7 = 20 + 35 + 35 + 294 = 384.",
+    hints: [
+      "Only the remainders mod 3 matter, so sort 1–20 into three remainder classes and count each class.",
+      "The sum is divisible by 3 exactly when all three remainders are equal or all three are different.",
+    ],
+    difficulty: 10,
+    topicSlug: "combinatorics",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-146",
+    question:
+      "A triangular plot of land has sides measuring 13, 14 and 15 meters. The owner wants to install a perfectly circular sprinkler that sits inside the plot and touches all three boundary fences without crossing any of them — that is, the largest circle that fits inside the triangle. What is the radius, in meters, of that circle?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 226\" width=\"340\" height=\"226\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"79,200 261,200 144,44\" /><circle cx=\"157\" cy=\"148\" r=\"52\" stroke-opacity=\"0.8\" /><circle cx=\"157\" cy=\"148\" r=\"3\" fill=\"currentColor\" /><text x=\"104\" y=\"116\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">13</text><text x=\"170\" y=\"216\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">14</text><text x=\"210\" y=\"116\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">15</text><text x=\"165\" y=\"146\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">r</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["3", "3.5", "4", "4.5", "5"],
+    answer: "C",
+    solution:
+      "The semiperimeter is s = (13 + 14 + 15)/2 = 21, and Heron's formula gives the area as √(21 · 8 · 7 · 6) = √7056 = 84. The inradius of any triangle satisfies area = rs, so r = 84/21 = 4 meters.",
+    hints: [
+      "The largest inscribed circle is the incircle, whose radius r satisfies area = r · s.",
+      "Get the area from Heron's formula with s = 21.",
+    ],
+    difficulty: 9,
+    topicSlug: "similarity-congruence",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-147",
+    question:
+      "A chemistry technician has 60 liters of a solution that is 40% acid by volume, the rest being water. The protocol for the next experiment calls for a solution that is exactly 50% acid by volume. To reach that concentration the technician will pour in some amount of pure acid; no water is added and nothing is removed. How many liters of pure acid must she add?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["6", "8", "10", "12", "15"],
+    answer: "D",
+    solution:
+      "The 60 liters contain 0.40 · 60 = 24 liters of acid. Adding x liters of pure acid gives 24 + x liters of acid in 60 + x liters of solution, and we need (24 + x)/(60 + x) = 1/2. Cross-multiplying gives 48 + 2x = 60 + x, so x = 12 liters.",
+    hints: [
+      "Track the liters of acid and the total liters separately.",
+      "Adding pure acid increases both the acid amount and the total by the same x.",
+    ],
+    difficulty: 8,
+    topicSlug: "percentages",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-148",
+    question:
+      "A theater sells two kinds of seats: balcony seats at $3 each and orchestra seats at $5 each. On one evening the box office took in exactly $300 from these seats, and at least one seat of each kind was sold. The manager wants to know how many different combinations of balcony and orchestra seat counts could have produced exactly $300. How many such combinations are there?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["15", "19", "20", "21", "25"],
+    answer: "B",
+    solution:
+      "We need 3x + 5y = 300 with x and y positive integers. Reducing mod 3 shows 5y ≡ 0, so y is a multiple of 3: write y = 3k. Then 3x + 15k = 300, so x = 100 − 5k. Positivity needs k ≥ 1 and 100 − 5k ≥ 1, that is k ≤ 19. So k runs from 1 to 19, giving 19 combinations.",
+    hints: [
+      "Reduce the equation modulo 3 to see what y must be divisible by.",
+      "Write y = 3k, solve for x, and count the k that keep both counts positive.",
+    ],
+    difficulty: 9,
+    topicSlug: "diophantine-equations",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-149",
+    question:
+      "A crystallography demonstration uses a cube-shaped model with a small bead at each of its eight corners. A student closes her eyes and selects three of the eight beads at random, with all three-bead selections equally likely, and then stretches a rubber band around the three beads she chose. What is the probability that the triangle formed by the rubber band is equilateral?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["1/14", "3/28", "1/9", "1/8", "1/7"],
+    answer: "E",
+    solution:
+      "There are C(8,3) = 56 equally likely selections. A triangle of cube vertices is equilateral exactly when all three sides are face diagonals. Each such triangle is determined by cutting off one corner of the cube — take a vertex and join the three vertices adjacent to it — so there are 8 of them, one per vertex. The probability is 8/56 = 1/7.",
+    hints: [
+      "Every distance between cube vertices is an edge, a face diagonal, or a space diagonal.",
+      "An equilateral triangle must use three equal sides; check which of the three lengths can occur three times, then count those triangles.",
+    ],
+    difficulty: 10,
+    topicSlug: "probability",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-150",
+    question:
+      "A cubic polynomial P(x) = x³ + ax² + bx + c has integer coefficients. A researcher knows two facts about it: its three roots are three consecutive integers, and its value at x = 0 is −6. From these two facts alone the coefficient a is determined. What is the value of a?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["-6", "-3", "0", "3", "6"],
+    answer: "A",
+    solution:
+      "Write the roots as n − 1, n and n + 1. For a monic cubic, c = −(product of the roots), and P(0) = c = −6, so (n − 1)n(n + 1) = 6. Testing consecutive integers, 1 · 2 · 3 = 6 gives n = 2 and the roots 1, 2, 3. Then a = −(sum of roots) = −(1 + 2 + 3) = −6.",
+    hints: [
+      "For a monic cubic, P(0) equals the constant term, which is minus the product of the roots.",
+      "Find three consecutive integers whose product is 6, then use a = −(sum of the roots).",
+    ],
+    difficulty: 9,
+    topicSlug: "polynomials",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-151",
+    question:
+      "A hobbyist is cataloguing six-digit palindromes — six-digit whole numbers that read the same forwards and backwards, such as 214412. Leading zeros are not allowed, so the first digit is never 0. She wants to list only those six-digit palindromes that are divisible by 4. How many entries will her list have?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["200", "210", "225", "250", "450"],
+    answer: "A",
+    solution:
+      "A six-digit palindrome has the form abccba. Divisibility by 4 depends only on the last two digits, which are 'ba', so we need the two-digit string ba (with b as its tens digit) to form a number divisible by 4. With a from 1 to 9 and b from 0 to 9, exactly 20 of the 90 (a, b) pairs make 10b + a divisible by 4. The digit c is free, giving 20 · 10 = 200 palindromes.",
+    hints: [
+      "A number is divisible by 4 exactly when the number formed by its last two digits is.",
+      "For the palindrome abccba those last two digits are b then a; the middle digit c is unconstrained.",
+    ],
+    difficulty: 8,
+    topicSlug: "counting-principles",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-152",
+    question:
+      "A circular mirror has radius 13 inches. A point P inside the mirror lies 5 inches from the center. A technician scribes a straight chord across the mirror that passes through P, and measures the two pieces into which P divides that chord. She finds that one of the two pieces is 8 inches long. How many inches long is the other piece?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 236\" width=\"340\" height=\"236\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><circle cx=\"170\" cy=\"120\" r=\"95\" /><line x1=\"88\" y1=\"72\" x2=\"252\" y2=\"168\" /><circle cx=\"170\" cy=\"120\" r=\"3\" fill=\"currentColor\" /><circle cx=\"138\" cy=\"102\" r=\"4\" fill=\"currentColor\" /><line x1=\"170\" y1=\"120\" x2=\"138\" y2=\"102\" stroke-dasharray=\"4 4\" stroke-opacity=\"0.6\" /><text x=\"132\" y=\"94\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">P</text><text x=\"178\" y=\"134\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">O</text><text x=\"106\" y=\"80\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">8</text><text x=\"200\" y=\"146\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">?</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["12", "14", "16", "18", "20"],
+    answer: "D",
+    solution:
+      "By the power of a point, for any chord through P the product of the two pieces is the same, equal to r² − d² = 13² − 5² = 169 − 25 = 144. (This follows by applying the intersecting-chords theorem to the diameter through P, whose pieces are 13 − 5 = 8 and 13 + 5 = 18.) So the other piece has length 144/8 = 18 inches.",
+    hints: [
+      "For every chord through a fixed interior point, the product of the two pieces is constant.",
+      "Evaluate that constant using the diameter through P, whose two pieces are r − d and r + d.",
+    ],
+    difficulty: 10,
+    topicSlug: "circles",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-153",
+    question:
+      "A board game requires a player to flip a fair coin repeatedly until two heads come up in a row, at which point the player's turn ends immediately. The coin is fair and the flips are independent, so a turn might end after just two flips or might drag on for many. Over many turns, what is the expected number of flips in a single turn?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["3", "4", "5", "6", "8"],
+    answer: "D",
+    solution:
+      "Let E₀ be the expected number of further flips with no current run, and E₁ the expected number just after a single head. Then E₀ = 1 + ½E₁ + ½E₀ and E₁ = 1 + ½ · 0 + ½E₀. The first gives E₀ = 2 + E₁; substituting the second gives E₀ = 2 + 1 + E₀/2, so E₀/2 = 3 and E₀ = 6.",
+    hints: [
+      "Set up states: no useful run so far, and exactly one head so far.",
+      "Write one equation per state — each flip costs 1 and moves you to a new state — and solve the pair.",
+    ],
+    difficulty: 9,
+    topicSlug: "expected-value",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-154",
+    question:
+      "A distributed system assigns each node a token by computing 2024²⁰²⁴ and keeping only the last three digits of the result. An engineer auditing the system must reproduce that three-digit value by hand. What are the last three digits of 2024²⁰²⁴, written as a three-digit number?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["024", "176", "376", "776", "976"],
+    answer: "D",
+    solution:
+      "Work modulo 1000 and split into 8 and 125. Since 2024 = 8 · 253, 2024²⁰²⁴ is divisible by 8, so it is ≡ 0 (mod 8). Modulo 125, 2024 ≡ 24, and 24 has order dividing φ(125) = 100, so 24²⁰²⁴ ≡ 24²⁴ (mod 125); computing gives 24²⁴ ≡ 26 (mod 125). The number that is ≡ 0 mod 8 and ≡ 26 mod 125 in the range 0–999 is 776.",
+    hints: [
+      "Split modulus 1000 into 8 and 125 and use the Chinese remainder theorem.",
+      "Modulo 8 the answer is immediate since 2024 is a multiple of 8; modulo 125 reduce the exponent using φ(125) = 100.",
+    ],
+    difficulty: 10,
+    topicSlug: "modular-arithmetic",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-155",
+    question:
+      "A glass paperweight is a sphere, and a cylindrical channel has been bored through it in such a way that the cylinder is inscribed in the sphere: the cylinder's two circular faces have their rims lying entirely on the sphere's surface. The cylinder has radius 3 centimeters and height 8 centimeters. What is the radius, in centimeters, of the sphere?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 240\" width=\"340\" height=\"240\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><circle cx=\"170\" cy=\"120\" r=\"100\" /><rect x=\"110\" y=\"40\" width=\"120\" height=\"160\" fill=\"currentColor\" fill-opacity=\"0.12\" /><line x1=\"110\" y1=\"200\" x2=\"230\" y2=\"40\" stroke-dasharray=\"5 4\" stroke-opacity=\"0.6\" /><circle cx=\"170\" cy=\"120\" r=\"3\" fill=\"currentColor\" /><text x=\"170\" y=\"216\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">6 (= 2r)</text><text x=\"240\" y=\"124\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">8</text><text x=\"178\" y=\"134\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">R</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["4", "4.5", "5", "5.5", "6"],
+    answer: "C",
+    solution:
+      "Take the cross-section through the axis. The cylinder appears as a rectangle 6 wide and 8 tall inscribed in a circle, so the rectangle's diagonal is a diameter of that circle. The diagonal is √(6² + 8²) = 10, so the sphere's radius is 5 centimeters. (Equivalently, R² = r² + (h/2)² = 9 + 16 = 25.)",
+    hints: [
+      "Slice through the axis of the cylinder to reduce this to a rectangle inscribed in a circle.",
+      "The sphere's center is the midpoint of the cylinder's axis, so R² = r² + (h/2)².",
+    ],
+    difficulty: 9,
+    topicSlug: "area-volume",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-156",
+    question:
+      "A raffle prints tickets numbered 1 through 1000. A ticket is called lucky when it satisfies both of the following: its number is not divisible by 2, by 3, or by 5; and its number is not a perfect square. The organizers want to know, before the drawing, exactly how many of the 1000 tickets are lucky. How many lucky tickets are there?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["234", "257", "266", "270", "275"],
+    answer: "B",
+    solution:
+      "By inclusion–exclusion, the count of numbers from 1 to 1000 divisible by none of 2, 3 and 5 is 1000 − 500 − 333 − 200 + 166 + 100 + 66 − 33 = 266. Among those, the perfect squares are the squares of numbers themselves divisible by none of 2, 3, 5: 1², 7², 11², 13², 17², 19², 23², 29², 31², which is 9 values (all at most 1000). So 266 − 9 = 257 lucky tickets.",
+    hints: [
+      "First count the numbers divisible by none of 2, 3, 5 using inclusion–exclusion.",
+      "Then subtract the perfect squares among those — n² avoids 2, 3 and 5 exactly when n does.",
+    ],
+    difficulty: 10,
     topicSlug: "casework",
     competitionSlug: "amc10",
   },

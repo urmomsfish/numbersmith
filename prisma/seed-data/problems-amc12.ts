@@ -8,9 +8,15 @@ import type { ProblemSeed } from "./problems";
  * NumberSmith problem, written to match the phrasing conventions and
  * difficulty ramp of a real AMC 12 exam; none are transcribed, closely
  * paraphrased, or numerically reskinned from any official AMC/AHSME
- * contest. Difficulty rises from about 5 (problem 1) to 10 (problem 32),
- * with genuinely difficult multi-step algebra, trig identities, complex
- * numbers, and advanced counting/number-theory dominating the back half.
+ * contest.
+ *
+ * Difficulty spans 5 through 10. Simulations draw 25 problems uniformly
+ * from this pool and then sort them by difficulty, so the shape of the pool
+ * *is* the shape of the paper's ramp: the counts at each difficulty are
+ * chosen so a generated contest closes on problems (difficulty 9-10) that
+ * need roots of unity, Carmichael numbers, telescoping trig identities and
+ * the like, the way questions 21-25 of the real contest do. Changing the
+ * counts here changes every simulated paper.
  *
  * Seeded as practice (isPlacement: false), same as the other
  * competition-tagged problem sets.
@@ -1634,6 +1640,530 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
     ],
     difficulty: 9,
     topicSlug: "probability",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-125",
+    question:
+      "A signal-processing course studies the thirteen complex numbers that satisfy z¹³ = 1. Let ω be one of the twelve such numbers other than 1, so that ω is a primitive thirteenth root of unity. A student is asked to evaluate the sum 1/(1 − ω) + 1/(1 − ω²) + … + 1/(1 − ω¹²), taking one term for each of the twelve nontrivial thirteenth roots of unity. She is told the answer is a real number. What is its value?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["11/2", "6", "13/2", "12", "13"],
+    answer: "B",
+    solution:
+      "Pair the terms k and 13 − k. Since ω¹³ = 1, the two roots ω^k and ω^(13−k) are complex conjugates, and for any u on the unit circle with u ≠ 1 one has 1/(1 − u) + 1/(1 − ū) = 1. There are six such conjugate pairs among the twelve terms, so the sum is 6. (In general the sum over the n − 1 nontrivial nth roots of unity is (n − 1)/2.)",
+    hints: [
+      "Pair each root with its complex conjugate, which is another root in the list.",
+      "For |u| = 1 with u ≠ 1, show that 1/(1 − u) + 1/(1 − ū) is exactly 1.",
+    ],
+    difficulty: 10,
+    topicSlug: "advanced-olympiad",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-126",
+    question:
+      "A scheduling system assigns three machines cycle lengths a, b and c, all positive integers. The system's synchronization rules require that machines A and B come back into step after exactly 1000 time units, meaning lcm(a, b) = 1000, while machines B and C, and also machines C and A, come back into step after exactly 2000 time units, meaning lcm(b, c) = lcm(c, a) = 2000. How many ordered triples (a, b, c) of positive integers meet all three requirements?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["30", "40", "50", "60", "70"],
+    answer: "E",
+    solution:
+      "Write a = 2^x1·5^y1, b = 2^x2·5^y2, c = 2^x3·5^y3, since 1000 = 2³5³ and 2000 = 2⁴5³ involve only the primes 2 and 5. The exponent conditions decouple: for the powers of 2 we need max(x1,x2) = 3, max(x2,x3) = max(x3,x1) = 4, and for the powers of 5 we need all three pairwise maxima equal to 3. The 2-part forces x3 = 4 and max(x1,x2) = 3, giving 7 choices; the 5-part requires at least two of y1, y2, y3 to equal 3, giving 10 choices. The total is 7 · 10 = 70.",
+    hints: [
+      "Both 1000 and 2000 use only the primes 2 and 5, so handle each prime's exponents separately.",
+      "For each prime, lcm becomes max — count triples of exponents with the prescribed pairwise maxima.",
+    ],
+    difficulty: 10,
+    topicSlug: "number-theory",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-127",
+    question:
+      "Two oscillating circuits produce the voltages sin(7x) and sin(3x), where x is measured in radians and ranges over one full period of the slower reference clock, that is over the interval 0 ≤ x < 2π. A technician wants to know how often the two voltages are exactly equal during that window. How many values of x in the interval 0 ≤ x < 2π satisfy sin(7x) = sin(3x)?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["12", "14", "16", "18", "20"],
+    answer: "A",
+    solution:
+      "Two sines are equal when the angles differ by a multiple of 2π or when they are supplementary up to a multiple of 2π. The first case, 7x = 3x + 2kπ, gives x = kπ/2, contributing x = 0, π/2, π, 3π/2 — four values. The second case, 7x = π − 3x + 2kπ, gives x = π/10 + kπ/5, contributing ten values in [0, 2π); two of them (x = π/2 and x = 3π/2) already appeared. So there are 4 + 10 − 2 = 12 distinct solutions.",
+    hints: [
+      "sin A = sin B happens when A = B + 2kπ or when A = π − B + 2kπ.",
+      "Count the solutions from each family inside [0, 2π), then remove those counted twice.",
+    ],
+    difficulty: 9,
+    topicSlug: "functions",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-128",
+    question:
+      "A factory paints a row of twelve fence posts, painting each post either black or white. To keep the fence from looking blocky, the foreman forbids any three consecutive posts from all being the same color; runs of one or two identical colors in a row are fine. In how many ways can the twelve posts be painted?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["384", "424", "466", "512", "728"],
+    answer: "C",
+    solution:
+      "Let f(n) count valid colorings of n posts. Classify by the length of the final run of one color, which must be 1 or 2. Splitting off that final run gives the recursion f(n) = f(n − 1) + f(n − 2) with f(1) = 2 and f(2) = 4 — a doubled Fibonacci sequence. Continuing: 2, 4, 6, 10, 16, 26, 42, 68, 110, 178, 288, 466. So f(12) = 466.",
+    hints: [
+      "Look at the run of same-colored posts at the right end; it has length 1 or 2.",
+      "That gives f(n) = f(n − 1) + f(n − 2); find f(1) and f(2) and iterate up to n = 12.",
+    ],
+    difficulty: 9,
+    topicSlug: "recursion-in-counting",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-129",
+    question:
+      "Eight runners, wearing bibs numbered 1 through 8, finish a race in a random order, with all orderings equally likely and no ties. A spectator is interested only in the relative order of the three runners wearing bibs 1, 2 and 3, and ignores everyone else. What is the probability that runner 1 finishes ahead of runner 2, and runner 2 finishes ahead of runner 3?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["1/56", "1/24", "1/8", "1/6", "1/3"],
+    answer: "D",
+    solution:
+      "The other five runners are irrelevant: by symmetry, all 3! = 6 relative orderings of runners 1, 2 and 3 are equally likely. Exactly one of those six orderings is the required one, so the probability is 1/6.",
+    hints: [
+      "The positions of the other five runners have no effect on the relative order of 1, 2 and 3.",
+      "All 3! relative orders of three specified runners are equally likely.",
+    ],
+    difficulty: 8,
+    topicSlug: "counting-probability",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-130",
+    question:
+      "A cryptography demonstration repeatedly doubles a counter modulo the prime 101: it starts at 1 and, on each step, replaces the current value v by the remainder of 2v on division by 101. The instructor claims the counter eventually returns to 1, and asks for the number of steps it takes to do so for the first time. What is the smallest positive integer k with 2^k ≡ 1 (mod 101)?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["4", "10", "20", "50", "100"],
+    answer: "E",
+    solution:
+      "The order of 2 must divide φ(101) = 100, so it is one of 1, 2, 4, 5, 10, 20, 25, 50, 100. Checking the maximal proper divisors suffices: 2⁵⁰ ≡ −1 (mod 101) and 2²⁰ ≢ 1 (mod 101), which rules out every proper divisor of 100. Hence the order is 100, and 2 is a primitive root modulo 101.",
+    hints: [
+      "The answer must divide φ(101) = 100, so only a few candidates are possible.",
+      "It is enough to rule out the maximal proper divisors of 100, namely 20 and 50.",
+    ],
+    difficulty: 9,
+    topicSlug: "modular-arithmetic",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-131",
+    question:
+      "An architect marks the twelve vertices of a regular twelve-sided polygon on a plaza and plans to stretch cables between three of them to form a triangular canopy. She selects three of the twelve vertices at random. For structural reasons the canopy is only usable when the center of the plaza — the center of the polygon — lies strictly inside the triangle, not on its boundary and not outside it. How many of the possible triangles have the center strictly inside?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 250\" width=\"320\" height=\"250\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"160.0,38.0 206.0,50.3 239.7,84.0 252.0,130.0 239.7,176.0 206.0,209.7 160.0,222.0 114.0,209.7 80.3,176.0 68.0,130.0 80.3,84.0 114.0,50.3\" stroke-opacity=\"0.55\" /><polygon points=\"160.0,38.0 239.7,176.0 80.3,176.0\" fill=\"currentColor\" fill-opacity=\"0.12\" /><circle cx=\"160\" cy=\"130\" r=\"3.5\" fill=\"currentColor\" /><text x=\"160\" y=\"150\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">center</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["20", "40", "60", "120", "220"],
+    answer: "B",
+    solution:
+      "There are C(12,3) = 220 triangles. A triangle fails to contain the center strictly when all three vertices lie within some half-turn. Fixing the first vertex clockwise and choosing two of the next five gives 12 · C(5,2) = 120 such triangles. Separately, a triangle has the center exactly on its boundary when two vertices are diametrically opposite: 6 diameters times 10 remaining vertices gives 60. So 220 − 120 − 60 = 40 triangles contain the center strictly.",
+    hints: [
+      "Count the complement: triangles whose vertices all lie in one half of the polygon.",
+      "Because 12 is even, also exclude the triangles having a pair of diametrically opposite vertices — those put the center on an edge.",
+    ],
+    difficulty: 10,
+    topicSlug: "polygons",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-132",
+    question:
+      "Six friends each bring one wrapped gift to a party and drop it into a bin. The gifts are then handed back out, one to each friend, in a completely random order. The party's rule is that the round only counts if nobody receives the gift they themselves brought. In how many of the possible ways of handing the gifts back does every one of the six friends receive someone else's gift?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["120", "144", "240", "265", "720"],
+    answer: "D",
+    solution:
+      "This counts derangements of six objects. By inclusion–exclusion, D₆ = 6!·(1 − 1/1! + 1/2! − 1/3! + 1/4! − 1/5! + 1/6!) = 720 − 720 + 360 − 120 + 30 − 6 + 1 = 265. (Equivalently, use Dₙ = (n − 1)(Dₙ₋₁ + Dₙ₋₂) from D₁ = 0, D₂ = 1.)",
+    hints: [
+      "Use inclusion–exclusion on the events 'friend i gets their own gift'.",
+      "The count is the derangement number D₆; it satisfies Dₙ = (n − 1)(Dₙ₋₁ + Dₙ₋₂).",
+    ],
+    difficulty: 8,
+    topicSlug: "permutations",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-133",
+    question:
+      "A data-compression routine processes the integers k = 1, 2, 3, …, 100 in order. For each k it computes k², divides by 101, and records only the integer part of the quotient, discarding the remainder. At the end it reports the total of all 100 recorded integers. What is the value of that total, that is, the value of ⌊1²/101⌋ + ⌊2²/101⌋ + … + ⌊100²/101⌋?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["3300", "3317", "3350", "3400", "3465"],
+    answer: "A",
+    solution:
+      "Write ⌊k²/101⌋ = (k² − r_k)/101, where r_k is the remainder of k² mod 101. Since 101 is prime, as k runs from 1 to 100 the squares k² hit each of the 50 nonzero quadratic residues exactly twice, so Σ r_k = 2 · (sum of the quadratic residues) = 2 · (101 · 50/2) = 5050. Also Σ k² = 100 · 101 · 201/6 = 338350. Hence the total is (338350 − 5050)/101 = 333300/101 = 3300.",
+    hints: [
+      "Replace each floor by (k² − r_k)/101, where r_k is the remainder of k² modulo 101.",
+      "Pair k with 101 − k: they give the same remainder, so the remainders run twice over the quadratic residues.",
+    ],
+    difficulty: 10,
+    topicSlug: "number-theory",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-134",
+    question:
+      "A molecular model is built as a regular tetrahedron with every edge 6 centimeters long. A technician wants to install a straight strut connecting the midpoint of one edge to the midpoint of the opposite edge — the one edge of the tetrahedron that shares no vertex with the first. How long, in centimeters, is that strut?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 234\" width=\"340\" height=\"234\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"50,200 270,200 160,150\" stroke-opacity=\"0.45\" /><line x1=\"50\" y1=\"200\" x2=\"160\" y2=\"40\" /><line x1=\"270\" y1=\"200\" x2=\"160\" y2=\"40\" /><line x1=\"160\" y1=\"150\" x2=\"160\" y2=\"40\" stroke-dasharray=\"5 4\" stroke-opacity=\"0.6\" /><line x1=\"50\" y1=\"200\" x2=\"270\" y2=\"200\" /><line x1=\"160\" y1=\"200\" x2=\"160\" y2=\"95\" stroke-width=\"3\" stroke-dasharray=\"0\" /><circle cx=\"160\" cy=\"200\" r=\"4\" fill=\"currentColor\" /><circle cx=\"160\" cy=\"95\" r=\"4\" fill=\"currentColor\" /><text x=\"148\" y=\"152\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">strut</text><text x=\"160\" y=\"220\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">midpoints of opposite edges</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["3", "2√3", "3√2", "3√3", "6"],
+    answer: "C",
+    solution:
+      "Place the tetrahedron so the two opposite edges are perpendicular; a clean way is to inscribe it in a cube of edge s, where the tetrahedron's edges are the cube's face diagonals, so s√2 = 6 and s = 3√2. The two opposite edges lie on opposite faces of the cube, and the segment joining their midpoints is a cube edge, of length s = 3√2 centimeters. (Coordinates confirm the distance is 3√2 ≈ 4.243.)",
+    hints: [
+      "Inscribe the regular tetrahedron in a cube, so its edges are the cube's face diagonals.",
+      "The midpoints of two opposite tetrahedron edges are the centers of two opposite cube faces.",
+    ],
+    difficulty: 9,
+    topicSlug: "three-d-geometry",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-135",
+    question:
+      "A software team implements a primality test based on Fermat's little theorem: it declares an integer n to be prime whenever a^n ≡ a (mod n) holds for every integer a. A reviewer warns that some composite numbers pass this test for every single base a, and asks the team to find the smallest one. What is the smallest composite positive integer n such that a^n ≡ a (mod n) for every integer a?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["341", "451", "481", "561", "645"],
+    answer: "D",
+    solution:
+      "Such numbers are the Carmichael numbers. By Korselt's criterion, n works exactly when n is squarefree and p − 1 divides n − 1 for every prime p dividing n. The smallest is n = 561 = 3 · 11 · 17: it is squarefree, and 2, 10 and 16 all divide 560. (The number 341 = 11 · 31 fails, since it is only a pseudoprime to base 2 — for instance 3³⁴¹ ≢ 3 mod 341.)",
+    hints: [
+      "Numbers passing the test for every base are called Carmichael numbers.",
+      "Korselt's criterion: n must be squarefree and p − 1 must divide n − 1 for each prime p | n; try products of three small primes.",
+    ],
+    difficulty: 10,
+    topicSlug: "number-theory",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-136",
+    question:
+      "While deriving a filter response, an engineer runs into the expression cos(π/7) − cos(2π/7) + cos(3π/7). Her computer prints a decimal that looks suspiciously clean, and she suspects the value is a simple rational number. Evaluate cos(π/7) − cos(2π/7) + cos(3π/7) exactly.",
+    format: "MULTIPLE_CHOICE",
+    choices: ["1/4", "1/2", "√7/4", "2/3", "1"],
+    answer: "B",
+    solution:
+      "Note that cos(2π/7) = −cos(5π/7) and cos(3π/7) = −cos(4π/7), so the expression equals cos(π/7) + cos(3π/7) + cos(5π/7). Multiplying that sum by 2sin(π/7) telescopes, using 2 sin A cos B = sin(A + B) − sin(B − A), to leave sin(π/7). Dividing back gives the value 1/2.",
+    hints: [
+      "Use cos(π − θ) = −cos θ to turn the alternating signs into a sum of three cosines of odd multiples of π/7.",
+      "Multiply the resulting sum by 2 sin(π/7) and watch the product-to-sum expansion telescope.",
+    ],
+    difficulty: 10,
+    topicSlug: "functions",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-137",
+    question:
+      "A tiling puzzle asks for a rectangle of integer side lengths whose perimeter is 200, so that the two side lengths a and b are positive integers with a + b = 100. The puzzle is called primitive when the two side lengths share no common factor larger than 1, that is when gcd(a, b) = 1. Counting the ordered pair (a, b) so that a 3-by-97 rectangle and a 97-by-3 rectangle are different, how many primitive puzzles are there?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["40", "48", "50", "60", "99"],
+    answer: "A",
+    solution:
+      "Since a + b = 100, any common divisor of a and b also divides 100, so gcd(a, b) = 1 is equivalent to gcd(a, 100) = 1. The count of a in 1 ≤ a ≤ 99 with gcd(a, 100) = 1 is φ(100) = 100(1 − 1/2)(1 − 1/5) = 40.",
+    hints: [
+      "A common divisor of a and b must divide their sum, which is 100.",
+      "So the condition reduces to gcd(a, 100) = 1, counted by Euler's totient φ(100).",
+    ],
+    difficulty: 8,
+    topicSlug: "number-theory",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-138",
+    question:
+      "A triangular truss ABC has side lengths AB = 15 feet, AC = 13 feet and BC = 14 feet. An engineer adds a single reinforcing bar running from vertex A to the midpoint M of the opposite side BC. She needs to order the bar to the nearest fraction of a foot and so wants its exact length. How many feet long is segment AM?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 228\" width=\"340\" height=\"228\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"80,200 248,200 188,56\" /><line x1=\"188\" y1=\"56\" x2=\"164\" y2=\"200\" /><circle cx=\"164\" cy=\"200\" r=\"4\" fill=\"currentColor\" /><text x=\"72\" y=\"216\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">B</text><text x=\"256\" y=\"216\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">C</text><text x=\"188\" y=\"48\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">A</text><text x=\"164\" y=\"222\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">M</text><text x=\"126\" y=\"122\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">15</text><text x=\"226\" y=\"122\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">13</text><text x=\"120\" y=\"216\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">7</text><text x=\"208\" y=\"216\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">7</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["12", "√145", "2√37", "√154", "√157"],
+    answer: "C",
+    solution:
+      "The median length formula gives 4m² = 2b² + 2c² − a², where a = BC = 14 is the side being bisected. So 4m² = 2(13²) + 2(15²) − 14² = 338 + 450 − 196 = 592, giving m² = 148 and m = √148 = 2√37 ≈ 12.166 feet.",
+    hints: [
+      "Use the median length formula, or apply the law of cosines twice.",
+      "With a the bisected side: 4m² = 2b² + 2c² − a².",
+    ],
+    difficulty: 9,
+    topicSlug: "triangles",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-139",
+    question:
+      "In a complex-analysis seminar, students are asked to find every complex number z, other than zero, that satisfies the equation z²⁴ = z̄, where z̄ denotes the complex conjugate of z. One student argues that taking absolute values pins down |z| immediately, after which the equation becomes a familiar one. How many nonzero complex numbers z satisfy z²⁴ = z̄?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["23", "24", "25", "26", "48"],
+    answer: "C",
+    solution:
+      "Taking absolute values gives |z|²⁴ = |z|, so for z ≠ 0 we get |z|²³ = 1 and hence |z| = 1. On the unit circle z̄ = 1/z, so the equation becomes z²⁴ = 1/z, that is z²⁵ = 1. That has exactly 25 solutions, all nonzero, and each indeed satisfies the original equation.",
+    hints: [
+      "Take absolute values of both sides to determine |z|.",
+      "On the unit circle the conjugate equals 1/z, which turns the equation into z²⁵ = 1.",
+    ],
+    difficulty: 9,
+    topicSlug: "advanced-olympiad",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-140",
+    question:
+      "A storage system writes each of the integers from 1 to 2024 in binary and records the number of bits after the leading one — that is, it records ⌊log₂ n⌋ for each n. An auditor wants to know how many of the 2024 integers produce an even recorded value, counting 0 as even. For how many integers n with 1 ≤ n ≤ 2024 is ⌊log₂ n⌋ even?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["672", "1011", "1012", "1024", "1342"],
+    answer: "E",
+    solution:
+      "⌊log₂ n⌋ = k exactly when 2^k ≤ n < 2^(k+1), a block of 2^k integers. The even values of k give the blocks k = 0, 2, 4, 6, 8 with 1, 4, 16, 64 and 256 integers, plus k = 10, whose block starts at 1024 and is cut off at 2024, contributing 2024 − 1024 + 1 = 1001 integers. The total is 1 + 4 + 16 + 64 + 256 + 1001 = 1342.",
+    hints: [
+      "⌊log₂ n⌋ = k holds exactly on the block 2^k ≤ n < 2^(k+1), which has 2^k members.",
+      "Add the blocks for even k, remembering that the last block is truncated at 2024.",
+    ],
+    difficulty: 9,
+    topicSlug: "exponents-radicals",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-141",
+    question:
+      "A cereal company puts one of six different collectible figures in each box, with each figure equally likely and independent from box to box. A collector keeps buying boxes until she owns at least one of every one of the six figures, then stops. Over many such collections, what is the expected number of boxes she buys?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["6", "36/5", "12", "147/10", "21"],
+    answer: "D",
+    solution:
+      "This is the coupon collector's problem. After she has j distinct figures, the chance a new box shows a new figure is (6 − j)/6, so the expected wait for the next new figure is 6/(6 − j). Summing over j = 0, 1, …, 5 gives 6(1 + 1/2 + 1/3 + 1/4 + 1/5 + 1/6) = 6 · 49/20 = 147/10 = 14.7 boxes.",
+    hints: [
+      "Break the process into stages: the wait to go from j distinct figures to j + 1.",
+      "Each stage is geometric with success probability (6 − j)/6, so its expected length is 6/(6 − j).",
+    ],
+    difficulty: 9,
+    topicSlug: "expected-value",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-142",
+    question:
+      "A modeling problem produces a function f, defined for all real numbers, that is known only through the relation f(x) + 2f(1 − x) = x², which holds for every real x. No formula for f is supplied. A researcher needs the single value f(1/3), and notices that substituting a well-chosen second value of x turns the relation into a solvable system. What is f(1/3)?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["-7/27", "1/9", "2/9", "7/27", "4/9"],
+    answer: "D",
+    solution:
+      "Substituting x = 1/3 gives f(1/3) + 2f(2/3) = 1/9. Substituting x = 2/3 gives f(2/3) + 2f(1/3) = 4/9. Treating f(1/3) and f(2/3) as unknowns and eliminating f(2/3) — multiply the second equation by 2 and subtract the first — gives 3f(1/3) = 8/9 − 1/9 = 7/9, so f(1/3) = 7/27.",
+    hints: [
+      "Substitute x = 1/3, then substitute x = 2/3; note 1 − 1/3 = 2/3 so the same two unknowns appear.",
+      "Solve the resulting 2-by-2 linear system for f(1/3).",
+    ],
+    difficulty: 9,
+    topicSlug: "functional-equations",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-143",
+    question:
+      "A surveyor is asked to price out a triangular parcel of land whose three boundary fences measure 9 meters, 10 meters and 17 meters. The price depends on the enclosed area, but the parcel is overgrown and no height can be measured directly, so the area must be computed from the three side lengths alone. What is the area of the parcel, in square meters?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 218\" width=\"340\" height=\"218\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"42,190 297,190 161,126.5\" /><text x=\"34\" y=\"206\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">A</text><text x=\"305\" y=\"206\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">B</text><text x=\"161\" y=\"119\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">C</text><text x=\"94\" y=\"152\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">9</text><text x=\"237\" y=\"152\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">10</text><text x=\"170\" y=\"208\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">17</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["30", "36", "40", "42", "45"],
+    answer: "B",
+    solution:
+      "Heron's formula applies. The semiperimeter is s = (9 + 10 + 17)/2 = 18, so the area is √(18 · (18 − 9) · (18 − 10) · (18 − 17)) = √(18 · 9 · 8 · 1) = √1296 = 36 square meters.",
+    hints: [
+      "Only the three side lengths are known, which is exactly Heron's formula's setting.",
+      "Compute s = 18 first, then √(s(s−a)(s−b)(s−c)).",
+    ],
+    difficulty: 8,
+    topicSlug: "triangles",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-144",
+    question:
+      "A control-systems problem produces the quartic equation x⁴ − 2x³ + 3x² − 4x + 5 = 0, whose four roots may be complex. The stability analysis does not need the roots themselves, only the sum of their squares. An engineer recalls that this can be read off from the coefficients without solving anything. What is the sum of the squares of the four roots?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["-4", "-2", "0", "2", "4"],
+    answer: "B",
+    solution:
+      "By Vieta's formulas the sum of the roots is e₁ = 2 and the sum of the products of pairs is e₂ = 3. Then Σr² = e₁² − 2e₂ = 4 − 6 = −2. (A negative sum is fine here, since the roots are not all real.)",
+    hints: [
+      "Vieta's formulas give the sum of the roots and the sum of their pairwise products.",
+      "Use the identity Σr² = (Σr)² − 2·Σ(pairwise products).",
+    ],
+    difficulty: 9,
+    topicSlug: "polynomials",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-145",
+    question:
+      "A teacher has ten identical pencils to distribute among four labelled bins, one bin per student. Each bin must receive at least one pencil, and because the bins are small, no bin may receive more than four pencils. The bins are distinguishable, so giving student A three pencils and student B one is different from the reverse. In how many ways can the ten pencils be distributed?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["20", "34", "40", "42", "44"],
+    answer: "E",
+    solution:
+      "Let each bin get 1 + yᵢ with 0 ≤ yᵢ ≤ 3 and Σyᵢ = 6. Without the upper bound there are C(9,3) = 84 solutions. Subtract those with some yᵢ ≥ 4: choosing the offending bin (4 ways) and distributing the remaining 2 gives 4 · C(5,3) = 4 · 10 = 40; no two variables can both exceed 3 since 2 · 4 > 6. So the count is 84 − 40 = 44.",
+    hints: [
+      "Give every bin one pencil first, leaving 6 to distribute with each bin taking at most 3 more.",
+      "Use stars and bars, then subtract by inclusion–exclusion the cases where one bin takes 4 or more.",
+    ],
+    difficulty: 9,
+    topicSlug: "counting-principles",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-146",
+    question:
+      "A combinatorics student is studying the enormous number 100!, the product of all the integers from 1 through 100. She wants to know the largest power of 3 that divides it evenly — that is, the largest exponent e for which 3^e is a divisor of 100!. Rather than multiply anything out, she counts how many factors of 3 the multiplication contributes. What is e?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["48", "50", "52", "66", "97"],
+    answer: "A",
+    solution:
+      "By Legendre's formula the exponent is ⌊100/3⌋ + ⌊100/9⌋ + ⌊100/27⌋ + ⌊100/81⌋ = 33 + 11 + 3 + 1 = 48. (Each term counts the multiples of that power of 3 among 1 through 100, so a number divisible by 9 is counted twice, as it should be.)",
+    hints: [
+      "Count multiples of 3, then of 9, then of 27, then of 81, and add.",
+      "This is Legendre's formula: e = Σ ⌊100/3^k⌋.",
+    ],
+    difficulty: 8,
+    topicSlug: "number-theory",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-147",
+    question:
+      "An oscillation problem reduces to finding the angles x in one full turn, that is with 0 ≤ x < 2π, at which the quantity 2cos²x equals the quantity 3 sin x. A student converts the cosine term into a sine term so the equation becomes a quadratic in sin x, then discards any value of sin x that no angle can attain. How many values of x in [0, 2π) satisfy 2cos²x = 3 sin x?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["0", "1", "2", "3", "4"],
+    answer: "C",
+    solution:
+      "Write cos²x = 1 − sin²x, so 2 − 2sin²x = 3 sin x, that is 2sin²x + 3 sin x − 2 = 0. Factoring gives (2 sin x − 1)(sin x + 2) = 0, so sin x = 1/2 or sin x = −2. The value −2 is impossible. Then sin x = 1/2 has exactly two solutions in [0, 2π), namely π/6 and 5π/6.",
+    hints: [
+      "Replace cos²x by 1 − sin²x to get a quadratic in sin x.",
+      "One root of the quadratic lies outside [−1, 1] and must be discarded; the other gives two angles.",
+    ],
+    difficulty: 8,
+    topicSlug: "functions",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-148",
+    question:
+      "A spherical water tank has radius 5 meters. Engineers need to install a flat circular baffle inside it, positioned so that the plane of the baffle is 3 meters from the center of the sphere and the baffle exactly fills the sphere's cross-section there. The manufacturer quotes a price per square meter, so the area is needed. The cross-section's area can be written as kπ square meters. What is k?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 244\" width=\"340\" height=\"244\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><circle cx=\"170\" cy=\"130\" r=\"100\" /><line x1=\"90\" y1=\"70\" x2=\"250\" y2=\"70\" stroke-width=\"3\" /><line x1=\"170\" y1=\"130\" x2=\"170\" y2=\"70\" stroke-dasharray=\"4 4\" /><line x1=\"170\" y1=\"130\" x2=\"250\" y2=\"70\" stroke-dasharray=\"4 4\" /><circle cx=\"170\" cy=\"130\" r=\"3\" fill=\"currentColor\" /><text x=\"162\" y=\"104\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">3</text><text x=\"216\" y=\"106\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">5</text><text x=\"210\" y=\"62\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">r</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["16", "20", "25", "30", "50"],
+    answer: "A",
+    solution:
+      "Slice through the center perpendicular to the plane. The radius r of the cross-sectional circle, the distance 3 from the center to the plane, and the sphere's radius 5 form a right triangle, so r² = 5² − 3² = 16. The area is πr² = 16π, so k = 16.",
+    hints: [
+      "The sphere's radius, the distance to the plane, and the cross-section's radius form a right triangle.",
+      "You need r² rather than r, since the area is πr².",
+    ],
+    difficulty: 8,
+    topicSlug: "three-d-geometry",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-149",
+    question:
+      "A board game has each player roll four standard six-sided dice at once and add the four numbers showing. A player advances an extra space whenever the four dice total exactly 10. All four dice are fair and independent. What is the probability that a given roll of four dice totals 10?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["1/18", "5/81", "1/12", "7/81", "1/9"],
+    answer: "B",
+    solution:
+      "There are 6⁴ = 1296 equally likely outcomes. The number of ordered quadruples from 1 to 6 summing to 10 is, by stars and bars with the upper bound handled by inclusion–exclusion, C(9,3) − 4·C(3,3) = 84 − 4 = 80. So the probability is 80/1296 = 5/81.",
+    hints: [
+      "Count ordered quadruples (a, b, c, d) with each between 1 and 6 that sum to 10.",
+      "Stars and bars gives C(9,3); subtract the cases where one die would exceed 6.",
+    ],
+    difficulty: 9,
+    topicSlug: "counting-probability",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-150",
+    question:
+      "A navigation system tracks the set of all points in the plane whose distances to two fixed beacons, located at the complex numbers 3 and −3, add up to exactly 10 units. Written with complex numbers, this is the set of z with |z − 3| + |z + 3| = 10. The region enclosed by this curve has area kπ. What is k?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 232\" width=\"340\" height=\"232\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><ellipse cx=\"170\" cy=\"120\" rx=\"100\" ry=\"80\" /><circle cx=\"110\" cy=\"120\" r=\"4\" fill=\"currentColor\" /><circle cx=\"230\" cy=\"120\" r=\"4\" fill=\"currentColor\" /><line x1=\"110\" y1=\"120\" x2=\"196\" y2=\"43\" stroke-dasharray=\"4 4\" /><line x1=\"230\" y1=\"120\" x2=\"196\" y2=\"43\" stroke-dasharray=\"4 4\" /><text x=\"104\" y=\"138\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">−3</text><text x=\"236\" y=\"138\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">3</text><text x=\"196\" y=\"36\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">z</text><text x=\"170\" y=\"216\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">sum of the two dashed lengths = 10</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["9", "12", "16", "18", "20"],
+    answer: "E",
+    solution:
+      "The condition is the locus definition of an ellipse with foci at ±3 and constant sum 2a = 10, so a = 5 and c = 3. Then b² = a² − c² = 25 − 9 = 16, so b = 4. The enclosed area is πab = π · 5 · 4 = 20π, giving k = 20.",
+    hints: [
+      "A constant sum of distances to two fixed points is the definition of an ellipse.",
+      "From 2a = 10 and c = 3 get b via b² = a² − c², then use area = πab.",
+    ],
+    difficulty: 9,
+    topicSlug: "coordinate-geometry",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-151",
+    question:
+      "A population model starts with a₁ = 1 thousand organisms in its first generation and a₂ = 2 thousand in its second. From then on, each generation's population is the sum of the two preceding generations, so a₃ = a₂ + a₁ and in general aₙ₊₂ = aₙ₊₁ + aₙ. A researcher needs the population in the twelfth generation. What is a₁₂, in thousands?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["89", "144", "199", "233", "377"],
+    answer: "D",
+    solution:
+      "Iterate the recursion: 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233. The twelfth term is 233. (This is the Fibonacci sequence shifted by one index.)",
+    hints: [
+      "Just list the terms; each is the sum of the previous two.",
+      "The sequence is the Fibonacci numbers starting 1, 2, so a₁₂ = F₁₃.",
+    ],
+    difficulty: 8,
+    topicSlug: "sequences",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-152",
+    question:
+      "A lottery prints tickets numbered 1 through 2024. A ticket is set aside for a special drawing when its number is divisible by none of 2, 3, 5 and 7. The organizers need to know how many tickets will be set aside before they print the special-drawing envelopes. How many of the numbers from 1 to 2024 are divisible by none of 2, 3, 5 and 7?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["462", "481", "509", "578", "675"],
+    answer: "A",
+    solution:
+      "Apply inclusion–exclusion to the four primes. Subtracting the multiples of each prime, adding back the multiples of each product of two, subtracting those of each product of three, and adding those of 210 gives 2024 − (1012 + 674 + 404 + 289) + (337 + 202 + 144 + 134 + 96 + 57) − (67 + 48 + 28 + 19) + 9 = 462.",
+    hints: [
+      "Use inclusion–exclusion over the four primes 2, 3, 5 and 7.",
+      "Each term is a floor: ⌊2024/d⌋ for d a product of a subset of the primes.",
+    ],
+    difficulty: 9,
+    topicSlug: "inclusion-exclusion",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-153",
+    question:
+      "A right triangle drafted on a plan has legs of 6 and 8 units and hypotenuse 10 units. Two special points are marked on it: the incenter, the center of the circle tangent to all three sides, and the circumcenter, the center of the circle through all three vertices. A drafter needs the exact distance between these two marked points. How many units apart are the incenter and the circumcenter?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 228\" width=\"340\" height=\"228\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"60,200 220,200 60,80\" /><rect x=\"60\" y=\"188\" width=\"12\" height=\"12\" stroke-width=\"1.5\" /><circle cx=\"100\" cy=\"160\" r=\"40\" stroke-dasharray=\"4 4\" stroke-opacity=\"0.6\" /><circle cx=\"100\" cy=\"160\" r=\"3.5\" fill=\"currentColor\" /><circle cx=\"140\" cy=\"140\" r=\"3.5\" fill=\"currentColor\" /><line x1=\"100\" y1=\"160\" x2=\"140\" y2=\"140\" stroke-width=\"3\" /><text x=\"92\" y=\"182\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">I</text><text x=\"150\" y=\"134\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">O</text><text x=\"50\" y=\"140\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">6</text><text x=\"140\" y=\"216\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">8</text><text x=\"154\" y=\"126\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">10</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["1", "√2", "2", "√5", "√10"],
+    answer: "D",
+    solution:
+      "The circumcenter of a right triangle is the midpoint of the hypotenuse, so R = 5. The inradius of a right triangle is r = (leg + leg − hyp)/2 = (6 + 8 − 10)/2 = 2. Euler's formula gives OI² = R(R − 2r) = 5(5 − 4) = 5, so OI = √5. (Coordinates confirm it: with the right angle at the origin the incenter is (2, 2) and the circumcenter is (4, 3).)",
+    hints: [
+      "In a right triangle the circumcenter is the midpoint of the hypotenuse, so R is half the hypotenuse.",
+      "Use r = (a + b − c)/2 for a right triangle, then Euler's formula OI² = R(R − 2r).",
+    ],
+    difficulty: 10,
+    topicSlug: "triangles",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-154",
+    question:
+      "A hashing scheme takes an ordered pair (a, b) where a and b are each integers from 1 to 100, and keeps the pair only when a² + b² is divisible by 5. Ordered pairs are distinct, so (1, 2) and (2, 1) count separately. Of the 10,000 possible ordered pairs, how many does the scheme keep?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["2000", "2800", "3200", "3400", "3600"],
+    answer: "E",
+    solution:
+      "A square is congruent to 0, 1 or 4 mod 5. Among 1 to 100, exactly 20 numbers are ≡ 0 (giving square ≡ 0), 40 are ≡ ±1 (square ≡ 1) and 40 are ≡ ±2 (square ≡ 4). The sum a² + b² is ≡ 0 mod 5 only when both squares are 0, or one is 1 and the other 4. That gives 20 · 20 + 40 · 40 + 40 · 40 = 400 + 1600 + 1600 = 3600 ordered pairs.",
+    hints: [
+      "Squares modulo 5 can only be 0, 1 or 4 — count how many of 1–100 fall into each case.",
+      "Then find which pairs of those residues sum to 0 mod 5.",
+    ],
+    difficulty: 10,
+    topicSlug: "modular-arithmetic",
     competitionSlug: "amc12",
   },
 ];

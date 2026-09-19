@@ -9,6 +9,7 @@ import { LinkButton } from "@/components/ui/button";
 import { parseChoices } from "@/lib/engine/scoring";
 import { difficultyLabel } from "@/lib/types";
 import { pickPriorityTopic } from "@/lib/engine/practice";
+import { ProblemFigure } from "@/components/practice/problem-figure";
 
 const CHOICE_LETTERS = ["A", "B", "C", "D", "E", "F"];
 
@@ -193,6 +194,7 @@ export default async function SimulationResultsPage({
                       </p>
                       <Badge tone="slate">{difficultyLabel(item.problem.difficulty)}</Badge>
                     </div>
+                    <ProblemFigure svg={item.problem.diagram} className="mt-3" />
                     <div className="mt-2 flex flex-wrap gap-3 text-xs">
                       <span className="text-danger-600 dark:text-red-400">
                         Your answer: {item.answerGiven || "(blank)"}

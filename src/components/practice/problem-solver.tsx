@@ -9,12 +9,14 @@ import { submitPracticeAnswerAction } from "@/lib/actions/practice-actions";
 import { difficultyLabel, type AttemptMode } from "@/lib/types";
 import { LEGAL } from "@/lib/legal";
 import { AnswerInput } from "@/components/practice/answer-input";
+import { ProblemStatement } from "@/components/practice/problem-figure";
 
 const CHOICE_LETTERS = ["A", "B", "C", "D", "E", "F"];
 
 export type SolverProblem = {
   id: string;
   question: string;
+  diagram?: string | null;
   format: string;
   choices: string[];
   hints: string[];
@@ -103,7 +105,7 @@ export function ProblemSolver({
         </span>
       </div>
 
-      <p className="text-lg font-medium leading-relaxed text-slate-900 dark:text-slate-50 sm:text-xl">{problem.question}</p>
+      <ProblemStatement question={problem.question} diagram={problem.diagram} />
 
       <div className="mt-7">
         {problem.format === "MULTIPLE_CHOICE" ? (
