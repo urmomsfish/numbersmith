@@ -28,6 +28,13 @@ async function pickSimulationProblems(opts: {
   difficultyMin: number;
   difficultyMax: number;
   topicIds?: string[];
+  /**
+   * The answer format the real contest uses. Problems matching it are drawn
+   * first so a simulation doesn't hand a student five-choice questions on a
+   * fill-in test (or vice versa). Off-format problems still backstop the pool
+   * rather than leaving the paper short.
+   */
+  format?: string;
 }) {
   const baseWhere = {
     isPublished: true,
@@ -39,7 +46,10 @@ async function pickSimulationProblems(opts: {
   };
 
   // Prefer problems tagged to this competition, then widen to the whole pool
-  // so a simulation always fills its full question count.
+  // so a simulation always fills its full question count. Within each of those
+  // two tiers, on-format comes before off-format — competition provenance is
+  // the stronger signal of "this looks like the real test", so a thin contest
+  // keeps its own off-format problems ahead of generic on-format ones.
   const preferred = opts.competitionId
     ? await prisma.problem.findMany({ where: { ...baseWhere, competitionId: opts.competitionId } })
     : [];
@@ -47,7 +57,14 @@ async function pickSimulationProblems(opts: {
     where: { ...baseWhere, ...(preferred.length ? { id: { notIn: preferred.map((p) => p.id) } } : {}) },
   });
 
-  const pool = [...shuffle(preferred), ...shuffle(rest)];
+  const byFormat = (list: typeof preferred) => {
+    if (!opts.format) return shuffle(list);
+    const match = list.filter((p) => p.format === opts.format);
+    const other = list.filter((p) => p.format !== opts.format);
+    return [...shuffle(match), ...shuffle(other)];
+  };
+
+  const pool = [...byFormat(preferred), ...byFormat(rest)];
 
   if (pool.length < opts.count) {
     const fallback = await prisma.problem.findMany({
@@ -77,6 +94,7 @@ export async function startOfficialSimulation(userId: string, competitionSlug: s
     count,
     difficultyMin: Math.max(1, competition.difficultyMin - 1),
     difficultyMax: Math.min(10, competition.difficultyMax + 1),
+    format: competition.format,
   });
 
   const attempt = await prisma.competitionAttempt.create({
