@@ -5,7 +5,12 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import { MessageContent } from "@/components/ai-assistant/message-content";
 import { sendAiMessageAction, clearAiChatAction } from "@/lib/actions/ai-actions";
-import { prepareImage, isImageFile, ACCEPTED_UPLOAD_TYPES, type PreparedImage } from "@/lib/prepare-image";
+import {
+  prepareAttachment,
+  isAttachableFile,
+  ACCEPTED_UPLOAD_TYPES,
+  type PreparedAttachment,
+} from "@/lib/prepare-attachment";
 
 type Message = {
   id: string;
@@ -13,6 +18,10 @@ type Message = {
   content: string;
   /** data: URL for a screenshot attached to this message, if any. */
   imageUrl?: string | null;
+  /** A PDF was attached. No filename: storing one would mean another column
+   * for a label, and the conversation around the bubble already says which
+   * paper it is. */
+  hasPdf?: boolean;
 };
 
 const SUGGESTIONS: Array<{ label: string; prompt: string }> = [
@@ -52,6 +61,15 @@ function IconPaperclip({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
       <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+    </svg>
+  );
+}
+
+function IconPdf({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <path d="M14 2v6h6" />
     </svg>
   );
 }
@@ -99,8 +117,8 @@ export function ChatPanel({
   const [error, setError] = useState<string | null>(null);
   const [confirmClear, setConfirmClear] = useState(false);
   const [pending, startTransition] = useTransition();
-  // The screenshot staged in the composer but not yet sent.
-  const [attachment, setAttachment] = useState<PreparedImage | null>(null);
+  // The file staged in the composer but not yet sent.
+  const [attachment, setAttachment] = useState<PreparedAttachment | null>(null);
   const [preparing, setPreparing] = useState(false);
   const [dragging, setDragging] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -136,24 +154,24 @@ export function ChatPanel({
     el.style.height = input ? `${Math.min(el.scrollHeight, 180)}px` : "";
   }, [input]);
 
-  /** Resizes and stages a file. Replaces whatever was staged — one image per
-   * message keeps the model's attention on the thing just asked about, and
+  /** Prepares and stages a file. Replaces whatever was staged — one attachment
+   * per message keeps the model's attention on the thing just asked about, and
    * makes "remove it" a single obvious control rather than a list. */
   const attach = useCallback(async (file: File) => {
-    if (!isImageFile(file)) {
-      setError("That file isn't an image.");
+    if (!isAttachableFile(file)) {
+      setError("You can attach an image or a PDF.");
       return;
     }
     setError(null);
     setPreparing(true);
     try {
-      const prepared = await prepareImage(file);
+      const prepared = await prepareAttachment(file);
       setAttachment((prev) => {
-        if (prev) URL.revokeObjectURL(prev.previewUrl);
+        if (prev?.previewUrl) URL.revokeObjectURL(prev.previewUrl);
         return prepared;
       });
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Couldn't read that image.");
+      setError(e instanceof Error ? e.message : "Couldn't read that file.");
     } finally {
       setPreparing(false);
     }
@@ -161,21 +179,25 @@ export function ChatPanel({
 
   const clearAttachment = useCallback(() => {
     setAttachment((prev) => {
-      if (prev) URL.revokeObjectURL(prev.previewUrl);
+      if (prev?.previewUrl) URL.revokeObjectURL(prev.previewUrl);
       return null;
     });
   }, []);
 
-  // Release the staged preview if the page unmounts with one pending.
-  useEffect(() => () => { if (attachment) URL.revokeObjectURL(attachment.previewUrl); }, [attachment]);
+  // Release the staged preview if the page unmounts with one pending. PDFs have
+  // no object URL to release.
+  useEffect(
+    () => () => { if (attachment?.previewUrl) URL.revokeObjectURL(attachment.previewUrl); },
+    [attachment]
+  );
 
   function send(content: string) {
     const text = content.trim();
-    const image = attachment;
-    // A screenshot on its own is a complete question, so an empty box is fine
-    // as long as something is attached. Don't send while one is still being
-    // resized, or it would silently go without the image.
-    if ((!text && !image) || pending || preparing) return;
+    const file = attachment;
+    // An attachment on its own is a complete question, so an empty box is fine
+    // as long as something is staged. Don't send while one is still being
+    // prepared, or it would silently go without the file.
+    if ((!text && !file) || pending || preparing) return;
     setError(null);
     setConfirmClear(false);
     stickToBottom.current = true;
@@ -184,7 +206,8 @@ export function ChatPanel({
       id: `local-${localMessageId.current}`,
       role: "user",
       content: text,
-      imageUrl: image ? `data:${image.type};base64,${image.data}` : null,
+      imageUrl: file?.kind === "image" ? `data:${file.type};base64,${file.data}` : null,
+      hasPdf: file?.kind === "pdf",
     };
     setMessages((prev) => [...prev, optimisticUser]);
     setInput("");
@@ -196,9 +219,9 @@ export function ChatPanel({
       try {
         const res = await sendAiMessageAction({
           content: text,
-          image: image ? { data: image.data, type: image.type } : null,
+          attachment: file ? { data: file.data, type: file.type } : null,
         });
-        // The server fills in a sentence when an image was sent with no text,
+        // The server fills in a sentence when a file was sent with no text,
         // so adopt what it stored rather than leaving the bubble empty.
         if (res.content !== text) {
           setMessages((prev) =>
@@ -287,6 +310,18 @@ export function ChatPanel({
                       className="max-h-72 max-w-[85%] rounded-2xl rounded-br-md border border-slate-200 object-contain dark:border-slate-700"
                     />
                   )}
+                  {m.hasPdf && (
+                    // A chip, not a preview. Rendering page one would mean a
+                    // PDF library in the bundle, and shipping the file's bytes
+                    // down to draw it — megabytes for a thumbnail too small to
+                    // read.
+                    <div className="flex items-center gap-2 rounded-2xl rounded-br-md border border-slate-200 bg-background px-3.5 py-2.5 dark:border-slate-700">
+                      <IconPdf className="h-4 w-4 shrink-0 text-slate-500 dark:text-slate-400" />
+                      <span className="text-xs font-medium text-slate-700 dark:text-slate-300">
+                        PDF attached
+                      </span>
+                    </div>
+                  )}
                   {m.content && (
                     <div className="max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-br-md bg-brand-600 px-4 py-2.5 text-sm leading-relaxed text-white">
                       {m.content}
@@ -359,26 +394,43 @@ export function ChatPanel({
           <div className="mb-2 flex items-center gap-3 rounded-xl border border-slate-200 bg-background p-2 dark:border-slate-700">
             {attachment ? (
               <>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={attachment.previewUrl}
-                  alt="Screenshot ready to send"
-                  className="h-14 w-14 rounded-lg border border-slate-200 object-cover dark:border-slate-700"
-                />
-                <span className="flex-1 text-xs text-slate-600 dark:text-slate-400">
-                  Screenshot attached. Add a question, or send it on its own.
+                {attachment.previewUrl ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={attachment.previewUrl}
+                    alt="Screenshot ready to send"
+                    className="h-14 w-14 rounded-lg border border-slate-200 object-cover dark:border-slate-700"
+                  />
+                ) : (
+                  <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700">
+                    <IconPdf className="h-6 w-6 text-slate-500 dark:text-slate-400" />
+                  </span>
+                )}
+                <span className="min-w-0 flex-1 text-xs text-slate-600 dark:text-slate-400">
+                  {attachment.kind === "pdf" ? (
+                    <>
+                      {/* The filename is the only thing identifying which paper
+                          this is, so it gets to be the prominent part. */}
+                      <span className="block truncate font-medium text-slate-900 dark:text-slate-100">
+                        {attachment.name}
+                      </span>
+                      <span className="block">Ask about a problem in it — say which number.</span>
+                    </>
+                  ) : (
+                    "Screenshot attached. Add a question, or send it on its own."
+                  )}
                 </span>
                 <button
                   type="button"
                   onClick={clearAttachment}
-                  className="rounded-md px-2 py-1 text-xs font-semibold text-slate-600 underline underline-offset-2 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground dark:text-slate-400 dark:hover:text-slate-100"
+                  className="shrink-0 rounded-md px-2 py-1 text-xs font-semibold text-slate-600 underline underline-offset-2 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground dark:text-slate-400 dark:hover:text-slate-100"
                 >
                   Remove
                 </button>
               </>
             ) : (
               <span className="px-1 py-3 text-xs text-slate-600 dark:text-slate-400">
-                Preparing image…
+                Preparing file…
               </span>
             )}
           </div>
@@ -407,8 +459,8 @@ export function ChatPanel({
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={pending || preparing}
-            aria-label="Attach a screenshot"
-            title="Attach a screenshot"
+            aria-label="Attach a screenshot or PDF"
+            title="Attach a screenshot or PDF"
             className="rounded-xl border border-slate-200 p-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground disabled:opacity-50 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
           >
             <IconPaperclip className="h-5 w-5" />
@@ -422,7 +474,7 @@ export function ChatPanel({
             // disk first just to re-pick it is the kind of friction that stops
             // the feature being used at all.
             onPaste={(e) => {
-              const file = Array.from(e.clipboardData.files).find(isImageFile);
+              const file = Array.from(e.clipboardData.files).find(isAttachableFile);
               if (file) {
                 e.preventDefault();
                 void attach(file);
@@ -434,7 +486,7 @@ export function ChatPanel({
                 send(input);
               }
             }}
-            placeholder="Ask a math question, or paste a screenshot…"
+            placeholder="Ask a math question, or attach a screenshot or PDF…"
             rows={1}
             className="max-h-[180px] flex-1 resize-none rounded-xl border border-slate-200 bg-background px-3.5 py-2.5 text-sm leading-relaxed text-slate-900 outline-none transition focus:border-foreground focus:ring-2 focus:ring-ember-600/30 dark:border-slate-700 dark:text-slate-50"
           />
@@ -449,7 +501,7 @@ export function ChatPanel({
           <p className="mr-auto hidden text-[11px] text-slate-500 sm:block dark:text-slate-500">
             <kbd className="font-sans font-medium">Enter</kbd> to send ·{" "}
             <kbd className="font-sans font-medium">Shift+Enter</kbd> for a new line · paste or drop
-            an image to attach it
+            an image or PDF to attach it
           </p>
           {messages.length > 0 &&
             (confirmClear ? (

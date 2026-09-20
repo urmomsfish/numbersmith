@@ -409,15 +409,22 @@ model AiChatMessage {
   /// role: user | assistant
   role      String
   content   String
-  /// Base64 of an image the student attached (user messages only). Stored in
-  /// the row rather than in blob storage: the app has no object store, these
-  /// are screenshots the client has already downscaled to a few hundred KB,
-  /// and the image is meaningless outside the message it belongs to — so
-  /// cascade-deleting with the thread is exactly the lifecycle we want.
-  imageData String?
-  /// MIME type of imageData, e.g. "image/jpeg". Needed to render it back and
-  /// to tell the model what it's looking at.
-  imageType String?
+  /// Base64 of a file the student attached (user messages only) — a screenshot
+  /// or a PDF worksheet. Stored in the row rather than in blob storage: the app
+  /// has no object store, the client downscales images before upload and PDFs
+  /// are capped at a few MB, and the file is meaningless outside the message it
+  /// belongs to — so cascade-deleting with the thread is exactly the lifecycle
+  /// we want.
+  ///
+  /// Mapped to a column still named "imageData" because it predates PDF
+  /// support, and renaming the column would mean another migration against the
+  /// production database for zero behavioural gain. The field name is what the
+  /// code reads, so only this mapping remembers the older, narrower name.
+  attachmentData String? @map("imageData")
+  /// MIME type of attachmentData, e.g. "image/jpeg" or "application/pdf".
+  /// Needed both to render it back and to tell the model what it's looking at —
+  /// images and PDFs go to the API as different block types.
+  attachmentType String? @map("imageType")
   createdAt DateTime @default(now())
 
   @@index([userId, createdAt])

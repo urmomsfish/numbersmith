@@ -33,7 +33,13 @@ Students can attach a screenshot or photo — usually a problem from a worksheet
 - Start by stating what you can actually read in it, briefly, so a misread is caught immediately instead of three steps later. Photos of handwriting and low-resolution crops are often ambiguous.
 - If something you need is genuinely illegible or cut off, say which part and ask, rather than guessing at it and building on the guess.
 - If it's the student's own written work, find the first step that goes wrong and start there — don't re-derive everything above it that was already correct.
-- The no-final-answers rule applies exactly as it does to typed questions. An attached image is not a request to just solve it.`;
+- The no-final-answers rule applies exactly as it does to typed questions. An attached image is not a request to just solve it.
+
+Students can also attach a PDF — typically a full practice test, a past paper, or a problem set they downloaded. A PDF is usually many problems rather than one, so:
+- If they attached a paper without saying which problem they're on, don't work through the whole thing. Say what the document appears to be (competition, year, number of problems if it's clear) and ask which problem they want.
+- If they name a problem, work on that one. Cite it by its number in the document so it's unambiguous which one you're answering.
+- If they ask something about the paper as a whole — which topics it covers, how to pace it, which problems are the hard ones — answer that directly; it's a legitimate question and doesn't need a problem number.
+- Never dump worked solutions to an entire paper, even if asked. That is the one request most directly opposed to the point of this product. Offer to go through them one at a time instead.`;
 
 /** The image formats the vision API accepts. Anything else is rejected at the
  * action boundary rather than being discovered as a 400 from the API. */
@@ -44,35 +50,69 @@ export function isSupportedImageType(value: string | null | undefined): value is
   return (SUPPORTED_IMAGE_TYPES as readonly string[]).includes(value ?? "");
 }
 
+/** PDF is the only document format the API takes as a base64 `document` block.
+ * Word/Pages files would have to be converted server-side, which needs a
+ * dependency and a sandbox this app doesn't have — so they're rejected with a
+ * message telling the student to export a PDF instead. */
+export const PDF_TYPE = "application/pdf" as const;
+
+export function isPdfType(value: string | null | undefined): value is typeof PDF_TYPE {
+  return value === PDF_TYPE;
+}
+
+/** Everything a student is allowed to attach. */
+export function isSupportedAttachmentType(value: string | null | undefined): boolean {
+  return isSupportedImageType(value) || isPdfType(value);
+}
+
 export type ChatTurn = {
   role: "user" | "assistant";
   content: string;
-  /** Base64 (no data: prefix) of a screenshot attached to this turn. */
-  imageData?: string | null;
-  imageType?: string | null;
+  /** Base64 (no data: prefix) of a screenshot or PDF attached to this turn. */
+  attachmentData?: string | null;
+  attachmentType?: string | null;
 };
 
 /** Sends the last `historyLimit` turns plus the new message. Non-streaming —
  * chat responses here are short enough that a single round trip is fine.
  *
- * A turn carrying an image becomes a two-block message: the image first, then
- * the text. Image-before-text is what Anthropic recommends for single-image
- * prompts, and it matches how the question reads — "here's the problem, now
- * my question about it". A turn with no image stays a plain string, so nothing
- * about the existing text-only path changes. */
+ * A turn carrying an attachment becomes a two-block message: the file first,
+ * then the text. File-before-text is what Anthropic recommends, and it matches
+ * how the question reads — "here's the problem, now my question about it". A
+ * turn with no attachment stays a plain string, so nothing about the existing
+ * text-only path changes.
+ *
+ * Images and PDFs are different block types, not one generic "file" block: an
+ * image is a single picture, while a PDF is paginated and the API extracts both
+ * its text and a rendering of each page. Sending a PDF as an image block is a
+ * 400, not a graceful degradation. */
 export async function askMathAssistant(history: ChatTurn[]): Promise<string> {
   const messages = history.map((m) => {
-    if (m.role === "user" && m.imageData && isSupportedImageType(m.imageType)) {
-      return {
-        role: m.role,
-        content: [
-          {
-            type: "image" as const,
-            source: { type: "base64" as const, media_type: m.imageType, data: m.imageData },
-          },
-          { type: "text" as const, text: m.content },
-        ],
-      };
+    if (m.role === "user" && m.attachmentData) {
+      if (isSupportedImageType(m.attachmentType)) {
+        return {
+          role: m.role,
+          content: [
+            {
+              type: "image" as const,
+              source: { type: "base64" as const, media_type: m.attachmentType, data: m.attachmentData },
+            },
+            { type: "text" as const, text: m.content },
+          ],
+        };
+      }
+      if (isPdfType(m.attachmentType)) {
+        return {
+          role: m.role,
+          content: [
+            {
+              type: "document" as const,
+              source: { type: "base64" as const, media_type: PDF_TYPE as typeof PDF_TYPE, data: m.attachmentData },
+            },
+            { type: "text" as const, text: m.content },
+          ],
+        };
+      }
     }
     return { role: m.role, content: m.content };
   });
