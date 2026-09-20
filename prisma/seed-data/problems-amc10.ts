@@ -2256,4 +2256,370 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     topicSlug: "casework",
     competitionSlug: "amc10",
   },
+  {
+    slug: "amc10-157",
+    question:
+      "A food truck currently sells 200 bowls of noodles a day at $9.00 each. The owner finds that every time she raises the price by $0.50, she sells 8 fewer bowls per day. She will only ever set the price at $9.00 plus a whole number of $0.50 increases. What is the greatest daily revenue, in dollars, that she can take in?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["1768", "1800", "1824", "1840", "1848"],
+    answer: "E",
+    solution:
+      "After k price increases the price is 9 + 0.5k dollars and she sells 200 − 8k bowls, so revenue is R(k) = (9 + 0.5k)(200 − 8k) = 1800 + 28k − 4k². This parabola opens downward with vertex at k = 28/8 = 3.5, which is not a whole number, so the best whole values are the two neighbours k = 3 and k = 4. Both give the same revenue: (10.50)(176) = 1848 and (11.00)(168) = 1848. The maximum is $1848.",
+    hints: [
+      "Let k count the $0.50 increases and write both the price and the number of bowls in terms of k.",
+      "Revenue is their product — expand it into a quadratic in k.",
+      "The vertex lands halfway between two integers, so test both whole numbers on either side.",
+    ],
+    difficulty: 9,
+    topicSlug: "quadratics",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-158",
+    question:
+      "A farm's grain silo is a right circular cylinder of radius 10 feet topped by a hemispherical dome of the same radius, sitting directly on the cylinder. From the ground to the very top of the dome the silo measures 40 feet. What is the total volume of the silo, in cubic feet?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 268\" width=\"340\" height=\"268\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><path d=\"M 124 86 A 46 46 0 0 1 216 86\" /><line x1=\"124\" y1=\"86\" x2=\"124\" y2=\"224\" /><line x1=\"216\" y1=\"86\" x2=\"216\" y2=\"224\" /><ellipse cx=\"170\" cy=\"224\" rx=\"46\" ry=\"11\" /><line x1=\"124\" y1=\"86\" x2=\"216\" y2=\"86\" stroke-dasharray=\"4 4\" stroke-opacity=\"0.5\" /><line x1=\"170\" y1=\"86\" x2=\"216\" y2=\"86\" stroke-dasharray=\"4 4\" stroke-opacity=\"0.7\" /><line x1=\"262\" y1=\"40\" x2=\"262\" y2=\"224\" stroke-dasharray=\"6 4\" stroke-opacity=\"0.6\" /><text x=\"193\" y=\"80\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">10 ft</text><text x=\"272\" y=\"134\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">40 ft</text><text x=\"170\" y=\"250\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">radius 10 ft</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["3000π", "10000π/3", "11000π/3", "4000π", "14000π/3"],
+    answer: "C",
+    solution:
+      "The dome is a hemisphere of radius 10, so it is 10 feet tall on its own. That leaves 40 − 10 = 30 feet for the cylinder. The cylinder's volume is π(10)²(30) = 3000π, and the hemisphere's is (2/3)π(10)³ = 2000π/3. The total is 3000π + 2000π/3 = 9000π/3 + 2000π/3 = 11000π/3 cubic feet.",
+    hints: [
+      "The 40 feet is the whole silo, dome included — the cylinder is shorter than that.",
+      "A hemisphere of radius r rises exactly r above its base.",
+      "Add πr²h to (2/3)πr³, keeping everything over a common denominator.",
+    ],
+    difficulty: 8,
+    topicSlug: "three-d-geometry",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-159",
+    question:
+      "A teacher hands out 15 identical prize pencils to her 4 tutoring students. Every student must receive at least 2 pencils, and no student may receive more than 6. The students are distinguishable but the pencils are not. In how many ways can the 15 pencils be handed out?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["56", "68", "80", "96", "120"],
+    answer: "C",
+    solution:
+      "Give each student 2 pencils up front and let eᵢ be the extra pencils, so e₁ + e₂ + e₃ + e₄ = 7 with 0 ≤ eᵢ ≤ 4. Ignoring the upper bound, stars and bars gives C(7 + 3, 3) = C(10,3) = 120 solutions. Subtract those where some eᵢ ≥ 5: pick the offending student (4 ways) and hand them 5 extras, leaving 2 to distribute freely in C(5,3) = 10 ways, so 4 · 10 = 40 bad solutions. Two students cannot both exceed 4 (that would need 10 > 7). The count is 120 − 40 = 80.",
+    hints: [
+      "Hand out the required 2 pencils first so the remaining counts start at zero.",
+      "Use stars and bars for the unrestricted count, then remove the violations.",
+      "Check whether two students could break the upper bound at the same time — that decides whether you add anything back.",
+    ],
+    difficulty: 9,
+    topicSlug: "inclusion-exclusion",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-160",
+    question:
+      "A bakery sells cookies only in sealed boxes of 7 and sealed crates of 11, and it never opens a box or a crate. A customer can buy any number of cookies that is a sum of 7s and 11s. What is the largest number of cookies a customer cannot buy?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["43", "47", "53", "59", "71"],
+    answer: "D",
+    solution:
+      "A total n is buyable exactly when n = 7x + 11y for some whole numbers x, y ≥ 0. Since 7 and 11 are relatively prime, only finitely many totals fail, and the largest one is 7·11 − 7 − 11 = 77 − 18 = 59. To check 59 directly, subtract crates of 11 and see whether a multiple of 7 is ever left: 59, 48, 37, 26, 15, 4 — none is a multiple of 7, so 59 is unbuyable. Everything larger works: the seven consecutive totals 60 = 7·7 + 11, 61 = 7·4 + 11·3, 62 = 7 + 11·5, 63 = 7·9, 64 = 7·6 + 11·2, 65 = 7·3 + 11·4 and 66 = 11·6 are all buyable, and adding boxes of 7 to those seven reaches every total beyond.",
+    hints: [
+      "Two box sizes with no common factor leave only finitely many totals unreachable.",
+      "For relatively prime a and b the largest unreachable total is ab − a − b.",
+      "Sanity-check by confirming the next several totals above your answer are all buyable.",
+    ],
+    difficulty: 9,
+    topicSlug: "diophantine-equations",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-161",
+    question:
+      "To save for a car, Nadia deposits $50 into an account in the first week, and in each later week she deposits $5 more than she did the week before. The account pays no interest. After how many weeks does the total amount she has deposited first exceed $5000?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["32", "35", "36", "37", "40"],
+    answer: "D",
+    solution:
+      "The weekly deposits form an arithmetic sequence 50, 55, 60, …, so after n weeks the total is (n/2)[2·50 + (n − 1)·5] = n(95 + 5n)/2. Setting this greater than 5000 gives 5n² + 95n − 10000 > 0, or n² + 19n − 2000 > 0, whose positive root is (−19 + √8361)/2 ≈ 36.2. Checking: after 36 weeks the total is 18 · 275 = $4950, still short, and after 37 weeks it is 37 · 140 = $5180. The answer is 37 weeks.",
+    hints: [
+      "The deposits form an arithmetic sequence; use the sum formula rather than adding term by term.",
+      "Set the sum greater than 5000 and solve the resulting quadratic inequality.",
+      "The root is not a whole number — check the integers on both sides of it.",
+    ],
+    difficulty: 9,
+    topicSlug: "sequences",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-162",
+    question:
+      "At a carnival booth a player pays $3 to roll a pair of fair six-sided dice once. If the two dice show a sum of 7, the booth pays the player $10. If the sum is 2 or 11, the booth pays $5. Otherwise the booth pays nothing. In the long run, how many dollars does a player lose on average per play?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["11/12", "25/12", "13/6", "3", "10/3"],
+    answer: "A",
+    solution:
+      "Of the 36 equally likely outcomes, 6 give a sum of 7, 1 gives 2, and 2 give 11. The expected payout is (6 · 10 + 1 · 5 + 2 · 5)/36 = (60 + 15)/36 = 75/36 = 25/12 dollars. The player pays $3 = 36/12, so the average loss per play is 36/12 − 25/12 = 11/12 of a dollar.",
+    hints: [
+      "Count the outcomes out of 36 for each of the three payout cases.",
+      "Expected payout is the sum of (payout × number of outcomes) divided by 36.",
+      "The loss is the $3 paid minus the expected payout, not the other way around.",
+    ],
+    difficulty: 9,
+    topicSlug: "expected-value",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-163",
+    question:
+      "A street lamp sits atop a straight vertical post 24 feet tall. A person 6 feet tall walks directly away from the base of the post along level ground at a steady 4 feet per second. At what rate, in feet per second, does the tip of the person's shadow move away from the base of the post?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["4/3", "16/5", "4", "16/3", "6"],
+    answer: "D",
+    solution:
+      "Let x be the walker's distance from the post and s the distance from the post to the shadow's tip. The lamp, the walker's head and the tip lie on a line, giving similar triangles: 24/s = 6/(s − x). Cross-multiplying, 24(s − x) = 6s, so 18s = 24x and s = (4/3)x. The tip's distance is always 4/3 of the walker's, so its speed is (4/3)(4) = 16/3 feet per second.",
+    hints: [
+      "Draw the big triangle (lamp to tip) and the small one (person to tip) — they are similar.",
+      "Write the similarity as a proportion relating the walker's distance x and the tip's distance s.",
+      "Solving gives s as a constant multiple of x, so the speeds are in that same ratio.",
+    ],
+    difficulty: 9,
+    topicSlug: "similarity-congruence",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-164",
+    question:
+      "A school's enrollment is somewhere between 600 and 700 students. When the students line up in rows of 7, three students are left over. When they line up in rows of 8, five are left over. When they line up in rows of 9, four are left over. How many students are enrolled?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["605", "613", "637", "653", "661"],
+    answer: "E",
+    solution:
+      "We want n with n ≡ 3 (mod 7), n ≡ 5 (mod 8), n ≡ 4 (mod 9). The last two conditions are both satisfied by n = 85, and since 8 and 9 are coprime they force n ≡ 85 ≡ 13 (mod 72). Writing n = 13 + 72k and reducing mod 7: 13 ≡ 6 and 72 ≡ 2, so 6 + 2k ≡ 3 (mod 7), giving 2k ≡ 4 and k ≡ 2 (mod 7). The smallest such n is 13 + 144 = 157, so n ≡ 157 (mod 504). Adding 504 gives 661, which lies between 600 and 700. (Check: 661 = 94·7 + 3 = 82·8 + 5 = 73·9 + 4.)",
+    hints: [
+      "Translate each lineup into a congruence and combine two of them first.",
+      "The moduli 8 and 9 are coprime, so they combine into a single condition mod 72.",
+      "Bring in the mod 7 condition last, then step by 504 until you land in the given range.",
+    ],
+    difficulty: 9,
+    topicSlug: "modular-arithmetic",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-165",
+    question:
+      "A survey of 300 households found that 180 subscribe to a streaming service, 150 have cable television, and 90 take a printed newspaper. Of these, 80 have both streaming and cable, 40 have both streaming and a newspaper, and 30 have both cable and a newspaper, while 20 households have all three. How many of the 300 households have none of the three?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["10", "20", "30", "40", "50"],
+    answer: "A",
+    solution:
+      "By inclusion–exclusion the number with at least one service is 180 + 150 + 90 − 80 − 40 − 30 + 20 = 420 − 150 + 20 = 290. Therefore 300 − 290 = 10 households have none of the three.",
+    hints: [
+      "Add the three single totals, subtract each pairwise total, then add back the triple.",
+      "The pairwise figures already include the 20 triple households, which is why they get added back once.",
+      "Subtract the union from 300 at the end.",
+    ],
+    difficulty: 8,
+    topicSlug: "inclusion-exclusion",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-166",
+    question:
+      "A biologist starts a culture with 400 bacteria. The population triples every 5 hours, growing continuously so that after t hours there are 400 · 3^(t/5) bacteria. After how many whole hours does the population first exceed 100,000?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["21", "23", "25", "26", "28"],
+    answer: "D",
+    solution:
+      "We need 400 · 3^(t/5) > 100000, i.e. 3^(t/5) > 250. Taking logarithms, t/5 > log₃250 = ln 250 / ln 3 ≈ 5.5215/1.0986 ≈ 5.026, so t > 25.13. The first whole hour past that is t = 26. (Check: at t = 25 the population is 400 · 3⁵ = 97,200, just short, and at t = 26 it is about 102,700.)",
+    hints: [
+      "Divide first so the inequality reads 3 to a power greater than a plain number.",
+      "Note that 3⁵ = 243 is only slightly less than 250 — the crossing happens just after t = 25.",
+      "Take logs to confirm, then round up to the next whole hour.",
+    ],
+    difficulty: 9,
+    topicSlug: "exponents-radicals",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-167",
+    question:
+      "A shipping company requires that length plus girth be at most 108 inches. A box has a square cross-section of side s inches and length L inches, and its girth is the distance once around that square, namely 4s. Both s and L are whole numbers of inches. What is the largest possible volume of such a box, in cubic inches?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["10404", "11250", "11552", "11560", "11664"],
+    answer: "E",
+    solution:
+      "To maximize volume the constraint should be tight: L = 108 − 4s, so V(s) = s²(108 − 4s) = 108s² − 4s³. Then V′(s) = 216s − 12s² = 12s(18 − s), which is zero at s = 18, and V increases before that and decreases after. Since 18 is already a whole number, take s = 18, L = 108 − 72 = 36, and V = 324 · 36 = 11,664 cubic inches. (Without calculus, testing s = 17, 18, 19 gives 11,560, 11,664 and 11,552.)",
+    hints: [
+      "Making L smaller than the limit allows only wastes volume, so use L = 108 − 4s.",
+      "That turns the volume into a cubic in the single variable s.",
+      "Find where the cubic peaks, then check the whole numbers nearest that peak.",
+    ],
+    difficulty: 9,
+    topicSlug: "three-d-geometry",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-168",
+    question:
+      "In a certain town 2% of the residents have a particular condition. A screening test correctly returns a positive result for 90% of the residents who have the condition, and it returns a positive result for 5% of the residents who do not have it. A resident is chosen at random and tests positive. What is the probability that this resident actually has the condition?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["9/50", "1/5", "18/67", "49/67", "9/10"],
+    answer: "C",
+    solution:
+      "Imagine 10,000 residents. Then 200 have the condition and 180 of them test positive. Of the 9,800 without it, 5% — that is 490 — also test positive. So 670 residents test positive in all, and 180 of them truly have the condition. The probability is 180/670 = 18/67 ≈ 0.269. Notice this is far below 90%: because the condition is rare, the false positives outnumber the true ones.",
+    hints: [
+      "Pick a convenient population size, like 10,000, and count actual people instead of juggling decimals.",
+      "Positives come from two groups — the sick who test positive and the healthy who test positive.",
+      "The answer is (true positives)/(all positives), not the test's accuracy rate.",
+    ],
+    difficulty: 10,
+    topicSlug: "conditional-probability",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-169",
+    question:
+      "A juice company blends a drink that is 30% real juice with a drink that is 75% real juice to produce 900 liters of a blend that is exactly 50% real juice. How many liters of the 75% drink does the company use?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["300", "360", "400", "450", "500"],
+    answer: "C",
+    solution:
+      "Let x be the liters of the 30% drink, so 900 − x liters are the 75% drink. The juice content gives 0.30x + 0.75(900 − x) = 0.50(900) = 450. Expanding: 675 − 0.45x = 450, so 0.45x = 225 and x = 500. Therefore the 75% drink accounts for 900 − 500 = 400 liters. (Check: 0.30·500 + 0.75·400 = 150 + 300 = 450.)",
+    hints: [
+      "Track the liters of pure juice, not the liters of drink.",
+      "If x liters are the weaker drink, the rest of the 900 is the stronger one.",
+      "Solve for x, then remember the question asks about the other drink.",
+    ],
+    difficulty: 8,
+    topicSlug: "systems-of-equations",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-170",
+    question:
+      "A vertical flagpole stands on level ground. One guy wire runs from the very top of the 30-foot pole to a stake in the ground 16 feet from the pole's base. A second guy wire runs from a point 12 feet up the pole to that very same stake. How many feet longer is the first wire than the second?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 244\" width=\"340\" height=\"244\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><line x1=\"80\" y1=\"210\" x2=\"80\" y2=\"30\" /><line x1=\"40\" y1=\"210\" x2=\"300\" y2=\"210\" /><line x1=\"80\" y1=\"30\" x2=\"260\" y2=\"210\" /><line x1=\"80\" y1=\"138\" x2=\"260\" y2=\"210\" /><rect x=\"80\" y=\"196\" width=\"14\" height=\"14\" stroke-width=\"1.5\" /><text x=\"72\" y=\"120\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">30 ft</text><text x=\"72\" y=\"176\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">12 ft</text><text x=\"170\" y=\"228\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">16 ft</text><text x=\"265\" y=\"206\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">stake</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["10", "12", "14", "16", "18"],
+    answer: "C",
+    solution:
+      "Each wire is the hypotenuse of a right triangle whose legs are a height on the pole and the 16-foot ground distance. The first wire is √(30² + 16²) = √(900 + 256) = √1156 = 34 feet. The second is √(12² + 16²) = √(144 + 256) = √400 = 20 feet. The difference is 34 − 20 = 14 feet.",
+    hints: [
+      "Both wires end at the same stake, so both right triangles share the 16-foot leg.",
+      "Apply the Pythagorean theorem separately to the 30-foot height and the 12-foot height.",
+      "Both hypotenuses come out to whole numbers — 1156 and 400 are perfect squares.",
+    ],
+    difficulty: 8,
+    topicSlug: "triangles",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-171",
+    question:
+      "A fan climbing to her seat must go up a flight of 12 stadium steps. Because she is carrying a full drink, she takes either 1 step or 2 steps at a time, and she never takes two 2-step strides in a row. Two climbs are different if the sequence of strides differs. In how many different ways can she climb the 12 steps?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["60", "72", "88", "110", "233"],
+    answer: "C",
+    solution:
+      "Let aₙ be the number of valid climbs of n steps ending in a 1-step and bₙ the number ending in a 2-step. A 1-step can follow anything, so aₙ = aₙ₋₁ + bₙ₋₁; a 2-step may only follow a 1-step, so bₙ = aₙ₋₂. Starting from a₁ = 1, b₁ = 0, a₂ = 1, b₂ = 1, the totals aₙ + bₙ run 1, 2, 3, 4, 6, 9, 13, 19, 28, 41, 60, 88 for n = 1 through 12. So there are 88 ways. (Without the restriction the count would be the Fibonacci number 233.)",
+    hints: [
+      "Split the count by whether the last stride is a 1 or a 2.",
+      "A 2-step stride is only allowed right after a 1-step stride — that gives the second recurrence.",
+      "Build the table up from n = 1 rather than guessing a closed form.",
+    ],
+    difficulty: 10,
+    topicSlug: "recursion-in-counting",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-172",
+    question:
+      "A new car loses exactly 15% of its value every year, so that at the end of each year it is worth 85% of what it was worth at the start of that year. After how many full years is the car first worth less than one-fourth of its original price?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["5", "7", "8", "9", "10"],
+    answer: "D",
+    solution:
+      "We need 0.85ⁿ < 1/4. Taking logarithms, n > ln(0.25)/ln(0.85) = (−1.3863)/(−0.16252) ≈ 8.53, so the first whole year is n = 9. Checking directly: 0.85⁸ ≈ 0.2725, still above one-fourth, while 0.85⁹ ≈ 0.2316, which is below it.",
+    hints: [
+      "Each year multiplies the value by 0.85, so after n years the factor is 0.85ⁿ.",
+      "Set that less than 1/4 and take logarithms of both sides.",
+      "Dividing by a negative logarithm flips the inequality — then round up.",
+    ],
+    difficulty: 9,
+    topicSlug: "exponents-radicals",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-173",
+    question:
+      "The total cost of a school trip is a fixed amount that is split evenly among the students who go. If 5 more students went, each student would pay $6 less. If 10 fewer students went, each student would pay $24 more. What is the total cost of the trip, in dollars?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["600", "720", "750", "840", "900"],
+    answer: "E",
+    solution:
+      "Let n be the number of students and c the total cost, so each pays c/n. The first condition gives c/(n + 5) = c/n − 6; clearing denominators, cn = c(n + 5) − 6n(n + 5), so 5c = 6n² + 30n and c = (6n² + 30n)/5. The second gives c/(n − 10) = c/n + 24, leading to 10c = 24n² − 240n and c = (12n² − 120n)/5. Setting the two expressions equal: 6n² + 30n = 12n² − 120n, so 6n² = 150n and n = 25. Then c = (6·625 + 750)/5 = 4500/5 = $900. (Each of the 25 pays $36; 30 would pay $30, and 15 would pay $60.)",
+    hints: [
+      "Let n be the number of students and c the fixed total; the per-person price is c/n.",
+      "Each condition becomes an equation after clearing denominators — solve each for c in terms of n.",
+      "Setting the two expressions for c equal eliminates c and leaves a quadratic in n.",
+    ],
+    difficulty: 9,
+    topicSlug: "systems-of-equations",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-174",
+    question:
+      "A farmer's field is a trapezoid. Its two parallel sides, running north and south, measure 200 meters and 120 meters, and its two slanted sides measure 50 meters and 78 meters. What is the area of the field, in square meters?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 240\" width=\"340\" height=\"240\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"30,206 290,206 246,89 114,89\" fill=\"currentColor\" fill-opacity=\"0.12\" /><line x1=\"114\" y1=\"89\" x2=\"114\" y2=\"206\" stroke-dasharray=\"4 4\" stroke-opacity=\"0.55\" /><line x1=\"246\" y1=\"89\" x2=\"246\" y2=\"206\" stroke-dasharray=\"4 4\" stroke-opacity=\"0.55\" /><text x=\"160\" y=\"226\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">200 m</text><text x=\"180\" y=\"81\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">120 m</text><text x=\"62\" y=\"148\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">50 m</text><text x=\"276\" y=\"148\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">78 m</text><text x=\"124\" y=\"152\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">h</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["6240", "7200", "7488", "7680", "8000"],
+    answer: "C",
+    solution:
+      "Drop perpendiculars from the ends of the short side to the long side, cutting off horizontal pieces a and b with a + b = 200 − 120 = 80. If h is the height, then a² + h² = 50² and b² + h² = 78². Subtracting, a² − b² = 2500 − 6084 = −3584, and since a² − b² = (a − b)(a + b) = 80(a − b), we get a − b = −44.8. With a + b = 80 this gives a = 17.6 and b = 62.4. Then h² = 2500 − 309.76 = 2190.24, so h = 46.8. The area is ((200 + 120)/2) · 46.8 = 160 · 46.8 = 7488 square meters.",
+    hints: [
+      "Drop a perpendicular from each end of the shorter parallel side to form two right triangles.",
+      "The two horizontal offsets must add to the difference of the parallel sides.",
+      "Subtracting the two Pythagorean equations eliminates h and gives a − b directly.",
+    ],
+    difficulty: 9,
+    topicSlug: "quadrilaterals",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-175",
+    question:
+      "A jar at a school fair holds 15 red marbles and 12 blue marbles. A student repeats the following move until one marble remains: draw two marbles at random; if they match in color, drop a blue marble into the jar; if they differ, drop a red marble into the jar. (The jar has an unlimited supply of spare marbles.) What color is the last marble?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["Red", "Blue", "Red if the first draw matches, blue otherwise", "It depends on the order of the draws", "The process can never leave exactly one marble"],
+    answer: "A",
+    solution:
+      "Track the number of red marbles. Drawing two reds removes two and adds a blue, lowering the red count by 2. Drawing two blues removes two blues and adds a blue, leaving the red count alone. Drawing one of each removes one red and adds one red, again leaving the red count alone. So the number of reds never changes parity. It starts at 15, which is odd, so it is odd forever — and each move reduces the total by exactly one marble, so exactly one marble remains at the end. A single marble with an odd red count must be red.",
+    hints: [
+      "Every move removes two marbles and adds one, so the total drops by one each time — the process really does end with one marble.",
+      "Look for a quantity that never changes, or changes only in a predictable way.",
+      "Check how each of the three cases affects the number of red marbles, and watch whether it stays odd or even.",
+    ],
+    difficulty: 10,
+    topicSlug: "invariants",
+    competitionSlug: "amc10",
+  },
+  {
+    slug: "amc10-176",
+    question:
+      "A small plane flies a 1200-mile route with a steady tailwind in exactly 2 hours, then turns around and flies the same 1200 miles straight into that same steady wind in exactly 2.5 hours. The plane's speed in still air and the wind's speed are both constant. What is the speed of the wind, in miles per hour?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["30", "45", "60", "75", "120"],
+    answer: "C",
+    solution:
+      "Let p be the plane's speed in still air and w the wind's speed. Flying with the wind, the ground speed is p + w = 1200/2 = 600 mph. Flying against it, p − w = 1200/2.5 = 480 mph. Adding the two equations gives 2p = 1080, so p = 540, and subtracting gives 2w = 120, so w = 60 miles per hour.",
+    hints: [
+      "Convert each leg into a ground speed by dividing distance by time.",
+      "The tailwind leg gives p + w and the headwind leg gives p − w.",
+      "Subtract the two equations to isolate the wind speed.",
+    ],
+    difficulty: 8,
+    topicSlug: "rates",
+    competitionSlug: "amc10",
+  },
 ];

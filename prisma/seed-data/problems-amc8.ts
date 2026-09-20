@@ -2066,4 +2066,442 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
     topicSlug: "number-theory",
     competitionSlug: "amc8",
   },
+  {
+    slug: "amc8-142",
+    question:
+      "The eighth-grade concession stand charges $3 for a bag of popcorn, $2 for a drink, and $4 for a pretzel. During Friday's basketball game the stand sold 30 items altogether and took in exactly $84. It sold three times as many drinks as pretzels, and it sold at least one of each item. How many bags of popcorn did the stand sell?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["12", "15", "18", "20", "21"],
+    answer: "C",
+    solution:
+      "Let p, d, z be the numbers of popcorns, drinks and pretzels. Then p + d + z = 30, 3p + 2d + 4z = 84, and d = 3z. Substituting d = 3z into the count gives p + 4z = 30, so p = 30 − 4z. Substituting into the money equation: 3(30 − 4z) + 2(3z) + 4z = 90 − 12z + 6z + 4z = 90 − 2z = 84, so z = 3. Then d = 9 and p = 30 − 12 = 18. Check: 18 + 9 + 3 = 30 items and 54 + 18 + 12 = $84.",
+    hints: [
+      "Name a variable for each item and write one equation for the number of items and one for the money.",
+      "Use \"three times as many drinks as pretzels\" to cut the three unknowns down to two.",
+      "The item equation gives p = 30 − 4z; put that into the money equation and solve for z first.",
+    ],
+    difficulty: 7,
+    topicSlug: "systems-of-equations",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-143",
+    question:
+      "At the downtown transit center the Red line leaves at 6:00 AM and every 12 minutes after that. The Blue line leaves at 6:06 AM and every 18 minutes after that. The Green line leaves at 6:18 AM and every 30 minutes after that. At what time do all three lines leave the center together for the first time?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["7:12 AM", "8:00 AM", "8:48 AM", "9:36 AM", "12:00 PM"],
+    answer: "C",
+    solution:
+      "Measure time t in minutes after 6:00 AM. The Red line leaves when t ≡ 0 (mod 12), the Blue line when t ≡ 6 (mod 18), and the Green line when t ≡ 18 (mod 30). The first two conditions force t ≡ 24 (mod 36), giving t = 24, 60, 96, 132, 168, …. Testing these against t ≡ 18 (mod 30): 24, 60, 96 and 132 all fail, but 168 = 5·30 + 18 works. So t = 168 minutes = 2 hours 48 minutes after 6:00 AM, which is 8:48 AM.",
+    hints: [
+      "Count minutes after 6:00 AM and write each line's departures as a remainder condition.",
+      "Combine the Red and Blue conditions first — together they leave one possibility every 36 minutes.",
+      "Walk through 24, 60, 96, 132, 168 and check each against the Green line.",
+    ],
+    difficulty: 7,
+    topicSlug: "modular-arithmetic",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-144",
+    question:
+      "Maya can paint the clubhouse fence by herself in 6 hours, and her brother Eli can paint it by himself in 9 hours. They start painting together at 9:00 AM. After two hours Eli leaves for soccer practice and Maya finishes the job alone, working at her same steady rate. At what time is the fence finished?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["12:40 PM", "1:00 PM", "1:20 PM", "1:40 PM", "2:00 PM"],
+    answer: "D",
+    solution:
+      "Maya paints 1/6 of the fence per hour and Eli 1/9, so together they paint 1/6 + 1/9 = 5/18 per hour. In two hours they finish 10/18 = 5/9 of the fence, leaving 4/9. Maya alone needs (4/9) ÷ (1/6) = 24/9 = 8/3 hours = 2 hours 40 minutes. She stops at 11:00 AM + 2 hours 40 minutes = 1:40 PM.",
+    hints: [
+      "Turn each person's time into a rate: the fraction of the fence painted per hour.",
+      "Add the rates for the first two hours, then subtract that work from the whole job.",
+      "Divide the leftover fraction by Maya's rate alone to get the extra hours.",
+    ],
+    difficulty: 7,
+    topicSlug: "rates",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-145",
+    question:
+      "Three stores sell the same $120 tent. Store A takes 30% off the list price. Store B takes 20% off the list price and then takes another 15% off that reduced price. Store C subtracts a $25 coupon from the list price and then takes 20% off what remains. Each store then adds 7% sales tax to its own final price. What is the lowest of the three prices a shopper would pay, in dollars?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["81.32", "81.60", "84.00", "87.31", "89.88"],
+    answer: "A",
+    solution:
+      "Store A: 120 · 0.70 = $84. Store B: 120 · 0.80 = $96, then 96 · 0.85 = $81.60. Store C: 120 − 25 = $95, then 95 · 0.80 = $76. Store C is cheapest before tax, and since every store adds the same 7% it is still cheapest after tax: 76 · 1.07 = $81.32. (Note that 20% then 15% is not 35% off, and that subtracting the coupon before the percentage is what makes Store C win.)",
+    hints: [
+      "Two successive discounts multiply; they do not add.",
+      "Work out each store's pre-tax price first — the same 7% is applied to all three, so the cheapest before tax is cheapest after.",
+      "For Store C, be careful about the order: the $25 comes off first, then 20% of what is left.",
+    ],
+    difficulty: 7,
+    topicSlug: "percentages",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-146",
+    question:
+      "The school store sells notebooks for $7 each and binders for $11 each, and charges no tax. A teacher spends exactly $215 on notebooks and binders, buying at least one of each. How many different combinations of numbers of notebooks and binders could she have bought?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["1", "2", "3", "4", "6"],
+    answer: "C",
+    solution:
+      "We need 7n + 11b = 215 with n, b ≥ 1. Reading the equation modulo 7: 215 leaves remainder 5 and 11b leaves the same remainder as 4b, so 4b ≡ 5 (mod 7). Multiplying by 2 (since 4·2 = 8 ≡ 1) gives b ≡ 10 ≡ 3 (mod 7), so b = 3, 10, 17, 24, …. We also need 11b ≤ 215 − 7 = 208, so b ≤ 18. That leaves b = 3, 10, 17, giving (n, b) = (26, 3), (15, 10), (4, 17) — three combinations.",
+    hints: [
+      "Write the condition as 7n + 11b = 215 with both numbers positive.",
+      "Reduce the equation modulo 7 to pin down the possible values of b.",
+      "The solutions for b come every 7 apart; stop once 11b gets too big to leave room for a notebook.",
+    ],
+    difficulty: 8,
+    topicSlug: "diophantine-equations",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-147",
+    question:
+      "A pizza shop lets you build your own pizza. You pick exactly one of 3 crusts, exactly one of 2 sauces, and then either 2 different toppings or 3 different toppings from a list of 8. Two pizzas count as different if they differ in crust, in sauce, or in the set of toppings. How many different pizzas can be built?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["336", "420", "504", "560", "672"],
+    answer: "C",
+    solution:
+      "The toppings are chosen as a set, so there are C(8,2) = 28 ways to pick two and C(8,3) = 56 ways to pick three, for 28 + 56 = 84 topping choices. The crust and sauce multiply this by 3 · 2 = 6. The total is 6 · 84 = 504.",
+    hints: [
+      "Order does not matter among toppings, so count combinations, not arrangements.",
+      "Handle the 2-topping and 3-topping cases separately and add them.",
+      "Multiply the topping count by the number of crust-and-sauce pairs.",
+    ],
+    difficulty: 7,
+    topicSlug: "counting-principles",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-148",
+    question:
+      "After eight quizzes Priya's mean score is 84. She scores 96 on her ninth quiz. Her teacher then drops the single lowest of the nine scores and averages the remaining eight, and that final average is exactly 87. What was Priya's lowest score?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["60", "66", "72", "75", "78"],
+    answer: "C",
+    solution:
+      "The first eight quizzes total 8 · 84 = 672, so all nine total 672 + 96 = 768. After the lowest score L is dropped, eight scores remain with average 87, so they total 8 · 87 = 696. Therefore L = 768 − 696 = 72.",
+    hints: [
+      "Convert every average into a total before doing anything else.",
+      "The nine scores together total 672 + 96.",
+      "The eight kept scores total 8 · 87; the difference is the dropped score.",
+    ],
+    difficulty: 7,
+    topicSlug: "averages",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-149",
+    question:
+      "A rectangular community garden measures 20 feet by 14 feet. A gravel walkway of the same width is laid inside the garden along all four edges, leaving a smaller rectangle of planted ground in the middle. The planted rectangle has exactly 40% of the area of the whole garden. How many feet wide is the walkway?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"-24 0 364 224\" width=\"364\" height=\"224\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><rect x=\"30\" y=\"26\" width=\"260\" height=\"182\" /><rect x=\"69\" y=\"65\" width=\"182\" height=\"104\" fill=\"currentColor\" fill-opacity=\"0.12\" /><text x=\"160\" y=\"18\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">20 ft</text><text x=\"22\" y=\"122\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">14 ft</text><text x=\"160\" y=\"122\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">planted</text><text x=\"160\" y=\"52\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">walkway</text><text x=\"55\" y=\"48\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">w</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["2", "2.5", "3", "3.5", "4"],
+    answer: "C",
+    solution:
+      "The whole garden has area 20 · 14 = 280 square feet, so the planted rectangle has 0.40 · 280 = 112. A walkway of width w along all four edges shortens each dimension by 2w, so (20 − 2w)(14 − 2w) = 112. Expanding gives 280 − 68w + 4w² = 112, or w² − 17w + 42 = 0, which factors as (w − 3)(w − 14) = 0. Since w = 14 is impossible for a 14-foot side, w = 3 feet.",
+    hints: [
+      "The walkway runs along both edges in each direction, so each dimension loses 2w, not w.",
+      "Set (20 − 2w)(14 − 2w) equal to 40% of 280.",
+      "The resulting quadratic has two roots — throw out the one that is too big for the garden.",
+    ],
+    difficulty: 8,
+    topicSlug: "area-volume",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-150",
+    question:
+      "On Dev's bicycle the pedals turn a front sprocket with 52 teeth, which is joined by a chain to a rear sprocket with 13 teeth. The rear wheel turns exactly with the rear sprocket, and the wheel travels 7 feet along the ground for each full turn. Riding in this gear, what is the least number of complete pedal turns that carries Dev at least one mile (5280 feet)?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["47", "97", "188", "189", "754"],
+    answer: "D",
+    solution:
+      "The chain moves the same number of teeth at both sprockets, so one pedal turn (52 teeth) turns the 13-tooth rear sprocket 52/13 = 4 times. Four wheel turns cover 4 · 7 = 28 feet, so each pedal turn is worth 28 feet. Now 5280 ÷ 28 = 188.57…, so 188 pedal turns fall short and 189 are needed.",
+    hints: [
+      "The tooth counts give the gear ratio: one pedal turn equals 52/13 wheel turns.",
+      "Multiply the wheel turns per pedal turn by the 7 feet the wheel covers per turn.",
+      "Dividing 5280 by that distance does not come out even — round up, not to the nearest whole number.",
+    ],
+    difficulty: 7,
+    topicSlug: "ratios-proportions",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-151",
+    question:
+      "Six members of a math team — three from Lincoln Middle School and three from Jefferson Middle School — sit in a row of six chairs for a team photo. The coach insists that no two students from the same school sit next to each other. The six students are all different people. In how many orders can they be seated?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["36", "48", "72", "120", "144"],
+    answer: "C",
+    solution:
+      "If no two from the same school are adjacent, the schools must strictly alternate along the row, so the pattern is either L J L J L J or J L J L J L — two patterns. (Any other pattern would repeat a school somewhere.) Within a chosen pattern the three Lincoln students can be arranged in the three Lincoln seats in 3! = 6 ways and the Jefferson students likewise in 6 ways. The total is 2 · 6 · 6 = 72.",
+    hints: [
+      "With three of each school in six seats, \"no two adjacent\" forces a strict alternation.",
+      "There are only two alternating patterns; count them first.",
+      "Then arrange the named students inside each school's seats independently.",
+    ],
+    difficulty: 8,
+    topicSlug: "permutations",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-152",
+    question:
+      "A theater's neon sign cycles through 7 colors in a fixed order, numbered 1 through 7, changing to the next color every 9 seconds and returning to color 1 after color 7. Color 1 comes on at exactly 8:00:00 PM. Which color is showing at 9:30:04 PM?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["2", "3", "4", "5", "6"],
+    answer: "E",
+    solution:
+      "From 8:00:00 PM to 9:30:04 PM is 90 · 60 + 4 = 5404 seconds. Dividing by 9 gives 600 complete color changes with 4 seconds left over, so the sign is 600 colors past color 1. Since 600 = 85 · 7 + 5, the sign has advanced 5 colors within its cycle, landing on color 1 + 5 = 6.",
+    hints: [
+      "Convert the elapsed time to seconds, then divide by 9 to count how many changes have happened.",
+      "The leftover seconds do not matter — they just mean the current color is still showing.",
+      "Reduce the number of changes modulo 7 and count forward from color 1.",
+    ],
+    difficulty: 7,
+    topicSlug: "modular-arithmetic",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-153",
+    question:
+      "A prize bag at the school fair holds 5 red tickets, 4 blue tickets, and 3 green tickets, identical except for color. A student reaches in and draws two tickets at random without looking and without putting the first one back. What is the probability that the two tickets are different colors?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["19/66", "5/12", "7/12", "47/66", "19/22"],
+    answer: "D",
+    solution:
+      "There are C(12,2) = 66 equally likely pairs. Pairs of the same color number C(5,2) + C(4,2) + C(3,2) = 10 + 6 + 3 = 19. So 66 − 19 = 47 pairs have two different colors, and the probability is 47/66.",
+    hints: [
+      "Counting the pairs that match is easier than counting the pairs that differ.",
+      "Same-color pairs split into three cases: two reds, two blues, two greens.",
+      "Subtract the matching pairs from the total number of pairs, C(12,2).",
+    ],
+    difficulty: 7,
+    topicSlug: "basic-probability",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-154",
+    question:
+      "A Ferris wheel at the county fair has 20 cars spaced evenly around it, numbered 1 through 20 in the order they reach the bottom. The wheel turns steadily and makes one full revolution every 12 minutes. Car 1 is at the bottom at exactly 2:00 PM. Which car is at the bottom at 2:45 PM?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["6", "11", "15", "16", "20"],
+    answer: "D",
+    solution:
+      "One revolution takes 12 minutes and brings all 20 cars past the bottom, so a car reaches the bottom every 12/20 = 0.6 minutes. In the 45 minutes from 2:00 to 2:45 there are 45 ÷ 0.6 = 75 such steps. Starting from car 1 and advancing 75 positions: 75 = 3 · 20 + 15, so the wheel advances 15 positions past car 1, putting car 16 at the bottom.",
+    hints: [
+      "Find how long it takes for the next car to reach the bottom, not just for a full revolution.",
+      "Count how many cars have passed the bottom in 45 minutes.",
+      "Reduce that count modulo 20 and count forward from car 1.",
+    ],
+    difficulty: 7,
+    topicSlug: "patterns",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-155",
+    question:
+      "A rain barrel is shaped like a rectangular prism with a 2-foot by 3-foot base and tall vertical sides, and it is open at the top. Gutters channel every drop of rain that lands on a flat roof measuring 24 feet by 40 feet into the barrel. A storm drops 0.5 inch of rain on the roof. Assuming the barrel is tall enough to hold it all, by how many inches does the water level in the barrel rise?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["6.7", "20", "40", "80", "160"],
+    answer: "D",
+    solution:
+      "Half an inch is 1/24 foot, so the roof collects 24 · 40 · (1/24) = 40 cubic feet of water. The barrel's base has area 2 · 3 = 6 square feet, so the water stands 40 ÷ 6 = 20/3 feet deep. In inches that is (20/3) · 12 = 80 inches. (Equivalently, the roof's area is 960/6 = 160 times the barrel's base, so the depth is multiplied by 160: 0.5 · 160 = 80 inches.)",
+    hints: [
+      "Find the volume of rain that lands on the roof — convert 0.5 inch to feet first.",
+      "That whole volume sits on the barrel's 2-by-3-foot base.",
+      "Divide volume by base area to get a depth, then convert it back to inches.",
+    ],
+    difficulty: 7,
+    topicSlug: "area-volume",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-156",
+    question:
+      "Four friends split a $96 dinner bill unequally. Ben pays twice as much as Ana. Carla pays $6 more than Ana. Dev pays as much as Ana and Carla put together. If their four payments add up to exactly $96, how many dollars does Ben pay?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["14", "20", "28", "34", "42"],
+    answer: "C",
+    solution:
+      "Let Ana pay a dollars. Then Ben pays 2a, Carla pays a + 6, and Dev pays a + (a + 6) = 2a + 6. The total is a + 2a + (a + 6) + (2a + 6) = 6a + 12 = 96, so 6a = 84 and a = 14. Ben pays 2a = $28. (Check: 14 + 28 + 20 + 34 = 96.)",
+    hints: [
+      "Let Ana's payment be the variable and write everyone else in terms of it.",
+      "Dev's share depends on Carla's, which itself depends on Ana's — substitute twice.",
+      "Add all four expressions, set the sum to 96, and solve.",
+    ],
+    difficulty: 6,
+    topicSlug: "linear-equations",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-157",
+    question:
+      "Jo and Sam start together at the same point on a 400-meter oval track and run for 20 minutes without stopping. Jo runs one lap every 80 seconds; Sam runs one lap every 100 seconds. They run in opposite directions around the track. Not counting the start, how many times are they at the same point on the track during those 20 minutes?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["3", "9", "24", "27", "30"],
+    answer: "D",
+    solution:
+      "Jo's speed is 400/80 = 5 m/s and Sam's is 400/100 = 4 m/s. Running toward each other, they close the gap at 5 + 4 = 9 m/s, so they meet each time their combined distance grows by one lap: every 400/9 seconds. Twenty minutes is 1200 seconds, and 1200 ÷ (400/9) = 1200 · 9/400 = 27 exactly, so they meet 27 times (the 27th meeting happens right at the 20-minute mark).",
+    hints: [
+      "Convert both lap times into speeds in meters per second.",
+      "Running in opposite directions, the relevant speed is the sum, not the difference.",
+      "They meet once for every full 400 meters of combined distance.",
+    ],
+    difficulty: 8,
+    topicSlug: "rates",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-158",
+    question:
+      "The chess club holds a round-robin tournament in which every member plays every other member exactly once. This year three new students joined the club, and as a result the tournament had 39 more games than last year's. How many members does the club have now?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["12", "13", "14", "15", "18"],
+    answer: "D",
+    solution:
+      "With n members there are C(n,2) = n(n−1)/2 games. Going from n to n + 3 members changes the count by [(n+3)(n+2) − n(n−1)]/2 = (6n + 6)/2 = 3n + 3. Setting 3n + 3 = 39 gives n = 12, so the club had 12 members and now has 12 + 3 = 15. (Check: C(15,2) − C(12,2) = 105 − 66 = 39.)",
+    hints: [
+      "A round robin among n players has C(n,2) games.",
+      "Write the increase C(n+3,2) − C(n,2) and simplify — the n² terms cancel.",
+      "The question asks for the club's size now, not before.",
+    ],
+    difficulty: 7,
+    topicSlug: "combinations",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-159",
+    question:
+      "A recipe that makes exactly 12 muffins calls for 2 1/4 cups of flour, 3/4 cup of sugar, and 2 eggs. Ravi has 6 cups of flour, 2 cups of sugar, and 5 eggs, and he will not use partial eggs. Keeping every ingredient in the same proportion as the recipe, what is the largest number of whole muffins Ravi can make?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["24", "27", "30", "32", "36"],
+    answer: "C",
+    solution:
+      "Work out how many muffins each ingredient alone would allow. Flour: 6 ÷ (9/4) = 8/3 recipes, or (8/3) · 12 = 32 muffins. Sugar: 2 ÷ (3/4) = 8/3 recipes, again 32 muffins. Eggs: 5 ÷ 2 = 5/2 recipes, or (5/2) · 12 = 30 muffins. The eggs run out first, so Ravi can make 30 muffins.",
+    hints: [
+      "For each ingredient separately, ask how many muffins that ingredient alone would allow.",
+      "Divide what he has by what one batch needs, then scale by 12.",
+      "The smallest of the three answers is the limit.",
+    ],
+    difficulty: 7,
+    topicSlug: "fractions",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-160",
+    question:
+      "A phone company offers three plans. Plan A costs $25 per month plus 8 cents per text message. Plan B costs a flat $45 per month with unlimited texts. Plan C costs $15 per month plus 12 cents per text message. For how many whole numbers of text messages in a month is Plan A strictly cheaper than both Plan B and Plan C?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["0", "1", "125", "249", "250"],
+    answer: "A",
+    solution:
+      "Let t be the number of texts. Plan A beats Plan B when 25 + 0.08t < 45, that is 0.08t < 20, so t < 250. Plan A beats Plan C when 25 + 0.08t < 15 + 0.12t, that is 10 < 0.04t, so t > 250. No number of texts satisfies t < 250 and t > 250 at once, so the answer is 0. (At t = 250 all three plans cost exactly $45, and Plan A is never strictly the cheapest.)",
+    hints: [
+      "Set up one inequality for A versus B and another for A versus C.",
+      "Solve each inequality for t — notice which direction each one points.",
+      "Check whether the two ranges actually overlap before answering.",
+    ],
+    difficulty: 8,
+    topicSlug: "inequalities",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-161",
+    question:
+      "A paper map measures 32 cm by 20 cm. Each fold cuts the map's longer dimension exactly in half (if the two dimensions are equal, either one is halved). The map is folded this way over and over. After how many folds is the area of the folded map first less than 5 square centimeters?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["5", "6", "7", "8", "9"],
+    answer: "D",
+    solution:
+      "Track the dimensions, halving the longer one each time: 32×20 (area 640) → 16×20 (320) → 16×10 (160) → 8×10 (80) → 8×5 (40) → 4×5 (20) → 4×2.5 (10) → 2×2.5 (5) → 2×1.25 (2.5). Each fold halves the area, so after k folds the area is 640/2^k. The area is 5 after 7 folds — not yet less than 5 — and 2.5 after 8 folds. The answer is 8 folds.",
+    hints: [
+      "Each fold halves the area, whichever side gets folded.",
+      "Starting area is 640; write the area after k folds as 640 divided by a power of 2.",
+      "Read \"less than 5\" strictly — hitting exactly 5 is not enough.",
+    ],
+    difficulty: 7,
+    topicSlug: "patterns",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-162",
+    question:
+      "A 25-foot ladder leans against a vertical wall with its foot resting 7 feet from the base of the wall on level ground. The foot of the ladder slips and slides 8 more feet away from the wall, while the top stays in contact with the wall. How many feet does the top of the ladder slide down the wall?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 250\" width=\"340\" height=\"250\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><line x1=\"60\" y1=\"210\" x2=\"60\" y2=\"10\" /><line x1=\"40\" y1=\"210\" x2=\"300\" y2=\"210\" /><line x1=\"116\" y1=\"210\" x2=\"60\" y2=\"18\" stroke-dasharray=\"6 4\" stroke-opacity=\"0.55\" /><line x1=\"180\" y1=\"210\" x2=\"60\" y2=\"50\" /><text x=\"88\" y=\"228\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">7 ft</text><text x=\"148\" y=\"228\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">8 ft more</text><text x=\"52\" y=\"34\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">25 ft</text><text x=\"128\" y=\"118\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">25 ft</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["3", "4", "5", "6", "8"],
+    answer: "B",
+    solution:
+      "The ladder, the wall and the ground form a right triangle with hypotenuse 25. At first the base is 7, so the height is √(625 − 49) = √576 = 24 feet. After slipping, the base is 7 + 8 = 15, so the height is √(625 − 225) = √400 = 20 feet. The top slides down 24 − 20 = 4 feet.",
+    hints: [
+      "The ladder's length never changes — it is the hypotenuse in both positions.",
+      "Use the Pythagorean theorem twice, once before and once after the slip.",
+      "The new base distance is 7 + 8, not 8.",
+    ],
+    difficulty: 7,
+    topicSlug: "triangles",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-163",
+    question:
+      "An airport shuttle van made 20 trips from a college dorm one morning, and each trip carried a whole number of students from 1 to 7. Altogether the 20 trips carried 96 students. What is the largest possible number of those trips that carried exactly 7 students?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["9", "10", "11", "12", "13"],
+    answer: "D",
+    solution:
+      "Suppose k trips carried 7 students. The other 20 − k trips carried between 1 and 6 students each, so they carried at least 20 − k students in total. That requires 96 − 7k ≥ 20 − k, i.e. 76 ≥ 6k, so k ≤ 12.67 and therefore k ≤ 12. And k = 12 really works: twelve 7s carry 84 students, leaving 12 students on 8 trips — for example four trips of 2 and four trips of 1. So the largest possible number is 12.",
+    hints: [
+      "Let k be the number of full trips and write what the remaining trips must total.",
+      "Every remaining trip carries at least 1 student — that gives an inequality bounding k.",
+      "An upper bound is not enough: check that the bound can actually be achieved.",
+    ],
+    difficulty: 8,
+    topicSlug: "pigeonhole",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-164",
+    question:
+      "A weather station recorded the daily high temperature for seven days, and the mean of the seven highs was 71°F. The three coldest of those days had a mean high of 62°F, and the three warmest had a mean high of 82°F. What was the high temperature, in degrees Fahrenheit, on the one remaining day?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["63", "65", "68", "71", "72"],
+    answer: "B",
+    solution:
+      "The seven highs total 7 · 71 = 497°F. The three coldest total 3 · 62 = 186 and the three warmest total 3 · 82 = 246, together 432. The remaining day's high is 497 − 432 = 65°F. (This is consistent: 65 does sit between the coldest group and the warmest group.)",
+    hints: [
+      "Turn each of the three averages into a sum.",
+      "The six days described account for all but one of the seven.",
+      "Subtract the two group totals from the grand total.",
+    ],
+    difficulty: 7,
+    topicSlug: "averages",
+    competitionSlug: "amc8",
+  },
+  {
+    slug: "amc8-165",
+    question:
+      "A kitchen floor measuring 12 feet by 9 feet is covered exactly by 1-foot square tiles in a grid. A painter snaps a chalk line straight from one corner of the floor to the opposite corner. Through the interiors of how many of the tiles does the chalk line pass?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 254\" width=\"340\" height=\"254\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><line x1=\"30\" y1=\"24\" x2=\"30\" y2=\"222\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"52\" y1=\"24\" x2=\"52\" y2=\"222\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"74\" y1=\"24\" x2=\"74\" y2=\"222\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"96\" y1=\"24\" x2=\"96\" y2=\"222\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"118\" y1=\"24\" x2=\"118\" y2=\"222\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"140\" y1=\"24\" x2=\"140\" y2=\"222\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"162\" y1=\"24\" x2=\"162\" y2=\"222\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"184\" y1=\"24\" x2=\"184\" y2=\"222\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"206\" y1=\"24\" x2=\"206\" y2=\"222\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"228\" y1=\"24\" x2=\"228\" y2=\"222\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"250\" y1=\"24\" x2=\"250\" y2=\"222\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"272\" y1=\"24\" x2=\"272\" y2=\"222\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"294\" y1=\"24\" x2=\"294\" y2=\"222\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"30\" y1=\"24\" x2=\"294\" y2=\"24\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"30\" y1=\"46\" x2=\"294\" y2=\"46\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"30\" y1=\"68\" x2=\"294\" y2=\"68\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"30\" y1=\"90\" x2=\"294\" y2=\"90\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"30\" y1=\"112\" x2=\"294\" y2=\"112\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"30\" y1=\"134\" x2=\"294\" y2=\"134\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"30\" y1=\"156\" x2=\"294\" y2=\"156\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"30\" y1=\"178\" x2=\"294\" y2=\"178\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"30\" y1=\"200\" x2=\"294\" y2=\"200\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"30\" y1=\"222\" x2=\"294\" y2=\"222\" stroke-width=\"1\" stroke-opacity=\"0.45\" /><line x1=\"30\" y1=\"222\" x2=\"294\" y2=\"24\" stroke-width=\"2.5\" /><text x=\"162\" y=\"240\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">12 ft</text><text x=\"22\" y=\"128\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">9 ft</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["12", "15", "18", "20", "21"],
+    answer: "C",
+    solution:
+      "Walk along the line from corner to corner. It enters a new tile every time it crosses one of the 11 interior vertical grid lines or one of the 8 interior horizontal ones — except that whenever it crosses both at once (passing exactly through a lattice corner) those two crossings only start one new tile. Because gcd(12, 9) = 3, the line passes through 2 interior lattice points. So the number of tiles is 1 + 11 + 8 − 2 = 18, matching the standard formula 12 + 9 − gcd(12, 9) = 18.",
+    hints: [
+      "Count how many times the line crosses from one tile to the next, then add the starting tile.",
+      "Crossing a vertical line and a horizontal line at the same moment should only be counted once.",
+      "The number of interior lattice points on the diagonal is controlled by gcd(12, 9).",
+    ],
+    difficulty: 8,
+    topicSlug: "polygons",
+    competitionSlug: "amc8",
+  },
 ];

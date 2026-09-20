@@ -2166,4 +2166,300 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
     topicSlug: "modular-arithmetic",
     competitionSlug: "amc12",
   },
+  {
+    slug: "amc12-155",
+    question:
+      "A surveyor needs the distance across a pond between two points A and B on its shore, but cannot measure it directly. She stands at a third point C on dry land, measures CA = 180 meters and CB = 210 meters, and finds that the angle ACB is exactly 60°. What is the distance AB, in meters?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 244\" width=\"340\" height=\"244\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><ellipse cx=\"184\" cy=\"96\" rx=\"96\" ry=\"52\" stroke-opacity=\"0.45\" fill=\"currentColor\" fill-opacity=\"0.12\" /><line x1=\"60\" y1=\"214\" x2=\"104\" y2=\"60\" /><line x1=\"60\" y1=\"214\" x2=\"272\" y2=\"118\" /><line x1=\"104\" y1=\"60\" x2=\"272\" y2=\"118\" stroke-dasharray=\"6 4\" /><circle cx=\"60\" cy=\"214\" r=\"4\" fill=\"currentColor\" /><circle cx=\"104\" cy=\"60\" r=\"4\" fill=\"currentColor\" /><circle cx=\"272\" cy=\"118\" r=\"4\" fill=\"currentColor\" /><text x=\"52\" y=\"230\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">C</text><text x=\"98\" y=\"50\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">A</text><text x=\"282\" y=\"114\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">B</text><text x=\"70\" y=\"132\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">180</text><text x=\"180\" y=\"190\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">210</text><text x=\"188\" y=\"78\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">AB = ?</text><text x=\"92\" y=\"192\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">60°</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["30√29", "30√37", "30√43", "30√51", "30√57"],
+    answer: "C",
+    solution:
+      "Apply the law of cosines to triangle ACB with the 60° angle at C: AB² = CA² + CB² − 2·CA·CB·cos 60° = 180² + 210² − 2(180)(210)(1/2) = 32400 + 44100 − 37800 = 38700. Since 38700 = 900 · 43, AB = √38700 = 30√43 ≈ 196.7 meters.",
+    hints: [
+      "Two sides and the included angle is exactly the law of cosines setup.",
+      "cos 60° = 1/2, so the correction term is just the product of the two sides.",
+      "Pull the largest perfect square out of 38700 to simplify the radical.",
+    ],
+    difficulty: 9,
+    topicSlug: "triangles",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-156",
+    question:
+      "A hospital prepares a radioactive tracer whose amount halves every 6 hours. For a scan to be readable, at least 20% of the originally prepared amount must still be present when the scan begins. What is the largest whole number of hours after preparation at which the scan can still begin?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["10", "12", "13", "14", "15"],
+    answer: "C",
+    solution:
+      "After t hours the fraction remaining is (1/2)^(t/6). We need (1/2)^(t/6) ≥ 1/5, i.e. 2^(t/6) ≤ 5, so t/6 ≤ log₂5 ≈ 2.3219 and t ≤ 13.93. The largest whole number of hours is 13. (Check: at t = 13 the fraction is 2^(−13/6) ≈ 0.2213, still above 20%, while at t = 14 it is 2^(−7/3) ≈ 0.1984, just below.)",
+    hints: [
+      "Write the remaining fraction as one half raised to the power t/6.",
+      "Take base-2 logarithms; log₂5 is a little more than 2.3.",
+      "The bound is not a whole number, so round down — and verify the next hour really fails.",
+    ],
+    difficulty: 9,
+    topicSlug: "exponents-radicals",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-157",
+    question:
+      "A county wants to build one cell tower that is exactly the same distance from each of three towns. On the county map the towns sit at the coordinates (0, 0), (14, 0) and (4, 12), with one unit representing one mile. How many miles is the tower from each town?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["√505/3", "√577/3", "√610/3", "√658/3", "√730/3"],
+    answer: "C",
+    solution:
+      "The tower sits at the circumcenter. Being equidistant from (0,0) and (14,0) puts it on the vertical line x = 7. Being equidistant from (0,0) and (4,12) gives x² + y² = (x − 4)² + (y − 12)², which simplifies to 8x + 24y = 160, so at x = 7 we get 24y = 104 and y = 13/3. The distance to the origin is then √(7² + (13/3)²) = √(49 + 169/9) = √(610/9) = √610/3 ≈ 8.23 miles.",
+    hints: [
+      "The point equidistant from all three towns is the circumcenter — intersect two perpendicular bisectors.",
+      "The bisector of the horizontal side is the easy one: it is a vertical line.",
+      "Set the squared distances to two towns equal and expand; the squared terms cancel.",
+    ],
+    difficulty: 10,
+    topicSlug: "coordinate-geometry",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-158",
+    question:
+      "An insurance company sells a one-year policy for $500. Over a year, 3% of its policyholders file a claim that costs the company $8000, another 7% file a claim that costs $1200, and the rest file no claim at all. No policyholder files more than one claim. What is the company's expected profit per policy sold, in dollars?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["84", "140", "176", "240", "324"],
+    answer: "C",
+    solution:
+      "The expected payout per policy is 0.03(8000) + 0.07(1200) + 0.90(0) = 240 + 84 = $324. The company collects $500 from every policy regardless, so the expected profit is 500 − 324 = $176 per policy.",
+    hints: [
+      "Compute the expected payout first, weighting each claim size by its probability.",
+      "The 90% who file nothing contribute zero to the payout but still pay the premium.",
+      "Profit is the premium minus the expected payout.",
+    ],
+    difficulty: 9,
+    topicSlug: "expected-value",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-159",
+    question:
+      "Four friends arrive separately at a concert and choose seats in a single row of 9 seats. To leave room for their coats they insist that no two of them sit in adjacent seats. The four friends are distinguishable, and two seatings are different if some friend sits in a different seat. In how many ways can they be seated?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["15", "120", "126", "360", "3024"],
+    answer: "D",
+    solution:
+      "First choose which seats are used. Choosing 4 of 9 seats with no two adjacent is the same as choosing 4 seats freely from 9 − 4 + 1 = 6 positions, so there are C(6,4) = 15 valid seat sets. (Equivalently, lay down the 5 empty seats and slot the 4 friends into 4 of the 6 gaps around them.) Then assign the four distinguishable friends to those 4 seats in 4! = 24 ways. The total is 15 · 24 = 360.",
+    hints: [
+      "Separate the problem into choosing the set of seats and then assigning people to them.",
+      "For non-adjacent choices, think of placing the empty seats first and dropping people into the gaps between them.",
+      "Do not stop at the seat sets — the friends are distinguishable, so multiply by 4!.",
+    ],
+    difficulty: 10,
+    topicSlug: "combinations",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-160",
+    question:
+      "A security token displays a new code every day. On day n the token displays the last two digits of 7ⁿ, written with a leading zero when necessary. What two-digit code does the token display on day 2026?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["01", "07", "43", "49", "93"],
+    answer: "D",
+    solution:
+      "Work modulo 100. The powers of 7 cycle: 7¹ ≡ 07, 7² ≡ 49, 7³ ≡ 343 ≡ 43, 7⁴ ≡ 7·43 = 301 ≡ 01, and then the pattern repeats with period 4. Since 2026 = 4·506 + 2, we have 7²⁰²⁶ ≡ 7² ≡ 49 (mod 100). The code is 49.",
+    hints: [
+      "Only the last two digits matter, so compute modulo 100.",
+      "List 7¹, 7², 7³, 7⁴ mod 100 and look for the point where the cycle restarts.",
+      "Reduce the exponent 2026 modulo the cycle length, not modulo 100.",
+    ],
+    difficulty: 9,
+    topicSlug: "modular-arithmetic",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-161",
+    question:
+      "Gravel is poured onto the ground and forms a cone whose height is always exactly half the radius of its circular base. Pouring continues until the pile contains 36π cubic feet of gravel. What is the height of the pile at that moment, in feet?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 248\" width=\"340\" height=\"248\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"70,206 290,206 180,151\" fill=\"currentColor\" fill-opacity=\"0.12\" /><ellipse cx=\"180\" cy=\"206\" rx=\"110\" ry=\"22\" stroke-opacity=\"0.75\" /><line x1=\"180\" y1=\"206\" x2=\"180\" y2=\"151\" stroke-dasharray=\"4 4\" /><line x1=\"180\" y1=\"206\" x2=\"290\" y2=\"206\" stroke-dasharray=\"4 4\" /><text x=\"188\" y=\"184\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">h</text><text x=\"236\" y=\"224\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">r = 2h</text><text x=\"180\" y=\"142\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">gravel</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["2", "3", "4", "6", "9"],
+    answer: "B",
+    solution:
+      "Let h be the height, so the base radius is r = 2h. The volume of a cone is V = (1/3)πr²h = (1/3)π(2h)²h = (4/3)πh³. Setting (4/3)πh³ = 36π gives h³ = 27, so h = 3 feet. (The base radius is then 6 feet.)",
+    hints: [
+      "Express the radius in terms of the height so the volume has a single variable.",
+      "Careful with the relationship: the height is half the radius, so r = 2h.",
+      "The π cancels from both sides, leaving a pure cube root.",
+    ],
+    difficulty: 9,
+    topicSlug: "three-d-geometry",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-162",
+    question:
+      "A parking garage charges $5 for the first hour, $3 for each of the next three hours, and $2 for every hour after that. Any part of an hour is billed as a full hour. A driver's ticket comes to exactly $28. What is the longest time, in hours, that the driver could have been parked?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["8", "9", "10", "11", "12"],
+    answer: "D",
+    solution:
+      "The first hour costs $5 and hours 2, 3 and 4 cost $3 each, so four hours cost 5 + 9 = $14. Every hour beyond the fourth adds $2, so parking billed at 4 + k hours costs 14 + 2k dollars. Setting 14 + 2k = 28 gives k = 7, for 11 billed hours. Since a partial hour is rounded up, being billed for 11 hours means the driver was there more than 10 hours but no more than 11, so the longest possible time is 11 hours.",
+    hints: [
+      "Build the cost in pieces: the first hour, the next three, then a flat rate per hour.",
+      "Write the cost of 4 + k hours as a linear expression in k.",
+      "Rounding up means the billed number of hours is the maximum time actually parked.",
+    ],
+    difficulty: 9,
+    topicSlug: "functions",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-163",
+    question:
+      "A factory's output comes from three machines: machine A makes 20% of all items, machine B makes 30%, and machine C makes the remaining 50%. Of the items machine A makes, 5% are defective; for machine B the figure is 3%, and for machine C it is 1%. An inspector pulls one item at random from the day's output and finds it defective. What is the probability that it came from machine A?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["1/20", "1/5", "5/24", "3/8", "5/12"],
+    answer: "E",
+    solution:
+      "Think of 10,000 items. Machine A makes 2000 with 100 defective; machine B makes 3000 with 90 defective; machine C makes 5000 with 50 defective. That is 100 + 90 + 50 = 240 defective items in all, of which 100 came from machine A. The probability is 100/240 = 5/12.",
+    hints: [
+      "Pick a convenient total output and count actual defective items rather than juggling percentages.",
+      "Each machine contributes (its share) × (its defect rate) to the defective pile.",
+      "The answer is A's defectives divided by all defectives — not A's defect rate.",
+    ],
+    difficulty: 10,
+    topicSlug: "conditional-probability",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-164",
+    question:
+      "A $12,000 loan charges 1% interest each month on the unpaid balance. At the end of each month, interest for that month is added first and then a payment of $400 is subtracted. What is the outstanding balance, in dollars, immediately after the third payment is made?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["10800.00", "10963.20", "11040.00", "11151.57", "11212.08"],
+    answer: "D",
+    solution:
+      "Each month the balance becomes 1.01 times the old balance, minus 400. Starting at 12000: after month 1, 12000(1.01) − 400 = 12120 − 400 = 11720; after month 2, 11720(1.01) − 400 = 11837.20 − 400 = 11437.20; after month 3, 11437.20(1.01) − 400 = 11551.572 − 400 = 11151.572, which is $11,151.57 to the nearest cent. Note the balance falls by well under $400 a month, since part of each payment only covers that month's interest.",
+    hints: [
+      "Apply the interest to the whole current balance before subtracting the payment.",
+      "Iterate the rule balance → 1.01 · balance − 400 exactly three times.",
+      "Do not simply subtract $1200 — most of the early payments go toward interest.",
+    ],
+    difficulty: 9,
+    topicSlug: "sequences",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-165",
+    question:
+      "A Ferris wheel has radius 60 feet, its center sits 65 feet above the ground, and it turns at a constant rate, completing one full revolution every 4 minutes. A rider boards at the lowest point of the wheel and the wheel begins turning immediately. How many seconds into the ride is the rider first 95 feet above the ground?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["40", "60", "80", "100", "120"],
+    answer: "C",
+    solution:
+      "Boarding at the bottom, the rider's height after t seconds is h(t) = 65 − 60 cos(2πt/240), since one revolution takes 240 seconds. Setting h(t) = 95 gives cos(2πt/240) = (65 − 95)/60 = −1/2. The first positive solution has 2πt/240 = 2π/3, that is t = 240/3 = 80 seconds. (The rider is a third of the way around, which checks out: at that point the wheel has carried them 120° past the bottom.)",
+    hints: [
+      "Model the height as a cosine starting at the minimum: h = center − radius·cos(angle).",
+      "One revolution is 240 seconds, so the angle after t seconds is 2πt/240.",
+      "Solving gives a cosine equal to −1/2 — take the smallest positive angle, 2π/3.",
+    ],
+    difficulty: 10,
+    topicSlug: "transformations",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-166",
+    question:
+      "A census taker is told that the three children in a household have ages, in whole numbers of years, whose product is 1296 and whose sum is 41. He is also told that no two of the children are the same age. How old is the oldest child?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["18", "24", "27", "36", "48"],
+    answer: "C",
+    solution:
+      "Since 1296 = 2⁴ · 3⁴, each age is of the form 2^a 3^b. Searching the divisor triples with product 1296 and distinct entries: (6, 12, 18) sums to 36, (8, 9, 18) to 35, (6, 9, 24) to 39, (4, 12, 27) to 43, (2, 24, 27) to 53, (4, 9, 36) to 49 — and (6, 8, 27) sums to 6 + 8 + 27 = 41. Checking the rest of the divisor triples shows this is the only one with sum 41, so the ages are 6, 8 and 27 and the oldest child is 27.",
+    hints: [
+      "Factor 1296 = 2⁴·3⁴ — every age must be built from 2s and 3s only.",
+      "List the divisor triples with product 1296 systematically, smallest age first.",
+      "Only one triple has distinct entries summing to 41; the sum is what pins it down.",
+    ],
+    difficulty: 10,
+    topicSlug: "factorization",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-167",
+    question:
+      "Two friends play a game with a jar of 2026 candies. They alternate turns, and on a turn a player removes 1, 2, or 3 candies. The player who takes the last candy wins. The first player wants a strategy that guarantees a win no matter what the second player does. How many candies must the first player take on the opening turn?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["1", "2", "3", "4", "No opening move guarantees a win"],
+    answer: "B",
+    solution:
+      "A position is a loss for the player about to move exactly when the number of candies is a multiple of 4: from a multiple of 4 any move of 1, 2 or 3 leaves a non-multiple, and from a non-multiple the mover can always bring the count down to the next multiple of 4. Since 2026 = 4·506 + 2, the first player should remove 2, leaving 2024, a multiple of 4. From then on she answers a move of k with a move of 4 − k, keeping the count a multiple of 4 until it reaches 0 — and her opponent faces an empty jar.",
+    hints: [
+      "Work out which small counts are losses for whoever must move: 0, then check 1, 2, 3, 4.",
+      "A pattern emerges with period 4 — identify the losing positions.",
+      "Compute 2026 mod 4 and take exactly that many candies.",
+    ],
+    difficulty: 9,
+    topicSlug: "games-and-strategies",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-168",
+    question:
+      "A rectangular swimming pool is 25 meters long and 12 meters wide. Its floor slopes at a constant rate from a depth of 1 meter at the shallow end to a depth of 3 meters at the deep end, and the top edge is level all the way around. How many cubic meters of water does the pool hold when filled to the brim?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 226\" width=\"340\" height=\"226\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"40,60 300,60 300,186 40,102\" fill=\"currentColor\" fill-opacity=\"0.12\" /><text x=\"170\" y=\"50\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">25 m</text><text x=\"32\" y=\"82\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">1 m</text><text x=\"310\" y=\"124\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">3 m</text><text x=\"170\" y=\"212\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">width 12 m</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["300", "450", "600", "750", "900"],
+    answer: "C",
+    solution:
+      "Cut the pool by a vertical plane parallel to its long side. The cross-section is a trapezoid with parallel sides 1 and 3 meters (the two depths) and width 25 meters, so its area is ((1 + 3)/2)(25) = 50 square meters. That cross-section is the same all the way across the 12-meter width, so the volume is 50 · 12 = 600 cubic meters. (Equivalently, the average depth is 2 meters and 25 · 12 · 2 = 600.)",
+    hints: [
+      "A uniformly sloping floor makes the lengthwise cross-section a trapezoid.",
+      "Find that trapezoid's area using the two depths as the parallel sides.",
+      "Multiply by the width, which is constant — or just use the average depth.",
+    ],
+    difficulty: 9,
+    topicSlug: "area-volume",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-169",
+    question:
+      "A quality inspector receives a box of 12 manufactured parts, of which exactly 4 are defective, though she does not know which. She selects 3 of the 12 parts at random, all selections being equally likely. What is the probability that at least one of the three parts she selects is defective?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["8/55", "14/55", "3/11", "41/55", "9/11"],
+    answer: "D",
+    solution:
+      "There are C(12,3) = 220 equally likely selections. The selections with no defective part come from the 8 good parts: C(8,3) = 56. So the probability of at least one defective is 1 − 56/220 = 164/220 = 41/55 ≈ 0.745.",
+    hints: [
+      "\"At least one\" is much easier through its complement.",
+      "Count the selections drawn entirely from the 8 non-defective parts.",
+      "Subtract that probability from 1 and reduce the fraction.",
+    ],
+    difficulty: 9,
+    topicSlug: "counting-probability",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-170",
+    question:
+      "A rancher has 240 meters of fencing and wants to enclose a rectangular field along a straight river, using no fencing at all on the river side. He also wants to divide the field into three equal rectangular pens using two interior fences, each running perpendicular to the river. What is the largest total area, in square meters, that he can enclose?",
+    diagram:
+      "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 232\" width=\"340\" height=\"232\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><line x1=\"30\" y1=\"44\" x2=\"310\" y2=\"44\" stroke-dasharray=\"7 5\" stroke-opacity=\"0.6\" /><polygon points=\"40,70 300,70 300,196 40,196\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\" /><line x1=\"40\" y1=\"70\" x2=\"40\" y2=\"196\" /><line x1=\"300\" y1=\"70\" x2=\"300\" y2=\"196\" /><line x1=\"40\" y1=\"196\" x2=\"300\" y2=\"196\" /><line x1=\"126\" y1=\"70\" x2=\"126\" y2=\"196\" /><line x1=\"213\" y1=\"70\" x2=\"213\" y2=\"196\" /><text x=\"170\" y=\"36\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">river</text><text x=\"170\" y=\"216\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">L</text><text x=\"32\" y=\"136\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">w</text></svg>",
+    format: "MULTIPLE_CHOICE",
+    choices: ["2400", "2880", "3200", "3600", "4800"],
+    answer: "D",
+    solution:
+      "Let w be the side perpendicular to the river and L the side parallel to it. The two ends plus the two interior fences are four segments of length w, and the only fencing parallel to the river is the far side of length L, so L + 4w = 240 and L = 240 − 4w. The area is A(w) = w(240 − 4w) = 240w − 4w², a downward parabola with vertex at w = 240/8 = 30. Then L = 240 − 120 = 120 and the area is 30 · 120 = 3600 square meters.",
+    hints: [
+      "Count the fence segments carefully: the interior dividers add to the perpendicular direction, and the river side needs none.",
+      "Solve the fencing constraint for L and substitute into the area.",
+      "The result is a quadratic in w; its maximum is at the vertex.",
+    ],
+    difficulty: 9,
+    topicSlug: "quadratics",
+    competitionSlug: "amc12",
+  },
 ];
