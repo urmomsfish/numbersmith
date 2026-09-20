@@ -172,7 +172,7 @@ export function ProblemForm({
           </select>
         </Field>
 
-        <Field label="Competition" hint="Optional — tags this problem to a competition track.">
+        <Field label="Competition" hint="Optional. Tags this problem to a competition track.">
           <select
             name="competitionSlug"
             defaultValue={competitions.find((c) => c.id === problem?.competitionId)?.slug ?? ""}

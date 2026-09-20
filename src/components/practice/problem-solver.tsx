@@ -27,7 +27,7 @@ export type SolverProblem = {
 type SubmitResult = Awaited<ReturnType<typeof submitPracticeAnswerAction>>;
 
 /** Prefills a mailto so a report includes the specifics without the student
- * having to retype them — the question, what they answered, and what the key
+ * having to retype them. The question, what they answered, and what the key
  * currently says. */
 function reportMailto(question: string, theirAnswer: string, correctAnswer: string): string {
   const subject = "Problem report";
@@ -58,7 +58,7 @@ export function ProblemSolver({
   const [pending, setPending] = useState(false);
   const [result, setResult] = useState<SubmitResult | null>(null);
   const [elapsed, setElapsed] = useState(0);
-  // Seeded in the effect rather than during render — reading the clock while
+  // Seeded in the effect rather than during render. Reading the clock while
   // rendering is impure and can drift across re-renders.
   const startedAtRef = useRef(0);
 
@@ -202,8 +202,8 @@ export function ProblemSolver({
                 // These paths deliberately pay nothing, so "+0 rating · +0 XP"
                 // would read as a bug rather than as the rule.
                 result.rewardSkipped === "review"
-                  ? "Review — no XP or rating"
-                  : "Already attempted — no XP or rating"
+                  ? "Review. No XP or rating"
+                  : "Already attempted. No XP or rating"
               ) : (
                 <>
                   {result.ratingDelta >= 0 ? "+" : ""}

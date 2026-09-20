@@ -63,7 +63,7 @@ export default async function CompetitionDetailPage({
       { masteryPercent: m.masteryPercent, problemsAttempted: m.problemsAttempted },
     ])
   );
-  // Discounted by evidence — see src/lib/engine/progress.ts.
+  // Discounted by evidence. See src/lib/engine/progress.ts.
   const overallMastery = competitionProgress(
     competition.topics.map((ct) => ({ topicId: ct.topicId, weight: ct.weight })),
     masteryByTopicId
@@ -231,7 +231,7 @@ export default async function CompetitionDetailPage({
               {isProofBased ? (
                 <p className="mt-2 text-sm text-slate-700 dark:text-slate-400">
                   This is a proof-based competition. Timed multiple-choice simulations don&apos;t apply
-                  — train through the olympiad lesson track instead.
+                  Train through the olympiad lesson track instead.
                 </p>
               ) : attempts.length === 0 ? (
                 <p className="mt-2 text-sm text-slate-700 dark:text-slate-400">
@@ -246,7 +246,7 @@ export default async function CompetitionDetailPage({
                       className="flex items-center justify-between rounded-lg bg-slate-50 dark:bg-slate-800 px-3 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-700"
                     >
                       <span className="text-slate-700 dark:text-slate-400">
-                        {a.submittedAt?.toLocaleDateString() ?? "—"}
+                        {a.submittedAt?.toLocaleDateString() ?? "Not submitted"}
                       </span>
                       <span className="font-semibold text-slate-800 dark:text-slate-100">
                         {a.correctCount}/{a.totalQuestions}

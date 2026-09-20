@@ -34,7 +34,7 @@ export default async function VideoLessonsPage() {
             <Badge tone="warning">⭐ Pro</Badge>
           </div>
           <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-            Animated, narration-free walkthroughs — diagrams and worked examples you step through at your own pace.
+            Animated, narration-free walkthroughs with diagrams and worked examples you step through at your own pace.
           </p>
         </div>
         {isPro && (

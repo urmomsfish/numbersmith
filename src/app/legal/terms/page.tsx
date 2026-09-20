@@ -10,7 +10,7 @@ import {
 } from "@/lib/subscription";
 
 export const metadata: Metadata = {
-  title: "Terms of Service — NumberSmith",
+  title: "Terms of Service | NumberSmith",
   description: "The terms governing use of the NumberSmith math competition training platform.",
 };
 
@@ -127,7 +127,7 @@ export default function TermsPage() {
           personal, non-transferable licence to use them for your own study.
         </p>
         <p>
-          Anything you write on the platform — such as scratch notes during a simulation — remains
+          Anything you write on the platform, such as scratch notes during a simulation, remains
           yours. We use it only to operate the service.
         </p>
       </Section>
@@ -177,7 +177,7 @@ export default function TermsPage() {
         <p>
           To the fullest extent permitted by law, we are not liable for indirect, incidental,
           special, consequential, exemplary, or punitive damages, or for lost profits, lost data, or
-          lost opportunities, arising from or relating to your use of NumberSmith — even if we have
+          lost opportunities, arising from or relating to your use of NumberSmith, even if we have
           been advised that such damages are possible.
         </p>
         <p>
@@ -258,8 +258,8 @@ export default function TermsPage() {
         <p>
           You may stop using NumberSmith and delete your account at any time. We may terminate or
           suspend access for violations of these terms. On termination your licence to our content
-          ends. Sections that by their nature should survive — including limitation of liability,
-          indemnification, and dispute resolution — continue to apply.
+          ends. Sections that by their nature should survive, including limitation of liability,
+          indemnification, and dispute resolution, continue to apply.
         </p>
       </Section>
 

@@ -168,7 +168,7 @@ export function TestRunner({
                   key={current.id}
                   value={answers[current.id] ?? ""}
                   onChange={(next) => setAnswers((a) => ({ ...a, [current.id]: next }))}
-                  // A simulation is a timed paper — Enter must not submit it.
+                  // A simulation is a timed paper. Enter must not submit it.
                   onEnter={() => {}}
                   disabled={false}
                   integerOnly={current.format === "INTEGER"}

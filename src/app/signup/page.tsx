@@ -31,7 +31,7 @@ export default function SignupPage() {
         <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-card p-8 shadow-sm">
           <h1 className="text-xl font-bold text-slate-900 dark:text-slate-50">Create your free account</h1>
           <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-            Start with a free placement test — no credit card required.
+            Start with a free placement test. No credit card required.
           </p>
 
           <Suspense fallback={null}>

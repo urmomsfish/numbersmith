@@ -201,7 +201,7 @@ export default async function SimulationResultsPage({
                       </span>
                       <span className="text-success-600 dark:text-emerald-400">
                         Correct: {item.problem.answer}
-                        {choices[correctIndex] ? ` — ${choices[correctIndex]}` : ""}
+                        {choices[correctIndex] ? `: ${choices[correctIndex]}` : ""}
                       </span>
                     </div>
                     <p className="mt-2 rounded-lg bg-slate-50 dark:bg-slate-800 px-3 py-2 text-xs leading-relaxed text-slate-600 dark:text-slate-300">

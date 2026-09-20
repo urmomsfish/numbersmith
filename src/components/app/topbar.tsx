@@ -2,7 +2,6 @@ import { MobileNav } from "@/components/app/mobile-nav";
 import { UserMenu } from "@/components/app/user-menu";
 import { Badge } from "@/components/ui/badge";
 import { LinkButton } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { IconFlame, IconBolt } from "@/components/app/icons";
 
 export function Topbar({
@@ -25,7 +24,7 @@ export function Topbar({
   return (
     <header className="flex min-h-16 items-center justify-between border-b border-slate-200 bg-surface px-4 py-3 dark:border-slate-800 sm:px-6">
       <div className="flex items-center gap-3">
-        <MobileNav isPro={isPro} />
+        <MobileNav />
       </div>
       <div className="flex items-center gap-2 sm:gap-3">
         <div className="hidden items-center gap-1.5 border-r border-slate-200 pr-3 text-sm font-semibold text-ember-600 dark:border-slate-800 dark:text-ember-400 sm:flex">
@@ -44,7 +43,6 @@ export function Topbar({
             Upgrade
           </LinkButton>
         )}
-        <ThemeToggle />
         <UserMenu name={name} email={email} />
       </div>
     </header>

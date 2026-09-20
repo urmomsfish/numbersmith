@@ -10,7 +10,7 @@ type Message = { id: string; role: "user" | "assistant"; content: string };
 const SUGGESTIONS = [
   "I don't understand why we flip the inequality sign when dividing by a negative number.",
   "Walk me through how to approach a stuck combinatorics counting problem.",
-  "I got this wrong — can you show me where my reasoning broke down?",
+  "I got this wrong. Can you show me where my reasoning broke down?",
 ];
 
 export function ChatPanel({
@@ -67,7 +67,7 @@ export function ChatPanel({
         </p>
         <p className="mt-1.5 max-w-sm text-xs text-slate-700 dark:text-slate-400">
           This deployment is missing an ANTHROPIC_API_KEY. Once one is added, this page starts working
-          immediately — no other changes needed.
+          immediately. No other changes needed.
         </p>
       </div>
     );

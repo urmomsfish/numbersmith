@@ -27,7 +27,7 @@ export default async function MistakeReviewPage() {
   return (
     <SessionRunner
       topicName="Mistake Review"
-      focusMessage="These are problems you previously missed — resolving them removes them from your review queue."
+      focusMessage="These are problems you previously missed. Resolving them removes them from your review queue."
       isPro={isPro}
       mode="MISTAKE_REVIEW"
       problems={mistakes.map((m) => ({

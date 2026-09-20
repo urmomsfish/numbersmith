@@ -11,7 +11,6 @@ import {
   startProTrialAction,
 } from "@/lib/actions/subscription-actions";
 import { updateProfileAction } from "@/lib/actions/settings-actions";
-import { TintPicker } from "@/components/tint-picker";
 
 export default async function SettingsPage() {
   const user = await getCurrentUser();
@@ -58,27 +57,11 @@ export default async function SettingsPage() {
 
       <Card className="mt-5">
         <CardBody>
-          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">
-            Appearance
-          </h2>
-          <p className="mt-2 text-sm text-slate-700 dark:text-slate-400">
-            Give the background a gentle colour, in both light and dark mode. Buttons, links, and
-            text are left alone so everything stays just as easy to read. Saved on this device.
-          </p>
-          <TintPicker className="mt-4" />
-          <p className="mt-4 text-xs text-slate-700 dark:text-slate-500">
-            Use the sun/moon button in the top bar to switch between light and dark.
-          </p>
-        </CardBody>
-      </Card>
-
-      <Card className="mt-5">
-        <CardBody>
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">Subscription</h2>
             <Badge tone={cancelPending ? "warning" : isPro ? "brand" : "slate"}>
               {cancelPending
-                ? "⭐ Pro — ending"
+                ? "⭐ Pro, ending"
                 : subscription.status === "TRIAL"
                   ? "⭐ Pro Trial"
                   : isPro
@@ -90,7 +73,7 @@ export default async function SettingsPage() {
           {subscription.status === "TRIAL" && subscription.trialEndsAt && (
             <p className="mt-3 rounded-lg bg-amber-50 dark:bg-amber-950 px-3 py-2 text-sm text-amber-800 dark:text-amber-400">
               Your free Pro trial ends on {subscription.trialEndsAt.toLocaleDateString()}. You will not
-              be charged — the account simply returns to the Free plan unless you choose to subscribe.
+              be charged. The account simply returns to the Free plan unless you choose to subscribe.
             </p>
           )}
 
@@ -106,12 +89,12 @@ export default async function SettingsPage() {
             <dl className="mt-3 space-y-2 text-sm">
               <div className="flex justify-between">
                 <dt className="text-slate-700 dark:text-slate-400">Plan</dt>
-                <dd className="font-medium text-slate-800 dark:text-slate-100">{subscription.plan ?? "—"}</dd>
+                <dd className="font-medium text-slate-800 dark:text-slate-100">{subscription.plan ?? "Not set"}</dd>
               </div>
               <div className="flex justify-between">
                 <dt className="text-slate-700 dark:text-slate-400">{cancelPending ? "Access ends" : "Renews"}</dt>
                 <dd className="font-medium text-slate-800 dark:text-slate-100">
-                  {subscription.renewalDate?.toLocaleDateString() ?? "—"}
+                  {subscription.renewalDate?.toLocaleDateString() ?? "Not set"}
                 </dd>
               </div>
             </dl>

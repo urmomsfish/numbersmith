@@ -71,7 +71,7 @@ export default async function AdminOverviewPage() {
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
       <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Admin Overview</h1>
       <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-        All figures are computed live from the database — no placeholder statistics.
+        All figures are computed live from the database. No placeholder statistics.
       </p>
 
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
@@ -120,7 +120,7 @@ export default async function AdminOverviewPage() {
             </p>
             <p className="mt-1 text-xs text-slate-700 dark:text-slate-500">
               Derived from {proSubs.length} active Pro subscription
-              {proSubs.length === 1 ? "" : "s"}. No live payment processing in this MVP — Stripe
+              {proSubs.length === 1 ? "" : "s"}. No live payment processing in this MVP. Stripe
               integration is architected but not enabled.
             </p>
             <dl className="mt-4 space-y-1.5 text-sm">
@@ -180,7 +180,7 @@ export default async function AdminOverviewPage() {
               {popularCompetitions.map((pc) => (
                 <div key={pc.competitionId} className="flex justify-between text-sm">
                   <span className="text-slate-600 dark:text-slate-300">
-                    {competitionById.get(pc.competitionId)?.shortName ?? "—"}
+                    {competitionById.get(pc.competitionId)?.shortName ?? "Not set"}
                   </span>
                   <span className="font-semibold text-slate-800 dark:text-slate-100">
                     {pc._count} student{pc._count === 1 ? "" : "s"}

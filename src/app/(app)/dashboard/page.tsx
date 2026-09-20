@@ -36,7 +36,7 @@ export default async function DashboardPage() {
       { masteryPercent: m.masteryPercent, problemsAttempted: m.problemsAttempted },
     ])
   );
-  // Progress is the accuracy estimate discounted by how much practice backs it —
+  // Progress is the accuracy estimate discounted by how much practice backs it.
   // see src/lib/engine/progress.ts. Reading masteryPercent raw here is what made
   // a twelve-question placement test read as "86% mastered".
   const priorityRow = masteryByTopicId.get(priorityTopic.id);

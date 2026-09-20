@@ -1,4 +1,4 @@
-/** Shown while NumberSmith Pro cannot actually be purchased — i.e. whenever a
+/** Shown while NumberSmith Pro cannot actually be purchased, whenever a
  * live Stripe key is not configured. Rendering this is preferable to showing
  * working-looking checkout buttons that would decline a real card.
  *
@@ -11,7 +11,7 @@ export function PaymentsNotice({ className }: { className?: string }) {
     >
       <p className="font-semibold">Everything is free while we&apos;re in early access.</p>
       <p className="mt-1 leading-relaxed text-amber-800 dark:text-amber-400">
-        We haven&apos;t opened payments yet, so every Pro feature below is unlocked for everyone —
+        We haven&apos;t opened payments yet, so every Pro feature below is unlocked for everyone. {" "}
         unlimited problems and simulations, the full lesson library, and complete mistake review. No
         card needed. The pricing here is what Pro will cost once it launches.
       </p>
@@ -25,7 +25,7 @@ export function PaymentsNoticeInline({ className }: { className?: string }) {
     <p
       className={`rounded-lg bg-amber-50 dark:bg-amber-950 px-3 py-2 text-xs text-amber-800 dark:text-amber-400 ${className ?? ""}`}
     >
-      Early access — every Pro feature is unlocked for free while we finish setting up payments.
+      Early access. Every Pro feature is unlocked for free while we finish setting up payments.
     </p>
   );
 }

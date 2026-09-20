@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { LinkButton } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { getCurrentUser } from "@/lib/auth";
 
 export async function SiteHeader() {
@@ -11,7 +10,7 @@ export async function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-slate-200 bg-surface dark:border-slate-800">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5 sm:px-6">
         <Logo href="/" />
-        <nav className="hidden items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-300 md:flex">
+        <nav className="hidden items-center gap-6 text-sm font-medium text-slate-700 md:flex">
           <Link href="/#competitions" className="transition-colors hover:text-slate-900 dark:hover:text-slate-50">
             Competitions
           </Link>
@@ -21,15 +20,8 @@ export async function SiteHeader() {
           <Link href="/pricing" className="transition-colors hover:text-slate-900 dark:hover:text-slate-50">
             Pricing
           </Link>
-          <Link href="/about" className="transition-colors hover:text-slate-900 dark:hover:text-slate-50">
-            About
-          </Link>
-          <Link href="/#faq" className="transition-colors hover:text-slate-900 dark:hover:text-slate-50">
-            FAQ
-          </Link>
         </nav>
         <div className="flex items-center gap-2">
-          <ThemeToggle />
           {user ? (
             <LinkButton href="/dashboard" size="sm">
               Go to Dashboard

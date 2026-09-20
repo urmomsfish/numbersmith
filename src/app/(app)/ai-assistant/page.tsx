@@ -24,7 +24,7 @@ export default async function AiAssistantPage() {
         <Badge tone="warning">⭐ Pro</Badge>
       </div>
       <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-        Explain a concept, walk through a problem step by step, or dig into a mistake — ask a follow-up any time.
+        Explain a concept, walk through a problem step by step, or dig into a mistake. Ask a follow-up any time.
       </p>
 
       <div className="mt-6 flex-1 overflow-hidden">

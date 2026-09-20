@@ -27,7 +27,7 @@ const sizeClasses: Record<Size, string> = {
 // `border border-transparent` is on the base so every variant has the same box
 // metrics. Without it, the bordered variants (outline, secondary) stand 2px
 // taller than the unbordered ones, which is visible whenever two buttons sit
-// side by side — the Free and Pro columns on the landing page rendered their
+// side by side. The Free and Pro columns on the landing page rendered their
 // calls to action at 54px and 52px.
 const base =
   "inline-flex items-center justify-center border border-transparent font-semibold transition-colors duration-150 disabled:cursor-not-allowed whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2";

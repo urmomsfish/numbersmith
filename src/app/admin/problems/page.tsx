@@ -65,7 +65,7 @@ export default async function AdminProblemsPage({
           <option value="">All topics</option>
           {topics.map((t) => (
             <option key={t.id} value={t.slug}>
-              {t.parentId ? `— ${t.name}` : t.name}
+              {t.parentId ? `: ${t.name}` : t.name}
             </option>
           ))}
         </select>

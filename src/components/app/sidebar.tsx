@@ -16,26 +16,21 @@ import {
   IconMap,
   IconSettings,
   IconShield,
-  IconVideo,
-  IconSparkles,
 } from "@/components/app/icons";
 
 export const NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard", icon: IconHome },
   { href: "/practice", label: "Practice", icon: IconTarget },
   { href: "/lessons", label: "Lessons", icon: IconBook },
-  { href: "/video-lessons", label: "Video Lessons", icon: IconVideo, pro: true },
-  { href: "/ai-assistant", label: "Smith AI", icon: IconSparkles, pro: true },
   { href: "/competitions", label: "Competitions", icon: IconTrophy },
   { href: "/simulations", label: "Simulations", icon: IconTimer },
   { href: "/daily-challenge", label: "Daily Challenge", icon: IconCalendar },
   { href: "/mistakes", label: "Mistakes", icon: IconRefresh },
   { href: "/stats", label: "Statistics", icon: IconChart },
   { href: "/study-plan", label: "Study Plan", icon: IconMap },
-  { href: "/schedule", label: "Schedule", icon: IconTrophy },
 ];
 
-export function Sidebar({ isAdmin, isPro }: { isAdmin?: boolean; isPro?: boolean }) {
+export function Sidebar({ isAdmin }: { isAdmin?: boolean }) {
   const pathname = usePathname();
 
   return (
@@ -51,6 +46,7 @@ export function Sidebar({ isAdmin, isPro }: { isAdmin?: boolean; isPro?: boolean
             <Link
               key={item.href}
               href={item.href}
+              aria-current={active ? "page" : undefined}
               className={cn(
                 "flex items-center gap-3 border-l-2 px-3 py-2 text-sm font-medium transition-colors duration-150",
                 active
@@ -65,12 +61,12 @@ export function Sidebar({ isAdmin, isPro }: { isAdmin?: boolean; isPro?: boolean
                 )}
               />
               <span className="flex-1">{item.label}</span>
-              {item.pro && !isPro && <span className="text-[11px]">⭐</span>}
             </Link>
           );
         })}
         <Link
           href="/settings"
+          aria-current={pathname.startsWith("/settings") ? "page" : undefined}
           className={cn(
             "flex items-center gap-3 border-l-2 px-3 py-2 text-sm font-medium transition-colors duration-150",
             pathname.startsWith("/settings")
@@ -89,6 +85,7 @@ export function Sidebar({ isAdmin, isPro }: { isAdmin?: boolean; isPro?: boolean
         {isAdmin && (
           <Link
             href="/admin"
+            aria-current={pathname.startsWith("/admin") ? "page" : undefined}
             className={cn(
               "flex items-center gap-3 border-l-2 px-3 py-2 text-sm font-medium transition-colors duration-150",
               pathname.startsWith("/admin")
@@ -108,7 +105,7 @@ export function Sidebar({ isAdmin, isPro }: { isAdmin?: boolean; isPro?: boolean
       </nav>
       <div className="border-t border-slate-100 p-3 dark:border-slate-800">
         <div className="bg-slate-50 px-3 py-2 text-[11px] text-slate-400 dark:bg-slate-800 dark:text-slate-500">
-          NumberSmith v0.1 — MVP
+          NumberSmith v0.1, MVP
         </div>
       </div>
     </aside>

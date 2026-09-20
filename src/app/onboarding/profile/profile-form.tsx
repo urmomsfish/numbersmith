@@ -34,7 +34,7 @@ const LEVEL_OPTIONS = [
   { value: "BEGINNER", label: "Beginner" },
   { value: "INTERMEDIATE", label: "Intermediate" },
   { value: "ADVANCED", label: "Advanced" },
-  { value: "NOT_SURE", label: "Not sure — that's what we're here for" },
+  { value: "NOT_SURE", label: "Not sure. That's what we're here for" },
 ];
 
 const PRACTICE_MINUTES = [15, 20, 30, 45, 60];
@@ -133,7 +133,7 @@ export function ProfileForm() {
 
       <section>
         <label className="mb-2 block text-sm font-semibold text-slate-800 dark:text-slate-100">
-          Approximate math level (your best guess — we&apos;ll verify it)
+          Approximate math level (your best guess. We&apos;ll verify it)
         </label>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           {LEVEL_OPTIONS.map((opt) => (
@@ -198,7 +198,7 @@ export function ProfileForm() {
       <div className="rounded-2xl border border-brand-100 bg-brand-50/50 p-6 text-center dark:border-brand-900 dark:bg-brand-950/40">
         <p className="text-lg font-bold text-slate-900 dark:text-slate-50">Let&apos;s find your competition math level.</p>
         <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-          A short adaptive assessment — takes about 15-20 minutes.
+          A short adaptive assessment. It takes about 15-20 minutes.
         </p>
         <Button type="submit" size="lg" disabled={pending} className="mt-4">
           {pending ? "Saving…" : "Start Free Placement Test"}
