@@ -193,17 +193,21 @@ export default async function PricingPage({
                 For students serious about competition results.
               </p>
 
+              {/* Monthly leads. It is the lower-commitment way in, and a student
+                  deciding whether this is for them should see a number they can
+                  say yes to rather than a year's outlay. The annual saving is
+                  real, so it stays on the page — just as the secondary line. */}
               <div className="mt-5 flex items-baseline gap-2">
                 <span className="text-4xl font-extrabold text-slate-900 dark:text-slate-50">
-                  ${PRO_PRICING.YEARLY}
+                  ${PRO_PRICING.MONTHLY}
                 </span>
-                <span className="text-sm text-slate-700 dark:text-slate-500">/year</span>
-                <span className="rounded-full bg-emerald-50 dark:bg-emerald-950 px-2 py-0.5 text-xs font-bold text-success-600 dark:text-emerald-400">
-                  Save {yearlySavingsPercent()}%
+                <span className="text-sm text-slate-700 dark:text-slate-500">/month</span>
+                <span className="rounded-full bg-brand-50 px-2 py-0.5 text-xs font-bold text-brand-700 dark:bg-brand-950 dark:text-brand-300">
+                  Cancel anytime
                 </span>
               </div>
               <p className="mt-1 text-sm text-slate-700 dark:text-slate-500">
-                or ${PRO_PRICING.MONTHLY}/month billed monthly
+                or ${PRO_PRICING.YEARLY}/year — save {yearlySavingsPercent()}%
               </p>
 
               <ul className="mt-6 flex-1 space-y-2.5">
@@ -236,15 +240,15 @@ export default async function PricingPage({
               ) : user ? (
                 <div className="mt-7 space-y-2">
                   <form action={activateProAction}>
-                    <input type="hidden" name="plan" value="YEARLY" />
+                    <input type="hidden" name="plan" value="MONTHLY" />
                     <Button type="submit" size="lg" className="w-full">
-                      Get Pro Yearly — ${PRO_PRICING.YEARLY}
+                      Get Pro Monthly — ${PRO_PRICING.MONTHLY}/mo
                     </Button>
                   </form>
                   <form action={activateProAction}>
-                    <input type="hidden" name="plan" value="MONTHLY" />
+                    <input type="hidden" name="plan" value="YEARLY" />
                     <Button type="submit" variant="outline" size="lg" className="w-full">
-                      Get Pro Monthly — ${PRO_PRICING.MONTHLY}/mo
+                      Or pay yearly — ${PRO_PRICING.YEARLY}
                     </Button>
                   </form>
                   <p className="pt-1 text-center text-xs text-slate-700 dark:text-slate-500">

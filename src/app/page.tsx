@@ -306,10 +306,11 @@ export default async function LandingPage() {
                 columns' buttons render at different heights side by side. */}
             <div className="relative flex flex-col rounded-lg border border-brand-600 ring-1 ring-brand-600 bg-card p-7">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50">NumberSmith Pro</h3>
+              {/* Leads with the monthly price to match the pricing page. */}
               <p className="mt-1 text-3xl font-extrabold text-slate-900 dark:text-slate-50">
-                ${PRO_PRICING.YEARLY} <span className="text-sm font-normal text-slate-700 dark:text-slate-500">/year</span>
+                ${PRO_PRICING.MONTHLY} <span className="text-sm font-normal text-slate-700 dark:text-slate-500">/month</span>
               </p>
-              <p className="text-xs text-slate-700 dark:text-slate-500">or ${PRO_PRICING.MONTHLY}/month</p>
+              <p className="text-xs text-slate-700 dark:text-slate-500">or ${PRO_PRICING.YEARLY}/year</p>
               <ul className="mt-5 flex-1 space-y-2 text-sm text-slate-600 dark:text-slate-300">
                 {[
                   "Unlimited daily problems",
