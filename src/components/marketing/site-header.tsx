@@ -8,23 +8,23 @@ export async function SiteHeader() {
   const user = await getCurrentUser();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-200 bg-surface/90 backdrop-blur dark:border-slate-800">
+    <header className="sticky top-0 z-40 border-b border-slate-200 bg-surface dark:border-slate-800">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5 sm:px-6">
         <Logo href="/" />
         <nav className="hidden items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-300 md:flex">
-          <Link href="/#competitions" className="hover:text-slate-900 dark:hover:text-slate-50">
+          <Link href="/#competitions" className="transition-colors hover:text-slate-900 dark:hover:text-slate-50">
             Competitions
           </Link>
-          <Link href="/#how-it-works" className="hover:text-slate-900 dark:hover:text-slate-50">
+          <Link href="/#how-it-works" className="transition-colors hover:text-slate-900 dark:hover:text-slate-50">
             How it works
           </Link>
-          <Link href="/pricing" className="hover:text-slate-900 dark:hover:text-slate-50">
+          <Link href="/pricing" className="transition-colors hover:text-slate-900 dark:hover:text-slate-50">
             Pricing
           </Link>
-          <Link href="/about" className="hover:text-slate-900 dark:hover:text-slate-50">
+          <Link href="/about" className="transition-colors hover:text-slate-900 dark:hover:text-slate-50">
             About
           </Link>
-          <Link href="/#faq" className="hover:text-slate-900 dark:hover:text-slate-50">
+          <Link href="/#faq" className="transition-colors hover:text-slate-900 dark:hover:text-slate-50">
             FAQ
           </Link>
         </nav>

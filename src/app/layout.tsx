@@ -1,16 +1,22 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { DM_Sans, DM_Mono, Space_Grotesk } from "next/font/google";
 import { TINT_IDS, DEFAULT_TINT } from "@/lib/tints";
 import { ThemeSync } from "@/components/theme-sync";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  subsets: ["latin"],
+});
+
+const dmMono = DM_Mono({
+  weight: "400",
+  variable: "--font-dm-mono",
   subsets: ["latin"],
 });
 
@@ -68,7 +74,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${dmSans.variable} ${spaceGrotesk.variable} ${dmMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>

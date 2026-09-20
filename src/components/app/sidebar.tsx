@@ -40,10 +40,10 @@ export function Sidebar({ isAdmin, isPro }: { isAdmin?: boolean; isPro?: boolean
 
   return (
     <aside className="hidden w-60 shrink-0 flex-col border-r border-slate-200 bg-surface dark:border-slate-800 lg:flex">
-      <div className="px-5 py-5">
+      <div className="border-b border-slate-100 px-5 py-5 dark:border-slate-800">
         <Logo href="/dashboard" />
       </div>
-      <nav className="flex-1 space-y-0.5 px-3">
+      <nav className="flex-1 space-y-0.5 px-3 py-4">
         {NAV_ITEMS.map((item) => {
           const active = pathname === item.href || pathname.startsWith(item.href + "/");
           const Icon = item.icon;
@@ -52,10 +52,10 @@ export function Sidebar({ isAdmin, isPro }: { isAdmin?: boolean; isPro?: boolean
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                "flex items-center gap-3 border-l-2 px-3 py-2 text-sm font-medium transition-colors duration-150",
                 active
-                  ? "bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300"
-                  : "text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800"
+                  ? "border-brand-600 bg-brand-50/70 text-brand-700 dark:bg-brand-950/60 dark:text-brand-300"
+                  : "border-transparent text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800"
               )}
             >
               <Icon
@@ -72,10 +72,10 @@ export function Sidebar({ isAdmin, isPro }: { isAdmin?: boolean; isPro?: boolean
         <Link
           href="/settings"
           className={cn(
-            "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+            "flex items-center gap-3 border-l-2 px-3 py-2 text-sm font-medium transition-colors duration-150",
             pathname.startsWith("/settings")
-              ? "bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300"
-              : "text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800"
+              ? "border-brand-600 bg-brand-50/70 text-brand-700 dark:bg-brand-950/60 dark:text-brand-300"
+              : "border-transparent text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800"
           )}
         >
           <IconSettings
@@ -90,10 +90,10 @@ export function Sidebar({ isAdmin, isPro }: { isAdmin?: boolean; isPro?: boolean
           <Link
             href="/admin"
             className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+              "flex items-center gap-3 border-l-2 px-3 py-2 text-sm font-medium transition-colors duration-150",
               pathname.startsWith("/admin")
-                ? "bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300"
-                : "text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800"
+                ? "border-brand-600 bg-brand-50/70 text-brand-700 dark:bg-brand-950/60 dark:text-brand-300"
+                : "border-transparent text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800"
             )}
           >
             <IconShield
@@ -106,8 +106,8 @@ export function Sidebar({ isAdmin, isPro }: { isAdmin?: boolean; isPro?: boolean
           </Link>
         )}
       </nav>
-      <div className="p-3">
-        <div className="rounded-lg bg-slate-50 px-3 py-2 text-[11px] text-slate-400 dark:bg-slate-800 dark:text-slate-500">
+      <div className="border-t border-slate-100 p-3 dark:border-slate-800">
+        <div className="bg-slate-50 px-3 py-2 text-[11px] text-slate-400 dark:bg-slate-800 dark:text-slate-500">
           NumberSmith v0.1 — MVP
         </div>
       </div>

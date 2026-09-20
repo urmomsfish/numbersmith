@@ -70,7 +70,7 @@ export default async function PracticePage({
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Problem Database</h1>
+          <h1 className="text-3xl font-semibold text-slate-900 dark:text-slate-50">Problem Database</h1>
           <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{total} problems match your filters.</p>
         </div>
         <LinkButton href={`/practice/session${params.topic ? `?topic=${params.topic}` : ""}`}>
@@ -88,7 +88,7 @@ export default async function PracticePage({
           return (
             <div
               key={p.id}
-              className="flex flex-col justify-between rounded-xl border border-slate-200 dark:border-slate-700 bg-card p-4"
+              className="flex flex-col justify-between rounded-lg border border-slate-200 dark:border-slate-700 bg-card p-5 transition-colors hover:border-slate-300 dark:hover:border-slate-600"
             >
               <div>
                 <div className="flex flex-wrap gap-1.5">
