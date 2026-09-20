@@ -20,6 +20,21 @@ const TONE_BADGE: Record<Scene["type"], { label: string; tone: "brand" | "succes
   summary: { label: "Recap", tone: "slate" },
 };
 
+// Every scene used to render on the same flat near-black panel, which made a
+// worked example indistinguishable from a warning at a glance. Each type now
+// carries an accent that washes the top of the stage and colours its bullets,
+// so the kind of slide you are on is readable peripherally. Class names are
+// spelled out in full because Tailwind cannot see into a computed string.
+const ACCENT: Record<Scene["type"], { wash: string; dot: string; rule: string }> = {
+  title: { wash: "from-brand-500/25", dot: "bg-brand-400", rule: "bg-brand-500" },
+  text: { wash: "from-brand-500/20", dot: "bg-brand-400", rule: "bg-brand-500" },
+  example: { wash: "from-success-500/20", dot: "bg-success-500", rule: "bg-success-500" },
+  strategy: { wash: "from-sky-500/20", dot: "bg-sky-400", rule: "bg-sky-500" },
+  pitfall: { wash: "from-warning-500/20", dot: "bg-warning-500", rule: "bg-warning-500" },
+  practice: { wash: "from-success-500/20", dot: "bg-success-500", rule: "bg-success-500" },
+  summary: { wash: "from-violet-500/20", dot: "bg-violet-400", rule: "bg-violet-500" },
+};
+
 const TICK_MS = 50;
 // How long the answer stays hidden on a practice scene, giving the learner
 // a real chance to solve it before it's shown.
@@ -129,15 +144,20 @@ export function ScenePlayer({
   const [answerRevealed, setAnswerRevealed] = useState(false);
   const [scrubbing, setScrubbing] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
+  // Set only when the native API was refused and we fall back to an overlay.
+  const [expanded, setExpanded] = useState(false);
   const markedRef = useRef(alreadyCompleted);
   const shellRef = useRef<HTMLDivElement>(null);
 
   const scene = scenes[index];
   const isLast = index === scenes.length - 1;
   const badge = TONE_BADGE[scene.type];
+  const accent = ACCENT[scene.type];
   // Body copy scales up in fullscreen — at arm's length from a projector or a
-  // laptop across a desk, 14px is unreadable.
-  const bodyText = fullscreen ? "text-lg sm:text-xl" : "text-sm";
+  // laptop across a desk, 14px is unreadable. Even inline this is a stage
+  // being read, not a dense UI panel, so the floor is 16px rather than 14:
+  // superscripts render at 0.72em, and an exponent on 14px body text is 10px.
+  const bodyText = fullscreen ? "text-lg sm:text-xl" : "text-base";
 
   function markCompleteOnce() {
     if (markedRef.current) return;
@@ -194,25 +214,44 @@ export function ScenePlayer({
     setAnswerRevealed(false);
   }
 
-  // The browser can leave fullscreen without going through our button (Esc,
-  // the system control, a tab switch), so the flag is driven by the event
-  // rather than by whichever handler last ran.
+  // The browser can leave native fullscreen without going through our button
+  // (Esc, the system control, a tab switch), so the flag is driven by the
+  // event rather than by whichever handler last ran.
   useEffect(() => {
-    const onChange = () => setFullscreen(document.fullscreenElement === shellRef.current);
+    const onChange = () => setFullscreen(document.fullscreenElement === shellRef.current || expanded);
     document.addEventListener("fullscreenchange", onChange);
     return () => document.removeEventListener("fullscreenchange", onChange);
-  }, []);
+  }, [expanded]);
 
+  // requestFullscreen is refused outright in a surprising number of real
+  // contexts — an embedded/cross-origin frame's permissions policy, and iOS
+  // Safari, which only grants it to <video>. Silently staying inline there
+  // reads as a broken button, so a refusal falls back to an in-page overlay
+  // that fills the viewport. The learner gets a full screen either way.
   async function toggleFullscreen() {
+    if (document.fullscreenElement) {
+      try {
+        await document.exitFullscreen();
+      } catch {
+        // Already gone; the change event settles the flag.
+      }
+      setExpanded(false);
+      return;
+    }
+    if (expanded) {
+      setExpanded(false);
+      setFullscreen(false);
+      return;
+    }
     try {
-      if (document.fullscreenElement) await document.exitFullscreen();
-      else await shellRef.current?.requestFullscreen();
+      await shellRef.current?.requestFullscreen();
     } catch {
-      // Fullscreen can be refused (permissions policy, iOS Safari on non-video
-      // elements). Staying inline is a fine outcome; nothing to report.
+      setExpanded(true);
+      setFullscreen(true);
     }
   }
 
+  // Esc leaves the CSS fallback, matching what it does in native fullscreen.
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       const target = e.target as HTMLElement | null;
@@ -221,10 +260,26 @@ export function ScenePlayer({
         e.preventDefault();
         void toggleFullscreen();
       }
+      if (e.key === "Escape" && expanded) {
+        setExpanded(false);
+        setFullscreen(false);
+      }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [expanded]);
+
+  // While the overlay is up the page behind it must not scroll, or a flick on
+  // the slide drags the dashboard around underneath.
+  useEffect(() => {
+    if (!expanded) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [expanded]);
 
   function togglePlay() {
     if (finished) {
@@ -241,23 +296,49 @@ export function ScenePlayer({
   const elapsedTotal = sceneStarts[index] + elapsed;
 
   return (
-    <div className="dark">
+    <>
+      {/* Only the player is forced dark — it is a screening surface and reads
+          as one in either theme. The quiz below is ordinary page furniture and
+          must follow the user's actual theme, so it stays outside this
+          wrapper; nested inside, it rendered a dark card on a light page. */}
+      <div className={cn("dark", expanded && "fixed inset-0 z-50 bg-slate-950")}>
       <div
         ref={shellRef}
         className={cn(
-          "overflow-hidden border border-white/10 bg-slate-950 shadow-xl shadow-black/30",
-          fullscreen ? "flex h-full flex-col rounded-none" : "rounded-2xl"
+          "relative overflow-hidden border-white/10 bg-slate-950 shadow-xl shadow-black/30",
+          fullscreen ? "flex h-full flex-col rounded-none border-0" : "rounded-2xl border"
         )}
       >
-        <div className={cn("px-5 pt-5 sm:px-8 sm:pt-8", fullscreen && "flex-1 overflow-y-auto px-8 pt-10 sm:px-16")}>
+        {/* Scene-typed colour wash. Sits behind the content and fades out, so
+            the slide reads as tinted rather than as a coloured panel. */}
+        <div
+          className={cn(
+            "pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b to-transparent transition-colors duration-500",
+            accent.wash
+          )}
+          aria-hidden
+        />
+        <div
+          className={cn(
+            "relative px-5 pt-5 sm:px-8 sm:pt-8",
+            fullscreen && "flex flex-1 flex-col justify-center overflow-y-auto px-8 py-10 sm:px-16"
+          )}
+        >
           <div
             key={index}
             className={cn(
               "animate-[scene-in_0.35s_ease-out]",
-              fullscreen ? "mx-auto max-w-4xl" : "min-h-[280px] sm:min-h-[320px]"
+              // Centred in a fixed-height stage rather than pinned to the top:
+              // most scenes are a heading and three bullets, which used to sit
+              // in the corner of a tall empty black rectangle.
+              fullscreen
+                ? "mx-auto w-full max-w-4xl"
+                : "flex min-h-[280px] flex-col justify-center sm:min-h-[320px]"
             )}
           >
-            <Badge tone={badge.tone}>{badge.label}</Badge>
+            <div>
+              <Badge tone={badge.tone}>{badge.label}</Badge>
+            </div>
             <h2 className={cn("mt-3 font-bold text-slate-50", fullscreen ? "text-3xl sm:text-4xl" : "text-xl sm:text-2xl")}>
               <MathText>{scene.heading}</MathText>
             </h2>
@@ -269,14 +350,14 @@ export function ScenePlayer({
             )}
 
             {scene.type === "example" && (
-              <p className={cn("mt-3 rounded-lg bg-white/10 px-3 py-2 font-medium text-slate-100", bodyText)}>
+              <p className={cn("mt-3 rounded-xl border border-white/10 bg-white/[0.07] px-4 py-3 font-medium text-slate-100", bodyText)}>
                 <MathText>{scene.prompt}</MathText>
               </p>
             )}
 
             {scene.type === "practice" && (
               <div className="mt-3 space-y-3">
-                <p className={cn("rounded-lg bg-white/10 px-3 py-2 font-medium text-slate-100", bodyText)}>
+                <p className={cn("rounded-xl border border-white/10 bg-white/[0.07] px-4 py-3 font-medium text-slate-100", bodyText)}>
                   <MathText>{scene.prompt}</MathText>
                 </p>
                 {answerRevealed ? (
@@ -310,8 +391,9 @@ export function ScenePlayer({
                   >
                     <span
                       className={cn(
-                        "shrink-0 rounded-full bg-brand-400",
-                        fullscreen ? "mt-2.5 h-2 w-2" : "mt-1.5 h-1.5 w-1.5"
+                        "shrink-0 rounded-full",
+                        accent.dot,
+                        fullscreen ? "mt-2.5 h-2 w-2" : "mt-2 h-1.5 w-1.5"
                       )}
                     />
                     <MathText>{b}</MathText>
@@ -396,12 +478,13 @@ export function ScenePlayer({
           </div>
         </div>
       </div>
+      </div>
 
       {/* The quiz lives outside the player shell so that entering fullscreen
           shows the lesson alone, and so it stays on the page once revealed. */}
       {!fullscreen && (finished || completed) && quizProblems.length > 0 && (
         <LessonQuiz problems={quizProblems} />
       )}
-    </div>
+    </>
   );
 }

@@ -17,19 +17,66 @@ export type MathNode =
   | { t: "frac"; num: string; den: string }
   | { t: "sqrt"; v: MathNode[] };
 
-/** Literal substitutions that are unambiguous wherever they appear. */
+/** Literal substitutions that are unambiguous wherever they appear.
+ *
+ * Order matters: longer LaTeX names must precede any shorter name they start
+ * with, or "\rightarrow" would be eaten by the "\right" sizing hint. */
 const SYMBOLS: Array<[RegExp, string]> = [
   // LaTeX fragments that leaked into hand-authored content.
   [/\\div\b/g, "÷"],
   [/\\times\b/g, "×"],
   [/\\cdot\b/g, "·"],
   [/\\pm\b/g, "±"],
+  [/\\mp\b/g, "∓"],
   [/\\leq?\b/g, "≤"],
   [/\\geq?\b/g, "≥"],
   [/\\neq?\b/g, "≠"],
+  [/\\approx\b/g, "≈"],
+  [/\\equiv\b/g, "≡"],
   [/\\pi\b/g, "π"],
   [/\\infty\b/g, "∞"],
   [/\\sqrt\b/g, "sqrt"],
+  // Arrows. The long names come first so the sizing hints below cannot
+  // truncate them.
+  [/\\Rightarrow\b/g, "⇒"],
+  [/\\Leftrightarrow\b/g, "⇔"],
+  [/\\Leftarrow\b/g, "⇐"],
+  [/\\rightarrow\b/g, "→"],
+  [/\\leftarrow\b/g, "←"],
+  [/\\implies\b/g, "⇒"],
+  [/\\iff\b/g, "⇔"],
+  [/\\to\b/g, "→"],
+  // Set and sequence notation.
+  [/\\in\b/g, "∈"],
+  [/\\notin\b/g, "∉"],
+  [/\\subseteq\b/g, "⊆"],
+  [/\\subset\b/g, "⊂"],
+  [/\\cup\b/g, "∪"],
+  [/\\cap\b/g, "∩"],
+  [/\\emptyset\b/g, "∅"],
+  [/\\(ldots|dots|cdots)\b/g, "…"],
+  [/\\sum\b/g, "∑"],
+  [/\\prod\b/g, "∏"],
+  [/\\angle\b/g, "∠"],
+  [/\\triangle\b/g, "△"],
+  [/\\degree\b/g, "°"],
+  // Greek letters that appear in competition write-ups.
+  [/\\alpha\b/g, "α"],
+  [/\\beta\b/g, "β"],
+  [/\\gamma\b/g, "γ"],
+  [/\\delta\b/g, "δ"],
+  [/\\Delta\b/g, "Δ"],
+  [/\\theta\b/g, "θ"],
+  [/\\lambda\b/g, "λ"],
+  [/\\mu\b/g, "μ"],
+  [/\\sigma\b/g, "σ"],
+  [/\\phi\b/g, "φ"],
+  [/\\omega\b/g, "ω"],
+  [/\\Omega\b/g, "Ω"],
+  // Sizing hints and spacing carry no meaning once we are not in TeX.
+  [/\\(left|right|big|Big|bigg|Bigg)\b/g, ""],
+  [/\\[,;:!]/g, " "],
+  [/\\quad\b/g, "  "],
   // ASCII comparison operators.
   [/<=>/g, "⇔"],
   [/<=/g, "≤"],
@@ -62,13 +109,19 @@ function isScriptChar(c: string): boolean {
   return /[0-9A-Za-z]/.test(c);
 }
 
-/** Reads a balanced (...) group starting at `i` (which must point at "("). */
+/** Reads a balanced (...) or {...} group starting at `i`, which must point at
+ * the opening delimiter. Braces matter because hand-authored content mixes
+ * TeX habits into the ASCII style — "a^{p-1}" and "S_{15}" are as common as
+ * "a^(m+n)" — and a brace group that isn't understood leaks the raw "^{"
+ * straight onto the slide. The delimiters themselves are dropped. */
 function readGroup(src: string, i: number): { body: string; next: number } | null {
-  if (src[i] !== "(") return null;
+  const open = src[i];
+  const close = open === "(" ? ")" : open === "{" ? "}" : null;
+  if (!close) return null;
   let depth = 0;
   for (let j = i; j < src.length; j++) {
-    if (src[j] === "(") depth++;
-    else if (src[j] === ")") {
+    if (src[j] === open) depth++;
+    else if (src[j] === close) {
       depth--;
       if (depth === 0) return { body: src.slice(i + 1, j), next: j + 1 };
     }
@@ -126,6 +179,38 @@ function parseInner(src: string): MathNode[] {
         flush();
         nodes.push({ t: c === "^" ? "sup" : "sub", v: parseInner(script.body) });
         i = script.next;
+        continue;
+      }
+    }
+
+    // \frac{a}{b} and its sizing variants. Only a genuinely short pair becomes
+    // a raised/lowered fraction; a bulky numerator like n(n+1) is illegible at
+    // 0.72em, so it degrades to an inline "a/b" that still reads correctly.
+    const fracCmd = /^\\[dt]?frac\s*(?=\{)/.exec(src.slice(i));
+    if (fracCmd) {
+      const num = readGroup(src, i + fracCmd[0].length);
+      const den = num && readGroup(src, num.next);
+      if (num && den) {
+        flush();
+        if (num.body.length <= 3 && den.body.length <= 3) {
+          nodes.push({ t: "frac", num: num.body, den: den.body });
+        } else {
+          nodes.push(...parseInner(`${num.body}/${den.body}`));
+        }
+        i = den.next;
+        continue;
+      }
+    }
+
+    // \text{...} and \mathrm{...} exist only to switch font in TeX; the words
+    // inside are ordinary prose and should render as such.
+    const textCmd = /^\\(text|textrm|mathrm|mbox|operatorname)\s*(?=\{)/.exec(src.slice(i));
+    if (textCmd) {
+      const group = readGroup(src, i + textCmd[0].length);
+      if (group) {
+        flush();
+        pushText(nodes, group.body);
+        i = group.next;
         continue;
       }
     }
