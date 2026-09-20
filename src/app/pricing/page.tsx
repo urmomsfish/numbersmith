@@ -58,7 +58,7 @@ const PRO_FEATURES = [
   "Custom practice sets",
   "Detailed performance reports",
   "Video lessons — animated, narration-free walkthroughs of key concepts",
-  "Smith AI — step-by-step help that never just gives the answer",
+  "Smith AI — works through any problem with you, one step at a time",
 ];
 
 const FAQ = [
@@ -83,7 +83,7 @@ const FAQ = [
     a: "Your NumberSmith rating runs from roughly 1000 (Beginner) to 2200+ (Elite). It rises when you solve problems that are hard relative to your current level and falls slightly when you miss problems well below it. You have an overall rating plus competition-specific ratings (AMC, MathCounts, Olympiad) and per-topic ratings.",
   },
   {
-    q: "Is the free version actually useful?",
+    q: "How far can I get on the free plan?",
     a: "Yes. Free includes the complete placement test, your full skill breakdown, competition selection, a personalized training plan, 15 problems a day, the daily challenge, introductory lessons, two weekly simulations, and full XP, streak, and achievement systems. A dedicated student can train on the free plan for months.",
   },
   {
@@ -179,9 +179,9 @@ export default async function PricingPage({
             </div>
 
             {/* Pro */}
-            <div className="relative flex flex-col rounded-2xl border-2 border-brand-600 bg-card p-7">
+            <div className="relative flex flex-col rounded-2xl border-2 border-foreground bg-card p-7">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <span className="rounded-full bg-brand-600 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
+                <span className="rounded-full bg-ember-600 px-3 py-1 text-xs font-semibold text-white">
                   Best Value
                 </span>
               </div>
@@ -218,7 +218,7 @@ export default async function PricingPage({
                       i === 0 ? "font-semibold text-slate-800" : "text-slate-600"
                     }`}
                   >
-                    {i !== 0 && <span className="mt-0.5 text-brand-600 dark:text-brand-400">✓</span>}
+                    {i !== 0 && <span className="mt-0.5 text-ember-600 dark:text-ember-500">✓</span>}
                     {f}
                   </li>
                 ))}
@@ -278,7 +278,7 @@ export default async function PricingPage({
                   <tr className="border-b border-slate-200 dark:border-slate-700">
                     <th className="py-3 text-left font-semibold text-slate-700 dark:text-slate-400">Feature</th>
                     <th className="px-3 py-3 text-center font-semibold text-slate-700 dark:text-slate-400">Free</th>
-                    <th className="px-3 py-3 text-center font-semibold text-brand-700 dark:text-brand-300">Pro</th>
+                    <th className="px-3 py-3 text-center font-semibold text-ember-700 dark:text-ember-500">Pro</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -286,7 +286,7 @@ export default async function PricingPage({
                     <tr key={row.feature}>
                       <td className="py-2.5 text-slate-700 dark:text-slate-200">{row.feature}</td>
                       <td className="px-3 py-2.5 text-center text-slate-700 dark:text-slate-400">{row.free}</td>
-                      <td className="px-3 py-2.5 text-center font-semibold text-brand-700 dark:text-brand-300">
+                      <td className="px-3 py-2.5 text-center font-semibold text-ember-700 dark:text-ember-500">
                         {row.pro}
                       </td>
                     </tr>

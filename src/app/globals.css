@@ -18,23 +18,47 @@
   --card: #ffffff;
   --foreground: #171a24;
 
-  /* Brand: deep indigo — "forge" primary */
-  --brand-50: #eef2ff;
-  --brand-100: #e0e7ff;
-  --brand-200: #c7d2fe;
-  --brand-300: #a5b4fc;
-  --brand-400: #818cf8;
-  --brand-500: #6366f1;
-  --brand-600: #4c46c7;
-  --brand-700: #3f3aa5;
-  --brand-800: #343180;
-  --brand-900: #2d2a66;
-  --brand-950: #201e46;
+  /* Brand: graphite — the smith's iron.
+   *
+   * This ramp was a deep indigo, which is the default palette of essentially
+   * every AI-generated interface; it made a competition-math product look like
+   * a generic SaaS dashboard. Graphite is deliberately near-monochrome and
+   * slightly warm (it shares a hue family with ember below, so the two never
+   * look like they came from different palettes). The product has exactly one
+   * accent colour — ember — and this is not it. */
+  /* 50 and 100 are darker than a normal ramp's top end on purpose. They are
+   * used as *fills* — the active sidebar row, selected option cards — and the
+   * surfaces they sit on are already near-white (--surface #fbfaf7). An indigo
+   * #eef2ff read against that by hue; a graphite at the same lightness has no
+   * hue to read by, so it has to earn the separation in luminance instead. */
+  --brand-50: #efece8;
+  --brand-100: #e3dfda;
+  --brand-200: #dcd8d3;
+  --brand-300: #c1bcb5;
+  --brand-400: #918a82;
+  --brand-500: #635c54;
+  --brand-600: #423c36;
+  --brand-700: #332e29;
+  --brand-800: #292420;
+  --brand-900: #1c1917;
+  --brand-950: #12100f;
 
-  /* Accent: forge ember (amber/orange) — XP, streaks, energy */
+  /* Accent: forge ember — XP, streaks, the Pro column, link hover, and the
+   * translucent glow outside a focus ring. The only colour in the product, so
+   * it always means "this is the live thing here".
+   * Note it is not the focus *indicator*: no ember step clears 3:1 against all
+   * eight tints' surfaces, so the solid ring tracks --foreground and ember is
+   * layered outside it. See scripts/check-tint-contrast.mjs.
+   * 700 is the text-safe step: 600 is only 3.5:1 on white and fails AA for
+   * body text. It was already being used as a hover colour without ever
+   * having been defined. */
+  --ember-50: #fff7ed;
+  --ember-100: #ffedd5;
   --ember-400: #fb923c;
   --ember-500: #f97316;
   --ember-600: #ea580c;
+  --ember-700: #c2410c;
+  --ember-950: #431407;
 
   /* Success / warning / danger */
   --success-500: #10b981;
@@ -49,6 +73,22 @@
   --surface: #0f172a;
   --card: #171d2b;
   --foreground: #f1f5f9;
+
+  /* Graphite is a light-mode primary. At its light-mode values the deep end of
+   * the ramp is darker than the page itself, so a `bg-brand-600` chip or a
+   * `bg-brand-950` active row would sit *below* the surface it is meant to
+   * stand on — 1.6:1 against a card, which reads as nothing at all. The deep
+   * end is therefore lifted in dark mode until filled elements clear 3:1
+   * against their own background while still holding 4.5:1 for the white text
+   * on top of them. Hover inverts with it: 700 is lighter than 600 here,
+   * which is the correct direction on a dark surface.
+   * The light end (100–400, which is what `dark:text-brand-*` uses) already
+   * has the contrast it needs and is left alone. */
+  --brand-600: #6b635a;
+  --brand-700: #7d746a;
+  --brand-800: #3f3833;
+  --brand-900: #332d29;
+  --brand-950: #2a2522;
 }
 
 /* ---------------------------------------------------------------------------
@@ -60,7 +100,7 @@
  * surface. Only the untinted default keeps the original two-tone look of a
  * white sidebar over a slate-50 shell.
  * The --brand-* ramp above is deliberately NOT overridden: buttons, links, and
- * badges stay indigo under every tint, so choosing a colour can never change
+ * badges stay graphite under every tint, so choosing a colour can never change
  * the contrast of a control against its own background. "default" is the
  * neutral slate declared in :root, so it needs no block here and is what
  * renders with no attribute set at all.
@@ -252,9 +292,13 @@
   --color-brand-900: var(--brand-900);
   --color-brand-950: var(--brand-950);
 
+  --color-ember-50: var(--ember-50);
+  --color-ember-100: var(--ember-100);
   --color-ember-400: var(--ember-400);
   --color-ember-500: var(--ember-500);
   --color-ember-600: var(--ember-600);
+  --color-ember-700: var(--ember-700);
+  --color-ember-950: var(--ember-950);
 
   --color-success-500: var(--success-500);
   --color-success-600: var(--success-600);
@@ -278,6 +322,37 @@ h5,
 h6 {
   font-family: var(--font-space-grotesk), sans-serif;
   letter-spacing: -0.025em;
+}
+
+/* Inline links.
+ *
+ * These used to be `text-brand-600 dark:text-brand-400`, which worked only
+ * because the brand was indigo. Against a graphite ramp a "brand-coloured"
+ * link is the same colour as the paragraph it sits in, so it stops being a
+ * link at all. Colour was never a sufficient affordance on its own anyway.
+ *
+ * So: full-contrast text with a permanent underline.
+ *
+ * The underline is `currentColor`, not ember. An ember underline was the first
+ * attempt and it fails under the tints: --card is a saturated mid-tone in light
+ * mode, and ember-600 on the violet card is 1.64:1 — the affordance all but
+ * disappears on exactly the surface most links sit on. Since a tint can
+ * recolour any surface, the only underline guaranteed to hold everywhere is one
+ * that tracks the text, which is already held to 4.5:1 wherever it renders.
+ * The accent comes back on hover, where it's a flourish on top of an affordance
+ * that already reads rather than the thing carrying it. */
+.link {
+  color: var(--foreground);
+  text-decoration-line: underline;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+  transition: text-decoration-color 0.15s ease;
+}
+.link:hover {
+  /* Brighter, not darker — 500 lifts in dark mode where 700 would sink. */
+  text-decoration-color: var(--ember-500);
+  text-decoration-thickness: 3px;
 }
 
 button,

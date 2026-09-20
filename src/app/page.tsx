@@ -81,7 +81,7 @@ export default async function LandingPage() {
               Train Smarter. Compete Better.
             </h1>
             <p className="mt-6 max-w-2xl text-[17px] leading-8 text-slate-600 dark:text-slate-300">
-              Take a placement test, add the contests you&apos;re actually sitting, and NumberSmith
+              Take a placement test, add the contests you&apos;re sitting, and NumberSmith
               builds the practice backwards from those dates — {problemCount.toLocaleString()}{" "}
               problems across {competitions.length} competitions, from Math Kangaroo to the IMO.
             </p>
@@ -173,7 +173,7 @@ export default async function LandingPage() {
               <ul className="mt-6 space-y-2.5 text-sm text-slate-600 dark:text-slate-300">
                 {[
                   "Adaptive difficulty that responds to your accuracy and speed",
-                  "Progressive hints that guide without giving the answer away",
+                  "Progressive hints that move you forward one step at a time",
                   "Full solutions written for understanding, not just checking",
                   "Automatic mistake tracking and spaced review",
                 ].map((f) => (
@@ -270,7 +270,8 @@ export default async function LandingPage() {
           <div>
             <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-50">Free vs Pro</h2>
             <p className="mt-3 text-lg text-slate-700 dark:text-slate-400">
-              The free plan is built for students who may never pay for it.
+              Everything you need to train is on the free plan. Pro lifts the daily limits and
+              opens the full library.
             </p>
           </div>
 
@@ -304,7 +305,7 @@ export default async function LandingPage() {
             {/* Emphasised with a ring rather than a thicker border: border-2
                 shrinks the content box by a pixel each side, which made the two
                 columns' buttons render at different heights side by side. */}
-            <div className="relative flex flex-col rounded-lg border border-brand-600 ring-1 ring-brand-600 bg-card p-7">
+            <div className="relative flex flex-col rounded-lg border border-foreground ring-1 ring-foreground bg-card p-7">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50">NumberSmith Pro</h3>
               {/* Leads with the monthly price to match the pricing page. */}
               <p className="mt-1 text-3xl font-extrabold text-slate-900 dark:text-slate-50">
@@ -322,7 +323,7 @@ export default async function LandingPage() {
                   "Advanced statistics & custom practice",
                 ].map((f) => (
                   <li key={f} className="flex items-start gap-2">
-                    <span className="mt-0.5 text-brand-600 dark:text-brand-400">✓</span>
+                    <span className="mt-0.5 text-ember-600 dark:text-ember-500">✓</span>
                     {f}
                   </li>
                 ))}
@@ -334,7 +335,7 @@ export default async function LandingPage() {
           </div>
 
           <p className="mt-6 text-sm text-slate-700 dark:text-slate-500">
-            <Link href="/pricing" className="font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300">
+            <Link href="/pricing" className="link font-semibold">
               See the full feature comparison →
             </Link>
           </p>
@@ -366,7 +367,7 @@ export default async function LandingPage() {
         {/* Final CTA */}
         <section className="border-t border-slate-200 dark:border-slate-700">
           <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-            <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-50">Find out where you actually stand.</h2>
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-50">See where you stand.</h2>
             <p className="mt-3 max-w-xl text-lg text-slate-600 dark:text-slate-300">
               The placement test is free, takes about 15 minutes, and tells you exactly what to train
               next.

@@ -8,14 +8,22 @@ import { generateStudyPlan } from "@/lib/engine/study-plan";
 
 export type OnboardingFormState = { error?: string } | undefined;
 
+/* Only the three fields the product actually reads.
+ *
+ * This form used to ask seven questions. `ageRange`, `approxLevel` and
+ * `priorCompetitions` were written to the profile and then read by nothing —
+ * three mandatory questions that changed no behaviour anywhere. `targetScore`
+ * is real but belongs in Settings, where it already lives and can be set once
+ * someone has a reason to care about it.
+ *
+ * What survives is what has a consumer: `grade` and `priorExperience` feed
+ * computeStartingDifficulty(), and `dailyPracticeMinutes` sizes the study
+ * plan. The columns for the dropped fields keep their Prisma defaults, so
+ * nothing needs a migration and existing profiles are untouched. */
 const profileSchema = z.object({
   grade: z.coerce.number().int().min(0).max(12),
-  ageRange: z.string().min(1),
   priorExperience: z.enum(["NONE", "SOME", "EXPERIENCED", "ADVANCED"]),
-  priorCompetitions: z.array(z.string()).default([]),
-  approxLevel: z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED", "NOT_SURE"]),
   dailyPracticeMinutes: z.coerce.number().int().min(10).max(180),
-  targetScore: z.string().optional(),
 });
 
 export async function saveOnboardingProfileAction(
@@ -26,12 +34,8 @@ export async function saveOnboardingProfileAction(
 
   const parsed = profileSchema.safeParse({
     grade: formData.get("grade"),
-    ageRange: formData.get("ageRange"),
     priorExperience: formData.get("priorExperience"),
-    priorCompetitions: formData.getAll("priorCompetitions"),
-    approxLevel: formData.get("approxLevel"),
     dailyPracticeMinutes: formData.get("dailyPracticeMinutes"),
-    targetScore: formData.get("targetScore") || undefined,
   });
 
   if (!parsed.success) {
@@ -39,34 +43,33 @@ export async function saveOnboardingProfileAction(
   }
   const data = parsed.data;
 
+  // Both buttons on the form submit it, so the answers are saved either way and
+  // the only difference is where the user lands.
+  const takingTest = formData.get("intent") !== "skip";
+  const step = takingTest ? "PLACEMENT" : "COMPETITIONS";
+
+  const fields = {
+    grade: data.grade,
+    priorExperience: data.priorExperience,
+    dailyPracticeMinutes: data.dailyPracticeMinutes,
+    onboardingStep: step,
+  };
+
   await prisma.profile.upsert({
     where: { userId: user.id },
-    update: {
-      grade: data.grade,
-      ageRange: data.ageRange,
-      priorExperience: data.priorExperience,
-      priorCompetitions: JSON.stringify(data.priorCompetitions),
-      approxLevel: data.approxLevel,
-      dailyPracticeMinutes: data.dailyPracticeMinutes,
-      targetScore: data.targetScore || null,
-      onboardingStep: "PLACEMENT",
-    },
-    create: {
-      userId: user.id,
-      grade: data.grade,
-      ageRange: data.ageRange,
-      priorExperience: data.priorExperience,
-      priorCompetitions: JSON.stringify(data.priorCompetitions),
-      approxLevel: data.approxLevel,
-      dailyPracticeMinutes: data.dailyPracticeMinutes,
-      targetScore: data.targetScore || null,
-      onboardingStep: "PLACEMENT",
-    },
+    update: fields,
+    create: { userId: user.id, ...fields },
   });
 
-  redirect("/placement-test");
+  redirect(takingTest ? "/placement-test" : "/onboarding/competitions");
 }
 
+/** Leaves the placement test without finishing it.
+ *
+ * Nothing downstream requires a completed test: every account is created with
+ * an OVERALL rating of 1000, and applyRatingDelta() moves it from there on the
+ * first practice problems. The cost of skipping is a skill breakdown that
+ * starts empty, not a broken account. */
 export async function skipPlacementAction() {
   const user = await requireUser();
   await prisma.profile.update({
@@ -74,6 +77,21 @@ export async function skipPlacementAction() {
     data: { onboardingStep: "COMPETITIONS" },
   });
   redirect("/onboarding/competitions");
+}
+
+/** Finishes onboarding without picking a competition.
+ *
+ * generateStudyPlan() handles an empty schedule — it falls back to the generic
+ * week progression — and the dashboard renders a "pick a competition" empty
+ * state, so this lands on a working product rather than a half-built one. */
+export async function skipCompetitionsAction() {
+  const user = await requireUser();
+  await prisma.profile.update({
+    where: { userId: user.id },
+    data: { onboardingStep: "DONE", onboardingCompletedAt: new Date() },
+  });
+  await generateStudyPlan(user.id);
+  redirect("/dashboard");
 }
 
 const competitionsSchema = z.object({

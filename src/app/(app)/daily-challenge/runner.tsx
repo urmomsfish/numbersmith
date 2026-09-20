@@ -147,7 +147,7 @@ export function DailyChallengeRunner({
             <button
               type="button"
               onClick={() => setHintsShown((h) => h + 1)}
-              className="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300"
+              className="text-sm link font-semibold"
             >
               💡 Show Hint ({hintsShown + 1}/{problem.hints.length})
             </button>

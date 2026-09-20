@@ -151,6 +151,8 @@ function chroma(hex) {
 }
 
 const AA = 4.5;
+/** WCAG 1.4.11 minimum for non-text UI: focus rings, borders, underlines. */
+const UI = 3.0;
 const MIN_CHROMA_SHELL = 20; // shell is the main canvas, so it must clearly read as coloured
 const MIN_CHROMA_SURFACE = 12; // chrome carries the theme, so it must be obvious
 
@@ -169,20 +171,54 @@ for (const t of themes) {
     if (r < AA) checks.push(`${label} ${r.toFixed(2)} < ${AA}`);
     return r;
   };
+  // Non-text: focus rings, underlines, filled shapes. WCAG 1.4.11.
+  const needUI = (label, fg, bg) => {
+    const r = ratio(fg, bg);
+    if (r < UI) checks.push(`${label} ${r.toFixed(2)} < ${UI}`);
+    return r;
+  };
 
   // Light
   const shellSubtitle = need("light shell: slate-600 subtitle", SLATE_600, t.light);
   need("light shell: body text", FG_LIGHT, t.light);
-  need("light shell: brand link", BRAND_600, t.light);
+  need("light shell: brand-600 text", BRAND_600, t.light);
   const navText = need("light chrome: slate-600 nav", SLATE_600, t.lightSurface);
-  need("light chrome: brand link", BRAND_600, t.lightSurface);
+  need("light chrome: brand-600 text", BRAND_600, t.lightSurface);
 
   // Dark
   need("dark shell: body text", FG_DARK, t.dark);
-  need("dark shell: brand-400 link", BRAND_400, t.dark);
-  need("dark shell: brand-300", BRAND_300, t.dark);
+  need("dark shell: brand-300 text", BRAND_300, t.dark);
   need("dark chrome: body text", FG_DARK, t.darkSurface);
-  need("dark chrome: brand-400 link", BRAND_400, t.darkSurface);
+
+  // brand-400 is no longer a link colour. Links are `.link` (full-contrast
+  // foreground plus an ember underline), asserted below; the graphite ramp
+  // left brand-400 used only as a control fill — the signup checkbox — which
+  // is a UI component, not text, and so is held to 3:1 rather than 4.5:1.
+  // Asserting 4.5 here failed on four tints and was measuring an element that
+  // no longer exists.
+  needUI("dark shell: brand-400 control fill", BRAND_400, t.dark);
+  needUI("dark chrome: brand-400 control fill", BRAND_400, t.darkSurface);
+
+  // The `.link` treatment: --foreground text with a currentColor underline, so
+  // link and underline stand or fall together and one assertion covers both.
+  // Cards are the binding case — they are the most saturated tinted surface and
+  // the one most links actually sit on — and were previously unasserted for
+  // foreground-coloured text at all.
+  need("light card: link text + underline", FG_LIGHT, t.lightCard);
+  need("dark card: link text + underline", FG_DARK, t.darkCard);
+
+  // Focus indicators. The solid ring/border is --foreground for the same reason
+  // the underline is: no single ember step clears 3:1 on all 32 tinted surfaces
+  // (ember-600 is the best of them and still bottoms out at 1.64:1 on the
+  // violet light card), and the focus ring is the only thing marking the
+  // focused control. Ember survives as the translucent glow layered outside it,
+  // which is decoration rather than the indicator.
+  needUI("light shell: focus indicator", FG_LIGHT, t.light);
+  needUI("light chrome: focus indicator", FG_LIGHT, t.lightSurface);
+  needUI("light card: focus indicator", FG_LIGHT, t.lightCard);
+  needUI("dark shell: focus indicator", FG_DARK, t.dark);
+  needUI("dark chrome: focus indicator", FG_DARK, t.darkSurface);
+  needUI("dark card: focus indicator", FG_DARK, t.darkCard);
 
   // Card body text.
   need("light card: slate-700 body text", SLATE_700, t.lightCard);

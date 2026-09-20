@@ -25,7 +25,7 @@ function ResetForm() {
           required
           defaultValue={prefillEmail}
           autoComplete="email"
-          className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2.5 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 dark:focus:ring-brand-900"
+          className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2.5 text-sm outline-none focus:border-foreground focus:ring-2 focus:ring-ember-600/30"
           placeholder="you@example.com"
         />
       </div>
@@ -42,7 +42,7 @@ function ResetForm() {
           maxLength={6}
           required
           autoComplete="one-time-code"
-          className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2.5 text-center text-lg tracking-[0.5em] outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 dark:focus:ring-brand-900"
+          className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2.5 text-center text-lg tracking-[0.5em] outline-none focus:border-foreground focus:ring-2 focus:ring-ember-600/30"
           placeholder="000000"
         />
       </div>
@@ -57,7 +57,7 @@ function ResetForm() {
           required
           minLength={8}
           autoComplete="new-password"
-          className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2.5 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 dark:focus:ring-brand-900"
+          className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2.5 text-sm outline-none focus:border-foreground focus:ring-2 focus:ring-ember-600/30"
           placeholder="At least 8 characters"
         />
       </div>
@@ -72,7 +72,7 @@ function ResetForm() {
           required
           minLength={8}
           autoComplete="new-password"
-          className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2.5 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 dark:focus:ring-brand-900"
+          className="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2.5 text-sm outline-none focus:border-foreground focus:ring-2 focus:ring-ember-600/30"
           placeholder="Type it again"
         />
       </div>
@@ -106,7 +106,7 @@ export default function ResetPasswordPage() {
           </Suspense>
 
           <p className="mt-6 text-center text-sm text-slate-700 dark:text-slate-400">
-            <Link href="/forgot-password" className="font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300">
+            <Link href="/forgot-password" className="link font-semibold">
               Request a new code
             </Link>
           </p>

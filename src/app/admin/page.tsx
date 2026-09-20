@@ -159,7 +159,7 @@ export default async function AdminOverviewPage() {
             </dl>
             <Link
               href="/admin/problems"
-              className="mt-4 inline-block text-sm font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300"
+              className="mt-4 inline-block text-sm link font-semibold"
             >
               Manage problems →
             </Link>

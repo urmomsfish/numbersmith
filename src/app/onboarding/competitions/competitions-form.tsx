@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useMemo, useState } from "react";
-import { saveCompetitionsAction } from "@/lib/actions/onboarding-actions";
+import { saveCompetitionsAction, skipCompetitionsAction } from "@/lib/actions/onboarding-actions";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/cn";
@@ -62,7 +62,10 @@ export function CompetitionsForm({
       const next = new Set(prev);
       if (next.has(slug)) {
         next.delete(slug);
-        if (primary === slug) setPrimary(undefined);
+        // Hand the #1 slot to whatever is still selected rather than clearing
+        // it — an empty primary silently disables the submit button, and
+        // deselecting a competition is no reason to make the form unusable.
+        if (primary === slug) setPrimary(next.values().next().value);
       } else {
         next.add(slug);
         if (!primary) setPrimary(slug);
@@ -74,6 +77,7 @@ export function CompetitionsForm({
   const selectedList = competitions.filter((c) => selected.has(c.slug));
 
   return (
+    <>
     <form action={formAction} className="space-y-10">
       {["ELEMENTARY_MIDDLE", "HIGH_SCHOOL", "OLYMPIAD"].map((category) => {
         const meta = CATEGORY_META[category];
@@ -171,5 +175,18 @@ export function CompetitionsForm({
         </Button>
       </div>
     </form>
+
+    {/* Separate form because forms can't nest. Picking a target sharpens the
+        plan, but it isn't knowledge a new user necessarily has yet, so it
+        can't be the last locked gate before the product. */}
+    <form action={skipCompetitionsAction} className="mt-6 text-center">
+      <button type="submit" className="link text-sm font-semibold">
+        I&apos;m not sure yet — skip this
+      </button>
+      <p className="mt-2 text-xs text-slate-700 dark:text-slate-400">
+        You&apos;ll get a general training plan, and you can pick competitions any time from your schedule.
+      </p>
+    </form>
+    </>
   );
 }

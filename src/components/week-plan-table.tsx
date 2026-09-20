@@ -56,7 +56,7 @@ export function WeekPlanTable({ days, highlightToday = true }: { days: PlanDay[]
           >
             <div className="flex items-center gap-3">
               <div className="w-20 shrink-0">
-                <p className={cn("text-sm font-semibold", isToday ? "text-brand-700 dark:text-brand-300" : "text-slate-700 dark:text-slate-200")}>
+                <p className={cn("text-sm font-semibold", isToday ? "text-ember-700 dark:text-ember-500" : "text-slate-700 dark:text-slate-200")}>
                   {DAY_NAMES[dow]}
                 </p>
                 {isToday && <p className="text-[10px] font-semibold uppercase text-brand-500">Today</p>}

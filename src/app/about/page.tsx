@@ -12,7 +12,7 @@ const GENERATOR_COUNT = GENERATORS.length;
 const OLYMPIAD_COUNT = OLYMPIAD_PROBLEMS.length;
 
 export const metadata: Metadata = {
-  title: "About NumberSmith — How it works and what we actually claim",
+  title: "About NumberSmith — How it works, and what we claim",
   description:
     "How NumberSmith's adaptive engine works, where its problems come from, how every answer is verified, and what the platform does not claim.",
 };
@@ -114,7 +114,7 @@ export default async function AboutPage() {
         <section className="border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
           <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6 sm:py-16">
             <p className="text-xs font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">
-              What is actually in it
+              What is in it
             </p>
             <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-3xl">
               The real numbers, read from the live database
@@ -150,7 +150,7 @@ export default async function AboutPage() {
 
             <div className="mt-8 space-y-3 text-sm leading-relaxed text-slate-700 dark:text-slate-400">
               <p className="font-semibold text-slate-900 dark:text-slate-50">
-                What that {problemCount.toLocaleString()} actually consists of:
+                What that {problemCount.toLocaleString()} consists of:
               </p>
               <p>
                 <span className="font-semibold text-slate-700 dark:text-slate-200">
@@ -225,7 +225,7 @@ export default async function AboutPage() {
             any kind, please report it to{" "}
             <a
               href={`mailto:${LEGAL.contactEmail}`}
-              className="font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300"
+              className="link font-semibold"
             >
               {LEGAL.contactEmail}
             </a>{" "}
@@ -297,7 +297,7 @@ export default async function AboutPage() {
           </ul>
           <p>
             One deliberate consequence: your skill breakdown only shows domains the placement test
-            actually tested you on. Untested topics are left out rather than filled in with a
+            has tested you on. Untested topics are left out rather than filled in with a
             plausible-looking percentage.
           </p>
         </Section>
@@ -340,7 +340,7 @@ export default async function AboutPage() {
             Questions, corrections, and mathematical disputes are all welcome at{" "}
             <a
               href={`mailto:${LEGAL.contactEmail}`}
-              className="font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300"
+              className="link font-semibold"
             >
               {LEGAL.contactEmail}
             </a>
@@ -369,7 +369,7 @@ export default async function AboutPage() {
             </div>
             <p className="mt-6 text-sm text-slate-700 dark:text-slate-400">
               Still deciding?{" "}
-              <Link href="/#faq" className="font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300">
+              <Link href="/#faq" className="link font-semibold">
                 Read the FAQ →
               </Link>
             </p>

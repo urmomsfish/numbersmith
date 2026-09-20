@@ -67,7 +67,7 @@ export function SessionRunner({
           {!isPro && (
             <p className="mt-6 text-xs text-slate-700 dark:text-slate-500">
               Free plan includes 15 problems per day.{" "}
-              <a href="/pricing" className="font-semibold text-brand-600 dark:text-brand-400">
+              <a href="/pricing" className="link font-semibold">
                 See what Pro unlocks →
               </a>
             </p>
@@ -95,7 +95,7 @@ export function SessionRunner({
         problem={current}
         onContinue={handleContinue}
         mode={mode}
-        continueLabel={index + 1 >= total ? "Finish Session →" : "Next Problem →"}
+        continueLabel={index + 1 >= total ? "Finish session →" : "Next problem →"}
       />
     </div>
   );

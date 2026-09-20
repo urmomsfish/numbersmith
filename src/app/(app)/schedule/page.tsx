@@ -141,7 +141,7 @@ export default async function SchedulePage() {
                         type="date"
                         name="targetDate"
                         defaultValue={inputValue(s.targetDate)}
-                        className="rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-2.5 py-1.5 text-sm text-slate-900 dark:text-slate-50 outline-none focus:border-brand-500"
+                        className="rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-2.5 py-1.5 text-sm text-slate-900 dark:text-slate-50 outline-none focus:border-foreground"
                       />
                       <Button type="submit" variant="secondary" size="sm">
                         Save
@@ -218,7 +218,7 @@ export default async function SchedulePage() {
                 <select
                   name="competitionId"
                   required
-                  className="w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-slate-900 dark:text-slate-50 outline-none focus:border-brand-500"
+                  className="w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-slate-900 dark:text-slate-50 outline-none focus:border-foreground"
                 >
                   {addable.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -234,7 +234,7 @@ export default async function SchedulePage() {
                 <input
                   type="date"
                   name="targetDate"
-                  className="w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-slate-900 dark:text-slate-50 outline-none focus:border-brand-500"
+                  className="w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-slate-900 dark:text-slate-50 outline-none focus:border-foreground"
                 />
               </label>
               <div className="flex items-end">

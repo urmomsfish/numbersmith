@@ -73,7 +73,7 @@ export function LessonPractice({
         problem={queue[index]}
         mode="PRACTICE"
         onContinue={handleContinue}
-        continueLabel={index + 1 >= queue.length ? "Finish Lesson →" : "Next →"}
+        continueLabel={index + 1 >= queue.length ? "Finish lesson →" : "Next →"}
       />
     </div>
   );

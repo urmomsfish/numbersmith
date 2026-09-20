@@ -29,6 +29,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           xp={stats?.totalXp ?? 0}
           rating={rating?.value ?? 1000}
           isPro={isPro}
+          isAdmin={user.role === "ADMIN"}
           canBuy={paymentsAreLive()}
         />
         <div className="flex-1 overflow-x-hidden">{children}</div>

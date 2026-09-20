@@ -78,7 +78,7 @@ export function AnswerInput({
           if (e.key === "Enter") onEnter();
         }}
         placeholder="Your answer"
-        className="w-full max-w-xs rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 py-2.5 text-base text-slate-900 dark:text-slate-50 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 dark:focus:ring-brand-900 disabled:bg-slate-50 dark:disabled:bg-slate-800"
+        className="w-full max-w-xs rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 py-2.5 text-base text-slate-900 dark:text-slate-50 outline-none focus:border-foreground focus:ring-2 focus:ring-ember-600/30 disabled:bg-slate-50 dark:disabled:bg-slate-800"
       />
 
       {!integerOnly && (

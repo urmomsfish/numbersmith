@@ -113,7 +113,7 @@ export default async function AdminProblemsPage({
                     <input type="hidden" name="id" value={p.id} />
                     <button
                       type="submit"
-                      className="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300"
+                      className="text-xs link font-semibold"
                     >
                       {p.isPublished ? "Unpublish" : "Publish"}
                     </button>

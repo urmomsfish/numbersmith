@@ -24,6 +24,10 @@
 .DS_Store
 *.pem
 
+# local scratch / runtime state, not part of the project
+/.tmpwork/
+/.claude/scheduled_tasks.lock
+
 # debug
 npm-debug.log*
 yarn-debug.log*

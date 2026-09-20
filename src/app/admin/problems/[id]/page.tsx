@@ -39,7 +39,7 @@ export default async function EditProblemPage({
         </div>
         <Link
           href={`/practice/${problem.slug}`}
-          className="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300"
+          className="text-sm link font-semibold"
         >
           View as student →
         </Link>

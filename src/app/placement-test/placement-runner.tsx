@@ -14,6 +14,7 @@ import {
   submitPlacementAnswerAction,
   type PlacementQuestionPayload,
 } from "@/lib/actions/placement-actions";
+import { skipPlacementAction } from "@/lib/actions/onboarding-actions";
 
 const CHOICE_LETTERS = ["A", "B", "C", "D", "E", "F"];
 
@@ -201,6 +202,22 @@ function QuestionCard({
               {pending ? "Checking…" : "Submit Answer"}
             </Button>
           </div>
+        </div>
+
+        {/* The way out. Without this the test is a 20-question wall between
+            signing up and using the product, and the only exits are logging
+            out or closing the tab. Answers already given are kept, so this is
+            "leave", not "discard". */}
+        <div className="mt-8 text-center">
+          <form action={skipPlacementAction}>
+            <button type="submit" className="link text-sm font-semibold">
+              Leave the test and start practising
+            </button>
+          </form>
+          <p className="mt-2 text-xs text-slate-700 dark:text-slate-400">
+            You&apos;ll start at a default rating that adjusts as you practise. You can take the test later from
+            Settings.
+          </p>
         </div>
       </main>
     </>

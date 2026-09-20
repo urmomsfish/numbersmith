@@ -145,7 +145,7 @@ export default async function StudyPlanPage({
                     timeZone: "UTC",
                   })}
                   .{" "}
-                  <Link href="/schedule" className="text-brand-600 dark:text-brand-400 underline">
+                  <Link href="/schedule" className="link">
                     Edit schedule
                   </Link>
                 </p>
@@ -153,7 +153,7 @@ export default async function StudyPlanPage({
               {!nextContest?.targetDate && (
                 <p className="mt-1 text-xs text-slate-700 dark:text-slate-400">
                   No contest date set.{" "}
-                  <Link href="/schedule" className="text-brand-600 dark:text-brand-400 underline">
+                  <Link href="/schedule" className="link">
                     Add one
                   </Link>{" "}
                   and the plan rebuilds around it.

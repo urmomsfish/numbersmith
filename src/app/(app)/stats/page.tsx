@@ -79,13 +79,17 @@ export default async function StatsPage() {
         <StatTile label="Avg. Time" value={`${avgTime}s`} />
         <StatTile label="Rating" value={String(overall)} />
         <StatTile label="XP" value={xp.toLocaleString()} />
-        <StatTile label="Streak" value={`${effectiveStreak(stats?.currentStreak ?? 0, stats?.lastActiveDate)}d`} />
+        <StatTile
+          label="Streak"
+          value={`${effectiveStreak(stats?.currentStreak ?? 0, stats?.lastActiveDate)}d`}
+          hint={`longest ${stats?.longestStreak ?? 0}d`}
+        />
       </div>
 
       <div className="mt-5 grid gap-5 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardBody>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-50">
               Rating Over Time
             </h2>
             {chartData.length >= 2 ? (
@@ -102,7 +106,7 @@ export default async function StatsPage() {
 
         <Card>
           <CardBody>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">Level</h2>
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-50">Level</h2>
             <p className="mt-2 text-4xl font-extrabold text-brand-700 dark:text-brand-300">{level}</p>
             <ProgressBar value={current} max={needed} tone="ember" className="mt-3" />
             <p className="mt-1.5 text-xs text-slate-700 dark:text-slate-500">
@@ -129,7 +133,7 @@ export default async function StatsPage() {
       <div className="mt-5 grid gap-5 sm:grid-cols-2">
         <Card>
           <CardBody>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">Topic Mastery</h2>
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-50">Topic Mastery</h2>
             <div className="mt-4 space-y-3">
               {mastery.length === 0 && (
                 <p className="text-sm text-slate-700 dark:text-slate-500">Practice a few problems to build your mastery map.</p>
@@ -163,7 +167,7 @@ export default async function StatsPage() {
 
         <Card>
           <CardBody>
-            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-50">
               Performance by Difficulty
             </h2>
             <div className="mt-4 space-y-3">
@@ -191,13 +195,17 @@ export default async function StatsPage() {
       </div>
 
       {!isPro && (
-        <div className="mt-6 rounded-2xl border border-brand-200 dark:border-brand-800 bg-brand-50 dark:bg-brand-950 p-6 text-center">
-          <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">Unlock Advanced Analytics</h2>
-          <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-300">
-            See exactly which topics are limiting your competition performance, with subtopic-level
-            breakdowns, per-competition rating analytics, and detailed performance reports.
-          </p>
-          <LinkButton href="/pricing" className="mt-4">
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-slate-200 bg-card p-5 dark:border-slate-700">
+          <div className="max-w-prose">
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-50">
+              Advanced analytics
+            </h2>
+            <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+              See exactly which topics are limiting your competition performance, with subtopic-level
+              breakdowns, per-competition rating analytics, and detailed performance reports.
+            </p>
+          </div>
+          <LinkButton href="/pricing" variant="secondary" size="sm">
             Explore Pro
           </LinkButton>
         </div>
@@ -206,11 +214,14 @@ export default async function StatsPage() {
   );
 }
 
-function StatTile({ label, value }: { label: string; value: string }) {
+function StatTile({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
-    <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-card p-4 text-center">
-      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-500">{label}</p>
-      <p className="mt-1 text-xl font-extrabold text-slate-900 dark:text-slate-50">{value}</p>
+    <div className="rounded-lg border border-slate-200 bg-card p-4 dark:border-slate-700">
+      <p className="text-xs text-slate-600 dark:text-slate-400">{label}</p>
+      <p className="mt-0.5 text-xl font-semibold tabular-nums text-slate-900 dark:text-slate-50">
+        {value}
+      </p>
+      {hint && <p className="mt-0.5 text-xs text-slate-600 dark:text-slate-400">{hint}</p>}
     </div>
   );
 }

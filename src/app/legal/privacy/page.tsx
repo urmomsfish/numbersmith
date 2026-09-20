@@ -22,7 +22,7 @@ export default function PrivacyPage() {
         <p>
           NumberSmith is operated by {LEGAL.entityName}. For any
           privacy question or request, contact{" "}
-          <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 dark:text-brand-400 underline">
+          <a href={`mailto:${LEGAL.contactEmail}`} className="link">
             {LEGAL.contactEmail}
           </a>
           .
@@ -101,7 +101,7 @@ export default function PrivacyPage() {
             <>
               A parent or guardian may review their child&apos;s information, ask us to delete it, or
               refuse further collection by contacting{" "}
-              <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 dark:text-brand-400 underline">
+              <a href={`mailto:${LEGAL.contactEmail}`} className="link">
                 {LEGAL.contactEmail}
               </a>
               . We will verify the request before acting on it.
@@ -163,7 +163,7 @@ export default function PrivacyPage() {
             <>
               You can request a copy of your information, correction of it, or deletion of your
               account by contacting{" "}
-              <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 dark:text-brand-400 underline">
+              <a href={`mailto:${LEGAL.contactEmail}`} className="link">
                 {LEGAL.contactEmail}
               </a>
               .
@@ -191,11 +191,11 @@ export default function PrivacyPage() {
       <Section heading="11. Contact">
         <p>
           Privacy questions or requests:{" "}
-          <a href={`mailto:${LEGAL.contactEmail}`} className="text-brand-600 dark:text-brand-400 underline">
+          <a href={`mailto:${LEGAL.contactEmail}`} className="link">
             {LEGAL.contactEmail}
           </a>
           . See also our{" "}
-          <Link href="/legal/terms" className="text-brand-600 dark:text-brand-400 underline">
+          <Link href="/legal/terms" className="link">
             Terms of Service
           </Link>
           .

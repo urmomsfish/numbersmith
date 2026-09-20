@@ -101,7 +101,7 @@ export function CustomSimulationForm({
         {!isPro && (
           <p className="text-xs text-slate-700 dark:text-slate-500">
             Custom sets count toward your free weekly simulation limit.{" "}
-            <Link href="/pricing" className="font-semibold text-brand-600 dark:text-brand-400">
+            <Link href="/pricing" className="link font-semibold">
               Go unlimited →
             </Link>
           </p>

@@ -183,7 +183,7 @@ export function TestRunner({
                 onChange={(e) => setNotes((n) => ({ ...n, [current.id]: e.target.value }))}
                 rows={3}
                 placeholder="Work through the problem here…"
-                className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 font-mono text-sm outline-none focus:border-brand-400"
+                className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 font-mono text-sm outline-none focus:border-foreground"
               />
             </div>
 

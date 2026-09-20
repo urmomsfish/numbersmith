@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/cn";
-import { Badge } from "@/components/ui/badge";
 import { Button, LinkButton } from "@/components/ui/button";
 import { submitPracticeAnswerAction } from "@/lib/actions/practice-actions";
 import { difficultyLabel, type AttemptMode } from "@/lib/types";
@@ -95,12 +94,17 @@ export function ProblemSolver({
 
   return (
     <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-card p-6 sm:p-8">
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <Badge tone="brand">{problem.topicName}</Badge>
-          <Badge tone="slate">{difficultyLabel(problem.difficulty)}</Badge>
-        </div>
-        <span className="tabular-nums text-xs text-slate-700 dark:text-slate-500">
+      {/* Topic and difficulty are orientation, not status: two coloured badges
+          gave them more weight than the question itself. */}
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 dark:text-slate-400">
+        <span>
+          {problem.topicName}
+          <span aria-hidden className="mx-1.5 text-slate-300 dark:text-slate-700">
+            ·
+          </span>
+          {difficultyLabel(problem.difficulty)}
+        </span>
+        <span className="tabular-nums">
           {String(Math.floor(elapsed / 60)).padStart(2, "0")}:{String(elapsed % 60).padStart(2, "0")}
         </span>
       </div>
@@ -122,7 +126,7 @@ export function ProblemSolver({
                   disabled={pending || !!result}
                   onClick={() => setSelected(letter)}
                   className={cn(
-                    "flex w-full items-center gap-3 rounded-md border px-4 py-3 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40",
+                    "flex w-full items-center gap-3 rounded-md border px-4 py-3 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember-600/40",
                     result
                       ? isCorrectChoice
                         ? "border-success-500 bg-emerald-50 text-emerald-800 dark:border-emerald-500 dark:bg-emerald-950 dark:text-emerald-300"
@@ -168,18 +172,24 @@ export function ProblemSolver({
       {!result && problem.hints.length > 0 && (
         <div className="mt-5">
           {hintsShown < problem.hints.length ? (
+            /* Was text-brand-700 / dark:text-brand-400. A graphite brand-400 is
+               only ~4.1:1 on the darker tinted backgrounds, so the old pair no
+               longer held AA for text this size; .link keeps full-contrast
+               text in both themes and underlines it. */
             <button
               type="button"
               onClick={() => setHintsShown((h) => h + 1)}
-              className="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300"
+              className="link rounded-md text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
             >
-              💡 Show Hint ({hintsShown + 1}/{problem.hints.length})
+              Show hint ({hintsShown + 1} of {problem.hints.length})
             </button>
           ) : null}
+          {/* Hints were amber panels, which read as warnings and added a third
+              accent colour to the screen. They are quiet asides now. */}
           {hintsShown > 0 && (
-            <ul className="mt-2 space-y-1.5">
+            <ul className="mt-3 space-y-2 border-l-2 border-slate-300 pl-3 dark:border-slate-600">
               {problem.hints.slice(0, hintsShown).map((hint, i) => (
-                <li key={i} className="rounded-lg bg-amber-50 dark:bg-amber-950 px-3 py-2 text-sm text-amber-800 dark:text-amber-400">
+                <li key={i} className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
                   {hint}
                 </li>
               ))}
@@ -212,9 +222,11 @@ export function ProblemSolver({
               )}
             </span>
           </div>
-          <div className="rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-500">Solution</p>
-            <p className="mt-1.5 text-sm leading-relaxed text-slate-700 dark:text-slate-200">{result.solution}</p>
+          <div className="rounded-md border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800">
+            <p className="text-sm font-semibold text-slate-900 dark:text-slate-50">Solution</p>
+            <p className="mt-1.5 text-sm leading-relaxed text-slate-700 dark:text-slate-200">
+              {result.solution}
+            </p>
           </div>
           {result.newlyUnlocked.length > 0 && (
             <div className="rounded-md border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950 p-4">
@@ -229,21 +241,25 @@ export function ProblemSolver({
           <div className="pt-1">
             <a
               href={reportMailto(problem.question, answerGiven, result.correctAnswer)}
-              className="text-sm font-medium text-slate-700 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
+              className="text-sm text-slate-600 underline-offset-2 hover:underline dark:text-slate-400"
             >
-              🚩 Something wrong with this problem? Email {LEGAL.contactEmail}
+              Something wrong with this problem? Email {LEGAL.contactEmail}
             </a>
           </div>
         </div>
       )}
 
-      <div className="mt-7 flex justify-end">
+      {/* Full width on a phone, where this is the only action and the thumb is
+          at the bottom of the screen; right-aligned once there is room. */}
+      <div className="mt-7 flex sm:justify-end">
         {!result ? (
-          <Button disabled={!canSubmit} onClick={submit}>
-            {pending ? "Checking…" : "Submit Answer"}
+          <Button disabled={!canSubmit} onClick={submit} className="w-full sm:w-auto">
+            {pending ? "Checking…" : "Submit answer"}
           </Button>
         ) : (
-          <Button onClick={() => onContinue?.(result)}>{continueLabel}</Button>
+          <Button onClick={() => onContinue?.(result)} className="w-full sm:w-auto">
+            {continueLabel}
+          </Button>
         )}
       </div>
     </div>
@@ -252,17 +268,21 @@ export function ProblemSolver({
 
 export function DailyCapUpsell() {
   return (
-    <div className="rounded-lg border border-brand-100 bg-card p-8 text-center">
-      <p className="text-3xl">🎉</p>
-      <h2 className="mt-3 text-xl font-bold text-slate-900 dark:text-slate-50">You&apos;ve completed today&apos;s training!</h2>
-      <p className="mt-2 text-sm text-slate-700 dark:text-slate-400">
-        Come back tomorrow, or unlock unlimited practice right now with NumberSmith Pro.
+    // Had a light-only brand border, so in dark mode it sat on the page with no
+    // edge at all.
+    <div className="rounded-lg border border-slate-200 bg-card p-6 sm:p-8 dark:border-slate-700">
+      <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-50">
+        That&apos;s today&apos;s practice done
+      </h2>
+      <p className="mt-2 max-w-prose text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+        You&apos;ve reached the daily limit on the free plan. Come back tomorrow, or unlock
+        unlimited practice with NumberSmith Pro.
       </p>
-      <div className="mt-6 flex flex-wrap justify-center gap-3">
-        <LinkButton href="/dashboard" variant="outline">
-          Continue Tomorrow
-        </LinkButton>
+      <div className="mt-6 flex flex-wrap gap-3">
         <LinkButton href="/pricing">Try NumberSmith Pro</LinkButton>
+        <LinkButton href="/dashboard" variant="outline">
+          Back to dashboard
+        </LinkButton>
       </div>
     </div>
   );
@@ -270,7 +290,7 @@ export function DailyCapUpsell() {
 
 export function ProblemSolverLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <Link href={href} className="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300">
+    <Link href={href} className="text-sm link font-semibold">
       {children}
     </Link>
   );

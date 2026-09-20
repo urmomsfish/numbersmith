@@ -101,11 +101,11 @@ export default async function PracticePage({
               </div>
               <div className="mt-4">
                 {locked ? (
-                  <Link href="/pricing" className="text-sm font-semibold text-ember-600 dark:text-ember-400 hover:text-ember-700">
+                  <Link href="/pricing" className="link text-sm font-semibold">
                     Unlock with Pro →
                   </Link>
                 ) : (
-                  <Link href={`/practice/${p.slug}`} className="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300">
+                  <Link href={`/practice/${p.slug}`} className="text-sm link font-semibold">
                     Solve →
                   </Link>
                 )}

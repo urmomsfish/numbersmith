@@ -6,8 +6,15 @@ type Variant = "primary" | "secondary" | "outline" | "ghost" | "danger";
 type Size = "sm" | "md" | "lg";
 
 const variantClasses: Record<Variant, string> = {
+  // Disabled goes grey rather than pale-brand: `dark:disabled:bg-brand-900`
+  // kept white text on a deep indigo, which in dark mode was indistinguishable
+  // from an enabled primary button — "Submit answer" looked clickable with no
+  // answer selected. The grey is a translucent slate rather than a light/dark
+  // pair because `disabled:` and `dark:disabled:` carry equal specificity here
+  // (the dark variant is a `:where()`), so which one wins is down to emitted
+  // source order. One alpha value is correct over either background.
   primary:
-    "bg-brand-600 text-white shadow-sm hover:bg-brand-700 disabled:bg-brand-300 dark:disabled:bg-brand-900",
+    "bg-brand-600 text-white shadow-sm hover:bg-brand-700 disabled:bg-slate-400/25 disabled:text-slate-500 disabled:shadow-none",
   secondary:
     "bg-white text-brand-700 shadow-sm hover:bg-brand-50 disabled:text-brand-300 dark:bg-slate-900 dark:text-brand-300 dark:border-brand-800 dark:hover:bg-slate-800 dark:disabled:text-brand-800",
   outline:
@@ -30,7 +37,7 @@ const sizeClasses: Record<Size, string> = {
 // side by side — the Free and Pro columns on the landing page rendered their
 // calls to action at 54px and 52px.
 const base =
-  "inline-flex items-center justify-center border border-transparent font-semibold transition-colors duration-150 disabled:cursor-not-allowed whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2";
+  "inline-flex items-center justify-center border border-transparent font-semibold transition-colors duration-150 disabled:cursor-not-allowed whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2";
 
 export function Button({
   variant = "primary",

@@ -265,7 +265,7 @@ export function ChatPanel({
             }}
             placeholder="Ask a math question…"
             rows={1}
-            className="max-h-[180px] flex-1 resize-none rounded-xl border border-slate-200 bg-background px-3.5 py-2.5 text-sm leading-relaxed text-slate-900 outline-none transition focus:border-brand-400 focus:ring-2 focus:ring-brand-100 dark:border-slate-700 dark:text-slate-50 dark:focus:ring-brand-900"
+            className="max-h-[180px] flex-1 resize-none rounded-xl border border-slate-200 bg-background px-3.5 py-2.5 text-sm leading-relaxed text-slate-900 outline-none transition focus:border-foreground focus:ring-2 focus:ring-ember-600/30 dark:border-slate-700 dark:text-slate-50"
           />
           <Button type="submit" disabled={pending || !input.trim()}>
             Send

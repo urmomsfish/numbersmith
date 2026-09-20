@@ -100,7 +100,7 @@ export default async function MistakesPage() {
                   )}
                 </div>
                 <p className="mt-2.5 line-clamp-2 text-sm text-slate-600 dark:text-slate-300">{m.problem.question}</p>
-                <p className="mt-2 text-xs font-semibold text-brand-600 dark:text-brand-400">Retry this problem →</p>
+                <p className="mt-2 text-xs link font-semibold">Retry this problem →</p>
               </Link>
             );
           })}

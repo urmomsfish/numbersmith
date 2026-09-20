@@ -15,7 +15,7 @@ export function SolverPageClient({
   return (
     <ProblemSolver
       problem={problem}
-      continueLabel={nextSlug ? "Next Problem →" : "Back to Database →"}
+      continueLabel={nextSlug ? "Next problem →" : "Back to database →"}
       onContinue={() => {
         router.push(nextSlug ? `/practice/${nextSlug}` : "/practice");
         router.refresh();
