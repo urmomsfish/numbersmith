@@ -4,8 +4,10 @@ import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/cn";
+import { MathText } from "@/components/math-text";
 import type { Scene } from "@/lib/video-lessons/types";
 import { DiagramRenderer } from "@/components/video-lessons/diagrams";
+import { LessonQuiz, type QuizProblem } from "@/components/video-lessons/lesson-quiz";
 import { markVideoLessonCompleteAction } from "@/lib/actions/video-lesson-actions";
 
 const TONE_BADGE: Record<Scene["type"], { label: string; tone: "brand" | "success" | "warning" | "slate" }> = {
@@ -80,14 +82,31 @@ function IconReplay({ className }: { className?: string }) {
   );
 }
 
+function IconExpand({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <path d="M9 4H4v5M15 4h5v5M9 20H4v-5M15 20h5v-5" />
+    </svg>
+  );
+}
+function IconCollapse({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <path d="M4 9h5V4M20 9h-5V4M4 15h5v5M20 15h-5v5" />
+    </svg>
+  );
+}
+
 export function ScenePlayer({
   videoLessonId,
   scenes,
   alreadyCompleted,
+  quizProblems,
 }: {
   videoLessonId: string;
   scenes: Scene[];
   alreadyCompleted: boolean;
+  quizProblems: QuizProblem[];
 }) {
   const router = useRouter();
   const durations = useMemo(() => scenes.map(sceneDurationMs), [scenes]);
@@ -109,11 +128,16 @@ export function ScenePlayer({
   const [completed, setCompleted] = useState(alreadyCompleted);
   const [answerRevealed, setAnswerRevealed] = useState(false);
   const [scrubbing, setScrubbing] = useState(false);
+  const [fullscreen, setFullscreen] = useState(false);
   const markedRef = useRef(alreadyCompleted);
+  const shellRef = useRef<HTMLDivElement>(null);
 
   const scene = scenes[index];
   const isLast = index === scenes.length - 1;
   const badge = TONE_BADGE[scene.type];
+  // Body copy scales up in fullscreen — at arm's length from a projector or a
+  // laptop across a desk, 14px is unreadable.
+  const bodyText = fullscreen ? "text-lg sm:text-xl" : "text-sm";
 
   function markCompleteOnce() {
     if (markedRef.current) return;
@@ -170,6 +194,38 @@ export function ScenePlayer({
     setAnswerRevealed(false);
   }
 
+  // The browser can leave fullscreen without going through our button (Esc,
+  // the system control, a tab switch), so the flag is driven by the event
+  // rather than by whichever handler last ran.
+  useEffect(() => {
+    const onChange = () => setFullscreen(document.fullscreenElement === shellRef.current);
+    document.addEventListener("fullscreenchange", onChange);
+    return () => document.removeEventListener("fullscreenchange", onChange);
+  }, []);
+
+  async function toggleFullscreen() {
+    try {
+      if (document.fullscreenElement) await document.exitFullscreen();
+      else await shellRef.current?.requestFullscreen();
+    } catch {
+      // Fullscreen can be refused (permissions policy, iOS Safari on non-video
+      // elements). Staying inline is a fine outcome; nothing to report.
+    }
+  }
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      const target = e.target as HTMLElement | null;
+      if (target && /^(INPUT|TEXTAREA)$/.test(target.tagName)) return;
+      if (e.key === "f" || e.key === "F") {
+        e.preventDefault();
+        void toggleFullscreen();
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   function togglePlay() {
     if (finished) {
       setFinished(false);
@@ -186,28 +242,52 @@ export function ScenePlayer({
 
   return (
     <div className="dark">
-      <div className="overflow-hidden rounded-2xl border border-white/10 bg-slate-950 shadow-xl shadow-black/30">
-        <div className="px-5 pt-5 sm:px-8 sm:pt-8">
+      <div
+        ref={shellRef}
+        className={cn(
+          "overflow-hidden border border-white/10 bg-slate-950 shadow-xl shadow-black/30",
+          fullscreen ? "flex h-full flex-col rounded-none" : "rounded-2xl"
+        )}
+      >
+        <div className={cn("px-5 pt-5 sm:px-8 sm:pt-8", fullscreen && "flex-1 overflow-y-auto px-8 pt-10 sm:px-16")}>
           <div
             key={index}
-            className="min-h-[280px] animate-[scene-in_0.35s_ease-out] sm:min-h-[320px]"
+            className={cn(
+              "animate-[scene-in_0.35s_ease-out]",
+              fullscreen ? "mx-auto max-w-4xl" : "min-h-[280px] sm:min-h-[320px]"
+            )}
           >
             <Badge tone={badge.tone}>{badge.label}</Badge>
-            <h2 className="mt-3 text-xl font-bold text-slate-50 sm:text-2xl">{scene.heading}</h2>
+            <h2 className={cn("mt-3 font-bold text-slate-50", fullscreen ? "text-3xl sm:text-4xl" : "text-xl sm:text-2xl")}>
+              <MathText>{scene.heading}</MathText>
+            </h2>
 
-            {scene.type === "title" && <p className="mt-3 text-base leading-relaxed text-slate-300">{scene.sub}</p>}
+            {scene.type === "title" && (
+              <p className={cn("mt-3 leading-relaxed text-slate-300", fullscreen ? "text-xl" : "text-base")}>
+                <MathText>{scene.sub}</MathText>
+              </p>
+            )}
 
             {scene.type === "example" && (
-              <p className="mt-3 rounded-lg bg-white/10 px-3 py-2 text-sm font-medium text-slate-100">{scene.prompt}</p>
+              <p className={cn("mt-3 rounded-lg bg-white/10 px-3 py-2 font-medium text-slate-100", bodyText)}>
+                <MathText>{scene.prompt}</MathText>
+              </p>
             )}
 
             {scene.type === "practice" && (
               <div className="mt-3 space-y-3">
-                <p className="rounded-lg bg-white/10 px-3 py-2 text-sm font-medium text-slate-100">{scene.prompt}</p>
+                <p className={cn("rounded-lg bg-white/10 px-3 py-2 font-medium text-slate-100", bodyText)}>
+                  <MathText>{scene.prompt}</MathText>
+                </p>
                 {answerRevealed ? (
-                  <p className="animate-[fade-up_0.4s_ease-out] rounded-lg border border-success-500/30 bg-success-500/10 px-3 py-2 text-sm leading-relaxed text-slate-100">
+                  <p
+                    className={cn(
+                      "animate-[fade-up_0.4s_ease-out] rounded-lg border border-success-500/30 bg-success-500/10 px-3 py-2 leading-relaxed text-slate-100",
+                      bodyText
+                    )}
+                  >
                     <span className="font-semibold text-success-500">Answer: </span>
-                    {scene.answer}
+                    <MathText>{scene.answer}</MathText>
                   </p>
                 ) : (
                   <p className="text-xs font-medium text-slate-400">
@@ -218,15 +298,23 @@ export function ScenePlayer({
             )}
 
             {"bullets" in scene && (
-              <ul className="mt-4 space-y-2">
+              <ul className={cn("space-y-2", fullscreen ? "mt-6 space-y-4" : "mt-4")}>
                 {scene.bullets.map((b, i) => (
                   <li
                     key={i}
                     style={{ animationDelay: `${i * 220}ms` }}
-                    className="flex gap-2.5 text-sm leading-relaxed text-slate-200 opacity-0 animate-[fade-up_0.4s_ease-out_forwards]"
+                    className={cn(
+                      "flex gap-2.5 leading-relaxed text-slate-200 opacity-0 animate-[fade-up_0.4s_ease-out_forwards]",
+                      bodyText
+                    )}
                   >
-                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-400" />
-                    {b}
+                    <span
+                      className={cn(
+                        "shrink-0 rounded-full bg-brand-400",
+                        fullscreen ? "mt-2.5 h-2 w-2" : "mt-1.5 h-1.5 w-1.5"
+                      )}
+                    />
+                    <MathText>{b}</MathText>
                   </li>
                 ))}
               </ul>
@@ -292,12 +380,28 @@ export function ScenePlayer({
                 {formatTime(elapsedTotal)} / {formatTime(total)}
               </span>
             </div>
-            <span className="text-xs font-medium text-slate-400">
-              {pending ? "Saving…" : completed ? "Lesson complete ✓" : `Scene ${index + 1} of ${scenes.length}`}
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="text-xs font-medium text-slate-400">
+                {pending ? "Saving…" : completed ? "Lesson complete ✓" : `Scene ${index + 1} of ${scenes.length}`}
+              </span>
+              <button
+                onClick={toggleFullscreen}
+                aria-label={fullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+                title={fullscreen ? "Exit fullscreen (F)" : "Fullscreen (F)"}
+                className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition hover:bg-white/10 hover:text-slate-100"
+              >
+                {fullscreen ? <IconCollapse className="h-4 w-4" /> : <IconExpand className="h-4 w-4" />}
+              </button>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* The quiz lives outside the player shell so that entering fullscreen
+          shows the lesson alone, and so it stays on the page once revealed. */}
+      {!fullscreen && (finished || completed) && quizProblems.length > 0 && (
+        <LessonQuiz problems={quizProblems} />
+      )}
     </div>
   );
 }

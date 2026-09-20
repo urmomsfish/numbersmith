@@ -7,6 +7,7 @@ import { isProUser } from "@/lib/subscription";
 import { difficultyLabel } from "@/lib/types";
 import { ScenePlayer } from "@/components/video-lessons/scene-player";
 import type { Scene } from "@/lib/video-lessons/types";
+import { pickQuizProblems } from "@/lib/video-lessons/quiz";
 
 export default async function VideoLessonPage({ params }: { params: Promise<{ slug: string }> }) {
   const user = await getCurrentUser();
@@ -26,6 +27,7 @@ export default async function VideoLessonPage({ params }: { params: Promise<{ sl
   });
 
   const scenes = JSON.parse(lesson.scenes) as Scene[];
+  const quizProblems = await pickQuizProblems(lesson.topicId, lesson.difficulty);
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
@@ -46,7 +48,12 @@ export default async function VideoLessonPage({ params }: { params: Promise<{ sl
       <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-300">{lesson.summary}</p>
 
       <div className="mt-6">
-        <ScenePlayer videoLessonId={lesson.id} scenes={scenes} alreadyCompleted={progress?.completed ?? false} />
+        <ScenePlayer
+          videoLessonId={lesson.id}
+          scenes={scenes}
+          alreadyCompleted={progress?.completed ?? false}
+          quizProblems={quizProblems}
+        />
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import { cn } from "@/lib/cn";
+import { MathText } from "@/components/math-text";
 import type { Diagram } from "@/lib/video-lessons/types";
 
 // Diagrams only ever render inside the video stage (scene-player.tsx), which
@@ -107,7 +108,7 @@ function Numberline({ min, max, points, note }: Extract<Diagram, { kind: "number
             </g>
           ))}
         </svg>
-        {note && <p className="mt-2 text-center text-xs text-slate-400">{note}</p>}
+        {note && <p className="mt-2 text-center text-xs text-slate-400"><MathText>{note}</MathText></p>}
       </div>
     </DiagramCanvas>
   );
@@ -135,7 +136,7 @@ function Bars({ total, segments, note }: Extract<Diagram, { kind: "bars" }>) {
             </div>
           ))}
         </div>
-        {note && <p className="mt-2 text-center text-xs text-slate-400">{note}</p>}
+        {note && <p className="mt-2 text-center text-xs text-slate-400"><MathText>{note}</MathText></p>}
       </div>
     </DiagramCanvas>
   );
@@ -151,8 +152,8 @@ function EquationSteps({ lines }: Extract<Diagram, { kind: "equationSteps" }>) {
             style={{ animationDelay: `${i * 350}ms` }}
             className="flex items-baseline justify-between gap-3 rounded-lg bg-white/10 px-3 py-2 opacity-0 animate-[fade-up_0.4s_ease-out_forwards]"
           >
-            <code className="font-mono text-sm font-semibold text-slate-50">{l.expr}</code>
-            {l.note && <span className="text-xs text-slate-400">{l.note}</span>}
+            <MathText className="font-mono text-sm font-semibold text-slate-50">{l.expr}</MathText>
+            {l.note && <MathText className="text-xs text-slate-400">{l.note}</MathText>}
           </div>
         ))}
       </div>
@@ -322,7 +323,7 @@ function ModularClock({ modulus, highlight, note }: Extract<Diagram, { kind: "mo
             </g>
           ))}
         </svg>
-        {note && <p className="mt-1 text-center text-xs text-slate-400">{note}</p>}
+        {note && <p className="mt-1 text-center text-xs text-slate-400"><MathText>{note}</MathText></p>}
       </div>
     </DiagramCanvas>
   );
