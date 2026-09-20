@@ -46,7 +46,7 @@ export function DailyChallengeRunner({
   const [pending, setPending] = useState(false);
   const [result, setResult] = useState<Completed | null>(alreadyCompleted);
   const [unlocked, setUnlocked] = useState<{ name: string; icon: string }[]>([]);
-  // Seeded in the effect rather than during render. Reading the clock while
+  // Seeded in the effect rather than during render — reading the clock while
   // rendering is impure and can drift across re-renders.
   const startedAtRef = useRef(0);
 

@@ -4,7 +4,7 @@ import { LegalPage, Section, Bullets } from "../legal-page";
 import { LEGAL } from "@/lib/legal";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | NumberSmith",
+  title: "Privacy Policy — NumberSmith",
   description:
     "What information NumberSmith collects, how it is used, and how children's data is handled.",
 };
@@ -75,7 +75,7 @@ export default function PrivacyPage() {
         <Bullets
           items={[
             "To run your account and keep you signed in.",
-            "To decide what you should practise next. This is the core function of the product, and it depends on your answer history.",
+            "To decide what you should practise next — this is the core function of the product, and it depends on your answer history.",
             "To show you your own progress, ratings, and statistics.",
             "To process subscription payments and provide support.",
             "To keep the service secure and prevent abuse.",
@@ -122,13 +122,13 @@ export default function PrivacyPage() {
         <Bullets
           items={[
             <>
-                <strong>Stripe</strong>, payment processing and subscription management.
+              <strong>Stripe</strong> — payment processing and subscription management.
             </>,
             <>
-                <strong>Vercel</strong>, application hosting.
+              <strong>Vercel</strong> — application hosting.
             </>,
             <>
-                <strong>Neon</strong>, database hosting.
+              <strong>Neon</strong> — database hosting.
             </>,
           ]}
         />
@@ -143,7 +143,7 @@ export default function PrivacyPage() {
           We keep your account and learning history for as long as your account is open, because your
           progress and ratings depend on it. If you delete your account we remove your personal
           information within{" "}
-          {LEGAL.dataRetentionDays} days, except where we must retain records, such as
+          {LEGAL.dataRetentionDays} days, except where we must retain records — such as
           payment records for tax purposes.
         </p>
       </Section>

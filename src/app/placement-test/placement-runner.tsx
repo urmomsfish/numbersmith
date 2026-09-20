@@ -118,7 +118,7 @@ function QuestionCard({
         <div className="mx-auto max-w-3xl px-4 pb-3 sm:px-6">
           <div className="mb-1.5 flex items-center justify-between text-xs text-slate-700 dark:text-slate-500">
             <span>Question {question.questionNumber}</span>
-            <span>Adaptive test. Usually 20-30 questions</span>
+            <span>Adaptive test — usually 20-30 questions</span>
           </div>
           <ProgressBar value={progressPct} tone="brand" />
         </div>
@@ -184,7 +184,7 @@ function QuestionCard({
                   : "bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400"
               )}
             >
-              {feedback === "correct" ? "Correct." : "Noted. Moving on."}
+              {feedback === "correct" ? "Correct." : "Noted — moving on."}
             </div>
           )}
 

@@ -6,7 +6,7 @@ import { isTintId, DEFAULT_TINT } from "@/lib/tints";
 
 /** Re-runs the same logic as the no-flash inline script in layout.tsx, but on
  * every client-side navigation. Login/logout redirect via a server action's
- * `redirect()`, which swaps the route without reloading the document, so the
+ * `redirect()`, which swaps the route without reloading the document — so the
  * inline <head> script (which only runs once, on a real page load) never sees
  * the new auth cookie. This effect is what actually resets the theme/tint to
  * light+default right after logout, and restores it right after login. */

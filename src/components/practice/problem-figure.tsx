@@ -4,7 +4,7 @@ import { cn } from "@/lib/cn";
  * Renders a problem's inline SVG figure.
  *
  * Figures live in the seed data as raw `<svg>` markup, authored by us and
- * reviewed in the repo. Nothing a student types ever reaches this component,
+ * reviewed in the repo. Nothing a student types ever reaches this component —
  * there is no path from user input into `Problem.diagram`. Even so, this is the
  * one place in the app that injects markup, so it refuses anything that does not
  * look like a plain figure rather than trusting the column blindly: a bad row

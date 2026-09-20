@@ -1,18 +1,24 @@
 @import "tailwindcss";
 
+/* Class-based dark mode: toggled by adding/removing `dark` on <html> (see
+ * ThemeToggle and the inline script in the root layout), rather than only
+ * following prefers-color-scheme, so a user can override their device
+ * setting. */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* NumberSmith uses a single, calm light theme so the interface stays
- * predictable across devices. */
 :root {
   --background: #f7f6f2;
-  /* Chrome surfaces such as the sidebar, topbar, and marketing header. */
+  /* Chrome surfaces (sidebar, topbar, marketing header). Neutral by
+   * default; tints give this the strongest colour because its text is
+   * slate-600/700, which has far more headroom than the shell's slate-500. */
   --surface: #fbfaf7;
-  /* Content cards such as dashboard boxes, settings panels, and problem cards. */
+  /* Content cards (dashboard boxes, settings panels, problem cards, ...).
+   * Off-white default; each tint overrides this with its own darker shade —
+   * see the "Card colour" comment further down. */
   --card: #ffffff;
   --foreground: #171a24;
 
-  /* Brand: deep indigo primary. */
+  /* Brand: deep indigo — "forge" primary */
   --brand-50: #eef2ff;
   --brand-100: #e0e7ff;
   --brand-200: #c7d2fe;
@@ -25,7 +31,7 @@
   --brand-900: #2d2a66;
   --brand-950: #201e46;
 
-  /* Accent: ember for XP, streaks, and energy. */
+  /* Accent: forge ember (amber/orange) — XP, streaks, energy */
   --ember-400: #fb923c;
   --ember-500: #f97316;
   --ember-600: #ea580c;
@@ -36,6 +42,141 @@
   --warning-500: #f59e0b;
   --danger-500: #ef4444;
   --danger-600: #dc2626;
+}
+
+.dark {
+  --background: #0b1120;
+  --surface: #0f172a;
+  --card: #171d2b;
+  --foreground: #f1f5f9;
+}
+
+/* ---------------------------------------------------------------------------
+ * Background tints
+ *
+ * `data-tint` on <html> (set by the inline script in the root layout, written
+ * by TintPicker) recolours the page shell and the chrome (sidebar, topbar,
+ * marketing header) to a single shared shade, so the whole frame reads as one
+ * surface. Only the untinted default keeps the original two-tone look of a
+ * white sidebar over a slate-50 shell.
+ * The --brand-* ramp above is deliberately NOT overridden: buttons, links, and
+ * badges stay indigo under every tint, so choosing a colour can never change
+ * the contrast of a control against its own background. "default" is the
+ * neutral slate declared in :root, so it needs no block here and is what
+ * renders with no attribute set at all.
+ *
+ * The values are constrained from three directions, all asserted by
+ * `npm run verify:contrast` (scripts/check-tint-contrast.mjs):
+ *   - light tints stay bright enough that text-slate-500 — used for page
+ *     subtitles sitting directly on the background — holds WCAG AA 4.5:1.
+ *     Headroom is thin: the untinted default is only 4.55:1.
+ *   - dark tints stay far enough from the card colour that cards keep a
+ *     visible edge rather than melting into the page.
+ *   - each tint keeps enough chroma to actually read as coloured, since
+ *     lightening to win contrast trades directly against visible hue.
+ *
+ * `.dark[data-tint="x"]` (0,2,0) outranks `[data-tint="x"]` (0,1,0), so the
+ * dark background wins whenever both apply regardless of source order.
+ *
+ * Card colour
+ *
+ * --card (dashboard boxes, settings panels, problem cards, ...) follows the
+ * tint's hue in both modes now, mirroring each other:
+ *
+ *   - Dark: each tint's --card is a lightened step off that tint's
+ *     --background. Headroom is large (7–10:1 against the card's own text
+ *     even after lightening), so no other change was needed.
+ *   - Light: each tint's --card keeps the tint's hue but is built in HSL as
+ *     a genuinely saturated mid-tone (L 78%, S 55%) rather than mixing the
+ *     pastel --background toward black. A black mix desaturates as it
+ *     darkens — on these pastels that reads as a grey/brown "shadow" instead
+ *     of a colour, and it's the opposite of dark mode's cards, which are a
+ *     lighter, still-vivid step off their background. This mirrors that:
+ *     same hue family and comparable saturation to the dark-mode card, just
+ *     lighter overall to suit a light background. Measured, not assumed: at
+ *     L78/S55 the muted card text needs to be slate-700 (not slate-500/600)
+ *     to hold AA — every tint clears 4.7:1+ at slate-700, several drop below
+ *     4.5:1 at slate-600. The muted card text classes were darkened
+ *     accordingly in light mode (slate-500/600 → slate-700; dark-mode
+ *     classes are untouched, they already had headroom). See `bg-card`
+ *     usages / the shared `Card` component for where those classes live.
+ * ------------------------------------------------------------------------ */
+
+[data-tint="violet"] {
+  --background: #ede9fe;
+  --surface: #ede9fe;
+  --card: #b3a8e6;
+}
+.dark[data-tint="violet"] {
+  --background: #241748;
+  --surface: #241748;
+  --card: #2f2351;
+}
+
+[data-tint="blue"] {
+  --background: #dbeafe;
+  --surface: #dbeafe;
+  --card: #a8c3e6;
+}
+.dark[data-tint="blue"] {
+  --background: #12294f;
+  --surface: #12294f;
+  --card: #1e3458;
+}
+
+[data-tint="cyan"] {
+  --background: #cffafe;
+  --surface: #cffafe;
+  --card: #a8e1e6;
+}
+.dark[data-tint="cyan"] {
+  --background: #092f3c;
+  --surface: #092f3c;
+  --card: #153946;
+}
+
+[data-tint="emerald"] {
+  --background: #d1fae5;
+  --surface: #d1fae5;
+  --card: #a8e6c6;
+}
+.dark[data-tint="emerald"] {
+  --background: #093022;
+  --surface: #093022;
+  --card: #153a2d;
+}
+
+[data-tint="rose"] {
+  --background: #ffe4e6;
+  --surface: #ffe4e6;
+  --card: #e6a8ac;
+}
+.dark[data-tint="rose"] {
+  --background: #3d1421;
+  --surface: #3d1421;
+  --card: #47202c;
+}
+
+[data-tint="amber"] {
+  --background: #fef3c7;
+  --surface: #fef3c7;
+  --card: #e6d9a8;
+}
+.dark[data-tint="amber"] {
+  --background: #3d2908;
+  --surface: #3d2908;
+  --card: #473414;
+}
+
+[data-tint="orange"] {
+  --background: #ffedd5;
+  --surface: #ffedd5;
+  --card: #e6cba8;
+}
+.dark[data-tint="orange"] {
+  --background: #3d1c0a;
+  --surface: #3d1c0a;
+  --card: #472716;
 }
 
 @keyframes scene-in {
@@ -96,8 +237,8 @@
   --color-surface: var(--surface);
   --color-card: var(--card);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-dm-sans);
+  --font-mono: var(--font-dm-mono);
 
   --color-brand-50: var(--brand-50);
   --color-brand-100: var(--brand-100);
@@ -125,7 +266,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), sans-serif;
+  font-family: var(--font-dm-sans), sans-serif;
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
@@ -135,67 +276,8 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-geist-sans), sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   letter-spacing: -0.025em;
-}
-
-/* Keep interface copy crisp and readable without pale gray body text. */
-.text-slate-400,
-.text-slate-500,
-.text-slate-600,
-.text-slate-700 { color: #111827; }
-
-.skip-link {
-  position: fixed;
-  left: 1rem;
-  top: -4rem;
-  z-index: 100;
-  border-radius: 0.375rem;
-  background: #111827;
-  color: #ffffff;
-  padding: 0.65rem 0.9rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  transition: top 150ms ease;
-}
-
-.skip-link:focus { top: 1rem; }
-section[id] { scroll-margin-top: 5rem; }
-
-.loading-line,
-.loading-panel {
-  overflow: hidden;
-  position: relative;
-  border: 1px solid #e5e7eb;
-  background: #ffffff;
-}
-
-.loading-line::after,
-.loading-panel::after {
-  position: absolute;
-  inset: 0;
-  content: "";
-  transform: translateX(-100%);
-  background: linear-gradient(90deg, transparent, rgba(76, 70, 199, 0.08), transparent);
-  animation: loading-sweep 1.4s ease-in-out infinite;
-}
-
-.loading-line { border-radius: 0.25rem; }
-.loading-panel { border-radius: 0.5rem; }
-
-@keyframes loading-sweep {
-  to { transform: translateX(100%); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
 }
 
 button,
@@ -225,4 +307,7 @@ textarea {
 .scrollbar-thin::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 9999px;
+}
+.dark .scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #475569;
 }

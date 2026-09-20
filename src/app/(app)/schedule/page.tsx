@@ -13,7 +13,7 @@ import {
   setPrimaryCompetitionAction,
 } from "@/lib/actions/schedule-actions";
 
-export const metadata = { title: "Competition Schedule | NumberSmith" };
+export const metadata = { title: "Competition Schedule — NumberSmith" };
 
 /** Renders a date-only value without letting the viewer's timezone shift it.
  * These are stored as UTC midnight, so they must be read back in UTC. */
@@ -47,7 +47,7 @@ export default async function SchedulePage() {
   const today = streakDayIndex(new Date());
   const withTiming = scheduled.map((s) => ({
     ...s,
-    // targetDate is a date-only value. Use dateKeyIndex, not streakDayIndex.
+    // targetDate is a date-only value — dateKeyIndex, not streakDayIndex.
     daysAway: s.targetDate ? dateKeyIndex(s.targetDate) - today : null,
   }));
   const upcoming = withTiming.filter((s) => s.daysAway !== null && s.daysAway >= 0);
@@ -128,7 +128,7 @@ export default async function SchedulePage() {
                         </>
                       ) : (
                         <span className="text-slate-700 dark:text-slate-500">
-                          No date set. It shapes your practice, but doesn&apos;t anchor the calendar.
+                          No date set — shapes your practice, but doesn&apos;t anchor the calendar.
                         </span>
                       )}
                     </p>
@@ -192,7 +192,7 @@ export default async function SchedulePage() {
               ))}
             </div>
             <p className="mt-3 text-xs text-slate-700 dark:text-slate-500">
-              Past contests no longer steer your plan. Training has already moved on to the next
+              Past contests no longer steer your plan — training has already moved on to the next
               one.
             </p>
           </CardBody>

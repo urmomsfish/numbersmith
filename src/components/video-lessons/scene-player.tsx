@@ -37,7 +37,7 @@ function sceneWords(scene: Scene): number {
 }
 
 // Generous, reading-paced durations (~150 words/min) rather than a brisk
-// slideshow-advance rate. The goal is time to actually read, not just see.
+// slideshow-advance rate — the goal is time to actually read, not just see.
 function sceneDurationMs(scene: Scene): number {
   const hasDiagram = "diagram" in scene && !!scene.diagram;
   const readingMs = sceneWords(scene) * 420;
@@ -146,7 +146,7 @@ export function ScenePlayer({
           return 0;
         }
         // On a practice scene, reveal the answer after ANSWER_REVEAL_MS and
-        // pause right there. The learner gets the answer, then unlimited
+        // pause right there — the learner gets the answer, then unlimited
         // time to sit with it instead of getting swept into the next scene.
         if (scene.type === "practice" && !answerRevealed && next >= ANSWER_REVEAL_MS) {
           setAnswerRevealed(true);
@@ -211,7 +211,7 @@ export function ScenePlayer({
                   </p>
                 ) : (
                   <p className="text-xs font-medium text-slate-400">
-                    Try it yourself. The answer reveals in a few seconds.
+                    Try it yourself — the answer reveals in a few seconds.
                   </p>
                 )}
               </div>

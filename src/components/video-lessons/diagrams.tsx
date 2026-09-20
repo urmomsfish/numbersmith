@@ -2,7 +2,7 @@ import { cn } from "@/lib/cn";
 import type { Diagram } from "@/lib/video-lessons/types";
 
 // Diagrams only ever render inside the video stage (scene-player.tsx), which
-// forces a permanent dark "player chrome" regardless of site theme, so
+// forces a permanent dark "player chrome" regardless of site theme — so
 // these use flat white/slate-on-dark colors rather than the app's usual
 // light/dark: pairs.
 

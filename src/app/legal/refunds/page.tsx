@@ -6,7 +6,7 @@ import { FREE_DAILY_PROBLEM_LIMIT } from "@/lib/subscription";
 import { LEGAL } from "@/lib/legal";
 
 export const metadata: Metadata = {
-  title: "Refund & Cancellation Policy | NumberSmith",
+  title: "Refund & Cancellation Policy — NumberSmith",
   description: "How to cancel a NumberSmith Pro subscription and when refunds are available.",
 };
 
@@ -23,7 +23,7 @@ export default function RefundsPage() {
         <p>
           You do not need to pay to find out whether NumberSmith works for you. The free plan
           includes the complete placement test, your rating and skill breakdown, a personalised
-          training plan, and {FREE_DAILY_PROBLEM_LIMIT} problems a day indefinitely. We also offer
+          training plan, and {FREE_DAILY_PROBLEM_LIMIT} problems a day — indefinitely. We also offer
           an optional {TRIAL_DAYS}-day Pro trial that ends on its own and never converts into a
           charge.
         </p>
@@ -60,11 +60,11 @@ export default function RefundsPage() {
         <Bullets
           items={[
             <>
-               <strong>Within {LEGAL.refundWindowDays} days of your first payment.</strong>{" "}
+              <strong>Within {LEGAL.refundWindowDays} days of your first payment</strong> —
               contact us and we will refund it in full, no questions asked.
             </>,
             <>
-               <strong>Accidental or duplicate charges.</strong> They are refunded in full whenever they
+              <strong>Accidental or duplicate charges</strong> — refunded in full whenever they
               happen. This includes a renewal you did not intend, if you contact us promptly and have
               not substantially used the new period.
             </>,
@@ -73,7 +73,7 @@ export default function RefundsPage() {
               refund the unused portion automatically.
             </>,
             <>
-               <strong>A child subscribed without permission.</strong> Subscriptions are meant to be
+              <strong>A child subscribed without permission</strong> — subscriptions are meant to be
               purchased by adults. If a minor subscribed using your payment method without your
               authorisation, contact us and we will cancel and refund it.
             </>,
@@ -82,15 +82,15 @@ export default function RefundsPage() {
         <p>
           Outside those cases, payments for a completed billing period are generally not refundable,
           since you retained full access for that period. We look at genuine exceptions
-           individually. If something went wrong, tell us.
+          individually — if something went wrong, tell us.
         </p>
       </Section>
 
       <Section heading="Current pricing">
         <Bullets
           items={[
-             <>Monthly: ${PRO_PRICING.MONTHLY}, renews every month.</>,
-             <>Yearly: ${PRO_PRICING.YEARLY}, renews every twelve months.</>,
+            <>Monthly — ${PRO_PRICING.MONTHLY}, renews every month.</>,
+            <>Yearly — ${PRO_PRICING.YEARLY}, renews every twelve months.</>,
           ]}
         />
         <p>

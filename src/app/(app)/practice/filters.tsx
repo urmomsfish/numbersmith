@@ -78,7 +78,7 @@ export function PracticeFilters({
         <option value="">All Difficulties</option>
         {Array.from({ length: 10 }, (_, i) => i + 1).map((d) => (
           <option key={d} value={d}>
-            {d}: {difficultyLabel(d)}
+            {d} — {difficultyLabel(d)}
           </option>
         ))}
       </select>

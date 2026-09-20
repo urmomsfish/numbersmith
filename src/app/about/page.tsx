@@ -12,7 +12,7 @@ const GENERATOR_COUNT = GENERATORS.length;
 const OLYMPIAD_COUNT = OLYMPIAD_PROBLEMS.length;
 
 export const metadata: Metadata = {
-  title: "About NumberSmith | How it works and what we actually claim",
+  title: "About NumberSmith — How it works and what we actually claim",
   description:
     "How NumberSmith's adaptive engine works, where its problems come from, how every answer is verified, and what the platform does not claim.",
 };
@@ -97,7 +97,7 @@ export default async function AboutPage() {
             </h1>
             <p className="mt-5 text-lg leading-relaxed text-slate-600 dark:text-slate-300">
               NumberSmith is an adaptive training platform for competition mathematics. This page
-              exists to explain exactly how it works and exactly what it does not claim. A
+              exists to explain exactly how it works and exactly what it does not claim — because a
               study tool that quietly guesses at your level, or quietly gets an answer wrong, is
               worse than no study tool at all.
             </p>
@@ -110,7 +110,7 @@ export default async function AboutPage() {
           </div>
         </section>
 
-        {/* What's actually in it, read live from the database */}
+        {/* What's actually in it — read live from the database */}
         <section className="border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
           <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6 sm:py-16">
             <p className="text-xs font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">
@@ -156,7 +156,7 @@ export default async function AboutPage() {
                 <span className="font-semibold text-slate-700 dark:text-slate-200">
                   {handWritten} are hand-written
                 </span>{" "}
-                and reserved for the placement test. They are never served as practice, so your
+                and reserved for the placement test — they are never served as practice, so your
                 rating is never set by questions you have already drilled. Another{" "}
                 {OLYMPIAD_COUNT} are hand-written olympiad problems at the top of the difficulty
                 range. The remaining{" "}
@@ -173,7 +173,7 @@ export default async function AboutPage() {
                 </span>{" "}
                 {advancedCount.toLocaleString()} problems sit at difficulty 7 or above out of{" "}
                 {problemCount.toLocaleString()}. Generated variation works well through the AMC and
-                early AIME range, including arithmetic, algebraic manipulation, counting, modular arithmetic,
+                early AIME range — arithmetic, algebraic manipulation, counting, modular arithmetic,
                 and standard geometry, where repetition genuinely builds fluency. It stops working
                 at the olympiad level, where each problem is a single idea that cannot be
                 re-parameterized. Proof-based training for USAMO, IMO, and EGMO is not something
@@ -184,7 +184,7 @@ export default async function AboutPage() {
           </div>
         </section>
 
-        {/* Answer verification, the core credibility claim */}
+        {/* Answer verification — the core credibility claim */}
         <Section id="verification" eyebrow="Correctness" title="Every answer is machine-verified">
           <p>
             A wrong answer key is the single worst failure mode for a practice platform. It teaches
@@ -193,8 +193,8 @@ export default async function AboutPage() {
           </p>
           <p>
             The {handWritten} hand-written problems are checked by a script that independently
-            re-solves each one from scratch by brute-force search wherever the problem allows one,
-            then compares its own result against the stored answer key. The script never reads the
+            re-solves each one from scratch — by brute-force search wherever the problem allows one
+            — and compares its own result against the stored answer key. The script never reads the
             stored answer to decide what the answer should be. For multiple-choice problems it first
             resolves the stored letter through the choices list, so a correct value paired with the
             wrong letter still fails.
@@ -203,7 +203,7 @@ export default async function AboutPage() {
             The generated problems work the other way round: no answer is ever authored, so there is
             nothing for the key to disagree with. Each template draws its numbers, computes the
             answer from them, and then recomputes it a second time by a deliberately different route
-            using a closed-form formula checked against a brute-force search, or vice versa. Any
+            — a closed-form formula checked against a brute-force search, or vice versa. Any
             instance where the two disagree is discarded rather than published. Both mechanisms run
             in the same command:
           </p>
@@ -221,7 +221,7 @@ export default async function AboutPage() {
           </p>
           <p className="text-sm text-slate-700 dark:text-slate-400">
             This catches mathematical errors in answer keys. It does not certify that every hint and
-            worked solution is perfectly worded. Those are reviewed by hand. If you find an error of
+            worked solution is perfectly worded — those are reviewed by hand. If you find an error of
             any kind, please report it to{" "}
             <a
               href={`mailto:${LEGAL.contactEmail}`}
@@ -256,7 +256,7 @@ export default async function AboutPage() {
             )}
           </p>
           <p>
-            The training tracks are modeled on each contest&apos;s published format, including its topic mix,
+            The training tracks are modeled on each contest&apos;s published format — its topic mix,
             difficulty curve, timing, and answer format. NumberSmith is not affiliated with,
             endorsed by, or sponsored by any competition organization, and practicing here confers
             no standing in any actual contest.
@@ -279,7 +279,7 @@ export default async function AboutPage() {
             </li>
             <li>
               <span className="font-semibold text-slate-900 dark:text-slate-50">Your rating</span> is computed from the
-              average difficulty you settled at, adjusted by your accuracy. It is an Elo-inspired scale
+              average difficulty you settled at, adjusted by your accuracy — an Elo-inspired scale
               that then moves with every problem you solve afterward.
             </li>
             <li>

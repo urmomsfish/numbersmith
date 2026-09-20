@@ -92,7 +92,7 @@ export default async function SimulationsPage() {
                     {a.competition.shortName}
                     {a.mode === "CUSTOM" && <span className="ml-2 text-xs text-slate-700 dark:text-slate-500">Custom</span>}
                   </p>
-                  <p className="text-xs text-slate-700 dark:text-slate-500">{a.submittedAt?.toLocaleString() ?? "Not submitted"}</p>
+                  <p className="text-xs text-slate-700 dark:text-slate-500">{a.submittedAt?.toLocaleString() ?? "—"}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-bold text-slate-900 dark:text-slate-50">

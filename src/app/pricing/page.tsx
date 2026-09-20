@@ -25,10 +25,10 @@ const COMPARISON: { feature: string; free: string; pro: string }[] = [
   { feature: "Adaptive Training", free: "Basic", pro: "Advanced" },
   { feature: "Mistake Review", free: "10 most urgent", pro: "Full + spaced repetition" },
   { feature: "Statistics", free: "Basic", pro: "Advanced" },
-  { feature: "Custom Practice Sets", free: "Not included", pro: "✓" },
-  { feature: "Advanced Problems (Expert+)", free: "Not included", pro: "✓" },
-  { feature: "Video Lessons", free: "Not included", pro: "✓" },
-  { feature: "Smith AI", free: "Not included", pro: "✓" },
+  { feature: "Custom Practice Sets", free: "—", pro: "✓" },
+  { feature: "Advanced Problems (Expert+)", free: "—", pro: "✓" },
+  { feature: "Video Lessons", free: "—", pro: "✓" },
+  { feature: "Smith AI", free: "—", pro: "✓" },
 ];
 
 const FREE_FEATURES = [
@@ -48,7 +48,7 @@ const FREE_FEATURES = [
 const PRO_FEATURES = [
   "Everything in Free, plus:",
   "Unlimited daily problems",
-  "Full problem database, all difficulty levels",
+  "Full problem database — all difficulty levels",
   "Complete lesson library including olympiad technique",
   "Unlimited competition simulations",
   "Advanced adaptive training engine",
@@ -57,8 +57,8 @@ const PRO_FEATURES = [
   "Competition-specific roadmaps",
   "Custom practice sets",
   "Detailed performance reports",
-  "Video lessons with animated, narration-free walkthroughs of key concepts",
-  "Smith AI with step-by-step help that never just gives the answer",
+  "Video lessons — animated, narration-free walkthroughs of key concepts",
+  "Smith AI — step-by-step help that never just gives the answer",
 ];
 
 const FAQ = [
@@ -88,7 +88,7 @@ const FAQ = [
   },
   {
     q: "How do subscriptions work?",
-    a: "Pro will be $7.99/month or $59.99/year (about 37% off), billed through Stripe and cancellable anytime. Payments aren't open yet while we finish setting them up, so Pro can't be purchased today. The free plan is fully available in the meantime. Cancelling always keeps your access through the period you already paid for.",
+    a: "Pro will be $7.99/month or $59.99/year (about 37% off), billed through Stripe and cancellable anytime. Payments aren't open yet while we finish setting them up, so Pro can't be purchased today — the free plan is fully available in the meantime. Cancelling always keeps your access through the period you already paid for.",
   },
 ];
 
@@ -238,17 +238,17 @@ export default async function PricingPage({
                   <form action={activateProAction}>
                     <input type="hidden" name="plan" value="YEARLY" />
                     <Button type="submit" size="lg" className="w-full">
-                      Get Pro Yearly, ${PRO_PRICING.YEARLY}
+                      Get Pro Yearly — ${PRO_PRICING.YEARLY}
                     </Button>
                   </form>
                   <form action={activateProAction}>
                     <input type="hidden" name="plan" value="MONTHLY" />
                     <Button type="submit" variant="outline" size="lg" className="w-full">
-                      Get Pro Monthly, ${PRO_PRICING.MONTHLY}/mo
+                      Get Pro Monthly — ${PRO_PRICING.MONTHLY}/mo
                     </Button>
                   </form>
                   <p className="pt-1 text-center text-xs text-slate-700 dark:text-slate-500">
-                    Secure checkout by Stripe. Cancel anytime. See our{" "}
+                    Secure checkout by Stripe. Cancel anytime — see our{" "}
                     <Link href="/legal/refunds" className="underline">
                       refund policy
                     </Link>

@@ -40,7 +40,7 @@ export default async function MistakesPage() {
         <div>
           <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Mistake Review</h1>
           <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-            Every problem you missed, skipped, solved too slowly, or needed multiple hints on is brought
+            Every problem you missed, skipped, solved too slowly, or needed multiple hints on — brought
             back on a spaced schedule.
           </p>
         </div>
@@ -69,7 +69,7 @@ export default async function MistakesPage() {
             <p className="text-3xl">🎯</p>
             <p className="mt-3 font-semibold text-slate-900 dark:text-slate-50">No open mistakes.</p>
             <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-              Keep practicing. Anything you miss will show up here for spaced review.
+              Keep practicing — anything you miss will show up here for spaced review.
             </p>
             <LinkButton href="/practice/session" className="mt-5">
               Start Practicing

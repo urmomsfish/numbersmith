@@ -24,7 +24,7 @@ export function SessionRunner({
   const [correctCount, setCorrectCount] = useState(0);
   const [finished, setFinished] = useState(false);
   // Frozen on mount, never read from the prop. handleContinue calls
-  // router.refresh(), which re-runs the server component. In mistake
+  // router.refresh(), which re-runs the server component — and in mistake
   // review that query returns fewer rows, because the ones just answered
   // correctly are now resolved and filtered out. Reading problems.length after
   // that produced "solved 2 of 1".
@@ -38,7 +38,7 @@ export function SessionRunner({
       // Deliberately no router.refresh() here. Refreshing re-runs the server
       // component, and in mistake review that query now returns zero due rows
       // (the ones just answered are resolved or rescheduled), which trips its
-      // `redirect("/mistakes")` throws the user off the summary they just
+      // `redirect("/mistakes")` — throwing the user off the summary they just
       // earned. Both buttons below navigate, and those navigations fetch fresh
       // server data anyway, so nothing goes stale.
       setFinished(true);
@@ -56,7 +56,7 @@ export function SessionRunner({
           <h2 className="mt-3 text-xl font-bold text-slate-900 dark:text-slate-50">Session complete</h2>
           <p className="mt-2 text-slate-700 dark:text-slate-400">
             You solved <span className="font-semibold text-slate-800 dark:text-slate-100">{correctCount}</span> of{" "}
-            {total} correctly. Accuracy: {accuracy}%.
+            {total} correctly — {accuracy}% accuracy.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <LinkButton href="/dashboard" variant="outline">

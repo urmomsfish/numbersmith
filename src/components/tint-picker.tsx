@@ -15,7 +15,7 @@ function currentTint(): TintId {
 export function TintPicker({ className }: { className?: string }) {
   const [tint, setTint] = useState<TintId>(currentTint);
   // The server can't know the stored preference, so the checked state is held
-  // back until mount. Otherwise hydration mismatches on the radio inputs.
+  // back until mount — otherwise hydration mismatches on the radio inputs.
   const [mounted, setMounted] = useState(false);
 
   // eslint-disable-next-line react-hooks/set-state-in-effect -- mount-detection guard, not state sync

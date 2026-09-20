@@ -58,11 +58,11 @@ export default async function OnboardingPlanPage() {
         </p>
 
         <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
-          <ProfileStat label="Primary Goal" value={primary?.competition.shortName ?? "Not set"} />
-          <ProfileStat label="Secondary Goal" value={secondary?.competition.shortName ?? "Not set"} />
+          <ProfileStat label="Primary Goal" value={primary?.competition.shortName ?? "—"} />
+          <ProfileStat label="Secondary Goal" value={secondary?.competition.shortName ?? "—"} />
           <ProfileStat label="Current Rating" value={String(plan.currentRating)} />
-          <ProfileStat label="Strongest Topic" value={strongest ? DOMAIN_LABELS[strongest[0]] ?? strongest[0] : "Not set"} />
-          <ProfileStat label="Focus Topics" value={focusTopics.join(" + ") || "Not set"} />
+          <ProfileStat label="Strongest Topic" value={strongest ? DOMAIN_LABELS[strongest[0]] ?? strongest[0] : "—"} />
+          <ProfileStat label="Focus Topics" value={focusTopics.join(" + ") || "—"} />
           <ProfileStat label="Recommended Practice" value={`${plan.minutesPerDay} minutes/day`} />
         </div>
 
@@ -72,7 +72,7 @@ export default async function OnboardingPlanPage() {
           </h2>
           <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
             Week 1 of {planTotalWeeks(plan)} is below. The plan moves through foundations, then
-            heavier mixed practice, then contest simulation. It updates as your mastery changes.
+            heavier mixed practice, then contest simulation — and it updates as your mastery changes.
           </p>
           <div className="mt-5">
             <WeekPlanTable days={weekDays(plan.days, 1)} />

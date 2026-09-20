@@ -9,7 +9,7 @@ export function SiteFooter() {
           <div className="max-w-sm">
             <Logo href="/" />
             <p className="mt-3 text-sm leading-relaxed text-slate-700 dark:text-slate-400">
-              The adaptive training platform for competition mathematics, from Math Kangaroo and
+              The adaptive training platform for competition mathematics — from Math Kangaroo and
               MathCounts to AMC, AIME, HMMT, and olympiad mathematics.
             </p>
           </div>
@@ -30,6 +30,11 @@ export function SiteFooter() {
                 <li>
                   <Link href="/#competitions" className="hover:text-slate-900 dark:hover:text-slate-100">
                     Competitions
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/about" className="hover:text-slate-900 dark:hover:text-slate-100">
+                    About
                   </Link>
                 </li>
               </ul>
@@ -75,7 +80,7 @@ export function SiteFooter() {
         <div className="mt-8 border-t border-slate-100 pt-6 text-xs leading-relaxed text-slate-400 dark:border-slate-800 dark:text-slate-500">
           <p>
             All problems on NumberSmith are original content, and every answer key is checked by an
-            automated verifier that re-solves each problem independently. {" "}
+            automated verifier that re-solves each problem independently —{" "}
             <Link href="/about#verification" className="underline hover:text-slate-600 dark:hover:text-slate-300">
               how that works
             </Link>

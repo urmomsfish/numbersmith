@@ -63,7 +63,7 @@ export function MonthPlanCalendar({
 }) {
   const dates = monthGrid(year, month);
   // `today` is an instant; grid cells and contest dates are date-only values at
-  // UTC midnight. They need different converters. Running a date-only value
+  // UTC midnight. They need different converters — running a date-only value
   // through streakDayIndex lands it on the previous day. See dateKeyIndex.
   const todayIndex = streakDayIndex(today);
   const contestByDay = new Map(contests.map((c) => [dateKeyIndex(c.date), c]));

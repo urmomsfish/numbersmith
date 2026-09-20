@@ -35,7 +35,7 @@ export default async function StudyPlanPage({
     getActiveStudyPlan(user.id),
     prisma.competition.findMany({ orderBy: { order: "asc" } }),
     prisma.rating.findUnique({ where: { userId_category: { userId: user.id, category: "OVERALL" } } }),
-    // The soonest contest still ahead of the student is what the plan is aimed at.
+    // The soonest contest still ahead of the student — what the plan is aimed at.
     prisma.userCompetition.findFirst({
       where: { userId: user.id, targetDate: { gte: streakDayKey() } },
       include: { competition: true },
@@ -79,7 +79,7 @@ export default async function StudyPlanPage({
 
   const totalWeeks = planTotalWeeks(plan);
   const week = currentPlanWeek(plan, totalWeeks);
-  // Must match how the plan was generated. See phaseForPlanWeek.
+  // Must match how the plan was generated — see phaseForPlanWeek.
   const phase = phaseForPlanWeek(plan, week);
   const planComplete = isPlanComplete(plan);
   // Whole days on the shared streak boundary, so this counts down in step with
@@ -209,7 +209,7 @@ export default async function StudyPlanPage({
                     {Array.from({ length: totalWeeks }, (_, i) => i + 1).map((w) => (
                       <span
                         key={w}
-                        title={`Week ${w}: ${phaseForPlanWeek(plan, w).name}`}
+                        title={`Week ${w} — ${phaseForPlanWeek(plan, w).name}`}
                         className={
                           "h-1.5 flex-1 min-w-[10px] rounded-full " +
                           (w < week
@@ -338,7 +338,7 @@ export default async function StudyPlanPage({
                 </p>
                 <p className="mt-2 text-4xl font-extrabold text-ember-600 dark:text-ember-400">{daysUntilCompetition}</p>
                 <p className="mt-1 text-xs text-slate-700 dark:text-slate-500">
-                  {/* Stored as UTC midnight, so it must be read back in UTC.
+                  {/* Stored as UTC midnight, so it must be read back in UTC —
                       otherwise a contest on the 13th renders as the 12th for
                       anyone west of Greenwich. */}
                   {plan.competitionDate?.toLocaleDateString("en-US", { timeZone: "UTC" })}

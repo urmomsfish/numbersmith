@@ -32,7 +32,7 @@ type PlanDay = {
   topic: Topic | null;
 };
 
-/** Renders ONE week. Callers must pass a single week's days. A multi-week plan
+/** Renders ONE week. Callers must pass a single week's days — a multi-week plan
  * has seven rows per week, and they collide in the map below. */
 export function WeekPlanTable({ days, highlightToday = true }: { days: PlanDay[]; highlightToday?: boolean }) {
   // streakWeekday, not getDay(): the latter is the *server's* weekday, so on

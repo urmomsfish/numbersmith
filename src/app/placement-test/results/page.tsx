@@ -44,7 +44,7 @@ export default async function PlacementResultsPage({
     ? JSON.parse(test.skillBreakdown)
     : {};
 
-  // Only domains actually assessed appear in the breakdown. The engine omits
+  // Only domains actually assessed appear in the breakdown — the engine omits
   // untested topics rather than inventing a score for them.
   const entries = DOMAIN_TOPIC_SLUGS.filter(
     (s) => s !== "advanced-olympiad" && skillBreakdown[s] !== undefined

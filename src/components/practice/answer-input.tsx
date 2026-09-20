@@ -7,7 +7,7 @@ import { ANSWER_PALETTE } from "@/lib/answer-palette";
  *
  * Several hundred problems have answers like "7√11" or "(36/5)π" that cannot be
  * produced on a normal keyboard. The palette inserts at the caret rather than
- * appending, so a student can build "7√11" by typing 7, tapping √, typing 11,
+ * appending, so a student can build "7√11" by typing 7, tapping √, typing 11 —
  * and focus returns to the input so typing continues uninterrupted.
  *
  * The palette is a convenience, not the only route: `checkAnswer` also accepts
@@ -55,7 +55,7 @@ export function AnswerInput({
       onChange(value + symbol);
       return;
     }
-    // Insert at the caret, replacing any selection, rather than appending,
+    // Insert at the caret, replacing any selection, rather than appending —
     // a student building "7√11" presses √ in the middle of what they type.
     const start = el.selectionStart ?? value.length;
     const end = el.selectionEnd ?? value.length;

@@ -8,10 +8,10 @@ import { DailyCapUpsell } from "@/components/practice/problem-solver";
 import { SessionRunner } from "./session-runner";
 
 const FOCUS_COPY: Record<string, string> = {
-  CHALLENGE: "You've been acing this level. We're stepping the difficulty up.",
+  CHALLENGE: "You've been acing this level — we're stepping the difficulty up.",
   MEDIUM: "Recent hard problems gave you trouble, so we're rebuilding at a medium level.",
-  TIMED: "You're accurate but slow here. This set focuses on speed.",
-  ACCURACY: "You're fast but missing details. This set focuses on accuracy.",
+  TIMED: "You're accurate but slow here — this set focuses on speed.",
+  ACCURACY: "You're fast but missing details — this set focuses on accuracy.",
   STANDARD: "Balanced set targeting your current level.",
 };
 

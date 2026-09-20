@@ -7,7 +7,7 @@ import { cn } from "@/lib/cn";
 import { NAV_ITEMS } from "@/components/app/sidebar";
 import { IconSettings } from "@/components/app/icons";
 
-export function MobileNav() {
+export function MobileNav({ isPro }: { isPro?: boolean }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -42,7 +42,6 @@ export function MobileNav() {
                     key={item.href}
                     href={item.href}
                     onClick={() => setOpen(false)}
-                    aria-current={active ? "page" : undefined}
                     className={cn(
                       "flex items-center gap-3 border-l-2 px-3 py-2 text-sm font-medium",
                       active
@@ -52,19 +51,14 @@ export function MobileNav() {
                   >
                     <Icon className="h-[18px] w-[18px]" />
                     <span className="flex-1">{item.label}</span>
+                    {item.pro && !isPro && <span className="text-[11px]">⭐</span>}
                   </Link>
                 );
               })}
               <Link
                 href="/settings"
                 onClick={() => setOpen(false)}
-                aria-current={pathname.startsWith("/settings") ? "page" : undefined}
-                className={cn(
-                  "flex items-center gap-3 border-l-2 px-3 py-2 text-sm font-medium",
-                  pathname.startsWith("/settings")
-                    ? "border-brand-600 bg-brand-50 text-brand-700"
-                    : "border-transparent text-slate-600"
-                )}
+                className="flex items-center gap-3 border-l-2 border-transparent px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-300"
               >
                 <IconSettings className="h-[18px] w-[18px]" />
                 Settings
