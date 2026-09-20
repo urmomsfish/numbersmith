@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "db:seed": "tsx prisma/seed.ts",
+    "icons": "node scripts/generate-icons.mjs",
     "db:sync-problems": "tsx scripts/sync-problem-bank.ts",
     "db:sync-competitions": "tsx scripts/sync-competitions.ts",
     "db:sync-video-lessons": "tsx scripts/sync-video-lessons.ts",

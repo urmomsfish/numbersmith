@@ -24,12 +24,20 @@ export default async function AiAssistantPage() {
         <Badge tone="warning">⭐ Pro</Badge>
       </div>
       <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-        Explain a concept, walk through a problem step by step, or dig into a mistake — ask a follow-up any time.
+        Explain a concept, walk through a problem step by step, or dig into a mistake — ask a follow-up any
+        time. You can paste or attach a screenshot of a problem instead of typing it out.
       </p>
 
       <div className="mt-6 flex-1 overflow-hidden">
         <ChatPanel
-          initialMessages={messages.map((m) => ({ id: m.id, role: m.role as "user" | "assistant", content: m.content }))}
+          initialMessages={messages.map((m) => ({
+            id: m.id,
+            role: m.role as "user" | "assistant",
+            content: m.content,
+            // Rebuilt into a data: URL here rather than stored as one, so the
+            // column holds just the payload the vision API wants.
+            imageUrl: m.imageData && m.imageType ? `data:${m.imageType};base64,${m.imageData}` : null,
+          }))}
           configured={aiIsConfigured()}
         />
       </div>

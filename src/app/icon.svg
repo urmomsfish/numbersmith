@@ -1,4 +1,12 @@
 <svg width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <rect width="24" height="24" fill="#ffffff"/>
-  <path d="M4 13L7 19L12 5H20" fill="none" stroke="#4338ca" stroke-width="2.6" stroke-linecap="square" stroke-linejoin="miter"/>
+  <!-- Graphite tile, ember mark: the same logo mark as components/logo.tsx, in
+       the palette the rest of the product actually uses. It was a thin indigo
+       stroke on a white square, which was both the old brand colour and close
+       to invisible at 16px — a hairline on white has nothing to hold onto in a
+       browser tab. A filled tile gives the mark a shape at any size. -->
+  <rect width="24" height="24" rx="5" fill="#1c1917"/>
+  <path d="M4 13L7 19L12 5H20"
+        transform="translate(12 12) scale(0.82) translate(-12 -12)"
+        fill="none" stroke="#f97316" stroke-width="2.8"
+        stroke-linecap="square" stroke-linejoin="miter"/>
 </svg>

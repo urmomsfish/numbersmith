@@ -12,8 +12,11 @@ export default function manifest(): MetadataRoute.Manifest {
     // Opens without browser chrome so it reads as an app rather than a tab.
     display: "standalone",
     orientation: "portrait",
-    background_color: "#f8fafc",
-    theme_color: "#4338ca",
+    // Match the graphite palette. Both of these were left on the old indigo
+    // when the brand changed, so an installed app still framed itself in the
+    // colour the rest of the product no longer uses.
+    background_color: "#f7f6f2",
+    theme_color: "#1c1917",
     categories: ["education"],
     icons: [
       { src: "/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },

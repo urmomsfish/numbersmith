@@ -19,7 +19,11 @@ function applyTheme() {
       (!storedTheme && loggedIn && window.matchMedia("(prefers-color-scheme: dark)").matches);
     document.documentElement.classList.toggle("dark", dark);
 
+    // An unrecognised stored tint falls back to the classic untinted default
+    // AND is cleared, so a retired tint (violet) doesn't sit dormant in
+    // storage looking like a live preference. Valid choices are untouched.
     const storedTint = loggedIn ? localStorage.getItem("tint") : null;
+    if (storedTint !== null && !isTintId(storedTint)) localStorage.removeItem("tint");
     document.documentElement.setAttribute(
       "data-tint",
       loggedIn && isTintId(storedTint) ? storedTint : DEFAULT_TINT

@@ -46,9 +46,12 @@
   /* Accent: forge ember — XP, streaks, the Pro column, link hover, and the
    * translucent glow outside a focus ring. The only colour in the product, so
    * it always means "this is the live thing here".
-   * Note it is not the focus *indicator*: no ember step clears 3:1 against all
-   * eight tints' surfaces, so the solid ring tracks --foreground and ember is
-   * layered outside it. See scripts/check-tint-contrast.mjs.
+   * Note it is not the focus *indicator*: no ember step clears 3:1 against
+   * every tint's surfaces, so the solid ring tracks --foreground and ember is
+   * layered outside it. Re-measured after the violet tint was retired, in case
+   * losing the worst case changed the answer — it didn't; ember-600 is still
+   * the best step and still fails on 10 of 42 surfaces. See
+   * scripts/check-tint-contrast.mjs.
    * 700 is the text-safe step: 600 is only 3.5:1 on white and fails AA for
    * body text. It was already being used as a hover colour without ever
    * having been defined. */
@@ -142,16 +145,8 @@
  *     usages / the shared `Card` component for where those classes live.
  * ------------------------------------------------------------------------ */
 
-[data-tint="violet"] {
-  --background: #ede9fe;
-  --surface: #ede9fe;
-  --card: #b3a8e6;
-}
-.dark[data-tint="violet"] {
-  --background: #241748;
-  --surface: #241748;
-  --card: #2f2351;
-}
+/* No violet block, and no purple tint of any kind — see the note in
+ * src/lib/tints.ts. */
 
 [data-tint="blue"] {
   --background: #dbeafe;
@@ -335,7 +330,7 @@ h6 {
  *
  * The underline is `currentColor`, not ember. An ember underline was the first
  * attempt and it fails under the tints: --card is a saturated mid-tone in light
- * mode, and ember-600 on the violet card is 1.64:1 — the affordance all but
+ * mode, and ember-600 on the rose card is 1.79:1 — the affordance all but
  * disappears on exactly the surface most links sit on. Since a tint can
  * recolour any surface, the only underline guaranteed to hold everywhere is one
  * that tracks the text, which is already held to 4.5:1 wherever it renders.

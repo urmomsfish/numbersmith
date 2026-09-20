@@ -21,7 +21,7 @@
 //
 // Because the --brand-* ramp is deliberately shared by every tint, this does
 // NOT re-check control contrast per theme the way a true accent system would —
-// a button is the same indigo everywhere. What can go wrong is the surfaces,
+// a button is the same graphite everywhere. What can go wrong is the surfaces,
 // in three ways, two of which pull against each other:
 //
 //   1. Too dark  -> text on that surface drops below WCAG AA. slate-500 page
@@ -208,9 +208,9 @@ for (const t of themes) {
   need("dark card: link text + underline", FG_DARK, t.darkCard);
 
   // Focus indicators. The solid ring/border is --foreground for the same reason
-  // the underline is: no single ember step clears 3:1 on all 32 tinted surfaces
-  // (ember-600 is the best of them and still bottoms out at 1.64:1 on the
-  // violet light card), and the focus ring is the only thing marking the
+  // the underline is: no single ember step clears 3:1 on every tinted surface
+  // (ember-600 is the best of them and still bottoms out at 1.79:1 on the
+  // rose light card), and the focus ring is the only thing marking the
   // focused control. Ember survives as the translucent glow layered outside it,
   // which is decoration rather than the indicator.
   needUI("light shell: focus indicator", FG_LIGHT, t.light);

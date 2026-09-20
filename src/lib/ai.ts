@@ -27,14 +27,56 @@ Rules you always follow:
 - When a student made a mistake, identify specifically what went wrong (a sign error, a misapplied formula, a wrong assumption) rather than just marking it wrong — and connect it to the underlying concept so the same mistake doesn't repeat.
 - Encourage follow-up questions. End steps at natural checkpoints so the student can ask "why" or "what about..." before you continue.
 - Stay strictly on math (competition math, general math concepts, problem-solving strategy). If asked something unrelated, briefly decline and redirect to math.
-- Keep responses focused — a few short paragraphs or a tight numbered list, not an exhaustive essay.`;
+- Keep responses focused — a few short paragraphs or a tight numbered list, not an exhaustive essay.
 
-export type ChatTurn = { role: "user" | "assistant"; content: string };
+Students can attach a screenshot or photo — usually a problem from a worksheet or another site, a diagram, or their own written work. When one is attached:
+- Start by stating what you can actually read in it, briefly, so a misread is caught immediately instead of three steps later. Photos of handwriting and low-resolution crops are often ambiguous.
+- If something you need is genuinely illegible or cut off, say which part and ask, rather than guessing at it and building on the guess.
+- If it's the student's own written work, find the first step that goes wrong and start there — don't re-derive everything above it that was already correct.
+- The no-final-answers rule applies exactly as it does to typed questions. An attached image is not a request to just solve it.`;
+
+/** The image formats the vision API accepts. Anything else is rejected at the
+ * action boundary rather than being discovered as a 400 from the API. */
+export const SUPPORTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"] as const;
+export type SupportedImageType = (typeof SUPPORTED_IMAGE_TYPES)[number];
+
+export function isSupportedImageType(value: string | null | undefined): value is SupportedImageType {
+  return (SUPPORTED_IMAGE_TYPES as readonly string[]).includes(value ?? "");
+}
+
+export type ChatTurn = {
+  role: "user" | "assistant";
+  content: string;
+  /** Base64 (no data: prefix) of a screenshot attached to this turn. */
+  imageData?: string | null;
+  imageType?: string | null;
+};
 
 /** Sends the last `historyLimit` turns plus the new message. Non-streaming —
- * chat responses here are short enough that a single round trip is fine. */
+ * chat responses here are short enough that a single round trip is fine.
+ *
+ * A turn carrying an image becomes a two-block message: the image first, then
+ * the text. Image-before-text is what Anthropic recommends for single-image
+ * prompts, and it matches how the question reads — "here's the problem, now
+ * my question about it". A turn with no image stays a plain string, so nothing
+ * about the existing text-only path changes. */
 export async function askMathAssistant(history: ChatTurn[]): Promise<string> {
-  const messages = history.map((m) => ({ role: m.role, content: m.content }));
+  const messages = history.map((m) => {
+    if (m.role === "user" && m.imageData && isSupportedImageType(m.imageType)) {
+      return {
+        role: m.role,
+        content: [
+          {
+            type: "image" as const,
+            source: { type: "base64" as const, media_type: m.imageType, data: m.imageData },
+          },
+          { type: "text" as const, text: m.content },
+        ],
+      };
+    }
+    return { role: m.role, content: m.content };
+  });
+
   const response = await getClient().messages.create({
     model: MODEL,
     max_tokens: 1024,

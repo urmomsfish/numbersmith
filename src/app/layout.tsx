@@ -38,7 +38,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#4338ca",
+  // Graphite, matching --brand-900. Was still the old indigo.
+  themeColor: "#1c1917",
   // Prevents the zoom-on-input-focus jump that makes an installed web app feel
   // like a website rather than an app.
   initialScale: 1,
@@ -67,6 +68,7 @@ var d=t==='dark'||(!t&&loggedIn&&window.matchMedia('(prefers-color-scheme: dark)
 document.documentElement.classList.toggle('dark',d);
 var n=loggedIn?localStorage.getItem('tint'):null;
 var ok=${JSON.stringify(TINT_IDS)};
+if(n!==null&&ok.indexOf(n)<0){localStorage.removeItem('tint');n=null;}
 document.documentElement.setAttribute('data-tint',loggedIn&&ok.indexOf(n)>-1?n:${JSON.stringify(DEFAULT_TINT)});
 }catch(e){}})();`;
 

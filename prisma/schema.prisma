@@ -409,6 +409,15 @@ model AiChatMessage {
   /// role: user | assistant
   role      String
   content   String
+  /// Base64 of an image the student attached (user messages only). Stored in
+  /// the row rather than in blob storage: the app has no object store, these
+  /// are screenshots the client has already downscaled to a few hundred KB,
+  /// and the image is meaningless outside the message it belongs to — so
+  /// cascade-deleting with the thread is exactly the lifecycle we want.
+  imageData String?
+  /// MIME type of imageData, e.g. "image/jpeg". Needed to render it back and
+  /// to tell the model what it's looking at.
+  imageType String?
   createdAt DateTime @default(now())
 
   @@index([userId, createdAt])
