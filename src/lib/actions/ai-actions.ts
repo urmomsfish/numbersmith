@@ -37,35 +37,84 @@ const PDF_ONLY_FALLBACK = "Here's the paper I'm working from.";
 const IMAGE_CONTEXT_LIMIT = 3;
 const PDF_CONTEXT_LIMIT = 1;
 
+/** A message that is safe — and meant — to be shown to the student.
+ *
+ * Next strips thrown error messages in production builds and replaces them with
+ * a digest, which is why every message below used to reach the client as
+ * "Minified React error #441" instead of the sentence it actually says. So
+ * these aren't thrown past the action boundary: they're caught here and
+ * returned as a value. Anything *not* a ChatError is a bug rather than a
+ * message for a student, and is logged and replaced with a generic line. */
+class ChatError extends Error {}
+
+/** Next signals redirect() and notFound() by throwing, so a catch-all must let
+ * those through instead of reporting them as chat failures. */
+function isFrameworkError(err: unknown): boolean {
+  const digest = (err as { digest?: unknown } | null)?.digest;
+  return typeof digest === "string" && digest.startsWith("NEXT_");
+}
+
+export type SendAiMessageResult =
+  | { ok: true; reply: string; content: string }
+  | { ok: false; error: string };
+
 async function requireProAccess() {
-  const user = await requireUser();
-  if (!(await isProUser(user.id))) throw new Error("Smith AI is a Pro feature.");
+  // requireUser throws a bare "UNAUTHENTICATED" — a sentinel for the caller,
+  // not a sentence for a student. A session can expire with the page still
+  // open, so it needs its own message rather than the generic fallback.
+  const user = await requireUser().catch(() => {
+    throw new ChatError("You've been signed out — reload the page and sign in again.");
+  });
+  if (!(await isProUser(user.id))) throw new ChatError("Smith AI is a Pro feature.");
   return user;
 }
 
 export async function sendAiMessageAction(input: {
   content: string;
   attachment?: { data: string; type: string } | null;
-}) {
+  /** The name this argument had before PDFs were supported. A student with the
+   * page already open keeps running the client bundle they loaded, and that one
+   * posts `image`. Without this, their next send reaches a server that sees no
+   * attachment at all — an image-only message becomes an empty one and fails,
+   * which is exactly what happened on the deploy that introduced the rename.
+   * Reading both shapes means a warm tab keeps working instead of breaking
+   * until its owner happens to hard-refresh. */
+  image?: { data: string; type: string } | null;
+}): Promise<SendAiMessageResult> {
+  try {
+    return await sendAiMessage(input);
+  } catch (err) {
+    if (isFrameworkError(err)) throw err;
+    if (err instanceof ChatError) return { ok: false, error: err.message };
+    console.error("sendAiMessageAction failed:", err);
+    return { ok: false, error: "Something went wrong sending that — try again in a moment." };
+  }
+}
+
+async function sendAiMessage(input: {
+  content: string;
+  attachment?: { data: string; type: string } | null;
+  image?: { data: string; type: string } | null;
+}): Promise<SendAiMessageResult> {
   const user = await requireProAccess();
-  const attachment = input.attachment ?? null;
+  const attachment = input.attachment ?? input.image ?? null;
   // An attachment on its own is a complete question, so text is only required
   // when nothing is attached.
-  const typed = input.content.trim();
+  const typed = (input.content ?? "").trim();
   const fallback = isPdfType(attachment?.type) ? PDF_ONLY_FALLBACK : IMAGE_ONLY_FALLBACK;
   const content = typed || (attachment ? fallback : "");
-  if (!content) throw new Error("Message can't be empty.");
-  if (content.length > 4000) throw new Error("That message is too long.");
+  if (!content) throw new ChatError("Message can't be empty.");
+  if (content.length > 4000) throw new ChatError("That message is too long.");
 
   if (attachment) {
     if (!isSupportedAttachmentType(attachment.type)) {
-      throw new Error("You can attach a PNG, JPEG, GIF, WebP, or PDF.");
+      throw new ChatError("You can attach a PNG, JPEG, GIF, WebP, or PDF.");
     }
     if (!attachment.data) {
-      throw new Error("That file didn't upload correctly — try attaching it again.");
+      throw new ChatError("That file didn't upload correctly — try attaching it again.");
     }
     if (attachment.data.length > MAX_ATTACHMENT_BASE64) {
-      throw new Error(
+      throw new ChatError(
         isPdfType(attachment.type)
           ? "That PDF is too large — try attaching just the pages you need."
           : "That image is too large — try a smaller screenshot or crop it first."
@@ -74,7 +123,7 @@ export async function sendAiMessageAction(input: {
   }
 
   if (!aiIsConfigured()) {
-    throw new Error(
+    throw new ChatError(
       "Smith AI isn't configured yet — ask your NumberSmith admin to set ANTHROPIC_API_KEY."
     );
   }
@@ -134,17 +183,29 @@ export async function sendAiMessageAction(input: {
     reply = await askMathAssistant(history);
   } catch (err) {
     console.error("askMathAssistant failed:", err);
-    throw new Error("Smith AI couldn't respond just now — try again in a moment.");
+    throw new ChatError("Smith AI couldn't respond just now — try again in a moment.");
   }
 
   await prisma.aiChatMessage.create({ data: { userId: user.id, role: "assistant", content: reply } });
   // `content` goes back too: when an image was sent with no typed text the
   // stored message is the fallback sentence, and the optimistic bubble the
   // client already rendered would otherwise stay blank until a reload.
-  return { reply, content };
+  //
+  // `reply` and `content` stay at the top level, beside `ok`, so a client
+  // running the previous bundle — which destructures them directly — still
+  // renders a successful answer.
+  return { ok: true, reply, content };
 }
 
-export async function clearAiChatAction() {
-  const user = await requireProAccess();
-  await prisma.aiChatMessage.deleteMany({ where: { userId: user.id } });
+export async function clearAiChatAction(): Promise<{ ok: true } | { ok: false; error: string }> {
+  try {
+    const user = await requireProAccess();
+    await prisma.aiChatMessage.deleteMany({ where: { userId: user.id } });
+    return { ok: true };
+  } catch (err) {
+    if (isFrameworkError(err)) throw err;
+    if (err instanceof ChatError) return { ok: false, error: err.message };
+    console.error("clearAiChatAction failed:", err);
+    return { ok: false, error: "Couldn't clear the thread — try again in a moment." };
+  }
 }

@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { MathText } from "@/components/math-text";
+import { cn } from "@/lib/cn";
 
 // Smith AI answers in prose: short paragraphs, numbered steps, the occasional
 // bolded term, and math written the same ASCII way the lessons author it. The
@@ -8,22 +9,45 @@ import { MathText } from "@/components/math-text";
 //
 // This is deliberately a *small* formatter, not a Markdown engine. It covers
 // what the assistant actually emits — paragraphs, ordered and unordered lists,
-// bold, inline code — and passes everything else through as text, so an
-// unexpected construct degrades to plain prose instead of rendering wrong.
+// section headings, horizontal rules, bold, inline code — and passes everything
+// else through as text, so an unexpected construct degrades to plain prose
+// instead of rendering wrong.
 
 type Block =
   | { kind: "p"; lines: string[] }
   | { kind: "ul"; items: string[] }
-  | { kind: "ol"; items: string[] };
+  | { kind: "ol"; items: string[] }
+  | { kind: "h"; level: number; text: string }
+  | { kind: "hr" };
 
 const ORDERED = /^\s*(\d{1,2})[.)]\s+(.*)$/;
 const BULLET = /^\s*[-*•]\s+(.*)$/;
+// The assistant reaches for "## Step 3: …" and a "---" rule between sections
+// whenever an answer runs long. Both used to print literally, so a worked
+// solution arrived with `##` and `–––` sitting in the middle of the prose.
+const HEADING = /^\s*(#{1,6})\s+(.*)$/;
+const RULE = /^\s*([-*_])(?:\s*\1){2,}\s*$/;
 
 function toBlocks(text: string): Block[] {
   const blocks: Block[] = [];
   for (const raw of text.split("\n")) {
     const line = raw.trimEnd();
     if (!line.trim()) continue;
+
+    // Before the bullet check: "---" also matches a dash bullet, and a rule is
+    // the more specific reading of a line that is nothing but dashes.
+    if (RULE.test(line)) {
+      // Collapse a rule that lands straight after another, and drop a leading
+      // one — a divider needs something above it to divide.
+      if (blocks.length && blocks[blocks.length - 1].kind !== "hr") blocks.push({ kind: "hr" });
+      continue;
+    }
+
+    const h = HEADING.exec(line);
+    if (h && h[2].trim()) {
+      blocks.push({ kind: "h", level: h[1].length, text: h[2].trim() });
+      continue;
+    }
 
     const ol = ORDERED.exec(line);
     if (ol) {
@@ -45,6 +69,8 @@ function toBlocks(text: string): Block[] {
     if (last?.kind === "p") last.lines.push(line);
     else blocks.push({ kind: "p", lines: [line] });
   }
+  // A rule with nothing under it is a line across the bottom of the bubble.
+  if (blocks[blocks.length - 1]?.kind === "hr") blocks.pop();
   return blocks;
 }
 
@@ -82,6 +108,29 @@ export function MessageContent({ content }: { content: string }) {
   return (
     <div className="space-y-2.5">
       {blocks.map((block, i) => {
+        if (block.kind === "hr") {
+          return <hr key={i} className="border-slate-200 dark:border-slate-700" />;
+        }
+        if (block.kind === "h") {
+          // Two sizes, not six. The body here is text-sm, so an h1 scale would
+          // shout; what a section header needs is to read as a break in the
+          // answer, which weight and spacing do on their own.
+          const Tag = block.level <= 2 ? "h3" : "h4";
+          return (
+            <Tag
+              key={i}
+              className={cn(
+                "font-semibold text-slate-900 dark:text-slate-50",
+                // No top margin on the first block — it would push the heading
+                // off the avatar it lines up with.
+                i > 0 && "pt-1.5",
+                block.level <= 2 ? "text-[0.95rem]" : "text-sm"
+              )}
+            >
+              <Inline text={block.text} />
+            </Tag>
+          );
+        }
         if (block.kind === "p") {
           return (
             <p key={i} className="leading-relaxed">

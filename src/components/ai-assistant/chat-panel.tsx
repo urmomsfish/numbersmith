@@ -221,6 +221,13 @@ export function ChatPanel({
           content: text,
           attachment: file ? { data: file.data, type: file.type } : null,
         });
+        // Failures come back as a value, not a thrown error: Next replaces a
+        // thrown message with an opaque digest in production, so the sentences
+        // the action writes would never reach this panel.
+        if (!res.ok) {
+          setError(res.error);
+          return;
+        }
         // The server fills in a sentence when a file was sent with no text,
         // so adopt what it stored rather than leaving the bubble empty.
         if (res.content !== text) {
@@ -242,7 +249,8 @@ export function ChatPanel({
     setConfirmClear(false);
     startTransition(async () => {
       try {
-        await clearAiChatAction();
+        const res = await clearAiChatAction();
+        if (!res.ok) setError(res.error);
       } catch (e) {
         setError(e instanceof Error ? e.message : "Couldn't clear the thread.");
       }
