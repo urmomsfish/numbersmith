@@ -2,14 +2,13 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { isTintId, DEFAULT_TINT } from "@/lib/tints";
 
 /** Re-runs the same logic as the no-flash inline script in layout.tsx, but on
  * every client-side navigation. Login/logout redirect via a server action's
  * `redirect()`, which swaps the route without reloading the document — so the
  * inline <head> script (which only runs once, on a real page load) never sees
- * the new auth cookie. This effect is what actually resets the theme/tint to
- * light+default right after logout, and restores it right after login. */
+ * the new auth cookie. This effect is what actually resets the theme to light
+ * right after logout, and restores it right after login. */
 function applyTheme() {
   try {
     const loggedIn = document.cookie.includes("numbersmith_auth=");
@@ -19,15 +18,10 @@ function applyTheme() {
       (!storedTheme && loggedIn && window.matchMedia("(prefers-color-scheme: dark)").matches);
     document.documentElement.classList.toggle("dark", dark);
 
-    // An unrecognised stored tint falls back to the classic untinted default
-    // AND is cleared, so a retired tint (violet) doesn't sit dormant in
-    // storage looking like a live preference. Valid choices are untouched.
-    const storedTint = loggedIn ? localStorage.getItem("tint") : null;
-    if (storedTint !== null && !isTintId(storedTint)) localStorage.removeItem("tint");
-    document.documentElement.setAttribute(
-      "data-tint",
-      loggedIn && isTintId(storedTint) ? storedTint : DEFAULT_TINT
-    );
+    // Background tints were removed; clear the retired key and attribute so a
+    // colour picked before then doesn't linger in storage or on <html>.
+    localStorage.removeItem("tint");
+    document.documentElement.removeAttribute("data-tint");
   } catch {
     // localStorage/matchMedia can throw in locked-down environments; leave whatever's already applied.
   }

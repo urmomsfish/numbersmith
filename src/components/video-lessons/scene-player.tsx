@@ -32,9 +32,9 @@ const ACCENT: Record<Scene["type"], { wash: string; dot: string; rule: string }>
   strategy: { wash: "from-sky-500/20", dot: "bg-sky-400", rule: "bg-sky-500" },
   pitfall: { wash: "from-warning-500/20", dot: "bg-warning-500", rule: "bg-warning-500" },
   practice: { wash: "from-success-500/20", dot: "bg-success-500", rule: "bg-success-500" },
-  // Ember, not violet. Purple is gone from the product entirely (see
-  // src/lib/tints.ts), and the summary is the payoff slide, so the accent
-  // that means "this is the live thing here" is the right one for it.
+  // Ember, not violet. Purple is gone from the product entirely — it reads as
+  // "AI-generated" — and the summary is the payoff slide, so the accent that
+  // means "this is the live thing here" is the right one for it.
   summary: { wash: "from-ember-500/20", dot: "bg-ember-400", rule: "bg-ember-500" },
 };
 

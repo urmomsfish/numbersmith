@@ -172,10 +172,10 @@ export function ProblemSolver({
       {!result && problem.hints.length > 0 && (
         <div className="mt-5">
           {hintsShown < problem.hints.length ? (
-            /* Was text-brand-700 / dark:text-brand-400. A graphite brand-400 is
-               only ~4.1:1 on the darker tinted backgrounds, so the old pair no
-               longer held AA for text this size; .link keeps full-contrast
-               text in both themes and underlines it. */
+            /* Was text-brand-700 / dark:text-brand-400, which stopped holding
+               AA for text this size once the brand ramp went graphite. .link
+               keeps full-contrast text in both themes and underlines it, so
+               the affordance doesn't depend on colour at all. */
             <button
               type="button"
               onClick={() => setHintsShown((h) => h + 1)}

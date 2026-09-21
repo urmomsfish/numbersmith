@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Sans, DM_Mono, Space_Grotesk } from "next/font/google";
-import { TINT_IDS, DEFAULT_TINT } from "@/lib/tints";
 import { ThemeSync } from "@/components/theme-sync";
 import "./globals.css";
 
@@ -48,28 +47,25 @@ export const viewport: Viewport = {
 };
 
 // Runs before first paint (a plain inline <script>, not deferred) so the page
-// never flashes light-then-dark, or untinted-then-tinted. Respects a stored
-// user choice over the device's prefers-color-scheme; ThemeToggle and
-// TintPicker write those choices.
+// never flashes light-then-dark. Respects a stored user choice over the
+// device's prefers-color-scheme; ThemeToggle writes that choice.
 //
-// The tint list is interpolated from TINT_IDS rather than hardcoded so it
-// can't drift from the CSS, and an unrecognised stored value falls back to the
-// default instead of setting an attribute no stylesheet matches.
-//
-// Stored theme/tint are only honored while logged in — signalled by the
+// The stored theme is only honored while logged in — signalled by the
 // non-httpOnly numbersmith_auth cookie set alongside the session cookie in
 // auth.ts. Logged out (including right after logout, when localStorage still
-// has the old choice), the page always renders light + default so a
-// logged-out visitor never sees another session's personalization.
+// has the old choice), the page always renders light so a logged-out visitor
+// never sees another session's personalization.
+//
+// The retired `tint` key is cleared rather than ignored, so a background colour
+// someone picked before the picker was removed doesn't sit dormant in their
+// browser looking like a live preference.
 const NO_FLASH_THEME_SCRIPT = `(function(){try{
 var loggedIn=document.cookie.indexOf('numbersmith_auth=')>-1;
 var t=loggedIn?localStorage.getItem('theme'):null;
 var d=t==='dark'||(!t&&loggedIn&&window.matchMedia('(prefers-color-scheme: dark)').matches);
 document.documentElement.classList.toggle('dark',d);
-var n=loggedIn?localStorage.getItem('tint'):null;
-var ok=${JSON.stringify(TINT_IDS)};
-if(n!==null&&ok.indexOf(n)<0){localStorage.removeItem('tint');n=null;}
-document.documentElement.setAttribute('data-tint',loggedIn&&ok.indexOf(n)>-1?n:${JSON.stringify(DEFAULT_TINT)});
+localStorage.removeItem('tint');
+document.documentElement.removeAttribute('data-tint');
 }catch(e){}})();`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

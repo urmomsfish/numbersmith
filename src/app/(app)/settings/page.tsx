@@ -11,7 +11,6 @@ import {
   startProTrialAction,
 } from "@/lib/actions/subscription-actions";
 import { updateProfileAction } from "@/lib/actions/settings-actions";
-import { TintPicker } from "@/components/tint-picker";
 
 export default async function SettingsPage() {
   const user = await getCurrentUser();
@@ -62,12 +61,8 @@ export default async function SettingsPage() {
             Appearance
           </h2>
           <p className="mt-2 text-sm text-slate-700 dark:text-slate-400">
-            Give the background a gentle colour, in both light and dark mode. Buttons, links, and
-            text are left alone so everything stays just as easy to read. Saved on this device.
-          </p>
-          <TintPicker className="mt-4" />
-          <p className="mt-4 text-xs text-slate-700 dark:text-slate-500">
-            Use the sun/moon button in the top bar to switch between light and dark.
+            Use the sun/moon button in the top bar to switch between light and dark. Saved on this
+            device.
           </p>
         </CardBody>
       </Card>

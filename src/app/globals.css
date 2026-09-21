@@ -8,13 +8,9 @@
 
 :root {
   --background: #f7f6f2;
-  /* Chrome surfaces (sidebar, topbar, marketing header). Neutral by
-   * default; tints give this the strongest colour because its text is
-   * slate-600/700, which has far more headroom than the shell's slate-500. */
+  /* Chrome surfaces (sidebar, topbar, marketing header). */
   --surface: #fbfaf7;
-  /* Content cards (dashboard boxes, settings panels, problem cards, ...).
-   * Off-white default; each tint overrides this with its own darker shade —
-   * see the "Card colour" comment further down. */
+  /* Content cards (dashboard boxes, settings panels, problem cards, ...). */
   --card: #ffffff;
   --foreground: #171a24;
 
@@ -46,12 +42,13 @@
   /* Accent: forge ember — XP, streaks, the Pro column, link hover, and the
    * translucent glow outside a focus ring. The only colour in the product, so
    * it always means "this is the live thing here".
-   * Note it is not the focus *indicator*: no ember step clears 3:1 against
-   * every tint's surfaces, so the solid ring tracks --foreground and ember is
-   * layered outside it. Re-measured after the violet tint was retired, in case
-   * losing the worst case changed the answer — it didn't; ember-600 is still
-   * the best step and still fails on 10 of 42 surfaces. See
-   * scripts/check-tint-contrast.mjs.
+   * Note it is not the focus *indicator*: the solid ring tracks --foreground
+   * and ember is layered outside it. That started as a hard constraint — no
+   * ember step cleared 3:1 against every background tint. The tints are gone
+   * now, and ember-600 does clear 3:1 on all six remaining surfaces, but only
+   * by 0.29 at the worst (3.29:1 on the light shell). The ring stays on
+   * --foreground: a focus indicator is the one affordance that should not sit
+   * a rounding error above the minimum.
    * 700 is the text-safe step: 600 is only 3.5:1 on white and fails AA for
    * body text. It was already being used as a hover colour without ever
    * having been defined. */
@@ -92,126 +89,6 @@
   --brand-800: #3f3833;
   --brand-900: #332d29;
   --brand-950: #2a2522;
-}
-
-/* ---------------------------------------------------------------------------
- * Background tints
- *
- * `data-tint` on <html> (set by the inline script in the root layout, written
- * by TintPicker) recolours the page shell and the chrome (sidebar, topbar,
- * marketing header) to a single shared shade, so the whole frame reads as one
- * surface. Only the untinted default keeps the original two-tone look of a
- * white sidebar over a slate-50 shell.
- * The --brand-* ramp above is deliberately NOT overridden: buttons, links, and
- * badges stay graphite under every tint, so choosing a colour can never change
- * the contrast of a control against its own background. "default" is the
- * neutral slate declared in :root, so it needs no block here and is what
- * renders with no attribute set at all.
- *
- * The values are constrained from three directions, all asserted by
- * `npm run verify:contrast` (scripts/check-tint-contrast.mjs):
- *   - light tints stay bright enough that text-slate-500 — used for page
- *     subtitles sitting directly on the background — holds WCAG AA 4.5:1.
- *     Headroom is thin: the untinted default is only 4.55:1.
- *   - dark tints stay far enough from the card colour that cards keep a
- *     visible edge rather than melting into the page.
- *   - each tint keeps enough chroma to actually read as coloured, since
- *     lightening to win contrast trades directly against visible hue.
- *
- * `.dark[data-tint="x"]` (0,2,0) outranks `[data-tint="x"]` (0,1,0), so the
- * dark background wins whenever both apply regardless of source order.
- *
- * Card colour
- *
- * --card (dashboard boxes, settings panels, problem cards, ...) follows the
- * tint's hue in both modes now, mirroring each other:
- *
- *   - Dark: each tint's --card is a lightened step off that tint's
- *     --background. Headroom is large (7–10:1 against the card's own text
- *     even after lightening), so no other change was needed.
- *   - Light: each tint's --card keeps the tint's hue but is built in HSL as
- *     a genuinely saturated mid-tone (L 78%, S 55%) rather than mixing the
- *     pastel --background toward black. A black mix desaturates as it
- *     darkens — on these pastels that reads as a grey/brown "shadow" instead
- *     of a colour, and it's the opposite of dark mode's cards, which are a
- *     lighter, still-vivid step off their background. This mirrors that:
- *     same hue family and comparable saturation to the dark-mode card, just
- *     lighter overall to suit a light background. Measured, not assumed: at
- *     L78/S55 the muted card text needs to be slate-700 (not slate-500/600)
- *     to hold AA — every tint clears 4.7:1+ at slate-700, several drop below
- *     4.5:1 at slate-600. The muted card text classes were darkened
- *     accordingly in light mode (slate-500/600 → slate-700; dark-mode
- *     classes are untouched, they already had headroom). See `bg-card`
- *     usages / the shared `Card` component for where those classes live.
- * ------------------------------------------------------------------------ */
-
-/* No violet block, and no purple tint of any kind — see the note in
- * src/lib/tints.ts. */
-
-[data-tint="blue"] {
-  --background: #dbeafe;
-  --surface: #dbeafe;
-  --card: #a8c3e6;
-}
-.dark[data-tint="blue"] {
-  --background: #12294f;
-  --surface: #12294f;
-  --card: #1e3458;
-}
-
-[data-tint="cyan"] {
-  --background: #cffafe;
-  --surface: #cffafe;
-  --card: #a8e1e6;
-}
-.dark[data-tint="cyan"] {
-  --background: #092f3c;
-  --surface: #092f3c;
-  --card: #153946;
-}
-
-[data-tint="emerald"] {
-  --background: #d1fae5;
-  --surface: #d1fae5;
-  --card: #a8e6c6;
-}
-.dark[data-tint="emerald"] {
-  --background: #093022;
-  --surface: #093022;
-  --card: #153a2d;
-}
-
-[data-tint="rose"] {
-  --background: #ffe4e6;
-  --surface: #ffe4e6;
-  --card: #e6a8ac;
-}
-.dark[data-tint="rose"] {
-  --background: #3d1421;
-  --surface: #3d1421;
-  --card: #47202c;
-}
-
-[data-tint="amber"] {
-  --background: #fef3c7;
-  --surface: #fef3c7;
-  --card: #e6d9a8;
-}
-.dark[data-tint="amber"] {
-  --background: #3d2908;
-  --surface: #3d2908;
-  --card: #473414;
-}
-
-[data-tint="orange"] {
-  --background: #ffedd5;
-  --surface: #ffedd5;
-  --card: #e6cba8;
-}
-.dark[data-tint="orange"] {
-  --background: #3d1c0a;
-  --surface: #3d1c0a;
-  --card: #472716;
 }
 
 @keyframes scene-in {
@@ -329,13 +206,13 @@ h6 {
  * So: full-contrast text with a permanent underline.
  *
  * The underline is `currentColor`, not ember. An ember underline was the first
- * attempt and it fails under the tints: --card is a saturated mid-tone in light
- * mode, and ember-600 on the rose card is 1.79:1 — the affordance all but
- * disappears on exactly the surface most links sit on. Since a tint can
- * recolour any surface, the only underline guaranteed to hold everywhere is one
- * that tracks the text, which is already held to 4.5:1 wherever it renders.
- * The accent comes back on hover, where it's a flourish on top of an affordance
- * that already reads rather than the thing carrying it. */
+ * attempt and it failed badly under the background tints, which could recolour
+ * the card a link sat on. The tints are gone, but the reasoning that replaced
+ * it stands on its own: an underline that tracks the text inherits the 4.5:1
+ * the text is already held to, on every surface, without anyone having to
+ * re-measure when a colour changes. The accent comes back on hover, where it's
+ * a flourish on top of an affordance that already reads rather than the thing
+ * carrying it. */
 .link {
   color: var(--foreground);
   text-decoration-line: underline;
