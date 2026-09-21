@@ -5,6 +5,7 @@ import { updateTopicAndDomainMastery } from "@/lib/engine/mastery";
 import { setRating, ratingDelta, clampRating } from "@/lib/engine/rating";
 import { touchDailyActivity, awardXp, recordProblemOutcome } from "@/lib/engine/xp";
 import { checkAndUnlockAchievements } from "@/lib/engine/achievements";
+import { levelById, levelForGrade, hasLevels } from "@/lib/competition-levels";
 
 /** Maps a competition to the rating category its simulations should move. */
 export function ratingCategoryForCompetition(slug: string): string {
@@ -35,6 +36,21 @@ async function pickSimulationProblems(opts: {
    * rather than leaving the paper short.
    */
   format?: string;
+  /**
+   * The grade band this paper is written for. Every problem already carries
+   * gradeMin/gradeMax and nothing here used to read them, so a kindergartener
+   * and a twelfth grader sitting the same competition drew from one identical
+   * pool — the reason a Math Kangaroo simulation was the same test at every
+   * level.
+   *
+   * It biases selection rather than filtering on it. Difficulty stays the hard
+   * constraint: a ninth grader sitting AMC 10 must still get real AMC 10
+   * problems, not easier ones because of their grade. Where a band genuinely
+   * is easier — Kangaroo Levels 1–2 — that comes through the level's own
+   * difficulty window, which is passed in above.
+   */
+  gradeMin?: number;
+  gradeMax?: number;
 }) {
   const baseWhere = {
     isPublished: true,
@@ -44,6 +60,12 @@ async function pickSimulationProblems(opts: {
       ? { OR: [{ topicId: { in: opts.topicIds } }, { topic: { parentId: { in: opts.topicIds } } }] }
       : {}),
   };
+
+  /** True when a problem's own grade range overlaps the band being built. */
+  const inBand = (p: { gradeMin: number; gradeMax: number }) =>
+    opts.gradeMin === undefined ||
+    opts.gradeMax === undefined ||
+    (p.gradeMax >= opts.gradeMin && p.gradeMin <= opts.gradeMax);
 
   // Prefer problems tagged to this competition, then widen to the whole pool
   // so a simulation always fills its full question count. Within each of those
@@ -64,7 +86,17 @@ async function pickSimulationProblems(opts: {
     return [...shuffle(match), ...shuffle(other)];
   };
 
-  const pool = [...byFormat(preferred), ...byFormat(rest)];
+  // Grade outranks format: a paper of on-format problems written for the wrong
+  // age reads as the wrong test, while an off-format problem at the right level
+  // is still a question this student can sit. Within each grade tier the
+  // existing competition-then-format ordering is unchanged.
+  const byGrade = (list: typeof preferred) => {
+    const band = list.filter(inBand);
+    const outside = list.filter((p) => !inBand(p));
+    return [...byFormat(band), ...byFormat(outside)];
+  };
+
+  const pool = [...byGrade(preferred), ...byGrade(rest)];
 
   if (pool.length < opts.count) {
     const fallback = await prisma.problem.findMany({
@@ -95,21 +127,49 @@ function shuffle<T>(arr: T[]): T[] {
   return out;
 }
 
-export async function startOfficialSimulation(userId: string, competitionSlug: string) {
+export async function startOfficialSimulation(
+  userId: string,
+  competitionSlug: string,
+  levelId?: string | null
+) {
   const competition = await prisma.competition.findUniqueOrThrow({ where: { slug: competitionSlug } });
   if (competition.format === "PROOF") {
     throw new Error("Proof-based competitions do not support timed simulations");
   }
 
-  const count = competition.numQuestions ?? 20;
-  const timeLimitMinutes = competition.timeLimitMinutes ?? 60;
+  // A level, where the contest has them, overrides length, clock, and
+  // difficulty — those are the three things that differ between a Kangaroo
+  // Levels 1–2 paper and a Levels 11–12 one. An unrecognised id falls back to
+  // the band matching the student's own grade rather than erroring, so a stale
+  // link cannot strand anyone.
+  let level = levelById(competitionSlug, levelId);
+  if (!level && hasLevels(competitionSlug)) {
+    const profile = await prisma.profile.findUnique({
+      where: { userId },
+      select: { grade: true },
+    });
+    level = levelForGrade(competitionSlug, profile?.grade ?? competition.gradeMin);
+  }
+
+  const count = level?.numQuestions ?? competition.numQuestions ?? 20;
+  const timeLimitMinutes = level?.timeLimitMinutes ?? competition.timeLimitMinutes ?? 60;
+  const difficultyMin = level?.difficultyMin ?? competition.difficultyMin;
+  const difficultyMax = level?.difficultyMax ?? competition.difficultyMax;
+
+  // Without a level the band is the competition's own published grade range,
+  // which is still far better than the previous behaviour of ignoring grade
+  // altogether — an AMC 8 paper stops being able to draw on grade 11 material.
+  const gradeMin = level?.gradeMin ?? competition.gradeMin;
+  const gradeMax = level?.gradeMax ?? competition.gradeMax;
 
   const problems = await pickSimulationProblems({
     competitionId: competition.id,
     count,
-    difficultyMin: Math.max(1, competition.difficultyMin - 1),
-    difficultyMax: Math.min(10, competition.difficultyMax + 1),
+    difficultyMin: Math.max(1, difficultyMin - 1),
+    difficultyMax: Math.min(10, difficultyMax + 1),
     format: competition.format,
+    gradeMin,
+    gradeMax,
   });
 
   const attempt = await prisma.competitionAttempt.create({
@@ -120,6 +180,9 @@ export async function startOfficialSimulation(userId: string, competitionSlug: s
       status: "IN_PROGRESS",
       timeLimitSeconds: timeLimitMinutes * 60,
       totalQuestions: problems.length,
+      // Recorded on the existing config column so results can name which paper
+      // was sat — "Levels 3–4" is not a detail you want to lose.
+      config: level ? JSON.stringify({ levelId: level.id, levelLabel: level.label }) : null,
       items: {
         create: problems.map((p, i) => ({ problemId: p.id, order: i })),
       },

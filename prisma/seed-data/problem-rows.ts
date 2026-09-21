@@ -9,6 +9,12 @@ import type { ProblemSeed } from "./problems";
  * problems with different metadata depending on which path inserted them.
  */
 
+/** The default band, used when a problem does not declare its own.
+ *
+ * Note the floor: difficulty 1 maps to grade 2, not to kindergarten. Early
+ * years content is not merely "easy" — a counting question and a two-digit
+ * addition question are both difficulty 1 here — so problems below grade 2
+ * carry an explicit band instead of being inferred. */
 export function gradesForDifficulty(difficulty: number): [number, number] {
   if (difficulty <= 2) return [2, 6];
   if (difficulty <= 4) return [5, 9];
@@ -23,6 +29,12 @@ export function secondsForDifficulty(difficulty: number): number {
   if (difficulty <= 6) return 150;
   if (difficulty <= 8) return 240;
   return 360;
+}
+
+/** A problem's own band if it declares one, else the difficulty default. */
+export function gradesFor(p: ProblemSeed): [number, number] {
+  if (p.gradeMin !== undefined && p.gradeMax !== undefined) return [p.gradeMin, p.gradeMax];
+  return gradesForDifficulty(p.difficulty);
 }
 
 export type ProblemRow = {
@@ -54,7 +66,7 @@ export function toProblemRow(
     isPlacement: boolean;
   }
 ): ProblemRow {
-  const [gradeMin, gradeMax] = gradesForDifficulty(p.difficulty);
+  const [gradeMin, gradeMax] = gradesFor(p);
   return {
     slug: p.slug,
     question: p.question,

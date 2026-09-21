@@ -10,31 +10,31 @@ import {
   submitSimulation,
   type CustomConfig,
 } from "@/lib/engine/simulation";
-import { isProUser, FREE_SIMULATIONS_PER_WEEK } from "@/lib/subscription";
+import { isProUser } from "@/lib/subscription";
 
-export async function countSimulationsThisWeek(userId: string) {
-  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-  return prisma.competitionAttempt.count({
-    where: { userId, startedAt: { gte: weekAgo } },
-  });
-}
-
+/** Simulations are Pro-only. There is no free allowance any more, so this is
+ * just the Pro check — kept as its own function because three call sites and
+ * two Server Actions depend on it, and one place to change is the point.
+ *
+ * `remaining` is retained in the shape rather than dropped: callers render it,
+ * and a Pro user's allowance has always been unbounded. */
 export async function canStartSimulation(userId: string) {
-  if (await isProUser(userId)) return { allowed: true as const };
-  const used = await countSimulationsThisWeek(userId);
-  return used < FREE_SIMULATIONS_PER_WEEK
-    ? { allowed: true as const, remaining: FREE_SIMULATIONS_PER_WEEK - used }
+  return (await isProUser(userId))
+    ? { allowed: true as const }
     : { allowed: false as const, remaining: 0 };
 }
 
 export async function startOfficialSimulationAction(formData: FormData) {
   const user = await requireUser();
   const slug = String(formData.get("slug") ?? "");
+  // Empty for contests that have no levels; startOfficialSimulation resolves
+  // an unknown or missing id against the student's grade.
+  const levelId = String(formData.get("level") ?? "") || null;
 
   const gate = await canStartSimulation(user.id);
   if (!gate.allowed) redirect("/pricing?from=simulation-limit");
 
-  const attempt = await startOfficialSimulation(user.id, slug);
+  const attempt = await startOfficialSimulation(user.id, slug, levelId);
   redirect(`/simulations/run/${attempt.id}`);
 }
 
@@ -49,10 +49,8 @@ const customSchema = z.object({
 export async function startCustomSimulationAction(formData: FormData) {
   const user = await requireUser();
 
-  if (!(await isProUser(user.id))) {
-    const gate = await canStartSimulation(user.id);
-    if (!gate.allowed) redirect("/pricing?from=simulation-limit");
-  }
+  const gate = await canStartSimulation(user.id);
+  if (!gate.allowed) redirect("/pricing?from=simulation-limit");
 
   const parsed = customSchema.safeParse({
     problemCount: formData.get("problemCount"),

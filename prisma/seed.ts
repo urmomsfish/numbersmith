@@ -22,7 +22,7 @@ import { OLYMPIAD_TIER_PROBLEMS } from "./seed-data/problems-olympiad-tier";
 import { LESSONS } from "./seed-data/lessons";
 import { ACHIEVEMENTS } from "./seed-data/achievements";
 
-import { gradesForDifficulty, secondsForDifficulty, toProblemRow } from "./seed-data/problem-rows";
+import { gradesFor, secondsForDifficulty, toProblemRow } from "./seed-data/problem-rows";
 
 const prisma = new PrismaClient();
 
@@ -118,7 +118,7 @@ async function main() {
     const topicId = topicIdBySlug.get(p.topicSlug);
     if (!topicId) throw new Error(`Unknown topic slug: ${p.topicSlug} (problem ${p.slug})`);
     const competitionId = p.competitionSlug ? competitionIdBySlug.get(p.competitionSlug) : null;
-    const [gradeMin, gradeMax] = gradesForDifficulty(p.difficulty);
+    const [gradeMin, gradeMax] = gradesFor(p);
     const tags = [p.topicSlug, ...(p.competitionSlug ? [p.competitionSlug] : [])];
 
     const problem = await prisma.problem.upsert({

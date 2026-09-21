@@ -100,14 +100,14 @@ export function CustomSimulationForm({
       <div className="mt-5 flex items-center justify-between gap-3">
         {!isPro && (
           <p className="text-xs text-slate-700 dark:text-slate-500">
-            Custom sets count toward your free weekly simulation limit.{" "}
+            Custom timed sets are a Pro feature.{" "}
             <Link href="/pricing" className="link font-semibold">
-              Go unlimited →
+              See Pro →
             </Link>
           </p>
         )}
         <Button type="submit" disabled={!canStart} className="ml-auto">
-          {canStart ? "Start Custom Competition" : "Weekly Limit Reached"}
+          {canStart ? "Start Custom Competition" : "Pro only"}
         </Button>
       </div>
     </form>

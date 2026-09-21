@@ -43,6 +43,7 @@ export default async function PracticeSessionPage({
     topicSlug: params.topic,
     competitionSlug: params.competition,
     count,
+    isPro,
   });
 
   if (problems.length === 0) {

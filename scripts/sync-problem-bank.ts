@@ -68,6 +68,8 @@ async function main() {
       solution: true,
       hints: true,
       difficulty: true,
+      gradeMin: true,
+      gradeMax: true,
       _count: { select: { attempts: true } },
     },
   });
@@ -120,8 +122,17 @@ async function main() {
       continue;
     }
 
-    // Compare only the fields a student actually sees or is graded on.
+    // Compare the fields a student sees or is graded on, plus the grade band.
+    //
+    // The band used to be a pure function of difficulty, so it could never
+    // disagree with the seed and comparing it would have been dead weight. Now
+    // that a problem can declare its own (ProblemSeed.gradeMin), retargeting
+    // one in the seed left the database on the old band and the sync reported
+    // "nothing to do" — the grade is what decides who is ever shown the
+    // problem, so a silent drift there is worse than a wrong hint.
     const changed =
+      current.gradeMin !== row.gradeMin ||
+      current.gradeMax !== row.gradeMax ||
       current.question !== row.question ||
       current.diagram !== row.diagram ||
       current.format !== row.format ||
@@ -190,6 +201,13 @@ async function main() {
             solution: u.row.solution,
             hints: u.row.hints,
             difficulty: u.row.difficulty,
+            // Must stay in step with the `changed` comparison above. These
+            // were missing while the comparison had just been taught to read
+            // them, so a band correction reported "corrected 143/143" and
+            // wrote nothing — the loudest possible way to do nothing.
+            gradeMin: u.row.gradeMin,
+            gradeMax: u.row.gradeMax,
+            estimatedTimeSeconds: u.row.estimatedTimeSeconds,
           },
         })
       )

@@ -24,6 +24,20 @@ export type ProblemSeed = {
   difficulty: number; // 1-10
   topicSlug: string;
   competitionSlug?: string;
+  /**
+   * Grade band this problem is written for, when difficulty alone cannot say.
+   *
+   * Grades are normally derived from difficulty (see `gradesForDifficulty`),
+   * and that mapping bottoms out at grades 2-6 — which meant the bank could
+   * not represent a kindergarten or first-grade problem at all, whatever its
+   * content. Counting to ten and adding within ten are both difficulty 1, but
+   * they are not the same grade, and neither is grade 2.
+   *
+   * Set both or neither. Leave them off for anything from grade 2 up, so the
+   * difficulty mapping stays the single rule for the rest of the bank.
+   */
+  gradeMin?: number;
+  gradeMax?: number;
 };
 
 // All problems are original NumberSmith content, written and verified for this

@@ -5,7 +5,6 @@ import { PRO_PRICING } from "@/lib/pricing";
 import { LEGAL } from "@/lib/legal";
 import {
   FREE_DAILY_PROBLEM_LIMIT,
-  FREE_SIMULATIONS_PER_WEEK,
   FREE_MISTAKE_REVIEWS_PER_WEEK,
 } from "@/lib/subscription";
 
@@ -68,9 +67,9 @@ export default function TermsPage() {
             <>
               <strong>Free</strong> includes the full placement test, your rating and skill
               breakdown, competition selection, a personalised training plan,{" "}
-              {FREE_DAILY_PROBLEM_LIMIT} problems per day, the daily challenge, introductory lessons,{" "}
-              {FREE_SIMULATIONS_PER_WEEK} competition simulations per week, and{" "}
-              {FREE_MISTAKE_REVIEWS_PER_WEEK} mistake reviews per week.
+              {FREE_DAILY_PROBLEM_LIMIT} problems per day, the daily challenge, introductory lessons,
+              and {FREE_MISTAKE_REVIEWS_PER_WEEK} mistake reviews per week. Full-length competition
+              simulations are part of Pro.
             </>,
             <>
               <strong>Pro</strong> costs ${PRO_PRICING.MONTHLY} per month or ${PRO_PRICING.YEARLY}{" "}

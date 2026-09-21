@@ -1,5 +1,6 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
+import { isProUser } from "@/lib/subscription";
 import { rankTopicsByPriority, rankTopicsForCompetition } from "@/lib/engine/practice";
 import {
   PLAN_WEEKS,
@@ -43,6 +44,7 @@ export type { PlanPhase, ScheduledCompetition, ScheduledWeek } from "@/lib/engin
  * performance materially changes (new placement, big rating swing).
  */
 export async function generateStudyPlan(userId: string) {
+  const isPro = await isProUser(userId);
   const [profile, userCompetitions, overallRating] = await Promise.all([
     prisma.profile.findUnique({ where: { userId } }),
     prisma.userCompetition.findMany({
@@ -118,9 +120,21 @@ export async function generateStudyPlan(userId: string) {
   for (const week of weeks) {
     const topics = await topicsFor(week.target?.competitionId ?? null);
     /** Rotates through the ranked topics so later weeks widen coverage instead
-     * of drilling the same few for months. */
+     * of drilling the same few for months.
+     *
+     * Pro rotates through a weighted list instead of a flat one. `topics` is
+     * already ranked weakest-and-most-impactful first, but a flat rotation
+     * gives the sixth-priority topic exactly as much of the plan as the first —
+     * so a student whose Geometry is the thing costing them a qualification
+     * spends five-sixths of their weeks elsewhere. Repeating the front of the
+     * ranking concentrates the plan where the score actually moves, while the
+     * tail still appears, so coverage is never dropped entirely. */
+    const rotationPool =
+      isPro && topics.length > 1
+        ? topics.flatMap((t, i) => Array<(typeof topics)[number]>(Math.max(1, 4 - Math.floor(i / 2))).fill(t))
+        : topics;
     const topicAt = (offset: number) =>
-      topics.length > 0 ? topics[offset % topics.length] : undefined;
+      rotationPool.length > 0 ? rotationPool[offset % rotationPool.length] : undefined;
     const rotation = (week.weekNumber - 1) * 2;
     const a = topicAt(rotation);
     const b = topicAt(rotation + 1);
@@ -140,7 +154,24 @@ export async function generateStudyPlan(userId: string) {
       label: string,
       topicId?: string,
       count = problemCountFor(week, baseProblemCount)
-    ) => days.push({ weekNumber: week.weekNumber, dayOfWeek, taskType, topicId, problemCount: count, label });
+    ) => {
+      // Simulations are Pro-only, so scheduling one for a Free student is a
+      // plan day they cannot open — the plan would be telling them to do
+      // something the product refuses. They get an untimed mixed set instead,
+      // which is the part of a simulation available to them.
+      if (taskType === "SIMULATION" && !isPro) {
+        days.push({
+          weekNumber: week.weekNumber,
+          dayOfWeek,
+          taskType: "PRACTICE",
+          topicId,
+          problemCount: count,
+          label: "Mixed practice set",
+        });
+        return;
+      }
+      days.push({ weekNumber: week.weekNumber, dayOfWeek, taskType, topicId, problemCount: count, label });
+    };
 
     if (week.isTaper) {
       // Contest week: consolidate, do not cram. Light volume, review-heavy.

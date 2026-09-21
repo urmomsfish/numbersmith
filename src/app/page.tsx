@@ -288,7 +288,6 @@ export default async function LandingPage() {
                   "Personalized training plan",
                   "15 problems per day",
                   "Daily challenge & intro lessons",
-                  "2 simulations per week",
                   "XP, streaks & achievements",
                 ].map((f) => (
                   <li key={f} className="flex items-start gap-2">

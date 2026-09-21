@@ -61,6 +61,10 @@ export const sgn = (n: number) => (n < 0 ? `- ${Math.abs(n)}` : `+ ${n}`);
 
 export type Built = {
   question: string;
+  /** Optional inline <svg>, forwarded to ProblemSeed.diagram. Early-years
+   * counting questions need the picture to BE the question; see
+   * generators/early-years.ts for why that inverts the usual rule. */
+  diagram?: string;
   format: ProblemSeed["format"];
   /** Correct value. For MULTIPLE_CHOICE this is the value, not the letter —
    * the framework resolves the letter after shuffling. */
@@ -78,6 +82,10 @@ export type Generator = {
   topicSlug: string;
   difficulty: number;
   competitionSlug?: string;
+  /** Explicit grade band, for generators whose content sits below the grade 2
+   * floor that difficulty alone implies. See ProblemSeed.gradeMin. */
+  gradeMin?: number;
+  gradeMax?: number;
   /** How many distinct instances to emit. Tuned per generator to its actual
    * parameter space — a generator asked for more variants than it has distinct
    * questions emits what it has rather than padding with duplicates. */
@@ -104,10 +112,15 @@ function finalize(
     difficulty: g.difficulty,
     topicSlug: g.topicSlug,
     ...(g.competitionSlug ? { competitionSlug: g.competitionSlug } : {}),
+    ...(g.gradeMin !== undefined && g.gradeMax !== undefined
+      ? { gradeMin: g.gradeMin, gradeMax: g.gradeMax }
+      : {}),
   };
 
+  const withFigure = built.diagram ? { diagram: built.diagram } : {};
+
   if (built.format !== "MULTIPLE_CHOICE") {
-    return { ...base, question: built.question, format: built.format, answer: built.answer };
+    return { ...base, ...withFigure, question: built.question, format: built.format, answer: built.answer };
   }
 
   const wrong = [...new Set(built.distractors ?? [])].filter((d) => d !== built.answer);
@@ -123,6 +136,7 @@ function finalize(
   const idx = options.indexOf(built.answer);
   return {
     ...base,
+    ...withFigure,
     question: built.question,
     format: "MULTIPLE_CHOICE",
     choices: options,
@@ -167,7 +181,12 @@ export function expand(generators: Generator[]): {
         continue; // rejected parameter draw
       }
 
-      if (seenQuestions.has(built.question)) continue;
+      // Keyed on the figure as well as the prose. Two counting questions
+      // reading "How many circles are there?" over pictures of four and seven
+      // circles are different problems, and deduping on text alone collapsed
+      // an entire generator to one instance per shape.
+      const key = built.diagram ? `${built.question}\u0000${built.diagram}` : built.question;
+      if (seenQuestions.has(key)) continue;
 
       const expected = g.check(p);
       if (String(expected) !== String(built.answer)) {
@@ -190,7 +209,7 @@ export function expand(generators: Generator[]): {
         continue;
       }
 
-      seenQuestions.add(built.question);
+      seenQuestions.add(key);
       seenSlugs.add(slug);
       problems.push(seed);
       emitted++;

@@ -5,12 +5,14 @@ import { GEOMETRY } from "./geometry";
 import { NUMBER_THEORY, COMBINATORICS, PROBABILITY } from "./discrete";
 import { ADVANCED } from "./advanced";
 import { LOGIC } from "./logic";
+import { EARLY_YEARS } from "./early-years";
 
 /** The generator list on its own. Kept separate from `index.ts` so that code
  * needing only the registry — the About page, which shows how many templates
  * exist — does not trigger the full expansion and per-instance verification
  * that `index.ts` runs at module load. */
 export const GENERATORS: Generator[] = [
+  ...EARLY_YEARS,
   ...ARITHMETIC,
   ...ALGEBRA,
   ...GEOMETRY,

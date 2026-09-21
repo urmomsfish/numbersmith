@@ -21,7 +21,7 @@ const COMPARISON: { feature: string; free: string; pro: string }[] = [
   { feature: "Daily Problems", free: "15 / day", pro: "Unlimited" },
   { feature: "Problem Database", free: "Limited", pro: "Full" },
   { feature: "Lessons", free: "Intro lessons", pro: "All lessons" },
-  { feature: "Competition Simulations", free: "2 / week", pro: "Unlimited" },
+  { feature: "Competition Simulations", free: "—", pro: "Unlimited" },
   { feature: "Adaptive Training", free: "Basic", pro: "Advanced" },
   { feature: "Mistake Review", free: "10 most urgent", pro: "Full + spaced repetition" },
   { feature: "Statistics", free: "Basic", pro: "Advanced" },
@@ -34,12 +34,11 @@ const COMPARISON: { feature: string; free: string; pro: string }[] = [
 const FREE_FEATURES = [
   "Full adaptive placement test",
   "Your NumberSmith level, rating & skill breakdown",
-  "Choose from 20 competitions",
+  "Choose from 21 competitions",
   "Personalized weekly training plan",
   "15 problems per day",
   "Daily challenge with bonus XP",
   "Introductory lesson library",
-  "2 competition simulations per week",
   "XP, levels, streaks & achievements",
   "Topic mastery tracking",
   "Basic mistake review & statistics",
@@ -50,13 +49,11 @@ const PRO_FEATURES = [
   "Unlimited daily problems",
   "Full problem database — all difficulty levels",
   "Complete lesson library including olympiad technique",
-  "Unlimited competition simulations",
-  "Advanced adaptive training engine",
+  "Full-length competition simulations",
+  "Adaptive training that targets your weakest subtopics",
   "Full mistake review with spaced repetition",
-  "Advanced statistics & rating analytics",
-  "Competition-specific roadmaps",
+  "Subtopic analytics, per-competition rating & pace",
   "Custom practice sets",
-  "Detailed performance reports",
   "Video lessons — animated, narration-free walkthroughs of key concepts",
   "Smith AI — works through any problem with you, one step at a time",
 ];
@@ -84,7 +81,7 @@ const FAQ = [
   },
   {
     q: "How far can I get on the free plan?",
-    a: "Yes. Free includes the complete placement test, your full skill breakdown, competition selection, a personalized training plan, 15 problems a day, the daily challenge, introductory lessons, two weekly simulations, and full XP, streak, and achievement systems. A dedicated student can train on the free plan for months.",
+    a: "Yes. Free includes the complete placement test, your full skill breakdown, competition selection, a personalized training plan, 15 problems a day, the daily challenge, introductory lessons, and full XP, streak, and achievement systems. A dedicated student can train on the free plan for months.",
   },
   {
     q: "How do subscriptions work?",
@@ -107,7 +104,7 @@ export default async function PricingPage({
 
   const contextMessage =
     params.from === "simulation-limit"
-      ? "You've used your free simulations for this week."
+      ? "Full-length competition simulations are a Pro feature."
       : params.from === "lesson"
         ? "That lesson is part of the Pro library."
         : params.from === "video-lessons" || params.from === "video-lesson"

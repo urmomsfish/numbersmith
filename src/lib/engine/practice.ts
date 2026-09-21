@@ -1,6 +1,7 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
 import { DOMAIN_TOPIC_SLUGS } from "@/lib/types";
+import { topicProgress } from "@/lib/engine/progress";
 
 export function ratingToDifficulty(rating: number): number {
   return Math.max(1, Math.min(10, Math.round((rating - 900) / 120)));
@@ -131,11 +132,26 @@ export async function pickPriorityTopic(userId: string) {
   return ranked[0].topic;
 }
 
+/** Expert+ starts here. The problem database and the single-problem page both
+ * gate difficulty 8 and up behind Pro, and the pricing table lists "Advanced
+ * Problems (Expert+)" as Pro-only — but practice sessions did not enforce it,
+ * so a strong Free account whose rating pushed the adaptive window that high
+ * was served them anyway. The gate is now in the query that picks them. */
+const EXPERT_DIFFICULTY = 8;
+
 export async function pickNextPracticeProblems(
   userId: string,
-  opts: { topicSlug?: string; competitionSlug?: string; difficulty?: number; count?: number } = {}
+  opts: {
+    topicSlug?: string;
+    competitionSlug?: string;
+    difficulty?: number;
+    count?: number;
+    /** Free accounts are capped below Expert+; omitted means unrestricted. */
+    isPro?: boolean;
+  } = {}
 ) {
   const count = opts.count ?? 5;
+  const maxDifficulty = opts.isPro === false ? EXPERT_DIFFICULTY - 1 : 10;
 
   const domainTopic = opts.topicSlug
     ? await prisma.topic.findUnique({ where: { slug: opts.topicSlug } })
@@ -170,18 +186,26 @@ export async function pickNextPracticeProblems(
     isPlacement: false,
     id: { notIn: recentCorrectIds },
     topic: { OR: [{ id: domainTopic.id }, { parentId: domainTopic.id }] },
-    difficulty: { gte: Math.max(1, difficulty - 1), lte: Math.min(10, difficulty + 1) },
+    difficulty: {
+      gte: Math.max(1, difficulty - 1),
+      lte: Math.min(maxDifficulty, difficulty + 1),
+    },
     ...(competition ? { competitionId: competition.id } : {}),
     ...(focus === "TIMED" ? { estimatedTimeSeconds: { lte: 150 } } : {}),
   };
 
   let problems = await prisma.problem.findMany({ where, take: count * 3 });
   if (problems.length === 0) {
+    // The widening fallback drops the difficulty window, the exclusion list and
+    // the competition filter to guarantee a non-empty session — but it must not
+    // drop the Pro gate with them, or a Free account reaches Expert+ problems
+    // precisely when its own topic pool runs thin.
     problems = await prisma.problem.findMany({
       where: {
         isPublished: true,
         isPlacement: false,
         topic: { OR: [{ id: domainTopic.id }, { parentId: domainTopic.id }] },
+        difficulty: { lte: maxDifficulty },
       },
       take: count * 3,
     });
@@ -195,6 +219,37 @@ export async function pickNextPracticeProblems(
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
+
+  // Pro: target the weakest *subtopic*, not just the domain.
+  //
+  // The selection above works at domain granularity — it knows Geometry is the
+  // weak area, so it draws Geometry problems, and which subtopic you get is
+  // whatever the shuffle hands over. That is fine as a baseline, but a student
+  // who is solid on triangles and lost on circles spends most of a Geometry
+  // session on triangles.
+  //
+  // This re-sorts the drawn pool so problems from the weakest subtopics inside
+  // the domain come first. It deliberately re-sorts rather than re-queries: the
+  // pool is already filtered to the right difficulty window and exclusions, so
+  // reordering keeps every one of those guarantees and cannot empty a session.
+  // Problems in an untracked subtopic sort to the middle rather than the end —
+  // no evidence is not the same as strength.
+  if (opts.isPro) {
+    const childMastery = await prisma.topicMastery.findMany({
+      where: { userId, topic: { parentId: domainTopic.id } },
+      select: { topicId: true, masteryPercent: true, problemsAttempted: true },
+    });
+    if (childMastery.length > 0) {
+      const weakness = new Map(
+        childMastery.map((m) => [m.topicId, topicProgress(m.masteryPercent, m.problemsAttempted)])
+      );
+      const UNTRACKED = 50;
+      shuffled.sort(
+        (a, b) => (weakness.get(a.topicId) ?? UNTRACKED) - (weakness.get(b.topicId) ?? UNTRACKED)
+      );
+    }
+  }
+
   shuffled.length = Math.min(shuffled.length, count);
 
   return { problems: shuffled, topic: domainTopic, focus, difficulty };

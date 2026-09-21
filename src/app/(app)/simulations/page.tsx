@@ -37,9 +37,10 @@ export default async function SimulationsPage() {
 
       {!isPro && (
         <p className="mt-4 rounded-xl border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950 px-4 py-2.5 text-sm text-amber-800 dark:text-amber-400">
-          Free plan: {gate.allowed ? `${gate.remaining} simulation${gate.remaining === 1 ? "" : "s"} left this week` : "Weekly simulation limit reached"}.{" "}
+          Full-length simulations are a Pro feature. You can still practise any
+          competition&apos;s topics from the practice page.{" "}
           <Link href="/pricing" className="font-semibold underline">
-            Unlock unlimited with Pro
+            See Pro
           </Link>
         </p>
       )}
@@ -61,7 +62,7 @@ export default async function SimulationsPage() {
               <form action={startOfficialSimulationAction} className="mt-4">
                 <input type="hidden" name="slug" value={c.slug} />
                 <Button type="submit" size="sm" className="w-full" disabled={!gate.allowed}>
-                  {gate.allowed ? "Start Simulation" : "Limit Reached"}
+                  {gate.allowed ? "Start Simulation" : "Pro only"}
                 </Button>
               </form>
             </CardBody>

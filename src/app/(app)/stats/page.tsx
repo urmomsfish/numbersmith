@@ -17,7 +17,12 @@ export default async function StatsPage() {
 
   const isPro = await isProUser(user.id);
 
-  const [stats, ratings, history, mastery, attempts] = await Promise.all([
+  // Pro-only queries are skipped entirely for Free accounts rather than fetched
+  // and hidden — subtopic mastery and per-category history are the two widest
+  // reads on this page, and a Free student would be paying their page load for
+  // data they never see.
+  const [stats, ratings, history, mastery, attempts, subtopics, categoryHistory] =
+    await Promise.all([
     prisma.userStats.findUnique({ where: { userId: user.id } }),
     prisma.rating.findMany({ where: { userId: user.id } }),
     prisma.ratingHistory.findMany({
@@ -32,10 +37,24 @@ export default async function StatsPage() {
     }),
     prisma.attempt.findMany({
       where: { userId: user.id },
-      include: { problem: { select: { difficulty: true } } },
+      include: {
+        problem: { select: { difficulty: true, estimatedTimeSeconds: true, topicId: true } },
+      },
       orderBy: { createdAt: "desc" },
       take: 500,
     }),
+    isPro
+      ? prisma.topicMastery.findMany({
+          where: { userId: user.id, topic: { parentId: { not: null } } },
+          include: { topic: { include: { parent: true } } },
+        })
+      : Promise.resolve([]),
+    isPro
+      ? prisma.ratingHistory.findMany({
+          where: { userId: user.id, category: { not: "OVERALL" } },
+          orderBy: { recordedAt: "asc" },
+        })
+      : Promise.resolve([]),
   ]);
 
   const overall = ratings.find((r) => r.category === "OVERALL")?.value ?? 1000;
@@ -58,6 +77,44 @@ export default async function StatsPage() {
   const orderedBuckets = ["Beginner", "Intermediate", "Advanced", "Expert", "Olympiad"].filter((b) =>
     difficultyBuckets.has(b)
   );
+
+  // ---- Pro analytics -------------------------------------------------
+  // Subtopics ranked by how much they are holding the student back: weakest
+  // progress first, and where two are level, the one with less evidence behind
+  // it — that is the one practice will actually move. Same rule the dashboard
+  // uses for domains, applied a level down.
+  const subtopicRows = subtopics
+    .map((m) => ({
+      id: m.id,
+      name: m.topic.name,
+      domain: m.topic.parent?.name ?? "—",
+      attempted: m.problemsAttempted,
+      progress: topicProgress(m.masteryPercent, m.problemsAttempted),
+    }))
+    .sort((a, b) => a.progress - b.progress || a.attempted - b.attempted);
+
+  // Pace against the time each problem was authored to take. Attempts with no
+  // estimate are excluded rather than counted as instant.
+  const timed = attempts.filter((a) => a.problem.estimatedTimeSeconds > 0);
+  const paceRatio =
+    timed.length > 0
+      ? timed.reduce((s, a) => s + a.timeSeconds / a.problem.estimatedTimeSeconds, 0) / timed.length
+      : null;
+
+  // Rating movement per competition category, oldest to newest in each.
+  const categoryDeltas = [...new Set(categoryHistory.map((h) => h.category))]
+    .map((category) => {
+      const rows = categoryHistory.filter((h) => h.category === category);
+      const first = rows[0]?.value ?? null;
+      const last = rows[rows.length - 1]?.value ?? null;
+      return {
+        category,
+        current: ratings.find((r) => r.category === category)?.value ?? last ?? 0,
+        delta: first !== null && last !== null ? last - first : 0,
+        points: rows.length,
+      };
+    })
+    .sort((a, b) => b.current - a.current);
 
   const xp = stats?.totalXp ?? 0;
   const level = levelForXp(xp);
@@ -194,6 +251,129 @@ export default async function StatsPage() {
         </Card>
       </div>
 
+      {isPro && (
+        <div className="mt-5 grid gap-5 lg:grid-cols-3">
+          {/* Subtopic breakdown — the whole point of Pro analytics. The free
+              page stops at the six domains, which tells a student that
+              "Geometry" is weak without telling them it is circles. */}
+          <Card className="lg:col-span-2">
+            <CardBody>
+              <div className="flex items-baseline justify-between gap-3">
+                <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-50">
+                  Subtopic breakdown
+                </h2>
+                <Badge tone="brand">Pro</Badge>
+              </div>
+              <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">
+                Weakest first. Where two are level, the one with less practice behind it comes
+                first — that is the one practice will move.
+              </p>
+              {subtopicRows.length === 0 ? (
+                <p className="mt-6 py-6 text-center text-sm text-slate-700 dark:text-slate-500">
+                  Practice a few problems to build your subtopic map.
+                </p>
+              ) : (
+                <ul className="mt-4 space-y-2.5">
+                  {subtopicRows.slice(0, 10).map((row) => (
+                    <li key={row.id} className="flex items-center gap-3">
+                      <span className="w-40 shrink-0 truncate text-sm text-slate-800 dark:text-slate-200">
+                        {row.name}
+                        <span className="block text-[11px] text-slate-500">{row.domain}</span>
+                      </span>
+                      <ProgressBar value={row.progress} tone="brand" />
+                      <span className="w-10 shrink-0 text-right text-sm tabular-nums text-slate-700 dark:text-slate-400">
+                        {row.progress}%
+                      </span>
+                      <span className="w-20 shrink-0 text-right text-[11px] text-slate-500">
+                        {evidenceLabel(row.attempted)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </CardBody>
+          </Card>
+
+          <div className="space-y-5">
+            <Card>
+              <CardBody>
+                <div className="flex items-baseline justify-between gap-3">
+                  <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-50">
+                    Rating by competition
+                  </h2>
+                  <Badge tone="brand">Pro</Badge>
+                </div>
+                {categoryDeltas.length === 0 ? (
+                  <p className="mt-5 py-4 text-center text-sm text-slate-700 dark:text-slate-500">
+                    Sit a simulation to start a per-competition rating.
+                  </p>
+                ) : (
+                  <ul className="mt-3 space-y-2">
+                    {categoryDeltas.map((c) => (
+                      <li key={c.category} className="flex items-baseline justify-between gap-2">
+                        <span className="text-sm text-slate-800 dark:text-slate-200">
+                          {c.category}
+                          <span className="block text-[11px] text-slate-500">
+                            {ratingTier(c.current).label}
+                          </span>
+                        </span>
+                        <span className="text-right">
+                          <span className="text-sm font-semibold tabular-nums text-slate-900 dark:text-slate-50">
+                            {c.current}
+                          </span>
+                          {c.points > 1 && (
+                            <span
+                              className={`ml-2 text-xs tabular-nums ${
+                                c.delta >= 0
+                                  ? "text-success-600 dark:text-success-400"
+                                  : "text-danger-600 dark:text-danger-400"
+                              }`}
+                            >
+                              {c.delta >= 0 ? "+" : ""}
+                              {c.delta}
+                            </span>
+                          )}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </CardBody>
+            </Card>
+
+            <Card>
+              <CardBody>
+                <div className="flex items-baseline justify-between gap-3">
+                  <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-50">Pace</h2>
+                  <Badge tone="brand">Pro</Badge>
+                </div>
+                {paceRatio === null ? (
+                  <p className="mt-5 py-4 text-center text-sm text-slate-700 dark:text-slate-500">
+                    Not enough timed attempts yet.
+                  </p>
+                ) : (
+                  <>
+                    <p className="mt-2 text-3xl font-extrabold tabular-nums text-slate-900 dark:text-slate-50">
+                      {Math.round(paceRatio * 100)}%
+                    </p>
+                    <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+                      of the time each problem is written to take.
+                    </p>
+                    <p className="mt-2 text-xs text-slate-600 dark:text-slate-400">
+                      {paceRatio <= 0.85
+                        ? "Comfortably inside the clock — you can afford to attempt harder problems."
+                        : paceRatio <= 1.15
+                          ? "On pace. This is where a real contest wants you."
+                          : "Over the intended time. Accuracy is worth more than speed, but a timed contest will cut you off."}
+                    </p>
+                  </>
+                )}
+              </CardBody>
+            </Card>
+          </div>
+        </div>
+      )}
+
       {!isPro && (
         <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-slate-200 bg-card p-5 dark:border-slate-700">
           <div className="max-w-prose">
@@ -202,7 +382,7 @@ export default async function StatsPage() {
             </h2>
             <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
               See exactly which topics are limiting your competition performance, with subtopic-level
-              breakdowns, per-competition rating analytics, and detailed performance reports.
+              breakdowns, per-competition rating analytics, and pace against contest timing.
             </p>
           </div>
           <LinkButton href="/pricing" variant="secondary" size="sm">
