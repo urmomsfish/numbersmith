@@ -12,6 +12,7 @@ import {
 } from "@/lib/engine/progress";
 import { dateKeyIndex, streakDayIndex } from "@/lib/streak";
 
+
 /** Formats a date-only value without letting the viewer's timezone shift it —
  * targetDate is stored as UTC midnight, the same convention the schedule uses. */
 function formatContestDate(date: Date) {
@@ -24,9 +25,15 @@ function countdown(daysAway: number) {
   return `in ${daysAway} days`;
 }
 
-export default async function DashboardPage() {
+export default async function DashboardPage(props: PageProps<"/dashboard">) {
   const user = await getCurrentUser();
   if (!user) return null;
+
+  // Stripe Checkout's success_url lands here with ?upgraded=1, which nothing
+  // read — so someone who had just paid arrived at an unchanged dashboard with
+  // no acknowledgement that anything had happened.
+  const { upgraded } = await props.searchParams;
+  const justUpgraded = upgraded === "1";
 
   const [profile, userCompetitions, plan, priorityTopic] = await Promise.all([
     prisma.profile.findUnique({ where: { userId: user.id } }),
@@ -107,6 +114,14 @@ export default async function DashboardPage() {
           </p>
         )}
       </header>
+
+      {justUpgraded && (
+        // Amber, matching the early-access notice — same family of message.
+        <p className="mt-5 rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:bg-amber-950 dark:text-amber-400">
+          <span className="font-semibold">You&apos;re on Pro.</span> Unlimited problems and
+          simulations, the full lesson library, and Smith AI are all open now.
+        </p>
+      )}
 
       {/* The one thing to do next, given the most weight on the page. Everything
           below it is context for the decision, not a second decision. */}

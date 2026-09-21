@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LegalPage, Section, Bullets } from "../legal-page";
-import { PRO_PRICING, TRIAL_DAYS } from "@/lib/pricing";
+import { PRO_PRICING } from "@/lib/pricing";
 import { LEGAL } from "@/lib/legal";
 import {
   FREE_DAILY_PROBLEM_LIMIT,
@@ -76,11 +76,6 @@ export default function TermsPage() {
               <strong>Pro</strong> costs ${PRO_PRICING.MONTHLY} per month or ${PRO_PRICING.YEARLY}{" "}
               per year and removes those limits, adding the full problem database, complete lesson
               library, unlimited simulations, and advanced statistics.
-            </>,
-            <>
-              We may offer a {TRIAL_DAYS}-day Pro trial. A trial ends automatically and does not
-              convert into a paid subscription unless you choose to subscribe. We will not charge you
-              when a trial ends.
             </>,
           ]}
         />

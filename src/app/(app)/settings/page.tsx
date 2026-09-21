@@ -8,7 +8,6 @@ import { getSubscription, grantsProAccess, isCancelPending } from "@/lib/subscri
 import {
   cancelSubscriptionAction,
   manageBillingAction,
-  startProTrialAction,
 } from "@/lib/actions/subscription-actions";
 import { updateProfileAction } from "@/lib/actions/settings-actions";
 
@@ -72,22 +71,9 @@ export default async function SettingsPage() {
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">Subscription</h2>
             <Badge tone={cancelPending ? "warning" : isPro ? "brand" : "slate"}>
-              {cancelPending
-                ? "Pro — ending"
-                : subscription.status === "TRIAL"
-                  ? "Pro Trial"
-                  : isPro
-                    ? "NumberSmith Pro"
-                    : "NumberSmith Free"}
+              {cancelPending ? "Pro — ending" : isPro ? "NumberSmith Pro" : "NumberSmith Free"}
             </Badge>
           </div>
-
-          {subscription.status === "TRIAL" && subscription.trialEndsAt && (
-            <p className="mt-3 rounded-lg bg-amber-50 dark:bg-amber-950 px-3 py-2 text-sm text-amber-800 dark:text-amber-400">
-              Your free Pro trial ends on {subscription.trialEndsAt.toLocaleDateString()}. You will not
-              be charged — the account simply returns to the Free plan unless you choose to subscribe.
-            </p>
-          )}
 
           {cancelPending && subscription.renewalDate && (
             <p className="mt-3 rounded-lg bg-amber-50 dark:bg-amber-950 px-3 py-2 text-sm text-amber-800 dark:text-amber-400">
@@ -113,18 +99,7 @@ export default async function SettingsPage() {
           )}
 
           <div className="mt-4 flex flex-wrap gap-2">
-            {!isPro && (
-              <>
-                <LinkButton href="/pricing">Upgrade to Pro</LinkButton>
-                {subscription.status === "FREE" && !subscription.trialEndsAt && (
-                  <form action={startProTrialAction}>
-                    <Button type="submit" variant="outline">
-                      Start 7-Day Free Trial
-                    </Button>
-                  </form>
-                )}
-              </>
-            )}
+            {!isPro && <LinkButton href="/pricing">Upgrade to Pro</LinkButton>}
             {cancelPending && <LinkButton href="/pricing">Resubscribe</LinkButton>}
             {subscription.externalCustomerId && (
               <form action={manageBillingAction}>

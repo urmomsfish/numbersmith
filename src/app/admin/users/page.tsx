@@ -102,7 +102,7 @@ export default async function AdminUsersPage({
                       defaultValue={u.subscription?.status ?? "FREE"}
                       className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-2 py-1 text-xs"
                     >
-                      {["FREE", "PRO", "TRIAL", "CANCELED"].map((s) => (
+                      {["FREE", "PRO", "CANCELED"].map((s) => (
                         <option key={s} value={s}>
                           {s}
                         </option>

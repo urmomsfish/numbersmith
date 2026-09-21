@@ -66,6 +66,9 @@ export type DailyChallengeTrack =
 
 export type StudyPlanTaskType = "LESSON" | "PRACTICE" | "TIMED_SET" | "SIMULATION" | "REVIEW";
 
+/** TRIAL is retained because it is still a value in the database enum, not
+ * because the product can produce one — free trials were removed. Taking it out
+ * of the enum would need a migration for no behavioural gain. */
 export type SubscriptionStatus = "FREE" | "PRO" | "TRIAL" | "CANCELED";
 export type SubscriptionPlan = "MONTHLY" | "YEARLY";
 

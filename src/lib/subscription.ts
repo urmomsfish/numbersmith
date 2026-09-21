@@ -8,6 +8,11 @@ import type { Subscription } from "@/generated/prisma";
  * end date at all (a manually granted comp account, which never lapses). */
 function accessValidThrough(sub: Subscription): Date | null {
   switch (sub.status as SubscriptionStatus) {
+    // Free trials were removed, and nothing in the product can write TRIAL any
+    // more — but the value is still in the database enum, so this stays as the
+    // correct reading of any row that predates the removal or is set by hand.
+    // Dropping it would silently fall through to `default` and hand that row
+    // permanent Free, which is a worse failure than a branch that never runs.
     case "TRIAL":
       return sub.trialEndsAt;
     case "PRO":

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LegalPage, Section, Bullets } from "../legal-page";
-import { PRO_PRICING, TRIAL_DAYS } from "@/lib/pricing";
+import { PRO_PRICING } from "@/lib/pricing";
 import { FREE_DAILY_PROBLEM_LIMIT } from "@/lib/subscription";
 import { LEGAL } from "@/lib/legal";
 
@@ -23,9 +23,8 @@ export default function RefundsPage() {
         <p>
           You do not need to pay to find out whether NumberSmith works for you. The free plan
           includes the complete placement test, your rating and skill breakdown, a personalised
-          training plan, and {FREE_DAILY_PROBLEM_LIMIT} problems a day — indefinitely. We also offer
-          an optional {TRIAL_DAYS}-day Pro trial that ends on its own and never converts into a
-          charge.
+          training plan, and {FREE_DAILY_PROBLEM_LIMIT} problems a day — indefinitely, with no card
+          and no time limit.
         </p>
       </Section>
 

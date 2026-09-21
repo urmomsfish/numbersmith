@@ -40,7 +40,7 @@ export default async function AdminOverviewPage() {
   ]);
 
   const statusCounts = new Map(subscriptions.map((s) => [s.status, s._count]));
-  const proCount = (statusCounts.get("PRO") ?? 0) + (statusCounts.get("TRIAL") ?? 0);
+  const proCount = statusCounts.get("PRO") ?? 0;
   const freeCount = statusCounts.get("FREE") ?? 0;
   const canceledCount = statusCounts.get("CANCELED") ?? 0;
   const totalSubs = proCount + freeCount + canceledCount;
@@ -93,7 +93,6 @@ export default async function AdminOverviewPage() {
               {[
                 ["Free", freeCount, "slate"],
                 ["Pro", statusCounts.get("PRO") ?? 0, "brand"],
-                ["Trial", statusCounts.get("TRIAL") ?? 0, "ember"],
                 ["Canceled", canceledCount, "slate"],
               ].map(([label, count, tone]) => (
                 <div key={label as string}>

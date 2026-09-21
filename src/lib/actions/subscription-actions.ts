@@ -5,9 +5,14 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { PLAN_DURATION_DAYS, TRIAL_DAYS } from "@/lib/pricing";
+import { PLAN_DURATION_DAYS } from "@/lib/pricing";
 import { stripe, isStripeConfigured, priceIdForPlan, appBaseUrl } from "@/lib/stripe";
 
+/** Elapsed time, deliberately — a subscription period is a duration, so a DST
+ * transition inside one must not lengthen or shorten it. Do not reuse this for
+ * anything that has to land on a particular local day: streak boundaries are
+ * midnight US Pacific and are read from the date in that zone, never derived by
+ * offset arithmetic. */
 function addDays(date: Date, days: number) {
   return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
 }
@@ -75,34 +80,6 @@ export async function activateProAction(formData: FormData) {
 
   if (!session.url) throw new Error("Stripe did not return a Checkout URL");
   redirect(session.url);
-}
-
-/** The trial never charges, so it needs no payment provider involvement. */
-export async function startProTrialAction() {
-  const user = await requireUser();
-
-  const existing = await prisma.subscription.findUnique({ where: { userId: user.id } });
-  if (existing?.trialEndsAt) redirect("/pricing");
-
-  const now = new Date();
-  await prisma.subscription.upsert({
-    where: { userId: user.id },
-    update: {
-      status: "TRIAL",
-      startDate: now,
-      trialEndsAt: addDays(now, TRIAL_DAYS),
-      canceledAt: null,
-    },
-    create: {
-      userId: user.id,
-      status: "TRIAL",
-      startDate: now,
-      trialEndsAt: addDays(now, TRIAL_DAYS),
-    },
-  });
-
-  revalidatePath("/settings");
-  redirect("/dashboard?trial=1");
 }
 
 /** Cancelling stops the next renewal; it does not revoke the period already

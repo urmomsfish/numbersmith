@@ -185,7 +185,30 @@ export async function togglePublishAction(formData: FormData) {
 }
 
 const roleSchema = z.enum(["STUDENT", "PARENT", "TEACHER", "ADMIN"]);
-const subStatusSchema = z.enum(["FREE", "PRO", "TRIAL", "CANCELED"]);
+const subStatusSchema = z.enum(["FREE", "PRO", "CANCELED"]);
+
+/** The date fields that have to move with a status when an admin sets one by
+ * hand. Writing `status` alone leaves the row describing two different things
+ * at once — which is how one account ended up FREE with a trial window still
+ * open: no Pro access, and no way back to the trial it had just been given.
+ *
+ * FREE therefore clears everything, including `trialEndsAt`. That column is
+ * vestigial now that trials are gone, but a stale date left behind would still
+ * misreport when the account last changed hands.
+ *
+ * PRO deliberately keeps a null `renewalDate`: that open-ended grant is the
+ * documented way to comp an account, and is the one case where null means
+ * "never lapses" on purpose. */
+function subscriptionDatesFor(status: z.infer<typeof subStatusSchema>, now: Date) {
+  switch (status) {
+    case "FREE":
+      return { plan: null, trialEndsAt: null, canceledAt: null };
+    case "CANCELED":
+      return { canceledAt: now };
+    case "PRO":
+      return { canceledAt: null };
+  }
+}
 
 export async function updateUserAction(formData: FormData) {
   const admin = await requireAdmin();
@@ -199,10 +222,11 @@ export async function updateUserAction(formData: FormData) {
   }
 
   await prisma.user.update({ where: { id: userId }, data: { role: role.data } });
+  const dates = subscriptionDatesFor(status.data, new Date());
   await prisma.subscription.upsert({
     where: { userId },
-    update: { status: status.data },
-    create: { userId, status: status.data },
+    update: { status: status.data, ...dates },
+    create: { userId, status: status.data, ...dates },
   });
 
   revalidatePath("/admin/users");
