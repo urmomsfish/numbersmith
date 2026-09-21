@@ -40,7 +40,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
       <div className="mt-4 flex flex-wrap items-center gap-2">
         <Badge tone="brand">{lesson.topic.name}</Badge>
         <Badge tone="slate">{difficultyLabel(lesson.difficulty)}</Badge>
-        {lesson.isPremium && <Badge tone="warning">⭐ Pro</Badge>}
+        {lesson.isPremium && <Badge tone="warning">Pro</Badge>}
       </div>
       <h1 className="mt-3 text-2xl font-bold text-slate-900 dark:text-slate-50 sm:text-3xl">{lesson.title}</h1>
 

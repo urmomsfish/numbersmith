@@ -42,7 +42,7 @@ export default async function VideoLessonPage({ params }: { params: Promise<{ sl
         <Badge tone="brand">{lesson.topic.name}</Badge>
         <Badge tone="slate">{difficultyLabel(lesson.difficulty)}</Badge>
         <Badge tone="slate">{lesson.durationMinutes} min</Badge>
-        <Badge tone="warning">⭐ Pro</Badge>
+        <Badge tone="warning">Pro</Badge>
       </div>
       <h1 className="mt-3 text-2xl font-bold text-slate-900 dark:text-slate-50 sm:text-3xl">{lesson.title}</h1>
       <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-300">{lesson.summary}</p>

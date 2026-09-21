@@ -31,7 +31,7 @@ export default async function VideoLessonsPage() {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Video Lessons</h1>
-            <Badge tone="warning">⭐ Pro</Badge>
+            <Badge tone="warning">Pro</Badge>
           </div>
           <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
             Animated, narration-free walkthroughs — diagrams and worked examples you step through at your own pace.
@@ -83,7 +83,7 @@ export default async function VideoLessonsPage() {
                     <div className="flex items-start justify-between gap-2">
                       <h3 className="text-sm font-bold text-slate-900 dark:text-slate-50">{lesson.title}</h3>
                       {!isPro ? (
-                        <Badge tone="warning">⭐ Pro</Badge>
+                        <Badge tone="warning">Pro</Badge>
                       ) : p?.completed ? (
                         <Badge tone="success">Done</Badge>
                       ) : null}

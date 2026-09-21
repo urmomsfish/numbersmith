@@ -146,7 +146,7 @@ export default async function PricingPage({
             {/* Free */}
             <div className="flex flex-col rounded-2xl border border-slate-200 dark:border-slate-700 bg-card p-7">
               <div className="flex items-center gap-2">
-                <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">🆓 NumberSmith Free</h2>
+                <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">NumberSmith Free</h2>
                 {!isPro && user && <Badge tone="slate">Current plan</Badge>}
               </div>
               <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
@@ -186,7 +186,7 @@ export default async function PricingPage({
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">⭐ NumberSmith Pro</h2>
+                <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">NumberSmith Pro</h2>
                 {isPro && <Badge tone="brand">Current plan</Badge>}
               </div>
               <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">

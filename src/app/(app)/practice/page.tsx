@@ -95,7 +95,7 @@ export default async function PracticePage({
                   <Badge tone="brand">{p.topic.name}</Badge>
                   <Badge tone="slate">{difficultyLabel(p.difficulty)}</Badge>
                   {p.competition && <Badge tone="ember">{p.competition.shortName}</Badge>}
-                  {locked && <Badge tone="warning">⭐ Pro</Badge>}
+                  {locked && <Badge tone="warning">Pro</Badge>}
                 </div>
                 <p className="mt-3 line-clamp-3 text-sm text-slate-600 dark:text-slate-300">{p.question}</p>
               </div>

@@ -73,12 +73,12 @@ export default async function SettingsPage() {
             <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-500">Subscription</h2>
             <Badge tone={cancelPending ? "warning" : isPro ? "brand" : "slate"}>
               {cancelPending
-                ? "⭐ Pro — ending"
+                ? "Pro — ending"
                 : subscription.status === "TRIAL"
-                  ? "⭐ Pro Trial"
+                  ? "Pro Trial"
                   : isPro
-                    ? "⭐ NumberSmith Pro"
-                    : "🆓 NumberSmith Free"}
+                    ? "NumberSmith Pro"
+                    : "NumberSmith Free"}
             </Badge>
           </div>
 

@@ -70,7 +70,7 @@ export default async function LessonsPage() {
                     <div className="flex items-start justify-between gap-2">
                       <h3 className="text-sm font-bold text-slate-900 dark:text-slate-50">{lesson.title}</h3>
                       {locked ? (
-                        <Badge tone="warning">⭐ Pro</Badge>
+                        <Badge tone="warning">Pro</Badge>
                       ) : p?.completed ? (
                         <Badge tone="success">Done</Badge>
                       ) : null}
