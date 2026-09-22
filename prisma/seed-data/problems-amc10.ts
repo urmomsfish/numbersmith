@@ -52,8 +52,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A shirt's price is discounted 20%, and then the sale price is discounted an additional 15%. What single percent discount, applied to the original price, gives the same final price?",
     format: "MULTIPLE_CHOICE",
-    choices: ["32%", "35%", "30%", "34%", "28%"],
-    answer: "A",
+    choices: ["28%", "29%", "30%", "32%", "34%"],
+    answer: "D",
     solution:
       "Applying both discounts multiplies the original price by 0.80 × 0.85 = 0.68, so the final price is 68% of the original — a 32% discount overall.",
     hints: [
@@ -174,8 +174,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-12",
     question: "A rectangular banner has side lengths x + p and x + q, where p and q are positive integers with pq = 36. Multiplied out, its area is x² + bx + 36. What is the largest possible value of b?",
     format: "MULTIPLE_CHOICE",
-    choices: ["15", "20", "25", "37", "36"],
-    answer: "D",
+    choices: ["15", "20", "25", "36", "37"],
+    answer: "E",
     solution: "Expanding gives b = p + q while pq = 36. The sum is largest when the factors are farthest apart, at p = 1 and q = 36, giving b = 37.",
     hints: ["Multiply out (x+p)(x+q) to see what b equals in terms of p and q.", "Among factor pairs of 36, the most lopsided pair has the biggest sum."],
     difficulty: 5,
@@ -227,8 +227,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-16",
     question: "A tile shop sells tiles shaped like regular polygons. One style has a corner angle 15 degrees larger than the corner angle of its regular hexagonal tile. How many sides does that style have?",
     format: "MULTIPLE_CHOICE",
-    choices: ["7", "8", "9", "10", "12"],
-    answer: "B",
+    choices: ["4", "6", "7", "8", "9"],
+    answer: "D",
     solution: "A regular hexagon's interior angle is 120 degrees, so this tile's is 135 degrees. From (n−2)·180/n = 135, we get 180n − 360 = 135n, so 45n = 360 and n = 8.",
     hints: ["Find the hexagon's interior angle first, then add 15.", "Set the regular-polygon interior angle formula equal to that value and solve for n."],
     difficulty: 6,
@@ -263,8 +263,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-19",
     question: "A gardener places a marker at fence post p and also at posts p + 2 and p + 6, but only when all three of those post numbers are prime and p is less than 20. What is the sum of all values of p she uses?",
     format: "MULTIPLE_CHOICE",
-    choices: ["28", "33", "36", "39", "41"],
-    answer: "B",
+    choices: ["25", "27", "28", "30", "33"],
+    answer: "E",
     solution: "Testing primes below 20: p = 5 gives 5, 7, 11 (all prime); p = 11 gives 11, 13, 17 (all prime); p = 17 gives 17, 19, 23 (all prime). The others fail, so the sum is 5 + 11 + 17 = 33.",
     hints: ["Test each prime below 20 one at a time.", "Check both p + 2 and p + 6 before accepting a value."],
     difficulty: 6,
@@ -275,8 +275,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-20",
     question: "A culture starts with 1 organism and triples every hour. After 100 hours the organisms are sorted into groups of 13, making as many full groups as possible. How many organisms are left over?",
     format: "MULTIPLE_CHOICE",
-    choices: ["1", "3", "9", "10", "12"],
-    answer: "B",
+    choices: ["3", "5", "9", "10", "12"],
+    answer: "A",
     solution: "After 100 hours there are 3¹⁰⁰ organisms. Since 3³ = 27 leaves remainder 1 upon division by 13, the remainders cycle with period 3. As 100 = 3(33) + 1, the remainder matches that of 3¹, which is 3.",
     hints: ["Compute the remainders of 3, 9, 27, 81, ... upon division by 13 and find the repeating cycle.", "Divide 100 by the cycle length and use the remainder."],
     difficulty: 6,
@@ -333,8 +333,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-24",
     question: "A rectangular plot has a perimeter of 16 meters, and the squares built on its length and its width have areas totaling 34 square meters. What is the area of the plot, in square meters?",
     format: "MULTIPLE_CHOICE",
-    choices: ["10", "12", "15", "17", "20"],
-    answer: "C",
+    choices: ["10", "12", "13", "15", "20"],
+    answer: "D",
     solution: "The length and width sum to 8, and their squares sum to 34. Since (a+b)² = a² + b² + 2ab, we get 64 = 34 + 2ab, so ab = 15 square meters.",
     hints: ["The perimeter gives you the sum of the two dimensions.", "Expand the square of that sum to bring in the product you want."],
     difficulty: 7,
@@ -357,8 +357,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-26",
     question: "A triangular sail has a horizontal seam running parallel to its bottom edge. The seam cuts the left edge into an upper piece 4 feet long and a lower piece 6 feet long. The small triangle above the seam has an area of 8 square feet. What is the area, in square feet, of the four-sided piece below the seam?",
     format: "MULTIPLE_CHOICE",
-    choices: ["32", "36", "40", "42", "45"],
-    answer: "D",
+    choices: ["32", "36", "39", "40", "42"],
+    answer: "E",
     solution: "The small triangle is similar to the whole sail with ratio 4/10 = 2/5, so the whole sail has area 8 ÷ (2/5)² = 8 ÷ (4/25) = 50 square feet. The piece below the seam is 50 − 8 = 42 square feet.",
     hints: ["The seam being parallel to the bottom makes the top triangle similar to the whole sail.", "Compare the left edges to get the ratio, then square it to compare areas."],
     difficulty: 7,
@@ -410,8 +410,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-30",
     question: "A bag holds tiles numbered 1 through 30, one of each. How many tiles must you draw to be certain that two of the drawn numbers differ by exactly 5?",
     format: "MULTIPLE_CHOICE",
-    choices: ["11", "13", "15", "16", "18"],
-    answer: "D",
+    choices: ["11", "13", "14", "15", "16"],
+    answer: "E",
     solution: "Sort the numbers into 5 chains by remainder mod 5, each of length 6, such as 1, 6, 11, 16, 21, 26. Within a chain, neighbors differ by 5, so the largest selection avoiding a difference of 5 takes every other entry: 3 per chain, or 15 in all. Drawing a 16th tile forces two numbers differing by 5.",
     hints: ["Group the numbers so that two numbers differing by 5 always land in the same group.", "Find the largest possible draw with no such pair, then add one."],
     difficulty: 8,
@@ -422,8 +422,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-31",
     question: "A caterer buys small trays costing $5 each and large trays costing $8 each, spending exactly $200 and buying at least one of each size. In how many different ways can this be done?",
     format: "MULTIPLE_CHOICE",
-    choices: ["3", "4", "5", "6", "7"],
-    answer: "B",
+    choices: ["1", "2", "3", "4", "5"],
+    answer: "D",
     solution: "With x small and y large trays, 5x + 8y = 200. Then x = (200 − 8y)/5 requires 8y to be a multiple of 5, so y is a multiple of 5. With y < 25 to keep x positive, y = 5, 10, 15, 20 give x = 32, 24, 16, 8. That is 4 ways.",
     hints: ["Write the spending equation and solve for one variable.", "Divisibility forces one of the two counts to be a multiple of 5."],
     difficulty: 8,
@@ -477,8 +477,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A jacket originally costs $80. It is marked up 25%, and then the marked-up price is discounted 20% during a sale. What is the final sale price?",
     format: "MULTIPLE_CHOICE",
-    choices: ["$80", "$84", "$88", "$92", "$96"],
-    answer: "A",
+    choices: ["$64", "$68", "$72", "$76", "$80"],
+    answer: "E",
     solution:
       "The markup multiplies the price by 1.25, giving 80 × 1.25 = $100. The discount then multiplies by 0.80, giving 100 × 0.80 = $80. (In general, a 25% increase followed by a 20% decrease multiplies the price by 1.25 × 0.80 = 1, returning to the original price.)",
     hints: [
@@ -528,8 +528,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "One printer prints 15 pages per minute, and a second printer prints 10 pages per minute. Working together, how many minutes do the two printers take to print 150 pages?",
     format: "MULTIPLE_CHOICE",
-    choices: ["5", "6", "7", "8", "9"],
-    answer: "B",
+    choices: ["3", "4", "5", "6", "7"],
+    answer: "D",
     solution:
       "Working together, the printers print 15 + 10 = 25 pages per minute. To print 150 pages takes 150/25 = 6 minutes.",
     hints: [
@@ -544,8 +544,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-39",
     question: "A gym's lockers are numbered 1 through 49. Every locker whose number is a multiple of 3 or a multiple of 4 is assigned to the swim team. How many lockers does the swim team get?",
     format: "MULTIPLE_CHOICE",
-    choices: ["24", "25", "26", "27", "28"],
-    answer: "A",
+    choices: ["20", "21", "22", "23", "24"],
+    answer: "E",
     solution: "There are ⌊49/3⌋ = 16 multiples of 3 and ⌊49/4⌋ = 12 multiples of 4. Lockers counted twice are multiples of 12, of which there are ⌊49/12⌋ = 4. So the total is 16 + 12 − 4 = 24.",
     hints: ["Count each kind of multiple separately.", "Lockers that are multiples of both get counted twice — subtract them once."],
     difficulty: 4,
@@ -592,8 +592,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-43",
     question: "On a city map the library sits at (1, 2) and the stadium sits at (7, 10), where each unit is one kilometer. How many kilometers apart are they in a straight line?",
     format: "MULTIPLE_CHOICE",
-    choices: ["10", "11", "12", "13", "14"],
-    answer: "A",
+    choices: ["6", "7", "8", "9", "10"],
+    answer: "E",
     solution: "The horizontal gap is 6 and the vertical gap is 8, so the distance is √(6² + 8²) = √100 = 10 kilometers.",
     hints: ["Find the horizontal and vertical gaps separately.", "Those gaps are the legs of a right triangle whose hypotenuse is the distance."],
     difficulty: 4,
@@ -604,8 +604,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-44",
     question: "A deck contains one card for each whole number from 41 through 59. How many of those cards show a prime number?",
     format: "MULTIPLE_CHOICE",
-    choices: ["3", "5", "6", "7", "8"],
-    answer: "B",
+    choices: ["2", "3", "4", "5", "7"],
+    answer: "D",
     solution: "Testing each value from 41 to 59, the primes are 41, 43, 47, 53, and 59 — five cards.",
     hints: ["Only check divisibility by 2, 3, 5, and 7, since 8² exceeds 59.", "Work through the range in order so none is missed."],
     difficulty: 4,
@@ -629,8 +629,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A restaurant offers 4 appetizers, 6 main courses, and 3 desserts. How many different 3-course meals (one of each course) can be ordered?",
     format: "MULTIPLE_CHOICE",
-    choices: ["72", "78", "84", "90", "96"],
-    answer: "A",
+    choices: ["48", "54", "60", "66", "72"],
+    answer: "E",
     solution: "By the multiplication principle, the number of meals is 4 × 6 × 3 = 72.",
     hints: [
       "Each course is chosen independently of the others.",
@@ -685,8 +685,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-50",
     question: "A startup's balance, in thousands of dollars, t months after launch is modeled by t² − 5t − 24, where negative t refers to months before launch. The balance is exactly zero at two such times. What is the sum of the absolute values of those two times?",
     format: "MULTIPLE_CHOICE",
-    choices: ["5", "11", "13", "16", "19"],
-    answer: "B",
+    choices: ["3", "5", "6", "9", "11"],
+    answer: "E",
     solution: "Factoring, t² − 5t − 24 = (t − 8)(t + 3), so the zeros are t = 8 and t = −3. The sum of absolute values is 8 + 3 = 11.",
     hints: ["Factor the quadratic to find where it equals zero.", "Take the size of each root, ignoring sign, then add."],
     difficulty: 4,
@@ -709,8 +709,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-52",
     question: "Two plots of land meet at a shared corner along a straight boundary wall, so their two corner angles together form a straight line. One angle is 30 degrees more than twice the other. What is the measure, in degrees, of the smaller angle?",
     format: "MULTIPLE_CHOICE",
-    choices: ["50", "55", "60", "65", "70"],
-    answer: "A",
+    choices: ["30", "35", "40", "45", "50"],
+    answer: "E",
     solution: "The angles sum to 180 degrees. If the smaller is x, the other is 2x + 30, so x + (2x + 30) = 180, giving 3x = 150 and x = 50 degrees.",
     hints: ["Angles forming a straight line add to 180 degrees.", "Write the larger angle in terms of the smaller one before solving."],
     difficulty: 4,
@@ -722,8 +722,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A recipe requires flour, sugar, and butter in the ratio 5:2:3 by weight. If the baker uses 6 more cups of flour than butter, how many cups of sugar does he use?",
     format: "MULTIPLE_CHOICE",
-    choices: ["6", "7", "8", "9", "10"],
-    answer: "A",
+    choices: ["2", "3", "4", "5", "6"],
+    answer: "E",
     solution:
       "Let the amounts be 5k, 2k, 3k cups. Since flour exceeds butter by 6 cups, 5k − 3k = 6, so 2k = 6 and k = 3. The sugar amount is 2k = 6 cups.",
     hints: [
@@ -762,8 +762,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-56",
     question: "A sample of one material triples in mass every hour and is measured after 2x − 1 hours. A sample of a second material grows 27-fold every hour and is measured after x − 2 hours. Both measurements give the same multiple of the starting mass. What is the value of x?",
     format: "MULTIPLE_CHOICE",
-    choices: ["5", "6", "7", "8", "9"],
-    answer: "A",
+    choices: ["1", "2", "3", "4", "5"],
+    answer: "E",
     solution: "The two multiples are 3^(2x−1) and 27^(x−2) = 3^(3x−6). Setting the exponents equal, 2x − 1 = 3x − 6, so x = 5.",
     hints: ["Rewrite 27 as a power of 3 so both sides share a base.", "Equal powers with the same base force equal exponents."],
     difficulty: 5,
@@ -774,8 +774,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-57",
     question: "A square plot of land with side x meters sits beside a rectangular strip whose area is x square meters. Together they cover 42 square meters. What is the largest possible value of x?",
     format: "MULTIPLE_CHOICE",
-    choices: ["5", "6", "7", "8", "9"],
-    answer: "B",
+    choices: ["3", "4", "5", "6", "7"],
+    answer: "D",
     solution: "The total area is x² + x = 42, so x² + x − 42 = 0, which factors as (x − 6)(x + 7) = 0. The solutions are 6 and −7, and the largest is 6.",
     hints: ["Write an equation for the combined area.", "Move everything to one side and factor the quadratic."],
     difficulty: 5,
@@ -799,8 +799,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A code consists of 3 distinct letters chosen from {A, B, C, D, E, F}, followed by 2 distinct digits chosen from {1, 2, 3, 4, 5}. How many such codes are possible?",
     format: "MULTIPLE_CHOICE",
-    choices: ["1800", "2000", "2200", "2400", "2600"],
-    answer: "D",
+    choices: ["2200", "2400", "2600", "2800", "3000"],
+    answer: "B",
     solution:
       "The three distinct letters can be arranged in 6 × 5 × 4 = 120 ways, and the two distinct digits in 5 × 4 = 20 ways. By the multiplication principle, the total number of codes is 120 × 20 = 2400.",
     hints: [
@@ -816,8 +816,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "How many ways can 4 different books be arranged on a shelf so that two specific books are not adjacent to each other?",
     format: "MULTIPLE_CHOICE",
-    choices: ["12", "14", "16", "18", "20"],
-    answer: "A",
+    choices: ["4", "6", "8", "10", "12"],
+    answer: "E",
     solution:
       "There are 4! = 24 total arrangements. Treating the two specific books as a single glued block gives 3! × 2 = 12 arrangements where they are adjacent. So the number of arrangements where they are not adjacent is 24 − 12 = 12.",
     hints: [
@@ -849,8 +849,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-62",
     question: "A charity drive raises $4 on its first day, and on each following day it raises 3 times what it raised the day before. How many dollars does it raise over the first 5 days in total?",
     format: "MULTIPLE_CHOICE",
-    choices: ["400", "444", "464", "484", "500"],
-    answer: "D",
+    choices: ["484", "500", "504", "524", "568"],
+    answer: "A",
     solution: "The daily amounts are 4, 12, 36, 108, and 324 dollars, totaling 484. Equivalently, 4(3⁵ − 1)/(3 − 1) = 4(242)/2 = 484.",
     hints: ["Write out the five daily amounts.", "Add them directly, or use the geometric series sum formula."],
     difficulty: 5,
@@ -886,8 +886,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A price increases by 10%, and then the new price increases by another 10%. If the final price is $968, what was the original price?",
     format: "MULTIPLE_CHOICE",
-    choices: ["$800", "$820", "$840", "$860", "$880"],
-    answer: "A",
+    choices: ["$720", "$740", "$760", "$780", "$800"],
+    answer: "E",
     solution:
       "Two successive 10% increases multiply the original price by 1.1 × 1.1 = 1.21. So the original price is 968/1.21 = $800.",
     hints: [
@@ -931,8 +931,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-68",
     question: "A prize of 60 identical coins is to be split evenly among some number of winners, where any number of winners that divides 60 exactly is allowed. What is the sum of all the possible per-winner amounts?",
     format: "MULTIPLE_CHOICE",
-    choices: ["168", "175", "182", "189", "196"],
-    answer: "A",
+    choices: ["140", "147", "154", "161", "168"],
+    answer: "E",
     solution: "The possible per-winner amounts are exactly the divisors of 60. Since 60 = 2²·3·5, their sum is (1+2+4)(1+3)(1+5) = 7 × 4 × 6 = 168.",
     hints: ["Each valid split corresponds to a divisor of 60.", "Factor 60 and use the product formula for the sum of its divisors."],
     difficulty: 5,
@@ -943,8 +943,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-69",
     question: "A gear train produces a total reduction ratio of 630, built entirely from gears whose tooth counts are prime numbers. What is the sum of the distinct prime tooth counts used?",
     format: "MULTIPLE_CHOICE",
-    choices: ["14", "17", "19", "21", "23"],
-    answer: "B",
+    choices: ["17", "19", "20", "21", "23"],
+    answer: "A",
     solution: "Factoring, 630 = 2 × 3² × 5 × 7. The distinct primes are 2, 3, 5, and 7, which sum to 17.",
     hints: ["Factor 630 completely into primes.", "Add each distinct prime only once, even if it appears twice."],
     difficulty: 5,
@@ -1003,8 +1003,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-74",
     question: "A designer is laying out a regular-polygon paving stone. Each of its interior corner angles measures 20 degrees more than 3 times the turn you make at each corner when walking once around its edge. How many sides does the stone have?",
     format: "MULTIPLE_CHOICE",
-    choices: ["6", "7", "8", "9", "10"],
-    answer: "D",
+    choices: ["8", "9", "10", "11", "12"],
+    answer: "B",
     solution: "The turn at each corner is the exterior angle e, and the interior angle is 180 − e. So 180 − e = 3e + 20, giving 4e = 160 and e = 40 degrees. Since the exterior angles total 360, the stone has 360/40 = 9 sides.",
     hints: ["The turn at each corner is the exterior angle, and interior plus exterior is 180 degrees.", "Walking all the way around turns through 360 degrees in total."],
     difficulty: 6,
@@ -1015,8 +1015,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-75",
     question: "Two cyclists ride along the same straight road. After x hours, the first is at position 2x − 3 kilometers from a marker and the second is at position −x + 9 kilometers from it. They are side by side at exactly one moment. What is the sum of that time, in hours, and that position, in kilometers?",
     format: "MULTIPLE_CHOICE",
-    choices: ["5", "6", "7", "8", "9"],
-    answer: "E",
+    choices: ["9", "10", "11", "12", "13"],
+    answer: "A",
     solution: "Setting 2x − 3 = −x + 9 gives 3x = 12, so x = 4 hours. The shared position is 2(4) − 3 = 5 kilometers. The sum is 4 + 5 = 9.",
     hints: ["Set the two position expressions equal to find when they meet.", "Substitute back to get the position, then add the two values."],
     difficulty: 6,
@@ -1051,8 +1051,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-78",
     question: "A culture starts with a single organism and multiplies sevenfold every hour. After 45 hours the organisms are arranged into rows of 11, as many complete rows as possible. How many organisms are left over?",
     format: "MULTIPLE_CHOICE",
-    choices: ["0", "1", "3", "7", "10"],
-    answer: "E",
+    choices: ["10", "13", "17", "19", "20"],
+    answer: "A",
     solution: "The count is 7⁴⁵, and we want its remainder upon division by 11. Since 7¹⁰ leaves remainder 1, the remainders repeat every 10 hours, and 45 leaves remainder 5 upon division by 10. Computing 7⁵ = 16807 = 11(1527) + 10, the leftover is 10.",
     hints: ["Find the repeating cycle of remainders of powers of 7 upon division by 11.", "Reduce the exponent 45 using that cycle length."],
     difficulty: 6,
@@ -1080,8 +1080,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A committee of 4 people is chosen from 5 juniors and 4 seniors and must include at least 2 seniors. How many such committees are possible?",
     format: "MULTIPLE_CHOICE",
-    choices: ["69", "72", "75", "78", "81"],
-    answer: "E",
+    choices: ["81", "84", "87", "90", "93"],
+    answer: "A",
     solution:
       "Count by cases on the number of seniors: 2 seniors and 2 juniors gives C(4,2)·C(5,2) = 6×10 = 60; 3 seniors and 1 junior gives C(4,3)·C(5,1) = 4×5 = 20; 4 seniors and 0 juniors gives C(4,4)·C(5,0) = 1. The total is 60 + 20 + 1 = 81.",
     hints: [
@@ -1124,8 +1124,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-83",
     question: "A triangular garden has a 14-meter base along a straight wall, and the garden covers 84 square meters. A post is placed on the wall 6 meters from one end of the base, and a straight path runs from that post to the garden's far corner. What is the area, in square meters, of the piece of garden between the path and the nearer end of the wall?",
     format: "MULTIPLE_CHOICE",
-    choices: ["12", "18", "24", "30", "36"],
-    answer: "E",
+    choices: ["36", "42", "48", "54", "60"],
+    answer: "A",
     solution: "Both pieces share the same height from the far corner down to the wall. Areas are therefore proportional to their bases, so the smaller piece has area 84 × (6/14) = 36 square meters.",
     hints: ["The two pieces have the same height measured from the far corner.", "Their areas are in the same ratio as the two parts of the base."],
     difficulty: 6,
@@ -1136,8 +1136,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-84",
     question: "Two sails have exactly the same triangular shape but different sizes, covering 50 and 128 square feet of canvas. The smaller sail is edged with 25 feet of rope around its border. How many feet of rope edge the larger sail?",
     format: "MULTIPLE_CHOICE",
-    choices: ["32", "35", "38", "40", "42"],
-    answer: "D",
+    choices: ["38", "40", "42", "45", "48"],
+    answer: "B",
     solution: "The ratio of areas is 128/50 = 64/25, so the ratio of corresponding lengths is √(64/25) = 8/5. The larger border is 25 × 8/5 = 40 feet.",
     hints: ["For similar figures, the area ratio is the square of the length ratio.", "Take the square root of the area ratio before scaling the border."],
     difficulty: 6,
@@ -1160,8 +1160,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-86",
     question: "A bakery sells 2 pastries on its first day and 5 on its second day. On every later day it sells as many pastries as the two previous days combined, plus one extra. How many pastries does it sell on the fifth day?",
     format: "MULTIPLE_CHOICE",
-    choices: ["15", "17", "19", "21", "23"],
-    answer: "E",
+    choices: ["23", "25", "27", "29", "31"],
+    answer: "A",
     solution: "Day 3 is 5 + 2 + 1 = 8, day 4 is 8 + 5 + 1 = 14, and day 5 is 14 + 8 + 1 = 23 pastries.",
     hints: ["Build the days up one at a time.", "Do not forget the extra pastry added each day."],
     difficulty: 6,
@@ -1209,8 +1209,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A pizza shop offers 5 toppings, and each topping is either included or not (no topping is used twice). How many different pizzas can be made using at least 1 but at most 3 toppings?",
     format: "MULTIPLE_CHOICE",
-    choices: ["20", "22", "25", "28", "31"],
-    answer: "C",
+    choices: ["22", "25", "28", "30", "31"],
+    answer: "B",
     solution:
       "The number of pizzas with exactly k toppings is C(5,k). Summing for k = 1, 2, 3: C(5,1) + C(5,2) + C(5,3) = 5 + 10 + 10 = 25.",
     hints: [
@@ -1283,8 +1283,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-95",
     question: "A mason lays 1 brick on the first row. For each later row, the number of bricks laid increases by 2 more than the increase used for the previous row, starting with an increase of 2 bricks from row 1 to row 2. How many bricks are in the 10th row?",
     format: "MULTIPLE_CHOICE",
-    choices: ["81", "85", "89", "91", "95"],
-    answer: "D",
+    choices: ["81", "85", "87", "89", "91"],
+    answer: "E",
     solution: "The increases from row to row are 2, 4, 6, ..., 18, which total 2(1+2+···+9) = 2(45) = 90. Starting from 1, row 10 has 1 + 90 = 91 bricks.",
     hints: ["List the nine increases that separate row 1 from row 10.", "Add them to the starting count of 1."],
     difficulty: 7,
@@ -1343,8 +1343,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-100",
     question: "A display shows only the final digit of a running total. A culture starts with 1 organism and multiplies sevenfold each hour. What digit does the display show after 2023 hours?",
     format: "MULTIPLE_CHOICE",
-    choices: ["0", "1", "3", "7", "9"],
-    answer: "C",
+    choices: ["3", "5", "6", "7", "9"],
+    answer: "A",
     solution: "The final digits of powers of 7 cycle 7, 9, 3, 1 with period 4. Since 2023 leaves remainder 3 upon division by 4, the digit matches that of 7³ = 343, which is 3.",
     hints: ["List the last digits of 7, 7², 7³, 7⁴ and find the repeating cycle.", "Divide 2023 by the cycle length and use the remainder."],
     difficulty: 7,
@@ -1355,8 +1355,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-101",
     question: "A locker uses a 4-digit code from 1000 to 9999. A code is valid only if all four digits are different and the code is an even number. How many valid codes are there?",
     format: "MULTIPLE_CHOICE",
-    choices: ["2240", "2260", "2280", "2296", "2320"],
-    answer: "D",
+    choices: ["2296", "2312", "2320", "2332", "2352"],
+    answer: "A",
     solution: "Split by the last digit. If it is 0 (1 choice), the leading digit has 9 options and the middle two have 8 and 7, giving 9·8·7 = 504. If it is 2, 4, 6, or 8 (4 choices), the leading digit has 8 options (not 0, not the last digit) and the middle two have 8 and 7, giving 4·8·8·7 = 1792. The total is 504 + 1792 = 2296.",
     hints: ["Handle the case of a final digit 0 separately from the other even final digits.", "A leading digit cannot be 0, which is why the two cases differ."],
     difficulty: 7,
@@ -1395,8 +1395,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-104",
     question: "Two lighthouses flash at regular intervals of a whole number of seconds. The two intervals add to 42 seconds, and the lighthouses flash together again after exactly 72 seconds. What is the greatest common divisor of the two intervals?",
     format: "MULTIPLE_CHOICE",
-    choices: ["2", "3", "4", "6", "9"],
-    answer: "D",
+    choices: ["3", "6", "8", "9", "10"],
+    answer: "B",
     solution: "The intervals sum to 42 with least common multiple 72. Testing pairs, 18 and 24 work: their lcm is 72 and their sum is 42. Their greatest common divisor is 6.",
     hints: ["Flashing together again after 72 seconds means the least common multiple is 72.", "Search pairs summing to 42 whose least common multiple is 72."],
     difficulty: 7,
@@ -1570,7 +1570,7 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-116",
     question: "A game awards a score equal to the product of all the whole numbers from 1 up to n. What is the smallest n whose score is divisible by 2025⁵?",
     format: "MULTIPLE_CHOICE",
-    choices: ["40", "45", "30", "50", "25"],
+    choices: ["40", "45", "50", "60", "65"],
     answer: "B",
     solution: "Since 2025 = 3⁴ · 5², we need 3²⁰ · 5¹⁰ to divide n!. The factors of 5 are scarcer: n = 45 gives ⌊45/5⌋ + ⌊45/25⌋ = 9 + 1 = 10, while n = 44 gives only 9. At n = 45 the factors of 3 number ⌊45/3⌋ + ⌊45/9⌋ + ⌊45/27⌋ = 15 + 5 + 1 = 21, which is enough. So n = 45.",
     hints: ["Factor 2025 into primes and raise it to the fifth power.", "Count the factors of 5 and of 3 in n! and find which prime runs out last."],
@@ -1612,8 +1612,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-119",
     question: "A club records how many new members join each month. Starting from the third month, the number joining equals the sum of the two previous months' numbers, and every month's number is a positive whole number. In the seventh month, 200 new members joined. How many different values are possible for the number who joined in the first month?",
     format: "MULTIPLE_CHOICE",
-    choices: ["3", "4", "5", "6", "2"],
-    answer: "B",
+    choices: ["2", "3", "4", "5", "6"],
+    answer: "C",
     solution: "Writing everything in terms of the first two months gives a₇ = 5a₁ + 8a₂ = 200. So 5a₁ = 200 − 8a₂, which forces a₂ to be a multiple of 5. With both counts positive, a₂ = 5, 10, 15, 20 give a₁ = 32, 24, 16, 8, so there are 4 possible values.",
     hints: ["Express the seventh month's count in terms of the first two months.", "Divisibility forces the second month to be a multiple of 5, and both counts must stay positive."],
     difficulty: 7,
@@ -1636,8 +1636,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-121",
     question: "Six guests numbered 1 through 6 are seated in six chairs numbered 1 through 6, one guest per chair. No guest may sit in the chair matching their own number, and for each i from 1 to 5, guest i may not sit in chair i + 1 either. In how many ways can the guests be seated?",
     format: "MULTIPLE_CHOICE",
-    choices: ["265", "96", "144", "120", "84"],
-    answer: "B",
+    choices: ["96", "108", "120", "144", "265"],
+    answer: "A",
     solution: "This counts permutations avoiding both a_i = i and a_i = i + 1, a total of 11 forbidden positions. Inclusion-exclusion over these forbidden placements, which form two disjoint diagonals, yields 96 valid seatings.",
     hints: ["Model the forbidden placements as marked squares on a 6 by 6 board.", "Use inclusion-exclusion, counting ways to place k non-attacking markers on the forbidden squares."],
     difficulty: 8,
@@ -1648,8 +1648,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     slug: "amc10-122",
     question: "A counter displays only the last two digits of a number. A culture starts with one organism and multiplies sevenfold each hour, running for 7⁷ hours. What two-digit value does the counter display?",
     format: "MULTIPLE_CHOICE",
-    choices: ["7", "49", "43", "1", "93"],
-    answer: "C",
+    choices: ["43", "49", "79", "85", "93"],
+    answer: "A",
     solution: "We want 7^(7⁷) modulo 100. The powers of 7 repeat modulo 100 with period 4, since 7⁴ = 2401 leaves remainder 1. Now 7⁷ leaves remainder 3 upon division by 4, so the answer matches 7³ = 343, which leaves 43.",
     hints: ["Find how often the last two digits of powers of 7 repeat.", "Reduce the giant exponent 7⁷ using that period."],
     difficulty: 8,
@@ -1679,8 +1679,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "Each of the nine unit squares of a 3×3 grid is colored red or blue. How many of the 512 colorings contain no 2×2 block of four squares that are all the same color?",
     format: "MULTIPLE_CHOICE",
-    choices: ["417", "336", "322", "320", "256"],
-    answer: "C",
+    choices: ["322", "324", "336", "388", "417"],
+    answer: "A",
     solution:
       "There are four 2×2 blocks (upper-left, upper-right, lower-left, lower-right). For each block B, let A_B be the set of colorings in which B is monochromatic; |A_B| = 2 (the block's color) × 2⁵ (the other five cells) = 64. Use inclusion–exclusion. Singles: 4 · 64 = 256. Pairs: two blocks overlap either in two cells (horizontally or vertically adjacent blocks, 4 such pairs) or in one cell (the two diagonal pairs, 2 such pairs). If both blocks are monochromatic and they share at least one cell, they must share the same color, so their union of 6 cells (adjacent pair) or 7 cells (diagonal pair) is one color: adjacent pairs give 2 · 2³ = 16 each, diagonal pairs give 2 · 2² = 8 each. Pair total: 4 · 16 + 2 · 8 = 80. Triples: any three of the four blocks overlap pairwise in a connected way, so all are forced to the same color, and their union always covers 8 of the 9 cells (it misses exactly the corner of the one omitted block). That leaves 2 · 2¹ = 4 colorings each, and there are 4 triples: 16. Quadruple: all nine cells one color, 2 colorings. Inclusion–exclusion gives |A₁ ∪ … ∪ A₄| = 256 − 80 + 16 − 2 = 190, so the answer is 512 − 190 = 322. An exhaustive check of all 512 colorings confirms 322.",
     hints: [
@@ -1767,8 +1767,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A computer science class is studying how the number 2024 looks when written in different bases. A student is asked to find every base b for which the base-b representation of 2024 has exactly four digits and ends in the digit 0. She checks every base and writes down all the values of b that work. What is the sum of the bases on her list?",
     format: "MULTIPLE_CHOICE",
-    choices: ["19", "22", "23", "30", "31"],
-    answer: "A",
+    choices: ["7", "8", "15", "16", "19"],
+    answer: "E",
     solution:
       "Having exactly four digits in base b means b³ ≤ 2024 < b⁴. Since 6⁴ = 1296 < 2024 and 7⁴ = 2401 > 2024, we need b ≥ 7; and 12³ = 1728 ≤ 2024 while 13³ = 2197 > 2024, so b ≤ 12. Ending in 0 means b divides 2024 = 2³ · 11 · 23. Among b = 7, 8, 9, 10, 11, 12 the divisors of 2024 are 8 and 11, so the sum is 8 + 11 = 19.",
     hints: [
@@ -1786,8 +1786,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     diagram:
       "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 240\" width=\"320\" height=\"240\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"160.0,30.0 187.8,34.4 212.9,47.2 232.8,67.1 245.6,92.2 250.0,120.0 245.6,147.8 232.8,172.9 212.9,192.8 187.8,205.6 160.0,210.0 132.2,205.6 107.1,192.8 87.2,172.9 74.4,147.8 70.0,120.0 74.4,92.2 87.2,67.1 107.1,47.2 132.2,34.4\" /><text x=\"160\" y=\"126\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">each interior</text><text x=\"160\" y=\"142\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">angle 162°</text></svg>",
     format: "MULTIPLE_CHOICE",
-    choices: ["150", "170", "180", "189", "190"],
-    answer: "B",
+    choices: ["150", "151", "160", "170", "190"],
+    answer: "D",
     solution:
       "Each exterior angle is 180° − 162° = 18°, and the exterior angles of any polygon sum to 360°, so the polygon has 360/18 = 20 sides. A polygon with n vertices has n(n − 3)/2 diagonals, giving 20 · 17/2 = 170.",
     hints: [
@@ -1820,8 +1820,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A quilter is designing a square quilt block made of a 3-by-3 grid of smaller squares. Each of the nine small squares will be sewn in either red or blue fabric, and the two colors are otherwise interchangeable in the design. To keep the block from looking striped, the quilter requires that no horizontal row of three squares be all one color and that no vertical column of three squares be all one color. How many different blocks can she design?",
     format: "MULTIPLE_CHOICE",
-    choices: ["84", "90", "96", "102", "120"],
-    answer: "D",
+    choices: ["84", "102", "108", "114", "120"],
+    answer: "B",
     solution:
       "There are 2⁹ = 512 colorings in all. Use inclusion–exclusion on the six 'bad' events (a particular row or column monochromatic). Each single event has 2 · 2⁶ = 128 colorings; summing over six events gives 768. Pairs, triples and larger intersections must be counted with care — a row and a column always intersect, forcing their colors to agree. Carrying the alternating sum through leaves 102 colorings with no monochromatic row and no monochromatic column.",
     hints: [
@@ -1873,8 +1873,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "In a physics lab, two measured quantities x and y are known to satisfy x + y = 10 and x² + y² = 58. The next step of the analysis calls for the value of x³ + y³, but the lab's software reports only the two equations above and will not report x and y individually. What is the value of x³ + y³?",
     format: "MULTIPLE_CHOICE",
-    choices: ["340", "370", "400", "430", "460"],
-    answer: "B",
+    choices: ["280", "310", "340", "370", "400"],
+    answer: "D",
     solution:
       "From (x + y)² = x² + 2xy + y² we get 100 = 58 + 2xy, so xy = 21. Then x³ + y³ = (x + y)³ − 3xy(x + y) = 1000 − 3 · 21 · 10 = 1000 − 630 = 370.",
     hints: [
@@ -1892,8 +1892,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     diagram:
       "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 216\" width=\"340\" height=\"216\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"40,190 300,190 120,70\" /><line x1=\"120\" y1=\"70\" x2=\"120\" y2=\"190\" /><rect x=\"120\" y=\"178\" width=\"12\" height=\"12\" stroke-width=\"1.5\" /><text x=\"34\" y=\"204\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">A</text><text x=\"308\" y=\"204\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">B</text><text x=\"120\" y=\"62\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">C</text><text x=\"120\" y=\"206\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">D</text><text x=\"80\" y=\"206\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">4</text><text x=\"210\" y=\"206\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">9</text></svg>",
     format: "MULTIPLE_CHOICE",
-    choices: ["26", "30", "36", "39", "45"],
-    answer: "D",
+    choices: ["39", "42", "45", "48", "52"],
+    answer: "A",
     solution:
       "In a right triangle the altitude to the hypotenuse satisfies CD² = AD · DB, so CD² = 4 · 9 = 36 and CD = 6. The hypotenuse is AB = 4 + 9 = 13, so the area is ½ · 13 · 6 = 39 square feet.",
     hints: [
@@ -1998,8 +1998,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A checksum routine in a banking system computes the enormous number 3²⁰²⁴ and then stores only its last two digits. A security auditor needs to reproduce that stored value by hand, without any computer, in order to confirm the routine is behaving correctly. What are the last two digits of 3²⁰²⁴, written as a two-digit number?",
     format: "MULTIPLE_CHOICE",
-    choices: ["01", "21", "41", "61", "81"],
-    answer: "E",
+    choices: ["81", "101", "121", "141", "161"],
+    answer: "A",
     solution:
       "Work modulo 100. Powers of 3 satisfy 3¹⁰ = 59049 ≡ 49, so 3²⁰ ≡ 49² = 2401 ≡ 1 (mod 100). Thus the last two digits repeat with period 20. Since 2024 = 20 · 101 + 4, we get 3²⁰²⁴ ≡ 3⁴ = 81 (mod 100), so the last two digits are 81.",
     hints: [
@@ -2087,8 +2087,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A chemistry technician has 60 liters of a solution that is 40% acid by volume, the rest being water. The protocol for the next experiment calls for a solution that is exactly 50% acid by volume. To reach that concentration the technician will pour in some amount of pure acid; no water is added and nothing is removed. How many liters of pure acid must she add?",
     format: "MULTIPLE_CHOICE",
-    choices: ["6", "8", "10", "12", "15"],
-    answer: "D",
+    choices: ["6", "8", "9", "10", "12"],
+    answer: "E",
     solution:
       "The 60 liters contain 0.40 · 60 = 24 liters of acid. Adding x liters of pure acid gives 24 + x liters of acid in 60 + x liters of solution, and we need (24 + x)/(60 + x) = 1/2. Cross-multiplying gives 48 + 2x = 60 + x, so x = 12 liters.",
     hints: [
@@ -2104,8 +2104,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A theater sells two kinds of seats: balcony seats at $3 each and orchestra seats at $5 each. On one evening the box office took in exactly $300 from these seats, and at least one seat of each kind was sold. The manager wants to know how many different combinations of balcony and orchestra seat counts could have produced exactly $300. How many such combinations are there?",
     format: "MULTIPLE_CHOICE",
-    choices: ["15", "19", "20", "21", "25"],
-    answer: "B",
+    choices: ["19", "20", "21", "23", "25"],
+    answer: "A",
     solution:
       "We need 3x + 5y = 300 with x and y positive integers. Reducing mod 3 shows 5y ≡ 0, so y is a multiple of 3: write y = 3k. Then 3x + 15k = 300, so x = 100 − 5k. Positivity needs k ≥ 1 and 100 − 5k ≥ 1, that is k ≤ 19. So k runs from 1 to 19, giving 19 combinations.",
     hints: [
@@ -2174,8 +2174,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     diagram:
       "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 236\" width=\"340\" height=\"236\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><circle cx=\"170\" cy=\"120\" r=\"95\" /><line x1=\"88\" y1=\"72\" x2=\"252\" y2=\"168\" /><circle cx=\"170\" cy=\"120\" r=\"3\" fill=\"currentColor\" /><circle cx=\"138\" cy=\"102\" r=\"4\" fill=\"currentColor\" /><line x1=\"170\" y1=\"120\" x2=\"138\" y2=\"102\" stroke-dasharray=\"4 4\" stroke-opacity=\"0.6\" /><text x=\"132\" y=\"94\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">P</text><text x=\"178\" y=\"134\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">O</text><text x=\"106\" y=\"80\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">8</text><text x=\"200\" y=\"146\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">?</text></svg>",
     format: "MULTIPLE_CHOICE",
-    choices: ["12", "14", "16", "18", "20"],
-    answer: "D",
+    choices: ["16", "18", "20", "22", "24"],
+    answer: "B",
     solution:
       "By the power of a point, for any chord through P the product of the two pieces is the same, equal to r² − d² = 13² − 5² = 169 − 25 = 144. (This follows by applying the intersecting-chords theorem to the diameter through P, whose pieces are 13 − 5 = 8 and 13 + 5 = 18.) So the other piece has length 144/8 = 18 inches.",
     hints: [
@@ -2208,8 +2208,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A distributed system assigns each node a token by computing 2024²⁰²⁴ and keeping only the last three digits of the result. An engineer auditing the system must reproduce that three-digit value by hand. What are the last three digits of 2024²⁰²⁴, written as a three-digit number?",
     format: "MULTIPLE_CHOICE",
-    choices: ["024", "176", "376", "776", "976"],
-    answer: "D",
+    choices: ["376", "776", "976", "1376", "1528"],
+    answer: "B",
     solution:
       "Work modulo 1000 and split into 8 and 125. Since 2024 = 8 · 253, 2024²⁰²⁴ is divisible by 8, so it is ≡ 0 (mod 8). Modulo 125, 2024 ≡ 24, and 24 has order dividing φ(125) = 100, so 24²⁰²⁴ ≡ 24²⁴ (mod 125); computing gives 24²⁴ ≡ 26 (mod 125). The number that is ≡ 0 mod 8 and ≡ 26 mod 125 in the range 0–999 is 776.",
     hints: [
@@ -2244,8 +2244,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A raffle prints tickets numbered 1 through 1000. A ticket is called lucky when it satisfies both of the following: its number is not divisible by 2, by 3, or by 5; and its number is not a perfect square. The organizers want to know, before the drawing, exactly how many of the 1000 tickets are lucky. How many lucky tickets are there?",
     format: "MULTIPLE_CHOICE",
-    choices: ["234", "257", "266", "270", "275"],
-    answer: "B",
+    choices: ["234", "244", "248", "257", "275"],
+    answer: "D",
     solution:
       "By inclusion–exclusion, the count of numbers from 1 to 1000 divisible by none of 2, 3 and 5 is 1000 − 500 − 333 − 200 + 166 + 100 + 66 − 33 = 266. Among those, the perfect squares are the squares of numbers themselves divisible by none of 2, 3, 5: 1², 7², 11², 13², 17², 19², 23², 29², 31², which is 9 values (all at most 1000). So 266 − 9 = 257 lucky tickets.",
     hints: [
@@ -2299,8 +2299,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A teacher hands out 15 identical prize pencils to her 4 tutoring students. Every student must receive at least 2 pencils, and no student may receive more than 6. The students are distinguishable but the pencils are not. In how many ways can the 15 pencils be handed out?",
     format: "MULTIPLE_CHOICE",
-    choices: ["56", "68", "80", "96", "120"],
-    answer: "C",
+    choices: ["80", "92", "96", "104", "120"],
+    answer: "A",
     solution:
       "Give each student 2 pencils up front and let eᵢ be the extra pencils, so e₁ + e₂ + e₃ + e₄ = 7 with 0 ≤ eᵢ ≤ 4. Ignoring the upper bound, stars and bars gives C(7 + 3, 3) = C(10,3) = 120 solutions. Subtract those where some eᵢ ≥ 5: pick the offending student (4 ways) and hand them 5 extras, leaving 2 to distribute freely in C(5,3) = 10 ways, so 4 · 10 = 40 bad solutions. Two students cannot both exceed 4 (that would need 10 > 7). The count is 120 − 40 = 80.",
     hints: [
@@ -2317,8 +2317,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A bakery sells cookies only in sealed boxes of 7 and sealed crates of 11, and it never opens a box or a crate. A customer can buy any number of cookies that is a sum of 7s and 11s. What is the largest number of cookies a customer cannot buy?",
     format: "MULTIPLE_CHOICE",
-    choices: ["43", "47", "53", "59", "71"],
-    answer: "D",
+    choices: ["47", "59", "65", "71", "75"],
+    answer: "B",
     solution:
       "A total n is buyable exactly when n = 7x + 11y for some whole numbers x, y ≥ 0. Since 7 and 11 are relatively prime, only finitely many totals fail, and the largest one is 7·11 − 7 − 11 = 77 − 18 = 59. To check 59 directly, subtract crates of 11 and see whether a multiple of 7 is ever left: 59, 48, 37, 26, 15, 4 — none is a multiple of 7, so 59 is unbuyable. Everything larger works: the seven consecutive totals 60 = 7·7 + 11, 61 = 7·4 + 11·3, 62 = 7 + 11·5, 63 = 7·9, 64 = 7·6 + 11·2, 65 = 7·3 + 11·4 and 66 = 11·6 are all buyable, and adding boxes of 7 to those seven reaches every total beyond.",
     hints: [
@@ -2335,8 +2335,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "To save for a car, Nadia deposits $50 into an account in the first week, and in each later week she deposits $5 more than she did the week before. The account pays no interest. After how many weeks does the total amount she has deposited first exceed $5000?",
     format: "MULTIPLE_CHOICE",
-    choices: ["32", "35", "36", "37", "40"],
-    answer: "D",
+    choices: ["36", "37", "39", "40", "42"],
+    answer: "B",
     solution:
       "The weekly deposits form an arithmetic sequence 50, 55, 60, …, so after n weeks the total is (n/2)[2·50 + (n − 1)·5] = n(95 + 5n)/2. Setting this greater than 5000 gives 5n² + 95n − 10000 > 0, or n² + 19n − 2000 > 0, whose positive root is (−19 + √8361)/2 ≈ 36.2. Checking: after 36 weeks the total is 18 · 275 = $4950, still short, and after 37 weeks it is 37 · 140 = $5180. The answer is 37 weeks.",
     hints: [
@@ -2389,8 +2389,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A school's enrollment is somewhere between 600 and 700 students. When the students line up in rows of 7, three students are left over. When they line up in rows of 8, five are left over. When they line up in rows of 9, four are left over. How many students are enrolled?",
     format: "MULTIPLE_CHOICE",
-    choices: ["605", "613", "637", "653", "661"],
-    answer: "E",
+    choices: ["613", "637", "653", "661", "717"],
+    answer: "D",
     solution:
       "We want n with n ≡ 3 (mod 7), n ≡ 5 (mod 8), n ≡ 4 (mod 9). The last two conditions are both satisfied by n = 85, and since 8 and 9 are coprime they force n ≡ 85 ≡ 13 (mod 72). Writing n = 13 + 72k and reducing mod 7: 13 ≡ 6 and 72 ≡ 2, so 6 + 2k ≡ 3 (mod 7), giving 2k ≡ 4 and k ≡ 2 (mod 7). The smallest such n is 13 + 144 = 157, so n ≡ 157 (mod 504). Adding 504 gives 661, which lies between 600 and 700. (Check: 661 = 94·7 + 3 = 82·8 + 5 = 73·9 + 4.)",
     hints: [
@@ -2425,8 +2425,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A biologist starts a culture with 400 bacteria. The population triples every 5 hours, growing continuously so that after t hours there are 400 · 3^(t/5) bacteria. After how many whole hours does the population first exceed 100,000?",
     format: "MULTIPLE_CHOICE",
-    choices: ["21", "23", "25", "26", "28"],
-    answer: "D",
+    choices: ["21", "23", "24", "25", "26"],
+    answer: "E",
     solution:
       "We need 400 · 3^(t/5) > 100000, i.e. 3^(t/5) > 250. Taking logarithms, t/5 > log₃250 = ln 250 / ln 3 ≈ 5.5215/1.0986 ≈ 5.026, so t > 25.13. The first whole hour past that is t = 26. (Check: at t = 25 the population is 400 · 3⁵ = 97,200, just short, and at t = 26 it is about 102,700.)",
     hints: [
@@ -2443,8 +2443,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A shipping company requires that length plus girth be at most 108 inches. A box has a square cross-section of side s inches and length L inches, and its girth is the distance once around that square, namely 4s. Both s and L are whole numbers of inches. What is the largest possible volume of such a box, in cubic inches?",
     format: "MULTIPLE_CHOICE",
-    choices: ["10404", "11250", "11552", "11560", "11664"],
-    answer: "E",
+    choices: ["11664", "11768", "11776", "12078", "12924"],
+    answer: "A",
     solution:
       "To maximize volume the constraint should be tight: L = 108 − 4s, so V(s) = s²(108 − 4s) = 108s² − 4s³. Then V′(s) = 216s − 12s² = 12s(18 − s), which is zero at s = 18, and V increases before that and decreases after. Since 18 is already a whole number, take s = 18, L = 108 − 72 = 36, and V = 324 · 36 = 11,664 cubic inches. (Without calculus, testing s = 17, 18, 19 gives 11,560, 11,664 and 11,552.)",
     hints: [
@@ -2479,8 +2479,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A juice company blends a drink that is 30% real juice with a drink that is 75% real juice to produce 900 liters of a blend that is exactly 50% real juice. How many liters of the 75% drink does the company use?",
     format: "MULTIPLE_CHOICE",
-    choices: ["300", "360", "400", "450", "500"],
-    answer: "C",
+    choices: ["300", "350", "360", "400", "500"],
+    answer: "D",
     solution:
       "Let x be the liters of the 30% drink, so 900 − x liters are the 75% drink. The juice content gives 0.30x + 0.75(900 − x) = 0.50(900) = 450. Expanding: 675 − 0.45x = 450, so 0.45x = 225 and x = 500. Therefore the 75% drink accounts for 900 − 500 = 400 liters. (Check: 0.30·500 + 0.75·400 = 150 + 300 = 450.)",
     hints: [
@@ -2517,8 +2517,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A fan climbing to her seat must go up a flight of 12 stadium steps. Because she is carrying a full drink, she takes either 1 step or 2 steps at a time, and she never takes two 2-step strides in a row. Two climbs are different if the sequence of strides differs. In how many different ways can she climb the 12 steps?",
     format: "MULTIPLE_CHOICE",
-    choices: ["60", "72", "88", "110", "233"],
-    answer: "C",
+    choices: ["88", "104", "110", "116", "233"],
+    answer: "A",
     solution:
       "Let aₙ be the number of valid climbs of n steps ending in a 1-step and bₙ the number ending in a 2-step. A 1-step can follow anything, so aₙ = aₙ₋₁ + bₙ₋₁; a 2-step may only follow a 1-step, so bₙ = aₙ₋₂. Starting from a₁ = 1, b₁ = 0, a₂ = 1, b₂ = 1, the totals aₙ + bₙ run 1, 2, 3, 4, 6, 9, 13, 19, 28, 41, 60, 88 for n = 1 through 12. So there are 88 ways. (Without the restriction the count would be the Fibonacci number 233.)",
     hints: [
@@ -2535,8 +2535,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A new car loses exactly 15% of its value every year, so that at the end of each year it is worth 85% of what it was worth at the start of that year. After how many full years is the car first worth less than one-fourth of its original price?",
     format: "MULTIPLE_CHOICE",
-    choices: ["5", "7", "8", "9", "10"],
-    answer: "D",
+    choices: ["8", "9", "10", "11", "13"],
+    answer: "B",
     solution:
       "We need 0.85ⁿ < 1/4. Taking logarithms, n > ln(0.25)/ln(0.85) = (−1.3863)/(−0.16252) ≈ 8.53, so the first whole year is n = 9. Checking directly: 0.85⁸ ≈ 0.2725, still above one-fourth, while 0.85⁹ ≈ 0.2316, which is below it.",
     hints: [
@@ -2553,8 +2553,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "The total cost of a school trip is a fixed amount that is split evenly among the students who go. If 5 more students went, each student would pay $6 less. If 10 fewer students went, each student would pay $24 more. What is the total cost of the trip, in dollars?",
     format: "MULTIPLE_CHOICE",
-    choices: ["600", "720", "750", "840", "900"],
-    answer: "E",
+    choices: ["840", "900", "1050", "1080", "1200"],
+    answer: "B",
     solution:
       "Let n be the number of students and c the total cost, so each pays c/n. The first condition gives c/(n + 5) = c/n − 6; clearing denominators, cn = c(n + 5) − 6n(n + 5), so 5c = 6n² + 30n and c = (6n² + 30n)/5. The second gives c/(n − 10) = c/n + 24, leading to 10c = 24n² − 240n and c = (12n² − 120n)/5. Setting the two expressions equal: 6n² + 30n = 12n² − 120n, so 6n² = 150n and n = 25. Then c = (6·625 + 750)/5 = 4500/5 = $900. (Each of the 25 pays $36; 30 would pay $30, and 15 would pay $60.)",
     hints: [
@@ -2573,8 +2573,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     diagram:
       "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 340 240\" width=\"340\" height=\"240\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"13\"><polygon points=\"30,206 290,206 246,89 114,89\" fill=\"currentColor\" fill-opacity=\"0.12\" /><line x1=\"114\" y1=\"89\" x2=\"114\" y2=\"206\" stroke-dasharray=\"4 4\" stroke-opacity=\"0.55\" /><line x1=\"246\" y1=\"89\" x2=\"246\" y2=\"206\" stroke-dasharray=\"4 4\" stroke-opacity=\"0.55\" /><text x=\"160\" y=\"226\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">200 m</text><text x=\"180\" y=\"81\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"middle\">120 m</text><text x=\"62\" y=\"148\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"end\">50 m</text><text x=\"276\" y=\"148\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">78 m</text><text x=\"124\" y=\"152\" fill=\"currentColor\" stroke=\"none\" text-anchor=\"start\">h</text></svg>",
     format: "MULTIPLE_CHOICE",
-    choices: ["6240", "7200", "7488", "7680", "8000"],
-    answer: "C",
+    choices: ["6240", "7200", "7296", "7488", "8000"],
+    answer: "D",
     solution:
       "Drop perpendiculars from the ends of the short side to the long side, cutting off horizontal pieces a and b with a + b = 200 − 120 = 80. If h is the height, then a² + h² = 50² and b² + h² = 78². Subtracting, a² − b² = 2500 − 6084 = −3584, and since a² − b² = (a − b)(a + b) = 80(a − b), we get a − b = −44.8. With a + b = 80 this gives a = 17.6 and b = 62.4. Then h² = 2500 − 309.76 = 2190.24, so h = 46.8. The area is ((200 + 120)/2) · 46.8 = 160 · 46.8 = 7488 square meters.",
     hints: [
@@ -2609,8 +2609,8 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
     question:
       "A small plane flies a 1200-mile route with a steady tailwind in exactly 2 hours, then turns around and flies the same 1200 miles straight into that same steady wind in exactly 2.5 hours. The plane's speed in still air and the wind's speed are both constant. What is the speed of the wind, in miles per hour?",
     format: "MULTIPLE_CHOICE",
-    choices: ["30", "45", "60", "75", "120"],
-    answer: "C",
+    choices: ["45", "60", "75", "90", "120"],
+    answer: "B",
     solution:
       "Let p be the plane's speed in still air and w the wind's speed. Flying with the wind, the ground speed is p + w = 1200/2 = 600 mph. Flying against it, p − w = 1200/2.5 = 480 mph. Adding the two equations gives 2p = 1080, so p = 540, and subtracting gives 2w = 120, so w = 60 miles per hour.",
     hints: [
