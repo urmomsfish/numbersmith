@@ -7,6 +7,7 @@ import { updateTopicAndDomainMastery } from "@/lib/engine/mastery";
 import { applyRatingDelta } from "@/lib/engine/rating";
 import { touchDailyActivity, recordProblemOutcome, awardXp } from "@/lib/engine/xp";
 import { checkAndUnlockAchievements } from "@/lib/engine/achievements";
+import { streakDayKey } from "@/lib/streak";
 
 const DAILY_CHALLENGE_BONUS_XP = 40;
 
@@ -22,11 +23,33 @@ export async function submitDailyChallengeAction(input: {
     include: { problem: true },
   });
 
+  // The challenge must be *today's*.
+  //
+  // A Server Action is a public endpoint, so the id arriving here is whatever
+  // the caller sent, not necessarily what the page rendered. Every past day's
+  // challenge is still a live row with its own id, and the only other guard is
+  // one-attempt-per-challenge — so walking backwards through historical ids
+  // paid out 40 + difficulty x 3 bonus XP per day, plus a rating change, for
+  // as many days as the app has existed.
+  //
+  // Compared through streakDayKey rather than by arithmetic on timestamps: the
+  // day boundary is midnight US Pacific and DST-aware, and DailyChallenge.date
+  // is that day normalised to UTC midnight, which is what streakDayKey returns.
+  if (challenge.date.getTime() !== streakDayKey().getTime()) {
+    return {
+      expired: true as const,
+      correct: false,
+      solution: challenge.problem.solution,
+      correctAnswer: challenge.problem.answer,
+    };
+  }
+
   const already = await prisma.dailyChallengeAttempt.findUnique({
     where: { userId_dailyChallengeId: { userId: user.id, dailyChallengeId: challenge.id } },
   });
   if (already) {
     return {
+      expired: false as const,
       alreadyDone: true as const,
       correct: already.correct,
       solution: challenge.problem.solution,
@@ -86,6 +109,7 @@ export async function submitDailyChallengeAction(input: {
   const newlyUnlocked = await checkAndUnlockAchievements(user.id);
 
   return {
+    expired: false as const,
     alreadyDone: false as const,
     correct,
     solution: challenge.problem.solution,

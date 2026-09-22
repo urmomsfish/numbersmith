@@ -46,6 +46,10 @@ export function DailyChallengeRunner({
   const [pending, setPending] = useState(false);
   const [result, setResult] = useState<Completed | null>(alreadyCompleted);
   const [unlocked, setUnlocked] = useState<{ name: string; icon: string }[]>([]);
+  // Set when the server says the submitted challenge is not today's — a tab
+  // left open across the midnight-Pacific boundary is the honest way to reach
+  // this, so it reads as "the day rolled over", not as a failure.
+  const [stale, setStale] = useState(false);
   // Seeded in the effect rather than during render — reading the clock while
   // rendering is impure and can drift across re-renders.
   const startedAtRef = useRef(0);
@@ -65,6 +69,14 @@ export function DailyChallengeRunner({
       answerGiven,
       timeSeconds: Math.max(1, Math.round((Date.now() - startedAt) / 1000)),
     });
+    if (res.expired) {
+      // Only reachable by submitting an id the page did not render, so this is
+      // a corrected state rather than an error to apologise for.
+      setStale(true);
+      setPending(false);
+      router.refresh();
+      return;
+    }
     setResult({
       correct: res.correct,
       solution: res.solution,
@@ -83,6 +95,12 @@ export function DailyChallengeRunner({
         <Badge tone="slate">{difficultyLabel(problem.difficulty)}</Badge>
         <Badge tone="ember">Bonus XP</Badge>
       </div>
+
+      {stale && (
+        <p className="mb-4 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800 dark:bg-amber-950 dark:text-amber-400">
+          This challenge is from an earlier day, so it no longer counts. Reload for today&apos;s.
+        </p>
+      )}
 
       <ProblemStatement question={problem.question} diagram={problem.diagram} />
 
