@@ -19,6 +19,7 @@
     "verify:reward": "tsx scripts/check-reward-rule.ts",
     "verify:grading": "tsx scripts/check-answer-grading.ts",
     "verify:progress": "tsx scripts/check-progress-model.ts",
+    "verify:ownership": "tsx scripts/check-action-ownership.ts",
     "db:backfill-mastery": "tsx scripts/backfill-mastery-counts.ts"
   },
   "prisma": {

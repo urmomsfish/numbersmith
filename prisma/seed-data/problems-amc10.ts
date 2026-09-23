@@ -298,15 +298,16 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc10-22",
     question:
-      "A committee of 5 people is chosen from 6 men and 5 women. How many such committees include at least 3 women?",
+      "A school council has 6 men and 5 women. A committee of 5 is chosen, and it must contain at least 3 women. One particular woman, the council chair, must also serve on it. How many committees are possible?",
     format: "MULTIPLE_CHOICE",
-    choices: ["171", "176", "181", "186", "191"],
-    answer: "C",
+    choices: ["115", "120", "126", "132", "140"],
+    answer: "A",
     solution:
-      "Count by cases on the number of women: exactly 3 women gives C(5,3)C(6,2) = 10×15 = 150; exactly 4 women gives C(5,4)C(6,1) = 5×6 = 30; exactly 5 women gives C(5,5)C(6,0) = 1. The total is 150+30+1 = 181.",
+      "The chair takes one seat, leaving 4 seats to fill from 4 other women and 6 men. With the chair already counted as a woman, at least 2 more women are needed. Choosing k more women and 4 - k men: k = 2 gives C(4,2) x C(6,2) = 6 x 15 = 90; k = 3 gives C(4,3) x C(6,1) = 4 x 6 = 24; k = 4 gives C(4,4) x C(6,0) = 1. The total is 90 + 24 + 1 = 115.",
     hints: [
-      "Split into cases: exactly 3, exactly 4, and exactly 5 women on the committee.",
-      "Use combinations to count each case, then add the cases together.",
+      "Seat the chair first and reduce the problem to filling 4 remaining places.",
+      "The chair already counts toward the three women, so only 2 more women are required.",
+      "Split into cases on how many additional women serve, and add.",
     ],
     difficulty: 6,
     topicSlug: "combinations",
@@ -315,15 +316,16 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc10-23",
     question:
-      "Two fair six-sided dice are rolled. What is the probability that the product of the two numbers rolled is a multiple of 4?",
+      "Three fair six-sided dice are rolled. What is the probability that the product of the three numbers showing is a multiple of 4?",
     format: "MULTIPLE_CHOICE",
-    choices: ["1/3", "3/8", "5/12", "4/9", "7/12"],
-    answer: "C",
+    choices: ["1/2", "5/8", "2/3", "3/4", "7/8"],
+    answer: "B",
     solution:
-      "Classify each face by its power of 2: {1,3,5} contribute 0, {2,6} contribute 1, {4} contributes 2. The product is a multiple of 4 exactly when the total power of 2 from both dice is at least 2. Counting ordered pairs by combined power: total 2 occurs 6+4=10 ways (one die contributes 0 & other 2, or both contribute 1), total 3 occurs 4 ways, total 4 occurs 1 way, giving 10+4+1 = 15 favorable outcomes out of 36. The probability is 15/36 = 5/12.",
+      "Count the complement: outcomes whose product is NOT a multiple of 4, meaning the three numbers contribute fewer than two factors of 2. The odd faces 1, 3, 5 contribute none, and 2 and 6 contribute exactly one each, while 4 contributes two. So the product misses being a multiple of 4 only if all three dice are odd, which happens in 3^3 = 27 ways, or exactly one die shows 2 or 6 and the other two are odd, which happens in 3 x 2 x 3 x 3 = 54 ways. That is 81 of the 216 outcomes, leaving 216 - 81 = 135, and 135/216 = 5/8.",
     hints: [
-      "Track how many factors of 2 each die face contributes: 0 for odd faces, 1 for 2 or 6, 2 for the face 4.",
-      "The product is divisible by 4 exactly when the two dice's factor-of-2 counts sum to at least 2 — count those ordered pairs out of 36.",
+      "Multiples of 4 need two factors of 2 — track factors of 2 rather than the product itself.",
+      "It is easier to count the outcomes that fail: all odd, or exactly one die contributing a single factor of 2.",
+      "Note that a 4 contributes two factors of 2 by itself.",
     ],
     difficulty: 7,
     topicSlug: "basic-probability",
@@ -492,15 +494,16 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc10-36",
     question:
-      "The ratio of boys to girls in a class is 5:7. There are 8 more girls than boys. How many students are in the class in total?",
+      "The ratio of boys to girls in a school is 5 to 7. After 12 more boys enrol and no other changes occur, the ratio becomes 4 to 5. How many students attended the school originally?",
     format: "MULTIPLE_CHOICE",
-    choices: ["36", "40", "44", "48", "52"],
-    answer: "D",
+    choices: ["180", "216", "240", "264", "288"],
+    answer: "C",
     solution:
-      "Let the numbers of boys and girls be 5k and 7k. Then 7k − 5k = 8, so 2k = 8 and k = 4. The total number of students is 5k + 7k = 12k = 48.",
+      "Write the original numbers as 5x boys and 7x girls. After the new boys arrive, (5x + 12)/(7x) = 4/5, so 5(5x + 12) = 28x, giving 25x + 60 = 28x and x = 20. Originally there were 100 boys and 140 girls, a total of 240 students.",
     hints: [
-      "Write the numbers of boys and girls as 5k and 7k for some k.",
-      "The difference 7k − 5k equals 8 — solve for k, then find 12k.",
+      "A ratio of 5 to 7 means the counts are 5x and 7x for some x.",
+      "Only the boys change, so the girls stay at 7x in the new ratio.",
+      "Cross-multiply and solve for x, then total both groups.",
     ],
     difficulty: 4,
     topicSlug: "ratios-proportions",
@@ -578,12 +581,18 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc10-42",
-    question: "A circular pond covers an area of 64π square meters. How many meters long is the path that runs all the way around its edge?",
+    question:
+      "A circular pond covers an area of 64 pi square metres. A gravel path of uniform width 2 metres is laid all the way around the outside of the pond. The area of the path is k times pi square metres. What is k?",
     format: "MULTIPLE_CHOICE",
-    choices: ["4π", "8π", "12π", "14π", "16π"],
-    answer: "E",
-    solution: "From πr² = 64π we get r = 8. The path is the circumference, 2πr = 16π meters.",
-    hints: ["Use the area to find the radius first.", "Then apply the circumference formula."],
+    choices: ["16", "20", "32", "36", "40"],
+    answer: "D",
+    solution:
+      "The pond has area pi r^2 = 64 pi, so its radius is 8 metres. The path's outer edge is a circle of radius 8 + 2 = 10 metres. The path is the region between the two circles, with area pi(10^2) - pi(8^2) = pi(100 - 64) = 36 pi, so k = 36.",
+    hints: [
+      "Get the pond's radius from its area before thinking about the path.",
+      "The path is an annulus — the region between two concentric circles.",
+      "Subtract the inner area from the outer area.",
+    ],
     difficulty: 4,
     topicSlug: "circles",
     competitionSlug: "amc10",
@@ -602,12 +611,18 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc10-44",
-    question: "A deck contains one card for each whole number from 41 through 59. How many of those cards show a prime number?",
+    question:
+      "A deck contains one card for each whole number from 41 through 59. How many of those cards show a number that is either prime or a perfect square?",
     format: "MULTIPLE_CHOICE",
-    choices: ["2", "3", "4", "5", "7"],
-    answer: "D",
-    solution: "Testing each value from 41 to 59, the primes are 41, 43, 47, 53, and 59 — five cards.",
-    hints: ["Only check divisibility by 2, 3, 5, and 7, since 8² exceeds 59.", "Work through the range in order so none is missed."],
+    choices: ["2", "3", "4", "5", "6"],
+    answer: "E",
+    solution:
+      "The primes between 41 and 59 inclusive are 41, 43, 47, 53 and 59 — five of them. The only perfect square in the range is 49, which is not prime, so it adds one more. Since no number is counted twice, the total is 5 + 1 = 6.",
+    hints: [
+      "Find the primes in the range first; test divisibility only up to 7, since 8^2 > 59.",
+      "Then look for perfect squares between 41 and 59.",
+      "Check whether any number qualifies on both counts before adding.",
+    ],
     difficulty: 4,
     topicSlug: "primes",
     competitionSlug: "amc10",
@@ -643,15 +658,16 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc10-47",
     question:
-      "A bag contains 4 red marbles and 6 blue marbles. One marble is drawn at random. What is the probability that it is red?",
+      "A bag contains 4 red marbles and 6 blue marbles. Two marbles are drawn at random without replacement. What is the probability that the two marbles are different colours?",
     format: "MULTIPLE_CHOICE",
-    choices: ["3/10", "2/5", "1/2", "3/5", "7/10"],
-    answer: "B",
+    choices: ["8/15", "3/5", "2/3", "7/10", "4/5"],
+    answer: "A",
     solution:
-      "There are 10 marbles total, 4 of which are red, so the probability of drawing red is 4/10 = 2/5.",
+      "There are C(10,2) = 45 equally likely pairs. A mixed pair is formed by choosing one of the 4 reds and one of the 6 blues, giving 4 x 6 = 24 pairs. The probability is 24/45 = 8/15.",
     hints: [
-      "Divide the number of red marbles by the total number of marbles.",
-      "Simplify the resulting fraction.",
+      "Count unordered pairs so you do not have to track which marble came first.",
+      "A mixed pair is one red and one blue — multiply the two counts.",
+      "Divide by C(10,2).",
     ],
     difficulty: 4,
     topicSlug: "basic-probability",
@@ -814,15 +830,16 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc10-60",
     question:
-      "How many ways can 4 different books be arranged on a shelf so that two specific books are not adjacent to each other?",
+      "A shelf holds 5 different books. Two of them are a matched pair that the owner does not want standing next to each other. In how many orders can the books be arranged?",
     format: "MULTIPLE_CHOICE",
-    choices: ["4", "6", "8", "10", "12"],
-    answer: "E",
+    choices: ["48", "72", "84", "96", "108"],
+    answer: "B",
     solution:
-      "There are 4! = 24 total arrangements. Treating the two specific books as a single glued block gives 3! × 2 = 12 arrangements where they are adjacent. So the number of arrangements where they are not adjacent is 24 − 12 = 12.",
+      "All five books can be arranged in 5! = 120 ways. If the pair is adjacent, glue the two into one block: the block plus the other 3 books arrange in 4! = 24 ways, and the pair can be glued in 2 orders, giving 48 arrangements to exclude. That leaves 120 - 48 = 72.",
     hints: [
-      "First count all arrangements, then count the arrangements where the two books are adjacent by gluing them together.",
-      "Subtract the adjacent count from the total.",
+      "Count the arrangements where the two ARE adjacent and subtract.",
+      "Glue the adjacent pair into a single object, then arrange 4 objects.",
+      "Remember the glued pair itself has 2 internal orders.",
     ],
     difficulty: 5,
     topicSlug: "permutations",
@@ -831,15 +848,16 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc10-61",
     question:
-      "A standard six-sided die is rolled twice. What is the probability that the sum of the two rolls is 8?",
+      "A standard six-sided die is rolled twice. What is the probability that either the two rolls sum to 8, or the two rolls show the same number?",
     format: "MULTIPLE_CHOICE",
-    choices: ["5/36", "1/6", "7/36", "2/9", "1/4"],
-    answer: "A",
+    choices: ["1/6", "2/9", "5/18", "1/3", "7/18"],
+    answer: "C",
     solution:
-      "The pairs (a,b) with a+b = 8 are (2,6), (3,5), (4,4), (5,3), (6,2) — five outcomes out of 36 total. The probability is 5/36.",
+      "Of the 36 equally likely outcomes, 5 give a sum of 8: (2,6), (3,5), (4,4), (5,3) and (6,2). Six outcomes are doubles. The outcome (4,4) satisfies both conditions, so by inclusion-exclusion the count is 5 + 6 - 1 = 10, and the probability is 10/36 = 5/18.",
     hints: [
-      "List the ordered pairs of die rolls that sum to 8.",
-      "Divide the count of favorable outcomes by 36.",
+      "Count each condition separately over the 36 outcomes.",
+      "The word 'either' here allows both to happen at once, so watch for overlap.",
+      "Exactly one outcome sums to 8 and is also a double.",
     ],
     difficulty: 5,
     topicSlug: "basic-probability",
@@ -977,12 +995,18 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc10-72",
-    question: "A gazebo has a floor shaped like a convex polygon whose interior angles total 1440 degrees. How many sides does the floor have?",
+    question:
+      "A gazebo has a floor shaped like a convex polygon whose interior angles total 1440 degrees. The builder runs a support beam along every diagonal of the floor. How many beams does he install?",
     format: "MULTIPLE_CHOICE",
-    choices: ["6", "7", "8", "9", "10"],
-    answer: "E",
-    solution: "For an n-sided polygon, the interior angles sum to (n − 2) × 180 degrees. Setting (n − 2) × 180 = 1440 gives n − 2 = 8, so n = 10.",
-    hints: ["Use the interior-angle-sum formula for a polygon.", "Divide 1440 by 180 before solving for n."],
+    choices: ["20", "25", "30", "35", "40"],
+    answer: "D",
+    solution:
+      "The interior angles of an n-sided convex polygon total (n - 2) x 180 degrees. Setting (n - 2) x 180 = 1440 gives n - 2 = 8, so n = 10. A polygon with n sides has n(n - 3)/2 diagonals, so the floor has 10 x 7/2 = 35 diagonals.",
+    hints: [
+      "Use the angle-sum formula to find the number of sides first.",
+      "Each vertex joins to all but itself and its two neighbours.",
+      "That gives n(n - 3)/2 diagonals, since each is counted from both ends.",
+    ],
     difficulty: 5,
     topicSlug: "polygons",
     competitionSlug: "amc10",
@@ -1061,15 +1085,17 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc10-79",
-    question: "How many distinct arrangements are there of the letters in the word BANANA?",
+    question:
+      "A child's name tiles spell BANANA. She rearranges all six tiles in a row so that the arrangement begins with an A and also ends with an A. How many such arrangements are there?",
     format: "MULTIPLE_CHOICE",
-    choices: ["30", "60", "90", "120", "150"],
-    answer: "B",
+    choices: ["4", "6", "8", "10", "12"],
+    answer: "E",
     solution:
-      "BANANA has 6 letters with A repeated 3 times and N repeated 2 times. The number of distinct arrangements is 6!/(3!·2!) = 720/12 = 60.",
+      "Fixing an A at each end uses two of the three A tiles, leaving B, N, N and one A to fill the four middle places. Those four tiles include two identical N tiles, so they can be arranged in 4!/2! = 24/2 = 12 distinct ways. The A tiles are identical, so no further adjustment is needed.",
     hints: [
-      "Use the formula for permutations of a multiset: divide the factorial of the total count by the factorials of each repeated letter's count.",
-      "B appears once, A appears 3 times, N appears 2 times.",
+      "Place the required A tiles at the two ends first and see which tiles remain.",
+      "The four remaining tiles are B, N, N and A — with one repeated letter.",
+      "Divide 4! by 2! to account for the identical N tiles.",
     ],
     difficulty: 6,
     topicSlug: "permutations",
@@ -1094,15 +1120,17 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc10-81",
-    question: "A fair coin is flipped 5 times. What is the probability of getting exactly 3 heads?",
+    question:
+      "A fair coin is flipped 5 times. What is the probability that the flips produce more heads than tails?",
     format: "MULTIPLE_CHOICE",
-    choices: ["5/32", "3/16", "1/4", "5/16", "15/32"],
-    answer: "D",
+    choices: ["1/2", "5/8", "11/16", "3/4", "13/16"],
+    answer: "A",
     solution:
-      "The number of ways to choose which 3 of the 5 flips are heads is C(5,3) = 10, out of 2⁵ = 32 equally likely outcomes. The probability is 10/32 = 5/16.",
+      "There are 2^5 = 32 equally likely sequences. More heads than tails means 3, 4 or 5 heads, counted by C(5,3) + C(5,4) + C(5,5) = 10 + 5 + 1 = 16, so the probability is 16/32 = 1/2. (With an odd number of flips a tie is impossible, so heads and tails are symmetric and the answer must be 1/2.)",
     hints: [
-      "Use combinations to count the number of ways to place 3 heads among 5 flips.",
-      "Divide by the total number of possible outcomes, 2⁵.",
+      "With 5 flips a tie is impossible — every outcome has a strict majority.",
+      "Either add C(5,3) + C(5,4) + C(5,5), or argue by the symmetry between heads and tails.",
+      "Divide by 2^5 = 32.",
     ],
     difficulty: 6,
     topicSlug: "basic-probability",
@@ -1182,12 +1210,18 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc10-88",
-    question: "In a recipe the flour-to-sugar ratio is 3 to 5, and the sugar-to-butter ratio is 10 to 7. What is the ratio of flour to butter?",
+    question:
+      "In a recipe the flour-to-sugar ratio is 3 to 5, the sugar-to-butter ratio is 10 to 7, and the butter-to-egg ratio is 4 to 3. What is the ratio of flour to eggs?",
     format: "MULTIPLE_CHOICE",
-    choices: ["3:7", "3:5", "5:7", "6:7", "6:5"],
-    answer: "D",
-    solution: "Scale the first ratio so sugar matches: flour to sugar is 3:5 = 6:10. With sugar to butter at 10:7, the combined chain is flour : sugar : butter = 6 : 10 : 7, so flour to butter is 6:7.",
-    hints: ["Rescale one ratio so the shared quantity has the same number in both.", "Then read off the two outer quantities."],
+    choices: ["6:7", "8:7", "10:7", "12:7", "2:1"],
+    answer: "B",
+    solution:
+      "Chain the ratios as fractions: flour/eggs = (flour/sugar) x (sugar/butter) x (butter/eggs) = (3/5) x (10/7) x (4/3). The 3s cancel and 10/5 = 2, leaving 2 x 4/7 = 8/7. So flour to eggs is 8 to 7.",
+    hints: [
+      "Treat each ratio as a fraction and multiply them so the middle quantities cancel.",
+      "Line them up as flour/sugar, sugar/butter, butter/eggs.",
+      "Cancel before multiplying to keep the arithmetic small.",
+    ],
     difficulty: 6,
     topicSlug: "ratios-proportions",
     competitionSlug: "amc10",
@@ -1224,15 +1258,16 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc10-91",
     question:
-      "In a class of 40 students, 22 take Spanish, 18 take French, and 8 take both languages. How many students take neither language?",
+      "In a class of 40 students, 22 take Spanish, 18 take French and 12 take German. Of these, 8 take both Spanish and French, 6 take both Spanish and German, 5 take both French and German, and 3 take all three languages. How many students take none of the three?",
     format: "MULTIPLE_CHOICE",
-    choices: ["6", "7", "8", "9", "10"],
+    choices: ["2", "3", "4", "5", "6"],
     answer: "C",
     solution:
-      "By inclusion-exclusion, the number taking at least one language is 22 + 18 − 8 = 32. The number taking neither is 40 − 32 = 8.",
+      "By inclusion-exclusion the number taking at least one language is 22 + 18 + 12 - 8 - 6 - 5 + 3 = 36. Subtracting from the class of 40 leaves 40 - 36 = 4 students taking none.",
     hints: [
-      "Use inclusion-exclusion to find how many students take at least one of the two languages.",
-      "Subtract that count from the total class size.",
+      "Add the three single-subject counts, then correct for double counting.",
+      "Each pairwise overlap is subtracted once; the triple overlap then needs adding back.",
+      "Subtract the size of the union from 40.",
     ],
     difficulty: 6,
     topicSlug: "inclusion-exclusion",
@@ -1253,15 +1288,16 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc10-93",
     question:
-      "Two fair six-sided dice are rolled. What is the probability that the sum of the two numbers rolled is a multiple of 3?",
+      "Three fair six-sided dice are rolled. What is the probability that the sum of the three numbers is a multiple of 4?",
     format: "MULTIPLE_CHOICE",
-    choices: ["1/4", "7/24", "1/3", "3/8", "5/12"],
-    answer: "C",
+    choices: ["1/6", "5/24", "1/4", "55/216", "2/7"],
+    answer: "D",
     solution:
-      "The possible sums that are multiples of 3 are 3, 6, 9, and 12. Counting ordered pairs: sum 3 has 2 ways, sum 6 has 5 ways, sum 9 has 4 ways, and sum 12 has 1 way, totaling 12 ways out of 36. The probability is 12/36 = 1/3.",
+      "The 216 equally likely outcomes give sums from 3 to 18, and the multiples of 4 in that range are 4, 8, 12 and 16. The number of ways to roll each is 3, 21, 25 and 6 respectively, totalling 55 outcomes, so the probability is 55/216.",
     hints: [
-      "List the sums between 2 and 12 that are multiples of 3.",
-      "Count the ordered pairs of dice giving each of those sums, then divide by 36.",
+      "List the multiples of 4 that a three-dice sum can actually reach.",
+      "Count the ordered triples giving each of those sums.",
+      "Unlike multiples of 3, the counts here do not come out to a neat fraction — add them carefully.",
     ],
     difficulty: 7,
     topicSlug: "basic-probability",
@@ -1365,15 +1401,17 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc10-102",
-    question: "A fair six-sided die is rolled repeatedly until a 6 appears. What is the expected number of rolls needed?",
+    question:
+      "A fair six-sided die is rolled repeatedly. What is the expected number of rolls until both a 1 and a 6 have appeared at least once?",
     format: "MULTIPLE_CHOICE",
-    choices: ["4", "5", "6", "7", "8"],
-    answer: "C",
+    choices: ["6", "7", "8", "8.5", "9"],
+    answer: "E",
     solution:
-      "The number of rolls follows a geometric distribution with success probability p = 1/6. The expected number of trials until the first success is 1/p = 6.",
+      "Split the wait in two. First wait for either a 1 or a 6: each roll succeeds with probability 2/6 = 1/3, so this takes 3 rolls on average. From then on you need the other specific face, which appears with probability 1/6 per roll, taking 6 rolls on average. The total is 3 + 6 = 9.",
     hints: [
-      "This is a geometric distribution: rolls repeat until the first success.",
-      "The expected number of trials for a geometric distribution is 1 divided by the success probability.",
+      "Break the wait into the time to see the first of the two faces, then the time to see the other.",
+      "A trial with success probability p takes 1/p attempts on average.",
+      "The first stage succeeds with probability 2/6, the second with 1/6.",
     ],
     difficulty: 7,
     topicSlug: "expected-value",
@@ -1447,15 +1485,16 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc10-108",
     question:
-      "How many ways can 8 identical candies be distributed among 3 children so that each child receives at least 1 candy?",
+      "A parent distributes 10 identical sweets among 3 children so that every child gets at least 1 sweet and no child gets more than 5. In how many ways can this be done?",
     format: "MULTIPLE_CHOICE",
-    choices: ["15", "18", "21", "24", "27"],
-    answer: "C",
+    choices: ["18", "21", "24", "27", "30"],
+    answer: "A",
     solution:
-      "By stars and bars, first give each child 1 candy, leaving 5 candies to distribute freely among 3 children: this is C(5+3−1, 3−1) = C(7,2) = 21.",
+      "Give each child one sweet first, leaving 7 to distribute freely, so we need non-negative a + b + c = 7 with each at most 4 (since a child's total must not exceed 5). Without the upper limit there are C(7 + 2, 2) = C(9,2) = 36 solutions. If one child exceeds the limit, that child takes at least 5 of the 7: setting a' = a - 5 leaves a' + b + c = 2, which has C(4,2) = 6 solutions, and any of the 3 children could be the offender, giving 18. Two children cannot both exceed it, since that would need 10 of the 7 sweets. So the count is 36 - 18 = 18.",
     hints: [
-      "Give each child one candy first to satisfy the 'at least 1' condition.",
-      "Distribute the remaining candies freely using stars and bars: C(n+k−1, k−1).",
+      "Hand out the compulsory sweet to each child first and work with what is left.",
+      "Count unrestricted distributions with stars and bars, then subtract those breaking the cap.",
+      "Check whether two children could break the cap at once — here they cannot.",
     ],
     difficulty: 7,
     topicSlug: "combinatorics",
@@ -1464,15 +1503,16 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc10-109",
     question:
-      "What is the minimum number of people needed in a room to guarantee that at least 4 people share the same birth month?",
+      "Everyone in a room was born in a month other than December. What is the smallest number of people that guarantees at least 4 of them share the same birth month?",
     format: "MULTIPLE_CHOICE",
-    choices: ["25", "30", "33", "36", "37"],
-    answer: "E",
+    choices: ["23", "34", "37", "45", "48"],
+    answer: "B",
     solution:
-      "In the worst case, each of the 12 months could have exactly 3 people without any month reaching 4, using 12 × 3 = 36 people. One more person, 37 total, forces some month to have at least 4 people.",
+      "With December excluded there are 11 possible months. If each month held at most 3 people, the room could hold at most 11 x 3 = 33 people without any month reaching 4. So 33 is not enough, but any 34th person must push some month to 4. The answer is 34.",
     hints: [
-      "Consider the worst case where every month has as many people as possible without reaching 4.",
-      "Add one more person to that worst-case total to force the fourth match.",
+      "Excluding December leaves 11 months, not 12.",
+      "Find the largest room that can avoid four people sharing a month.",
+      "That is 3 per month across 11 months; add one more person.",
     ],
     difficulty: 7,
     topicSlug: "pigeonhole",
@@ -1498,15 +1538,16 @@ export const AMC10_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc10-111",
     question:
-      "A standard 52-card deck is shuffled, and 2 cards are drawn without replacement. What is the probability that both cards are aces?",
+      "A standard 52-card deck is shuffled and 2 cards are drawn without replacement. What is the probability that the two cards are of the same suit?",
     format: "MULTIPLE_CHOICE",
-    choices: ["1/221", "1/169", "4/221", "1/52", "1/13"],
-    answer: "A",
+    choices: ["1/17", "2/17", "4/17", "6/17", "1/2"],
+    answer: "C",
     solution:
-      "The probability the first card is an ace is 4/52, and given that, the probability the second is also an ace is 3/51. Multiplying, (4/52)(3/51) = 12/2652 = 1/221.",
+      "There are C(52,2) = 1326 equally likely pairs. A same-suit pair is formed by choosing one of the 4 suits and then 2 of its 13 cards: 4 x C(13,2) = 4 x 78 = 312. The probability is 312/1326 = 4/17. (Equivalently, the first card can be anything and the second must be one of the 12 remaining cards of that suit out of 51, giving 12/51 = 4/17.)",
     hints: [
-      "Multiply the probability the first card is an ace by the (conditional) probability the second card is also an ace.",
-      "Simplify the resulting fraction fully.",
+      "Count unordered pairs of cards out of C(52,2).",
+      "A matching pair is fixed by its suit and by which two of that suit's 13 cards appear.",
+      "As a check, fix the first card and ask how many of the other 51 match its suit.",
     ],
     difficulty: 7,
     topicSlug: "basic-probability",

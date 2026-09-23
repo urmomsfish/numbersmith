@@ -15,6 +15,25 @@ export function ratingCategoryForCompetition(slug: string): string {
   return "OVERALL";
 }
 
+/** Target difficulty for each question of a paper, floor to ceiling.
+ *
+ * A real contest ramps: the opening questions are meant to be solved in under a
+ * minute and the closing ones are meant to stop most of the field. Simulations
+ * used to draw one flat difficulty window and shuffle it, which produced papers
+ * that opened with seven straight difficulty-4 questions and never showed the
+ * easy end at all — on AMC 8 the window began at 5, locking out all 50 tagged
+ * problems at difficulty 2 and 3.
+ *
+ * Linear from floor to ceiling. Measured on the AMC banks this lands the mean
+ * of the last five questions at roughly 2-3x the mean of the first five, which
+ * is the shape the real papers have. */
+export function difficultyRamp(floor: number, ceiling: number, count: number): number[] {
+  if (count <= 1) return [Math.round((floor + ceiling) / 2)];
+  return Array.from({ length: count }, (_, i) =>
+    Math.round(floor + (i / (count - 1)) * (ceiling - floor))
+  );
+}
+
 export type CustomConfig = {
   problemCount: number;
   difficultyMin: number;
@@ -51,11 +70,30 @@ async function pickSimulationProblems(opts: {
    */
   gradeMin?: number;
   gradeMax?: number;
+  /**
+   * Custom simulations should feel like a contest paper too. The general
+   * practice bank contains intentionally direct skill drills, so do not let
+   * those leak into a simulation when there is no official competition to
+   * provide the provenance filter.
+   */
+  competitionOnly?: boolean;
+  /**
+   * One target difficulty per question. When given, the paper is built position
+   * by position against these targets instead of being drawn from a flat window
+   * and sorted — which is what makes the opening genuinely easier than the
+   * close rather than merely earlier in a sorted list.
+   */
+  ramp?: number[];
 }) {
   const baseWhere = {
     isPublished: true,
+    // Placement questions are deliberately direct skill checks. They are
+    // useful for measuring a starting level, but they are not contest-paper
+    // material and should never be the first-class source for simulations.
+    isPlacement: false,
     difficulty: { gte: opts.difficultyMin, lte: opts.difficultyMax },
     format: { in: ["MULTIPLE_CHOICE", "SHORT_ANSWER", "INTEGER"] },
+    ...(opts.competitionOnly ? { competitionId: { not: null } } : {}),
     ...(opts.topicIds && opts.topicIds.length > 0
       ? { OR: [{ topicId: { in: opts.topicIds } }, { topic: { parentId: { in: opts.topicIds } } }] }
       : {}),
@@ -98,9 +136,41 @@ async function pickSimulationProblems(opts: {
 
   const pool = [...byGrade(preferred), ...byGrade(rest)];
 
+  if (opts.ramp && opts.ramp.length > 0) {
+    const used = new Set<string>();
+    const picked: typeof pool = [];
+    for (const target of opts.ramp) {
+      // Exact difficulty first, then the nearest available on either side, so a
+      // thin rung borrows from its neighbours instead of leaving the paper
+      // short or collapsing the whole ramp.
+      let best: (typeof pool)[number] | undefined;
+      let bestGap = Infinity;
+      for (const p of pool) {
+        if (used.has(p.id)) continue;
+        const gap = Math.abs(p.difficulty - target);
+        if (gap < bestGap) {
+          best = p;
+          bestGap = gap;
+          if (gap === 0) break; // pool is already in preference order
+        }
+      }
+      if (!best) break;
+      used.add(best.id);
+      picked.push(best);
+    }
+    if (picked.length >= opts.count) return picked.slice(0, opts.count);
+    // Fall through to the flat path only if the ramp could not be filled.
+    pool.push(...pool.filter((p) => !used.has(p.id)));
+  }
+
   if (pool.length < opts.count) {
     const fallback = await prisma.problem.findMany({
-      where: { isPublished: true, id: { notIn: pool.map((p) => p.id) } },
+      where: {
+        isPublished: true,
+        isPlacement: false,
+        ...(opts.competitionOnly ? { competitionId: { not: null } } : {}),
+        id: { notIn: pool.map((p) => p.id) },
+      },
     });
     pool.push(...shuffle(fallback));
   }
@@ -170,6 +240,7 @@ export async function startOfficialSimulation(
     format: competition.format,
     gradeMin,
     gradeMax,
+    ramp: difficultyRamp(difficultyMin, difficultyMax, count),
   });
 
   const attempt = await prisma.competitionAttempt.create({
@@ -202,6 +273,7 @@ export async function startCustomSimulation(userId: string, config: CustomConfig
     difficultyMin: config.difficultyMin,
     difficultyMax: config.difficultyMax,
     topicIds: topics.map((t) => t.id),
+    competitionOnly: true,
   });
 
   // Custom sets are still attached to a competition row for reporting; we use

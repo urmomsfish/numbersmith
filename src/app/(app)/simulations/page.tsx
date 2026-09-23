@@ -72,7 +72,7 @@ export default async function SimulationsPage() {
 
       <h2 className="mt-10 text-base font-bold text-slate-900 dark:text-slate-50">Custom Competition</h2>
       <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-        Build your own timed set: choose the number of problems, topics, difficulty, and time limit.
+        Build your own timed set of competition-style problems: choose the number of problems, topics, difficulty, and time limit.
       </p>
       <div className="mt-3">
         <CustomSimulationForm topics={topics} isPro={isPro} canStart={gate.allowed} />

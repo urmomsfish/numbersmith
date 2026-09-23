@@ -24,15 +24,15 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc8-01",
     question:
-      "A pizza is cut into 8 equal slices. Sam eats 3 slices and Mia eats 2 slices. What fraction of the pizza is left?",
+      "A pizza is cut into 8 equal slices. Sam eats 3 slices and Mia eats 2 slices. Their father then eats half of what is left. What fraction of the whole pizza remains?",
     format: "MULTIPLE_CHOICE",
-    choices: ["3/8", "5/8", "1/2", "2/8", "3/5"],
+    choices: ["3/16", "1/4", "5/16", "3/8", "1/2"],
     answer: "A",
     solution:
-      "Together Sam and Mia eat 3 + 2 = 5 slices out of 8, leaving 8 - 5 = 3 slices. That is 3/8 of the pizza.",
+      "Sam and Mia eat 5 of the 8 slices, leaving 3/8 of the pizza. Their father eats half of that, so half of 3/8 remains: (1/2)(3/8) = 3/16.",
     hints: [
-      "Find the total number of slices eaten first.",
-      "Subtract the eaten slices from 8, then write the result as a fraction of 8.",
+      "Find the fraction left after Sam and Mia before bringing in their father.",
+      "Half of what is left is eaten, so half of that fraction stays.",
     ],
     difficulty: 2,
     topicSlug: "fractions",
@@ -40,14 +40,16 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc8-02",
-    question: "A shirt originally costs $40. It is on sale for 25% off. What is the sale price?",
+    question:
+      "A shirt originally costs $40. It is on sale for 25% off, and a $2 store coupon is then subtracted from the sale price. What does the shopper pay?",
     format: "MULTIPLE_CHOICE",
-    choices: ["$10", "$25", "$28", "$30", "$35"],
-    answer: "D",
-    solution: "25% of $40 is $10, so the sale price is $40 - $10 = $30.",
+    choices: ["$26", "$28", "$30", "$32", "$34"],
+    answer: "B",
+    solution:
+      "A 25% discount takes off (1/4)($40) = $10, leaving a sale price of $30. Subtracting the $2 coupon gives $28.",
     hints: [
-      "First find 25% of the original price.",
-      "Subtract that discount amount from $40.",
+      "Apply the percentage discount first, then the flat coupon.",
+      "25% off means paying 75% of $40.",
     ],
     difficulty: 2,
     topicSlug: "percentages",
@@ -56,14 +58,15 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc8-03",
     question:
-      "In a fruit basket, the ratio of apples to oranges is 4:3. If there are 12 apples, how many oranges are there?",
+      "In a fruit basket the ratio of apples to oranges is 4:3, and there are 12 apples. A shopper then adds 6 more oranges to the basket. How many pieces of fruit are in the basket now?",
     format: "MULTIPLE_CHOICE",
-    choices: ["2", "6", "7", "8", "9"],
-    answer: "E",
-    solution: "Since 12 apples correspond to 4 parts, each part is 12/4 = 3. Oranges are 3 parts, so 3 × 3 = 9.",
+    choices: ["21", "24", "27", "30", "33"],
+    answer: "C",
+    solution:
+      "Since 12 apples correspond to 4 parts, one part is 3, so there are 3 x 3 = 9 oranges. Adding 6 more gives 15 oranges, and 12 + 15 = 27 pieces of fruit.",
     hints: [
-      "Figure out how many fruits one \"part\" of the ratio represents.",
-      "Multiply that part size by the number of parts for oranges.",
+      "Work out the size of one ratio part from the 12 apples.",
+      "Find the original number of oranges before adding the new ones.",
     ],
     difficulty: 2,
     topicSlug: "ratios-proportions",
@@ -100,14 +103,15 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc8-06",
     question:
-      "A train travels 180 miles in 3 hours at a constant speed. At this same speed, how many miles does it travel in 5 hours?",
+      "A train travels 180 miles in 3 hours at a constant speed. At that same speed, how many minutes does it take to travel 400 miles?",
     format: "MULTIPLE_CHOICE",
-    choices: ["240", "250", "280", "300", "360"],
+    choices: ["320", "360", "380", "400", "420"],
     answer: "D",
-    solution: "The speed is 180 / 3 = 60 miles per hour. In 5 hours it travels 60 × 5 = 300 miles.",
+    solution:
+      "The speed is 180/3 = 60 miles per hour, which is 1 mile per minute. Travelling 400 miles therefore takes 400 minutes.",
     hints: [
-      "Find the train's speed in miles per hour first.",
-      "Multiply that speed by the new number of hours.",
+      "Find the speed in miles per hour first.",
+      "Sixty miles per hour is a convenient rate — how far does the train go in one minute?",
     ],
     difficulty: 3,
     topicSlug: "rates",
@@ -220,14 +224,16 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc8-15",
-    question: "A committee of 3 people is to be chosen from a group of 8 people. How many different committees are possible?",
+    question:
+      "A committee of 3 is chosen from a club of 5 boys and 3 girls. The committee must include at least one girl. How many different committees are possible?",
     format: "MULTIPLE_CHOICE",
-    choices: ["48", "56", "64", "88", "336"],
-    answer: "B",
-    solution: "Since order does not matter, the number of committees is C(8,3) = (8×7×6)/(3×2×1) = 56.",
+    choices: ["30", "35", "40", "44", "46"],
+    answer: "E",
+    solution:
+      "There are C(8,3) = 56 committees in total. The ones with no girl are the committees of 3 boys chosen from 5, of which there are C(5,3) = 10. So 56 - 10 = 46 committees include at least one girl.",
     hints: [
-      "Since the committee is unordered, this is a combination, not a permutation.",
-      "Compute C(8,3) using the combination formula.",
+      "Counting the committees with NO girls is easier than counting those with at least one.",
+      "Subtract the all-boy committees from the total C(8,3).",
     ],
     difficulty: 4,
     topicSlug: "combinations",
@@ -259,12 +265,17 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc8-18",
-    question: "A circular fountain has a rim that is 18π feet long. What is the area of the fountain, in square feet?",
+    question:
+      "A circular fountain has a rim 18 pi feet long. A round flowerbed of radius 3 feet sits at its centre, and the rest of the fountain holds water. The water surface has area k times pi square feet. What is k?",
     format: "MULTIPLE_CHOICE",
-    choices: ["81π", "90π", "162π", "36π", "324π"],
+    choices: ["72", "76", "78", "81", "90"],
     answer: "A",
-    solution: "The rim is the circumference, so 2πr = 18π and r = 9. The area is πr² = 81π square feet.",
-    hints: ["Use the circumference to find the radius first.", "Then substitute that radius into the area formula."],
+    solution:
+      "The rim is the circumference, so 2 pi r = 18 pi gives r = 9 and the fountain's area is pi(9^2) = 81 pi. The flowerbed covers pi(3^2) = 9 pi, so the water covers 81 pi - 9 pi = 72 pi, giving k = 72.",
+    hints: [
+      "Get the fountain's radius from its circumference.",
+      "Subtract the flowerbed's area from the fountain's area.",
+    ],
     difficulty: 5,
     topicSlug: "circles",
     competitionSlug: "amc8",
@@ -341,15 +352,15 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc8-24",
     question:
-      "What is the minimum number of people needed in a room to guarantee that at least 3 of them were born in the same month?",
+      "Nobody in a room was born in July or August. What is the smallest number of people that guarantees at least 3 of them share the same birth month?",
     format: "MULTIPLE_CHOICE",
-    choices: ["24", "25", "26", "36", "37"],
+    choices: ["19", "21", "23", "25", "31"],
     answer: "B",
     solution:
-      "By the pigeonhole principle, with 12 months, 2 × 12 = 24 people could have at most 2 per month with none tripled up. One more person, 25 total, forces some month to have 3.",
+      "Excluding two months leaves 10 possible birth months. If no month held 3 people, each of the 10 months could hold at most 2, for at most 20 people. So 20 is not enough, but any 21st person forces some month to reach 3.",
     hints: [
-      "Think about the worst case: how many people can you place with at most 2 per month?",
-      "Add one more person to that worst-case total to force a third match.",
+      "Excluding July and August leaves 10 months, not 12.",
+      "Find the largest group that could avoid three people sharing a month, then add one.",
     ],
     difficulty: 6,
     topicSlug: "pigeonhole",
@@ -382,15 +393,15 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc8-27",
     question:
-      "In a class of 30 students, 18 take Spanish, 15 take French, and 8 take both languages. How many students take neither language?",
+      "In a class of 30 students, 18 take Spanish, 15 take French and 9 take German. Of these, 8 take Spanish and French, 5 take Spanish and German, 4 take French and German, and 2 take all three. How many students take none of the three languages?",
     format: "MULTIPLE_CHOICE",
-    choices: ["3", "5", "7", "8", "10"],
-    answer: "B",
+    choices: ["1", "2", "3", "4", "5"],
+    answer: "C",
     solution:
-      "By inclusion-exclusion, the number taking at least one language is 18 + 15 - 8 = 25. The number taking neither is 30 - 25 = 5.",
+      "By inclusion-exclusion, the number taking at least one language is 18 + 15 + 9 - 8 - 5 - 4 + 2 = 27. So 30 - 27 = 3 students take none.",
     hints: [
-      "Use inclusion-exclusion to find how many students take at least one of the two languages.",
-      "Subtract that count from the total class size.",
+      "Add the three subject totals, then correct for students counted more than once.",
+      "Subtract each pair overlap, then add the triple overlap back.",
     ],
     difficulty: 6,
     topicSlug: "inclusion-exclusion",
@@ -475,14 +486,16 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc8-33",
-    question: "A store marks up a $50 item by 20% to set its price. What is the new price?",
+    question:
+      "A store buys an item for $50 and marks it up by 20% to set the shelf price. At the register a 10% discount is applied to the shelf price. What does the customer pay?",
     format: "MULTIPLE_CHOICE",
-    choices: ["$40", "$50", "$55", "$60", "$65"],
+    choices: ["$48", "$50", "$52", "$54", "$60"],
     answer: "D",
-    solution: "20% of $50 is $10, so the new price is $50 + $10 = $60.",
+    solution:
+      "The markup gives a shelf price of $50 x 1.20 = $60. The register discount multiplies by 0.90, so the customer pays $60 x 0.90 = $54.",
     hints: [
-      "Find 20% of $50 first.",
-      "Add that amount to the original price.",
+      "Apply the markup and the discount one after the other as multipliers.",
+      "A 20% rise followed by a 10% fall does not return to the starting price.",
     ],
     difficulty: 2,
     topicSlug: "percentages",
@@ -491,14 +504,15 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc8-34",
     question:
-      "A recipe uses flour and sugar in the ratio 5:2. If a baker uses 20 cups of flour, how many cups of sugar does she use?",
+      "A recipe uses flour and sugar in the ratio 5:2, and it also calls for half as much butter as sugar. A baker uses 20 cups of flour. How many cups of flour, sugar and butter does she use altogether?",
     format: "MULTIPLE_CHOICE",
-    choices: ["4", "6", "8", "10", "12"],
-    answer: "C",
-    solution: "Since 20 cups of flour is 4 times 5, sugar is 4 times 2 = 8 cups.",
+    choices: ["24", "26", "28", "30", "32"],
+    answer: "E",
+    solution:
+      "The ratio 5:2 with 20 cups of flour means one part is 4 cups, so she uses 2 x 4 = 8 cups of sugar. The butter is half the sugar, or 4 cups. Altogether 20 + 8 + 4 = 32 cups.",
     hints: [
-      "Find how many times larger 20 is than 5.",
-      "Multiply that factor by 2 to get the sugar amount.",
+      "Find the size of one ratio part from the flour.",
+      "The butter depends on the sugar, so work out the sugar first.",
     ],
     difficulty: 2,
     topicSlug: "ratios-proportions",
@@ -602,14 +616,16 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc8-43",
-    question: "A printer prints 45 pages in 3 minutes. At this rate, how many pages does it print in 8 minutes?",
+    question:
+      "A printer prints 45 pages in 3 minutes at a steady rate. How many minutes does it take to print a 300-page job?",
     format: "MULTIPLE_CHOICE",
-    choices: ["90", "100", "105", "110", "120"],
-    answer: "E",
-    solution: "The printer's rate is 45/3 = 15 pages per minute. In 8 minutes it prints 15 × 8 = 120 pages.",
+    choices: ["20", "22", "24", "25", "30"],
+    answer: "A",
+    solution:
+      "The rate is 45/3 = 15 pages per minute. A 300-page job therefore takes 300/15 = 20 minutes.",
     hints: [
-      "Find the printer's rate in pages per minute.",
-      "Multiply that rate by 8.",
+      "Find the printing rate in pages per minute.",
+      "Divide the job size by that rate.",
     ],
     difficulty: 2,
     topicSlug: "rates",
@@ -658,14 +674,16 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc8-47",
-    question: "In a class of 25 students, 40% are boys. How many girls are in the class?",
+    question:
+      "In a class of 25 students, 40% are boys. How many more girls than boys are there?",
     format: "MULTIPLE_CHOICE",
-    choices: ["10", "12", "13", "14", "15"],
-    answer: "E",
-    solution: "40% of 25 is 10 boys, so the remaining 25 − 10 = 15 students are girls.",
+    choices: ["3", "5", "7", "10", "15"],
+    answer: "B",
+    solution:
+      "40% of 25 is 10 boys, so the other 25 - 10 = 15 students are girls. The difference is 15 - 10 = 5.",
     hints: [
-      "Find 40% of 25 to get the number of boys.",
-      "Subtract that from the total to find the girls.",
+      "Find the number of boys first, then the number of girls.",
+      "The question asks for the difference, not either count on its own.",
     ],
     difficulty: 2,
     topicSlug: "percentages",
@@ -697,14 +715,16 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc8-50",
-    question: "A standard six-sided die is rolled once. What is the probability that the result is a multiple of 3?",
+    question:
+      "A standard six-sided die is rolled once. What is the probability that the result is a multiple of 3, or is greater than 4, or both?",
     format: "MULTIPLE_CHOICE",
-    choices: ["1/6", "1/2", "1/3", "2/3", "1/4"],
+    choices: ["1/6", "1/3", "1/2", "2/3", "5/6"],
     answer: "C",
-    solution: "There are two multiples of 3 among 1–6, namely 3 and 6, so the probability is 2/6 = 1/3.",
+    solution:
+      "The multiples of 3 are 3 and 6, and the results greater than 4 are 5 and 6. Together these describe the outcomes 3, 5 and 6 — the 6 belongs to both lists and is counted once. That is 3 of the 6 faces, so the probability is 1/2.",
     hints: [
-      "List the outcomes from 1 to 6 that are multiples of 3.",
-      "Divide the count of favorable outcomes by 6.",
+      "List the faces satisfying each condition separately.",
+      "One face appears on both lists — do not count it twice.",
     ],
     difficulty: 2,
     topicSlug: "basic-probability",
@@ -712,12 +732,17 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc8-51",
-    question: "A caterer sets out twice as many chairs as tables, plus 5 extra chairs. There are 27 chairs. How many tables are there?",
+    question:
+      "A caterer sets out twice as many chairs as tables, plus 5 extra chairs, and ends up with 27 chairs. Three more tables are then added, and the caterer keeps to the same rule. How many chairs are set out now?",
     format: "MULTIPLE_CHOICE",
-    choices: ["6", "9", "10", "11", "12"],
+    choices: ["27", "29", "31", "33", "35"],
     answer: "D",
-    solution: "If there are t tables, then 2t + 5 = 27, so 2t = 22 and t = 11.",
-    hints: ["Let t be the number of tables and write the chair count in terms of t.", "Subtract the 5 extra chairs before dividing by 2."],
+    solution:
+      "If t is the number of tables, 2t + 5 = 27, so 2t = 22 and t = 11. With 3 more tables there are 14, and the rule gives 2(14) + 5 = 33 chairs.",
+    hints: [
+      "Turn the rule into an equation and solve for the original number of tables.",
+      "Apply the same rule again with the new table count.",
+    ],
     difficulty: 3,
     topicSlug: "linear-equations",
     competitionSlug: "amc8",
@@ -725,15 +750,15 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc8-52",
     question:
-      "In a bag of marbles, red to blue marbles are in ratio 3:5, and there are 48 marbles total. How many blue marbles are there?",
+      "A bag of 48 marbles contains red and blue marbles in the ratio 3:5. How many red marbles must be added so that the bag holds equal numbers of red and blue marbles?",
     format: "MULTIPLE_CHOICE",
-    choices: ["24", "30", "36", "42", "45"],
-    answer: "B",
+    choices: ["6", "8", "9", "10", "12"],
+    answer: "E",
     solution:
-      "There are 3 + 5 = 8 parts total, so each part is 48/8 = 6 marbles. Blue marbles are 5 × 6 = 30.",
+      "The ratio 3:5 splits 48 marbles into 8 parts of 6, so there are 18 red and 30 blue. To match the 30 blue marbles, 30 - 18 = 12 red marbles must be added.",
     hints: [
-      "Add the ratio parts to find the total number of parts.",
-      "Multiply the size of one part by the blue ratio number.",
+      "Split the 48 marbles according to the ratio first.",
+      "Only red marbles are added, so the blue count never changes.",
     ],
     difficulty: 3,
     topicSlug: "ratios-proportions",
@@ -741,12 +766,17 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc8-53",
-    question: "A shipping carton measures 4 inches by 5 inches by 6 inches. How many 1-inch cubes fit inside it?",
+    question:
+      "A shipping carton measures 4 inches by 5 inches by 6 inches. How many solid 2-inch cubes fit inside it?",
     format: "MULTIPLE_CHOICE",
-    choices: ["90", "100", "120", "150", "180"],
-    answer: "C",
-    solution: "The number of unit cubes equals the volume: 4 × 5 × 6 = 120.",
-    hints: ["Each 1-inch cube takes up one cubic inch.", "Multiply the three dimensions together."],
+    choices: ["12", "15", "20", "24", "30"],
+    answer: "A",
+    solution:
+      "Along each edge, count how many whole 2-inch cubes fit: 4/2 = 2, 5/2 gives 2 with an inch to spare, and 6/2 = 3. So the carton holds 2 x 2 x 3 = 12 cubes.",
+    hints: [
+      "Work edge by edge, counting only whole cubes along each one.",
+      "The 5-inch edge does not divide evenly — an inch is wasted.",
+    ],
     difficulty: 3,
     topicSlug: "area-volume",
     competitionSlug: "amc8",
@@ -789,12 +819,17 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc8-57",
-    question: "Five consecutive pages of a book have page numbers that average 21. What is the largest of those page numbers?",
+    question:
+      "Five consecutive pages of a book have page numbers averaging 21. What is the sum of the smallest and the largest of those page numbers?",
     format: "MULTIPLE_CHOICE",
-    choices: ["21", "22", "23", "24", "25"],
-    answer: "C",
-    solution: "For five consecutive numbers the average is the middle one, so the middle page is 21 and the five pages are 19, 20, 21, 22, 23. The largest is 23.",
-    hints: ["With an odd count of consecutive numbers, the average sits exactly in the middle.", "Count up two from the middle to reach the largest."],
+    choices: ["40", "42", "44", "46", "48"],
+    answer: "B",
+    solution:
+      "For an odd number of consecutive integers the average is the middle one, so the pages are 19, 20, 21, 22, 23. The smallest and largest sum to 19 + 23 = 42. (They are symmetric about 21, so their sum is twice the average.)",
+    hints: [
+      "With five consecutive numbers, the average sits exactly in the middle.",
+      "The smallest and largest are equally far from the middle.",
+    ],
     difficulty: 3,
     topicSlug: "averages",
     competitionSlug: "amc8",
@@ -817,24 +852,34 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc8-59",
-    question: "The odometer of a delivery van reads 4,987 miles. What is the sum of the digits it shows?",
+    question:
+      "The odometer of a delivery van reads 4,987 miles. How many more miles must the van travel before the odometer next shows a reading whose digits add to 1?",
     format: "MULTIPLE_CHOICE",
-    choices: ["26", "27", "28", "29", "30"],
+    choices: ["13", "1013", "5013", "5113", "6013"],
     answer: "C",
-    solution: "4 + 9 + 8 + 7 = 28.",
-    hints: ["Add the digits one at a time, ignoring their place values.", "Keep a running total: 4, then 13, then 21, then 28."],
+    solution:
+      "A reading whose digits add to 1 must be a power of 10 such as 10,000 (or 1, 10, 100, 1,000 — all already passed). The next one after 4,987 is 10,000, so the van must travel 10,000 - 4,987 = 5,013 more miles.",
+    hints: [
+      "Which whole numbers have digits adding to exactly 1?",
+      "They are 1, 10, 100, 1000, 10000 — find the first one above 4,987.",
+    ],
     difficulty: 3,
     topicSlug: "number-properties",
     competitionSlug: "amc8",
   },
   {
     slug: "amc8-60",
-    question: "A circular running track has a radius of 7 meters. How many meters long is one lap around it? Express your answer in terms of π.",
+    question:
+      "A circular running track has a radius of 7 metres. A runner completes 3 full laps. The distance covered is k times pi metres. What is k?",
     format: "MULTIPLE_CHOICE",
-    choices: ["28π", "7π", "49π", "14π", "21π"],
+    choices: ["14", "21", "28", "42", "49"],
     answer: "D",
-    solution: "One lap is the circumference, 2πr = 2π(7) = 14π meters.",
-    hints: ["A lap around a circle is its circumference.", "Use C = 2πr and leave π in the answer."],
+    solution:
+      "One lap is the circumference, 2 pi (7) = 14 pi metres. Three laps cover 3 x 14 pi = 42 pi metres, so k = 42.",
+    hints: [
+      "Find the length of a single lap first.",
+      "Multiply by the number of laps, keeping pi as a factor.",
+    ],
     difficulty: 3,
     topicSlug: "circles",
     competitionSlug: "amc8",
@@ -842,15 +887,15 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc8-61",
     question:
-      "A tank is 3/4 full of water. After removing 15 gallons, it is 1/2 full. What is the tank's total capacity, in gallons?",
+      "A tank is 3/4 full of water. After 15 gallons are removed it is 1/2 full. How many more gallons are needed to fill the tank completely from that point?",
     format: "MULTIPLE_CHOICE",
-    choices: ["30", "45", "60", "75", "90"],
-    answer: "C",
+    choices: ["15", "20", "24", "25", "30"],
+    answer: "E",
     solution:
-      "Let the capacity be T. Then (3/4)T − 15 = (1/2)T, so (1/4)T = 15, giving T = 60.",
+      "Removing 15 gallons dropped the level by 3/4 - 1/2 = 1/4 of the tank, so a quarter of the tank is 15 gallons and the full capacity is 60 gallons. From half full, filling it needs the other half: 30 gallons.",
     hints: [
-      "Set up an equation relating the two fractional amounts and the 15 gallons removed.",
-      "The difference between 3/4 and 1/2 of the tank is exactly 15 gallons.",
+      "The 15 gallons correspond to the drop from 3/4 full to 1/2 full.",
+      "Find the capacity first, then the amount needed from half full.",
     ],
     difficulty: 3,
     topicSlug: "fractions",
@@ -887,12 +932,17 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc8-64",
-    question: "A hall has 100 chairs, which are set out in rows of 7 with as many complete rows as possible. How many chairs are left over?",
+    question:
+      "A hall sets out 100 chairs in rows of 7, making as many complete rows as possible. How many more chairs would be needed to complete one more full row?",
     format: "MULTIPLE_CHOICE",
-    choices: ["1", "2", "3", "4", "5"],
-    answer: "B",
-    solution: "Since 7 × 14 = 98, fourteen complete rows use 98 chairs and 100 − 98 = 2 chairs are left over.",
-    hints: ["Find the largest multiple of 7 that does not exceed 100.", "Subtract it from 100."],
+    choices: ["5", "6", "7", "12", "14"],
+    answer: "A",
+    solution:
+      "Since 7 x 14 = 98, fourteen complete rows use 98 chairs and 2 are left over. Those 2 chairs start a fifteenth row, which needs 7 - 2 = 5 more chairs to be complete.",
+    hints: [
+      "Divide 100 by 7 and look at the remainder.",
+      "The leftover chairs have already begun the next row.",
+    ],
     difficulty: 3,
     topicSlug: "modular-arithmetic",
     competitionSlug: "amc8",
@@ -916,12 +966,17 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc8-66",
-    question: "A gazebo has a floor shaped like a hexagon. What is the sum, in degrees, of the six interior angles of the floor?",
+    question:
+      "A gazebo has a floor shaped like a regular hexagon, so all six of its interior angles are equal. What is the measure, in degrees, of one of those angles?",
     format: "MULTIPLE_CHOICE",
-    choices: ["720°", "540°", "600°", "1080°", "900°"],
-    answer: "A",
-    solution: "An n-sided polygon has interior angles summing to (n − 2) × 180 degrees. For n = 6 that is 4 × 180 = 720 degrees.",
-    hints: ["A hexagon can be cut into triangles by drawing diagonals from one corner.", "Count the triangles and multiply by 180."],
+    choices: ["60", "120", "135", "144", "720"],
+    answer: "B",
+    solution:
+      "The interior angles of an n-sided polygon total (n - 2) x 180 degrees, so a hexagon's total 4 x 180 = 720 degrees. Since the hexagon is regular, all six angles are equal, each measuring 720/6 = 120 degrees.",
+    hints: [
+      "Find the total of all six angles first.",
+      "Divide by 6, since the hexagon is regular.",
+    ],
     difficulty: 3,
     topicSlug: "polygons",
     competitionSlug: "amc8",
@@ -981,12 +1036,17 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc8-71",
-    question: "A rectangle has a perimeter of 14 and an area of 12. What is the sum of the squares of its length and its width?",
+    question:
+      "A rectangular garden has a perimeter of 14 metres and an area of 12 square metres. How long, in metres, is the diagonal path running corner to corner?",
     format: "MULTIPLE_CHOICE",
-    choices: ["13", "25", "26", "37", "49"],
-    answer: "B",
-    solution: "The length and width sum to 7 and multiply to 12. Then (length)² + (width)² = (length + width)² − 2(length)(width) = 49 − 24 = 25.",
-    hints: ["The perimeter gives the sum of the two dimensions and the area gives their product.", "Expand (a + b)² to relate a² + b² to a + b and ab."],
+    choices: ["3", "4", "5", "6", "7"],
+    answer: "C",
+    solution:
+      "The perimeter gives length plus width equal to 7, and the area gives their product as 12, so the sides are 3 and 4. By the Pythagorean theorem the diagonal is the square root of 3^2 + 4^2 = 25, which is 5 metres.",
+    hints: [
+      "The perimeter tells you the sum of the two sides; the area tells you their product.",
+      "Find the two side lengths, then use the Pythagorean theorem.",
+    ],
     difficulty: 4,
     topicSlug: "quadratics",
     competitionSlug: "amc8",
@@ -1005,12 +1065,17 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc8-73",
-    question: "A cylindrical water tank has a radius of 3 feet and a height of 10 feet. What is its volume, in cubic feet, in terms of π?",
+    question:
+      "A cylindrical water tank has a radius of 3 feet and a height of 10 feet. It is filled to 60% of its capacity. The water occupies k times pi cubic feet. What is k?",
     format: "MULTIPLE_CHOICE",
-    choices: ["270π", "94π", "60π", "90π", "30π"],
+    choices: ["27", "36", "45", "54", "60"],
     answer: "D",
-    solution: "The volume is πr²h = π(3²)(10) = 90π cubic feet.",
-    hints: ["The volume of a cylinder is the area of its circular base times its height.", "Square the radius before multiplying by the height."],
+    solution:
+      "The full tank holds pi r^2 h = pi(9)(10) = 90 pi cubic feet. Sixty percent of that is 0.6 x 90 pi = 54 pi, so k = 54.",
+    hints: [
+      "Compute the full volume with pi r squared times height.",
+      "Then take 60% of it; the pi carries through unchanged.",
+    ],
     difficulty: 4,
     topicSlug: "area-volume",
     competitionSlug: "amc8",
@@ -1053,14 +1118,16 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc8-77",
-    question: "In how many ways can 5 different books be arranged in a row on a shelf?",
+    question:
+      "Five different books are arranged in a row on a shelf. Two of them form a matched pair that must stand next to each other. In how many orders can the books be arranged?",
     format: "MULTIPLE_CHOICE",
-    choices: ["20", "24", "60", "100", "120"],
+    choices: ["12", "24", "36", "40", "48"],
     answer: "E",
-    solution: "There are 5! = 120 ways to arrange 5 distinct books.",
+    solution:
+      "Glue the matched pair into a single block. That block together with the other 3 books gives 4 objects, arranged in 4! = 24 ways, and the pair can be glued in 2 orders. So there are 24 x 2 = 48 arrangements.",
     hints: [
-      "This is a permutation of all 5 books.",
-      "Compute 5 × 4 × 3 × 2 × 1.",
+      "Treat the pair that must stay together as one combined object.",
+      "Do not forget the two books can swap places within the pair.",
     ],
     difficulty: 4,
     topicSlug: "permutations",
@@ -1069,15 +1136,15 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc8-78",
     question:
-      "A circular pizza with diameter 16 inches is cut into 8 equal slices. What is the area of one slice, in terms of π?",
+      "A circular pizza with diameter 16 inches is cut into 8 equal slices, and 2 slices are eaten. The remaining pizza covers k times pi square inches. What is k?",
     format: "MULTIPLE_CHOICE",
-    choices: ["64π", "8π", "16π", "4π", "32π"],
-    answer: "B",
+    choices: ["48", "56", "60", "64", "72"],
+    answer: "A",
     solution:
-      "The radius is 8, so the total area is π(8²) = 64π. One of 8 equal slices has area 64π/8 = 8π.",
+      "The radius is 8 inches, so the whole pizza has area pi(8^2) = 64 pi square inches. Six of the eight slices remain, which is 6/8 = 3/4 of the pizza: (3/4)(64 pi) = 48 pi, so k = 48.",
     hints: [
-      "Find the radius from the diameter, then the total area.",
-      "Divide the total area by the number of slices.",
+      "The diameter is 16, so halve it before using the area formula.",
+      "Six of the eight slices remain — work out that fraction of the whole.",
     ],
     difficulty: 4,
     topicSlug: "circles",
@@ -1138,27 +1205,33 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc8-83",
-    question: "Attendance at a school play rose by 40% from last year to this year. This year 84 people attended. How many attended last year?",
+    question:
+      "Attendance at a school play rose by 40% from last year to this year, reaching 84 people this year. Next year attendance is expected to fall by 25% from this year's figure. How many people are expected next year?",
     format: "MULTIPLE_CHOICE",
-    choices: ["50", "56", "67.2", "70", "60"],
-    answer: "E",
-    solution: "This year's attendance is 1.4 times last year's, so last year's was 84/1.4 = 60 people.",
-    hints: ["A 40% increase multiplies the original by 1.4.", "Divide rather than subtracting 40% of 84."],
+    choices: ["60", "63", "66", "70", "72"],
+    answer: "B",
+    solution:
+      "This year's 84 is not needed for the first step — the question asks about next year. A 25% fall multiplies by 0.75, so next year's expected attendance is 84 x 0.75 = 63.",
+    hints: [
+      "Read carefully which year each percentage applies to.",
+      "A 25% decrease means keeping 75% of this year's figure.",
+    ],
     difficulty: 4,
     topicSlug: "linear-equations",
     competitionSlug: "amc8",
   },
   {
     slug: "amc8-84",
-    question: "Today is a Tuesday. What day of the week will it be 100 days from today?",
+    question:
+      "Today is a Tuesday. What day of the week was it 100 days ago?",
     format: "MULTIPLE_CHOICE",
-    choices: ["Friday", "Wednesday", "Thursday", "Saturday", "Monday"],
+    choices: ["Friday", "Saturday", "Sunday", "Monday", "Tuesday"],
     answer: "C",
     solution:
-      "Since 100 = 14×7 + 2, 100 days from now is the same as 2 days from now. Two days after Tuesday is Thursday.",
+      "Days of the week repeat every 7 days, and 100 = 7 x 14 + 2, so 100 days ago is the same as 2 days before today in the weekly cycle. Counting back 2 days from Tuesday gives Sunday.",
     hints: [
-      "Find the remainder when 100 is divided by 7.",
-      "Count that many days forward from Tuesday.",
+      "Reduce 100 modulo 7 to find how far around the weekly cycle to move.",
+      "The question looks backwards in time, so count back rather than forward.",
     ],
     difficulty: 4,
     topicSlug: "modular-arithmetic",
@@ -1167,15 +1240,15 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc8-85",
     question:
-      "Among 50 students, 28 play basketball and 22 play volleyball, and 10 play both. How many play neither sport?",
+      "Among 50 students, 28 play basketball and 22 play volleyball, and 10 play both. How many students play exactly one of the two sports?",
     format: "MULTIPLE_CHOICE",
-    choices: ["2", "6", "8", "10", "12"],
+    choices: ["18", "22", "28", "30", "40"],
     answer: "D",
     solution:
-      "By inclusion-exclusion, students playing at least one sport number 28 + 22 − 10 = 40. Those playing neither are 50 − 40 = 10.",
+      "Of the 28 basketball players, 10 also play volleyball, leaving 18 who play only basketball. Of the 22 volleyball players, 10 also play basketball, leaving 12 who play only volleyball. So 18 + 12 = 30 play exactly one sport.",
     hints: [
-      "Use inclusion-exclusion to find the number playing at least one sport.",
-      "Subtract that from the total number of students.",
+      "Strip the students who play both out of each sport's total.",
+      "Exactly one means basketball-only plus volleyball-only.",
     ],
     difficulty: 4,
     topicSlug: "inclusion-exclusion",
@@ -1306,15 +1379,16 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc8-95",
-    question: "A committee of 4 is chosen from 6 men and 5 women. How many committees have exactly 2 men and 2 women?",
+    question:
+      "A committee of 4 is chosen from 6 men and 5 women. How many committees contain at least 3 women?",
     format: "MULTIPLE_CHOICE",
-    choices: ["55", "90", "100", "120", "150"],
+    choices: ["35", "45", "55", "60", "65"],
     answer: "E",
     solution:
-      "Choose 2 of the 6 men: C(6,2) = 15. Choose 2 of the 5 women: C(5,2) = 10. Multiply: 15 × 10 = 150.",
+      "Split into cases. With exactly 3 women there are C(5,3) x C(6,1) = 10 x 6 = 60 committees; with 4 women there are C(5,4) = 5. Since no committee can have more than 5 women, the total is 60 + 5 = 65.",
     hints: [
-      "Handle the men and women selections separately, then multiply the counts.",
-      "Compute C(6,2) and C(5,2) individually.",
+      "At least 3 women means exactly 3 or exactly 4 — handle the cases separately.",
+      "In each case choose the women, then fill the remaining seats with men.",
     ],
     difficulty: 5,
     topicSlug: "combinations",
@@ -1481,27 +1555,33 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc8-108",
-    question: "A floor tile is a regular hexagon with a side length of 4 inches. What is its area, in square inches?",
+    question:
+      "A floor tile is a regular hexagon with a side length of 4 inches. Drawing the three long diagonals splits it into 6 identical equilateral triangles. One of those triangles has area k times the square root of 3 square inches. What is k?",
     format: "MULTIPLE_CHOICE",
-    choices: ["24√3", "16√3", "36√3", "48√3", "12√3"],
+    choices: ["4", "6", "8", "12", "24"],
     answer: "A",
-    solution: "Cutting from the center gives 6 equilateral triangles of side 4, each with area (√3/4)(4²) = 4√3. The hexagon's area is 6 × 4√3 = 24√3 square inches.",
-    hints: ["Split the hexagon into six equilateral triangles meeting at the center.", "Use the area formula for an equilateral triangle, then multiply by 6."],
+    solution:
+      "Joining the centre of a regular hexagon to its six corners cuts it into 6 equilateral triangles, each with side equal to the hexagon's side, 4 inches. An equilateral triangle of side s has area (sqrt(3)/4)s^2 = (sqrt(3)/4)(16) = 4 sqrt(3), so k = 4.",
+    hints: [
+      "Each of the six pieces is an equilateral triangle whose side equals the hexagon's side.",
+      "Use area = (sqrt(3)/4) times side squared.",
+    ],
     difficulty: 5,
     topicSlug: "area-volume",
     competitionSlug: "amc8",
   },
   {
     slug: "amc8-109",
-    question: "A fair coin is flipped 4 times. What is the probability of getting exactly 3 heads?",
+    question:
+      "A fair coin is flipped 4 times. What is the probability of getting at least 3 heads?",
     format: "MULTIPLE_CHOICE",
-    choices: ["3/8", "1/8", "1/2", "1/4", "1/16"],
-    answer: "D",
+    choices: ["5/16", "3/8", "1/2", "5/8", "11/16"],
+    answer: "A",
     solution:
-      "There are C(4,3) = 4 ways to choose which flips are heads, out of 2⁴ = 16 total outcomes. The probability is 4/16 = 1/4.",
+      "There are 2^4 = 16 equally likely sequences. Exactly 3 heads occurs in C(4,3) = 4 of them and exactly 4 heads in C(4,4) = 1, so 5 sequences have at least 3 heads, giving a probability of 5/16.",
     hints: [
-      "Count the number of ways to choose which 3 of the 4 flips are heads.",
-      "Divide by the total number of possible outcomes, 2⁴ = 16.",
+      "At least 3 heads means exactly 3 or exactly 4 — the cases do not overlap.",
+      "Count each with a binomial coefficient over 2^4 = 16.",
     ],
     difficulty: 5,
     topicSlug: "counting-probability",

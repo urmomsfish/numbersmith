@@ -200,15 +200,17 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc12-14",
-    question: "Two fair six-sided dice are rolled. What is the probability that the sum of the two dice is a prime number?",
+    question:
+      "A board game has a player roll three fair six-sided dice and move forward only when the total showing is a prime number. On a single turn, what is the probability that the player moves forward?",
     format: "MULTIPLE_CHOICE",
-    choices: ["1/3", "7/18", "4/9", "5/12", "11/36"],
-    answer: "D",
+    choices: ["73/216", "5/12", "1/2", "5/8", "2/3"],
+    answer: "A",
     solution:
-      "The possible prime sums are 2, 3, 5, 7, and 11. Counting outcomes: sum 2 has 1 way, sum 3 has 2 ways, sum 5 has 4 ways, sum 7 has 6 ways, and sum 11 has 2 ways, for a total of 1 + 2 + 4 + 6 + 2 = 15 favorable outcomes out of 36. The probability is 15/36 = 5/12.",
+      "The three dice give 6^3 = 216 equally likely outcomes, with totals from 3 to 18. The primes in that range are 3, 5, 7, 11, 13 and 17. The number of ways to make each total is 1, 6, 15, 27, 21 and 3 respectively, so the prime totals account for 1 + 6 + 15 + 27 + 21 + 3 = 73 outcomes, giving a probability of 73/216.",
     hints: [
-      "List the prime numbers that are achievable as a sum of two dice (between 2 and 12).",
-      "Count the outcomes for each prime sum separately, then add them and divide by 36.",
+      "List the primes between 3 and 18 first — there are only six of them.",
+      "Count the number of ordered triples giving each of those totals; the counts are symmetric about 10.5.",
+      "Add the six counts and divide by 216.",
     ],
     difficulty: 7,
     topicSlug: "basic-probability",
@@ -462,15 +464,16 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc12-34",
     question:
-      "A price is increased by 20% and then the new price is decreased by 20%. The final price is what percent of the original price?",
+      "A shop raises the price of a coat by 25% before the winter season. It then advertises 20% off that raised price, and members receive a further 10% off the already-discounted price. What percent of the coat's original price does a member finally pay?",
     format: "MULTIPLE_CHOICE",
-    choices: ["94%", "90%", "100%", "98%", "96%"],
-    answer: "E",
+    choices: ["85", "90", "95", "96", "100"],
+    answer: "B",
     solution:
-      "Increasing by 20% multiplies the price by 1.2, and decreasing the result by 20% multiplies by 0.8. The combined effect is 1.2 × 0.8 = 0.96, so the final price is 96% of the original.",
+      "Successive percentage changes multiply. Raising by 25% multiplies by 1.25, taking 20% off multiplies by 0.80, and the further 10% off multiplies by 0.90. Together that is 1.25 x 0.80 x 0.90 = 0.90, so a member pays 90% of the original price.",
     hints: [
-      "Represent each percent change as a multiplier rather than computing amounts separately.",
-      "Multiply the two multipliers together to get the overall factor.",
+      "Percentage changes compose by multiplication, not addition.",
+      "Write each change as a single multiplier: 1.25, 0.80 and 0.90.",
+      "Multiply the three multipliers and read the result as a percentage.",
     ],
     difficulty: 5,
     topicSlug: "percentages",
@@ -514,15 +517,17 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc12-38",
-    question: "Two fair six-sided dice are rolled. What is the probability that the sum of the two dice is 8?",
+    question:
+      "Three fair six-sided dice are rolled together. What is the probability that the three numbers showing add up to exactly 8?",
     format: "MULTIPLE_CHOICE",
-    choices: ["1/6", "5/36", "7/36", "5/18", "1/9"],
-    answer: "B",
+    choices: ["1/36", "5/72", "7/72", "1/8", "5/36"],
+    answer: "C",
     solution:
-      "There are 36 equally likely outcomes. The pairs summing to 8 are (2,6), (3,5), (4,4), (5,3), (6,2), which is 5 outcomes. The probability is 5/36.",
+      "There are 6^3 = 216 equally likely ordered outcomes. The ways to write 8 as an ordered sum of three numbers from 1 to 6 number 21: the unordered possibilities are 1+1+6, 1+2+5, 1+3+4, 2+2+4, 2+3+3, contributing 3 + 6 + 6 + 3 + 3 = 21 ordered triples. The probability is 21/216 = 7/72.",
     hints: [
-      "List the ordered pairs of dice rolls that sum to 8.",
-      "Divide the number of favorable outcomes by the total of 36 outcomes.",
+      "Count ordered triples — the dice are distinguishable.",
+      "List the unordered ways to total 8, then count the orderings of each.",
+      "A triple with a repeated value has 3 orderings, not 6.",
     ],
     difficulty: 5,
     topicSlug: "basic-probability",
@@ -542,12 +547,18 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc12-40",
-    question: "A street's houses are numbered with two-digit numbers. How many of those house numbers have digits adding to 12?",
+    question:
+      "A locker room assigns each athlete a three-digit code. No digit may be 0, all three digits must be different, and the digits must add to 12. How many codes are possible?",
     format: "MULTIPLE_CHOICE",
-    choices: ["7", "8", "5", "6", "9"],
-    answer: "A",
-    solution: "Listing the two-digit numbers whose digits sum to 12: 39, 48, 57, 66, 75, 84, 93 — seven of them.",
-    hints: ["Let the tens digit run from 1 to 9 and see which give a valid units digit.", "The units digit must stay between 0 and 9."],
+    choices: ["21", "28", "35", "42", "56"],
+    answer: "D",
+    solution:
+      "First find the sets of three distinct digits from 1 to 9 that sum to 12. Taking them in increasing order: {1,2,9}, {1,3,8}, {1,4,7}, {1,5,6}, {2,3,7}, {2,4,6} and {3,4,5} — seven sets in all. Each set can be arranged in 3! = 6 orders, and every arrangement is a different code, so there are 7 x 6 = 42 codes.",
+    hints: [
+      "Find the unordered sets of digits first, then count their arrangements.",
+      "Work through the sets in increasing order so none is missed or repeated.",
+      "Each set of three distinct digits gives 3! codes.",
+    ],
     difficulty: 5,
     topicSlug: "number-properties",
     competitionSlug: "amc12",
@@ -607,15 +618,17 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc12-45",
-    question: "A committee of 3 people is chosen from a group of 8 people. How many different committees are possible?",
+    question:
+      "A school club of 8 members must send 3 of them to a regional conference. Two of the members, Priya and Marcus, had a falling-out and have each told the adviser they will not attend if the other one does. How many different groups of 3 can the adviser send?",
     format: "MULTIPLE_CHOICE",
-    choices: ["70", "64", "42", "48", "56"],
-    answer: "E",
+    choices: ["50", "52", "54", "56", "60"],
+    answer: "A",
     solution:
-      "The order of selection does not matter, so this is a combination: C(8,3) = 8!/(3!5!) = (8 × 7 × 6)/(3 × 2 × 1) = 336/6 = 56.",
+      "Count all groups and remove the forbidden ones. There are C(8,3) = (8 × 7 × 6)/6 = 56 groups in total. A group is forbidden exactly when it contains both Priya and Marcus, and such a group is determined by its one remaining member, chosen from the other 6 people — so there are 6 of them. That leaves 56 − 6 = 50 acceptable groups.",
     hints: [
-      "Since the committee has no distinct roles, order doesn't matter — use combinations.",
-      "Compute C(8,3) = (8 × 7 × 6)/3!.",
+      "Counting the groups that break the rule is far easier than counting the ones that satisfy it.",
+      "If a group contains both of them, only one seat is left to fill — from how many people?",
+      "Subtract the forbidden groups from C(8,3).",
     ],
     difficulty: 5,
     topicSlug: "combinations",
@@ -763,15 +776,16 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc12-57",
     question:
-      "In how many ways can 5 distinct books be arranged on a shelf so that two particular books are never adjacent?",
+      "A librarian lines up 6 different books on a display shelf. Two of them are volumes of the same series, and she does not want those two standing next to each other. In how many orders can she arrange the books?",
     format: "MULTIPLE_CHOICE",
-    choices: ["84", "96", "48", "60", "72"],
+    choices: ["240", "360", "420", "456", "480"],
     answer: "E",
     solution:
-      "There are 5! = 120 total arrangements. Treating the two particular books as a single glued block gives 4! × 2 = 48 arrangements where they are adjacent. The number of arrangements where they are not adjacent is 120 - 48 = 72.",
+      "Count all arrangements and subtract the bad ones. All six books can be arranged in 6! = 720 ways. If the two volumes are adjacent, glue them into a single block: the block plus the other 4 books gives 5! = 120 arrangements, and the two volumes can be swapped inside the block, giving 2 x 120 = 240. So 720 - 240 = 480 arrangements keep them apart.",
     hints: [
-      "First count all arrangements, then count the ones where the two books ARE adjacent (treat them as a block).",
-      "Subtract the adjacent count from the total using complementary counting.",
+      "Counting the arrangements where they ARE adjacent is easier than counting the rest.",
+      "Treat the adjacent pair as one glued object, then remember it can be glued in two orders.",
+      "Subtract the adjacent count from 6!.",
     ],
     difficulty: 6,
     topicSlug: "permutations",
@@ -780,15 +794,16 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc12-58",
     question:
-      "Two cards are drawn without replacement from a standard 52-card deck. What is the probability that both cards are aces?",
+      "A standard 52-card deck is shuffled and three cards are dealt without replacement. What is the probability that all three cards share the same rank?",
     format: "MULTIPLE_CHOICE",
-    choices: ["1/221", "1/169", "1/13", "1/26", "4/221"],
+    choices: ["1/425", "1/221", "1/85", "1/34", "1/17"],
     answer: "A",
     solution:
-      "The probability the first card is an ace is 4/52. Given that, the probability the second is also an ace is 3/51. The combined probability is (4/52)(3/51) = 12/2652 = 1/221.",
+      "There are C(52,3) = 22,100 equally likely three-card hands. A hand of three matching cards is determined by choosing the rank (13 ways) and then 3 of that rank's 4 suits, C(4,3) = 4 ways, giving 13 x 4 = 52 such hands. The probability is 52/22100 = 1/425.",
     hints: [
-      "Multiply the probability of the first ace by the conditional probability of the second ace.",
-      "Remember the deck has one fewer card (and one fewer ace) for the second draw.",
+      "Count unordered hands: C(52,3) of them altogether.",
+      "A matching hand is fixed by its rank and by which three of the four suits appear.",
+      "There are 13 ranks and C(4,3) = 4 suit choices for each.",
     ],
     difficulty: 6,
     topicSlug: "conditional-probability",
@@ -844,12 +859,18 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc12-63",
-    question: "A floor tile is a regular hexagon with 4-inch sides. What is its area, in square inches?",
+    question:
+      "A floor tile is a regular hexagon with 4-inch sides. A designer paints a triangle on the tile by joining every other corner — that is, three corners with one skipped between each pair. The painted triangle's area is k times the square root of 3 square inches. What is k?",
     format: "MULTIPLE_CHOICE",
-    choices: ["18√3", "32√3", "12√3", "16√3", "24√3"],
-    answer: "E",
-    solution: "A regular hexagon splits into 6 equilateral triangles of side 4, each with area (√3/4)(16) = 4√3. The total is 6(4√3) = 24√3 square inches.",
-    hints: ["Split the hexagon into six equilateral triangles from its center.", "Use the equilateral-triangle area formula on one of them."],
+    choices: ["8", "12", "16", "18", "24"],
+    answer: "B",
+    solution:
+      "Joining alternate corners of a regular hexagon gives an equilateral triangle. In a regular hexagon of side 4 the distance between alternate corners is 4 times the square root of 3, so the triangle is equilateral with that side. Its area is (sqrt(3)/4)(4 sqrt(3))^2 = (sqrt(3)/4)(48) = 12 sqrt(3), so k = 12. (As a check, the whole hexagon has area 24 sqrt(3), and the triangle is exactly half of it.)",
+    hints: [
+      "The three alternate corners form an equilateral triangle — find its side length first.",
+      "In a regular hexagon of side s, alternate corners are s times the square root of 3 apart.",
+      "Use area = (sqrt(3)/4) x side^2 for an equilateral triangle.",
+    ],
     difficulty: 6,
     topicSlug: "polygons",
     competitionSlug: "amc12",
@@ -958,15 +979,16 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
   {
     slug: "amc12-72",
     question:
-      "In a group of 30 people, what is the minimum number of people who are guaranteed to share the same birth month?",
+      "A company has 50 employees, and every birthday falls in one of the 12 months. What is the largest number n for which the company can be certain that some month contains at least n employees' birthdays?",
     format: "MULTIPLE_CHOICE",
-    choices: ["2", "4", "3", "6", "5"],
+    choices: ["3", "4", "5", "6", "12"],
     answer: "C",
     solution:
-      "There are 12 months. By the Pigeonhole Principle, distributing 30 people among 12 months as evenly as possible gives some month at least ⌈30/12⌉ = 3 people.",
+      "If every month held at most 4 birthdays, the company could have at most 12 x 4 = 48 employees — fewer than 50. So some month must hold at least 5. That bound is achievable: 50 = 12 x 4 + 2, so a spread of two months with 5 and ten months with 4 gives no month more than 5. Hence n = 5.",
     hints: [
-      "This is a Pigeonhole Principle problem with 12 'holes' (months).",
-      "Compute ⌈30/12⌉ to find the guaranteed minimum in the fullest month.",
+      "Ask what would happen if every month held at most 4 birthdays.",
+      "12 months x 4 birthdays is only 48, which is short of 50.",
+      "Check the bound is tight by finding a spread where no month exceeds it.",
     ],
     difficulty: 6,
     topicSlug: "pigeonhole",
@@ -1024,12 +1046,18 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc12-77",
-    question: "A warehouse's cumulative shipment count after n days is 3n² + 2n crates. How many crates were shipped on the 10th day alone?",
+    question:
+      "A warehouse's records show that after n days of operation it has shipped a cumulative total of 3n^2 + 2n crates. On which day did the warehouse ship exactly 89 crates?",
     format: "MULTIPLE_CHOICE",
-    choices: ["56", "59", "62", "60", "53"],
-    answer: "B",
-    solution: "The 10th day's count is the total after 10 days minus the total after 9: (300 + 20) − (243 + 18) = 320 − 261 = 59 crates.",
-    hints: ["A single day's amount is the difference of two consecutive cumulative totals.", "Evaluate the formula at n = 10 and n = 9."],
+    choices: ["9", "12", "14", "15", "18"],
+    answer: "D",
+    solution:
+      "The crates shipped on day n alone are the difference of consecutive cumulative totals: (3n^2 + 2n) - (3(n-1)^2 + 2(n-1)). Expanding, 3(n^2 - (n-1)^2) + 2 = 3(2n - 1) + 2 = 6n - 1. Setting 6n - 1 = 89 gives 6n = 90 and n = 15.",
+    hints: [
+      "The total after n days minus the total after n-1 days is the amount shipped on day n.",
+      "Simplify that difference — it is linear in n, not quadratic.",
+      "Set the resulting expression equal to 89.",
+    ],
     difficulty: 7,
     topicSlug: "sequences",
     competitionSlug: "amc12",
@@ -1060,15 +1088,17 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc12-80",
-    question: "A fair coin is flipped 6 times. What is the probability of getting exactly 4 heads?",
+    question:
+      "A fair coin is flipped 6 times. What is the probability of getting at least 4 heads?",
     format: "MULTIPLE_CHOICE",
-    choices: ["21/64", "3/16", "5/16", "15/64", "15/32"],
-    answer: "D",
+    choices: ["1/8", "3/16", "15/64", "5/16", "11/32"],
+    answer: "E",
     solution:
-      "The probability is C(6,4)(1/2)⁴(1/2)² = C(6,4)/2⁶ = 15/64.",
+      "There are 2^6 = 64 equally likely sequences. The number with exactly 4, 5 and 6 heads are C(6,4) = 15, C(6,5) = 6 and C(6,6) = 1, so 15 + 6 + 1 = 22 sequences have at least 4 heads. The probability is 22/64 = 11/32.",
     hints: [
-      "Use the binomial probability formula with n = 6, k = 4, p = 1/2.",
-      "Compute C(6,4) = 15 and divide by 2⁶ = 64.",
+      "At least 4 heads means exactly 4, exactly 5, or exactly 6 — these cases do not overlap.",
+      "Count each case with a binomial coefficient out of 2^6 = 64.",
+      "Add the three counts before dividing.",
     ],
     difficulty: 7,
     topicSlug: "counting-probability",
@@ -1076,12 +1106,18 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc12-81",
-    question: "A cube-shaped crate holds 216 cubic feet. How many square feet of material cover all six of its faces?",
+    question:
+      "A cube-shaped crate holds 216 cubic feet. Its entire outer surface is painted, and it is then sawn into 1-foot cubes. How many of those small cubes have paint on exactly two faces?",
     format: "MULTIPLE_CHOICE",
-    choices: ["196", "216", "240", "200", "180"],
-    answer: "B",
-    solution: "The edge is ∛216 = 6 feet. The surface area is 6(6²) = 6(36) = 216 square feet.",
-    hints: ["Take the cube root of the volume to get the edge length.", "Then multiply the area of one face by 6."],
+    choices: ["48", "54", "64", "96", "144"],
+    answer: "A",
+    solution:
+      "The crate has edge length the cube root of 216, which is 6 feet, so it cuts into a 6 x 6 x 6 array. A small cube shows paint on exactly two faces precisely when it sits along an edge of the crate but not at a corner. Each of the 12 edges holds 6 small cubes, of which the 2 at the ends are corners, leaving 4 per edge. That gives 12 x 4 = 48.",
+    hints: [
+      "Find the edge length of the crate first from its volume.",
+      "Two painted faces means the small cube lies on an edge of the big cube but is not a corner.",
+      "Count 12 edges, and subtract the two corner cubes from each.",
+    ],
     difficulty: 7,
     topicSlug: "three-d-geometry",
     competitionSlug: "amc12",
@@ -1124,15 +1160,17 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc12-85",
-    question: "How many distinct arrangements are there of the letters in the word BANANA?",
+    question:
+      "A child's name tiles spell BANANA. She rearranges all six tiles in a row, but she dislikes seeing two A tiles next to each other, so she wants an arrangement in which no two A tiles are adjacent. How many such arrangements are there?",
     format: "MULTIPLE_CHOICE",
-    choices: ["72", "90", "60", "120", "30"],
-    answer: "C",
+    choices: ["6", "12", "18", "24", "30"],
+    answer: "B",
     solution:
-      "BANANA has 6 letters with A repeated 3 times and N repeated 2 times. The number of distinct arrangements is 6!/(3!2!) = 720/12 = 60.",
+      "Place the non-A tiles first: B, N, N can be ordered in 3!/2! = 3 distinct ways, since the two N tiles are identical. Those three tiles create 4 gaps — before, between, between, and after. Choosing 3 of those 4 gaps for the three A tiles guarantees no two A tiles touch, and the A tiles are identical so the choice of gaps is all that matters: C(4,3) = 4. The total is 3 × 4 = 12.",
     hints: [
-      "Count the total letters and identify which letters repeat, and how often.",
-      "Divide the total permutations 6! by the factorial of each repeated letter's count.",
+      "Seat the letters that are allowed to touch first, and let the A tiles fill the gaps between them.",
+      "B, N, N has fewer than 3! orderings because the two N tiles are identical.",
+      "Three non-A tiles create 4 gaps; choose which 3 of them hold an A.",
     ],
     difficulty: 7,
     topicSlug: "permutations",
@@ -1176,15 +1214,17 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc12-89",
-    question: "Three fair six-sided dice are rolled. What is the probability that the sum of the three dice is 10?",
+    question:
+      "Three fair six-sided dice are rolled. What is the probability that the three numbers add up to 10 and that no two of the dice show the same number?",
     format: "MULTIPLE_CHOICE",
-    choices: ["5/36", "1/8", "1/6", "1/9", "7/72"],
+    choices: ["1/18", "1/12", "1/8", "5/36", "1/6"],
     answer: "B",
     solution:
-      "There are 6³ = 216 equally likely outcomes. Careful enumeration (or the standard coefficient count) shows exactly 27 ordered triples from {1,...,6} sum to 10. The probability is 27/216 = 1/8.",
+      "There are 216 equally likely ordered outcomes. The sets of three distinct values from 1 to 6 summing to 10 are {1,3,6}, {1,4,5} and {2,3,5} — three of them. Each set of three distinct values can be rolled in 3! = 6 orders, giving 3 x 6 = 18 outcomes, so the probability is 18/216 = 1/12.",
     hints: [
-      "Total outcomes are 6³ = 216 since each die is independent.",
-      "Count ordered triples (a,b,c) with each value 1-6 summing to 10 — there are 27 of them.",
+      "List the sets of three DIFFERENT values from 1 to 6 that total 10.",
+      "Sets with a repeat, such as {2,4,4}, are excluded by the distinctness condition.",
+      "Each set of three distinct values corresponds to 3! ordered rolls.",
     ],
     difficulty: 7,
     topicSlug: "counting-probability",
@@ -1204,12 +1244,18 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc12-91",
-    question: "A paving stone is a regular polygon whose interior corner angle measures 150 degrees. How many sides does it have?",
+    question:
+      "A paving stone is a regular polygon whose interior corner angle measures 150 degrees. A designer draws every diagonal of the stone. How many diagonals does she draw?",
     format: "MULTIPLE_CHOICE",
-    choices: ["12", "18", "10", "9", "15"],
-    answer: "A",
-    solution: "Each exterior angle is 180 − 150 = 30 degrees, and the exterior angles total 360, so the stone has 360/30 = 12 sides.",
-    hints: ["Find the exterior angle first as 180 minus the interior angle.", "Exterior angles of any polygon sum to 360 degrees."],
+    choices: ["36", "48", "54", "60", "66"],
+    answer: "C",
+    solution:
+      "Each exterior angle is 180 - 150 = 30 degrees, and the exterior angles of any polygon total 360 degrees, so the stone has 360/30 = 12 sides. A polygon with n sides has n(n-3)/2 diagonals, giving 12 x 9/2 = 54.",
+    hints: [
+      "Work with the exterior angle: it is the supplement of 150 degrees.",
+      "Exterior angles always total 360 degrees, which gives the number of sides.",
+      "Then use the diagonal count n(n-3)/2.",
+    ],
     difficulty: 7,
     topicSlug: "polygons",
     competitionSlug: "amc12",
@@ -1259,12 +1305,18 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc12-95",
-    question: "A triangular plot of land has sides measuring 13, 14, and 15 meters. What is its area, in square meters?",
+    question:
+      "A triangular plot of land has sides measuring 13, 14 and 15 metres. A surveyor needs to run a straight drainage channel from the corner opposite the 14-metre side, meeting that side at a right angle. How long, in metres, is the channel?",
     format: "MULTIPLE_CHOICE",
-    choices: ["90", "84", "76", "80", "88"],
-    answer: "B",
-    solution: "The semiperimeter is s = 21. By Heron's formula the area is √(21·8·7·6) = √7056 = 84 square meters.",
-    hints: ["Use Heron's formula with the semiperimeter.", "Alternatively, drop an altitude to the side of length 14 and split it into 5 and 9."],
+    choices: ["6", "8", "10", "12", "13"],
+    answer: "D",
+    solution:
+      "The channel is the altitude to the side of length 14, so find the area first and then read the altitude off it. The semiperimeter is s = (13 + 14 + 15)/2 = 21, and Heron\'s formula gives an area of √(21 × 8 × 7 × 6) = √7056 = 84 square metres. Since the area is also (1/2)(14)h, we get 84 = 7h, so h = 12 metres.",
+    hints: [
+      "The channel is the altitude to the 14-metre side — you are not asked for the area, but the area is the way in.",
+      "Heron\'s formula gives the area from the three side lengths alone.",
+      "Area = (1/2) × base × height, with the 14-metre side as the base.",
+    ],
     difficulty: 8,
     topicSlug: "triangles",
     competitionSlug: "amc12",
@@ -1478,15 +1530,17 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
   },
   {
     slug: "amc12-112",
-    question: "A fair six-sided die is rolled 4 times. What is the probability that the sequence of rolls is strictly increasing?",
+    question:
+      "A fair six-sided die is rolled 4 times and the results are written down in order. What is the probability that each roll is greater than or equal to the one before it?",
     format: "MULTIPLE_CHOICE",
-    choices: ["1/54", "1/216", "5/216", "5/432", "5/108"],
+    choices: ["5/432", "1/54", "5/72", "7/72", "1/6"],
     answer: "D",
     solution:
-      "For a strictly increasing sequence, the 4 rolled values must all be distinct, and there is exactly one increasing order for any chosen set of 4 distinct values from {1,...,6}. The number of favorable outcomes is C(6,4) = 15. The total number of outcomes is 6⁴ = 1296. The probability is 15/1296 = 5/432.",
+      "There are 6^4 = 1296 equally likely sequences. A non-decreasing sequence is determined entirely by how many times each face appears, so counting them is counting multisets of size 4 from 6 faces: C(6 + 4 - 1, 4) = C(9,4) = 126. The probability is 126/1296 = 7/72.",
     hints: [
-      "A strictly increasing sequence corresponds to choosing a set of 4 distinct values — order is then forced.",
-      "Divide C(6,4) by the total number of possible roll sequences, 6⁴.",
+      "A non-decreasing sequence is fixed once you know how many of each face it contains.",
+      "That makes it a multiset count, not a permutation count — repeats are allowed here.",
+      "Use C(n + k - 1, k) with n = 6 faces and k = 4 rolls.",
     ],
     difficulty: 8,
     topicSlug: "counting-probability",
@@ -2460,6 +2514,269 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
     ],
     difficulty: 9,
     topicSlug: "quadratics",
+    competitionSlug: "amc12",
+  },
+  // ---- Opening problems (difficulty 3-4) --------------------------------
+  //
+  // The AMC 12 bank bottomed out at difficulty 5, so a 25-question paper could
+  // not ramp: with a floor of 5 and a ceiling of 10 the closing questions came
+  // out under 1.8x the opening ones, against the 2-3x a real paper has. These
+  // fill the bottom two rungs. They are still contest questions — each needs a
+  // setup step before the arithmetic — but they are meant to be solved in about
+  // a minute, the way the first five questions of a real AMC 12 are.
+  {
+    slug: "amc12-201",
+    question:
+      "The Carlton Playhouse sells adult tickets for $12 and student tickets for $8. On Saturday every seat was filled: 200 tickets were sold in total, and the box office took in $2,040. How many student tickets were sold?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["90", "100", "110", "120", "140"],
+    answer: "A",
+    solution:
+      "Let s be the number of student tickets, so 200 - s adult tickets were sold. Then 12(200 - s) + 8s = 2040, which gives 2400 - 4s = 2040, so 4s = 360 and s = 90. Checking: 110 adult tickets raise $1,320 and 90 student tickets raise $720, totalling $2,040.",
+    hints: [
+      "Name one of the two ticket counts and write the other in terms of it — they sum to 200.",
+      "Build the revenue equation and notice that the s terms collapse to a single coefficient.",
+    ],
+    difficulty: 3,
+    topicSlug: "linear-equations",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-202",
+    question:
+      "A concert hall is built so that the front row has 12 seats and each row behind it has 3 more seats than the row directly in front. How many seats are there in the first 20 rows altogether?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["720", "810", "900", "960", "1080"],
+    answer: "B",
+    solution:
+      "The row sizes form an arithmetic sequence with first term 12 and common difference 3. The sum of the first n terms is (n/2)(2a + (n-1)d) = (20/2)(2 x 12 + 19 x 3) = 10(24 + 57) = 10 x 81 = 810.",
+    hints: [
+      "The row sizes form an arithmetic sequence — you do not need to list all twenty.",
+      "Use the sum formula (n/2)(2a + (n-1)d), or pair the first row with the last.",
+    ],
+    difficulty: 4,
+    topicSlug: "sequences",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-203",
+    question:
+      "A baker is packing this morning's cookies. Packed twelve to a box, 7 cookies are left over; packed eighteen to a box, 13 are left over. What is the smallest possible number of cookies she baked?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["19", "25", "31", "43", "55"],
+    answer: "C",
+    solution:
+      "If n is the number of cookies, then n leaves remainder 7 on division by 12 and remainder 13 on division by 18. In both cases the shortfall to a full box is the same: n + 5 is divisible by 12 and by 18, so n + 5 is a multiple of lcm(12, 18) = 36. The smallest positive n is 36 - 5 = 31, and indeed 31 = 2(12) + 7 = 1(18) + 13.",
+    hints: [
+      "Compare each remainder with its divisor — how far is n from the next full box in each case?",
+      "Both shortfalls are 5, so n + 5 is divisible by both 12 and 18.",
+    ],
+    difficulty: 4,
+    topicSlug: "modular-arithmetic",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-204",
+    question:
+      "A teacher records the scores of her 24 students and computes a class mean of 78. She then discovers that two scores were entered wrongly: a 40 should have been an 88, and a 46 should have been a 94. What is the corrected class mean?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["76", "78", "80", "82", "86"],
+    answer: "D",
+    solution:
+      "The recorded total was 24 x 78 = 1872. Each correction raises the total by 48, so the corrected total is 1872 + 48 + 48 = 1968, and the corrected mean is 1968/24 = 82.",
+    hints: [
+      "Work with the total rather than the mean — a mean of 78 over 24 students is a fixed total.",
+      "Each correction changes the total by the difference between the two scores.",
+    ],
+    difficulty: 3,
+    topicSlug: "averages",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-205",
+    question:
+      "A triangular plot of land has corners at A(0, 0), B(8, 0) and C(8, 6), with distances in metres. A surveyor runs a straight fence from the midpoint of side AB to the midpoint of side BC. What is the area, in square metres, of the smaller plot cut off on the side containing corner B?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["2", "3", "4", "5", "6"],
+    answer: "E",
+    solution:
+      "The midpoint of AB is (4, 0) and the midpoint of BC is (8, 3). Together with B(8, 0) these form a right triangle whose legs run 4 metres horizontally and 3 metres vertically, so its area is (1/2)(4)(3) = 6 square metres. (As a check, triangle ABC has area (1/2)(8)(6) = 24, and the piece cut off is a quarter of it.)",
+    hints: [
+      "Find the two midpoints first; both have convenient whole-number coordinates.",
+      "The piece containing B is itself a right triangle — read its legs straight off the coordinates.",
+    ],
+    difficulty: 4,
+    topicSlug: "coordinate-geometry",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-206",
+    question:
+      "In a laboratory, one bacterial culture has a population of 2^(x+3) cells after x hours, and a second culture started at the same moment has 8^(x-1) cells after x hours. After how many hours do the two cultures first have equal populations?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["3", "4", "5", "6", "7"],
+    answer: "A",
+    solution:
+      "Write both sides as powers of 2: 8^(x-1) = (2^3)^(x-1) = 2^(3x-3). Setting the exponents equal gives x + 3 = 3x - 3, so 2x = 6 and x = 3. At x = 3 both populations are 2^6 = 64 cells.",
+    hints: [
+      "Rewrite 8 as a power of 2 so both sides share a base.",
+      "Equal powers of the same base means equal exponents.",
+    ],
+    difficulty: 3,
+    topicSlug: "exponents-radicals",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-207",
+    question:
+      "A bread recipe calls for flour and sugar in the ratio 5:2 by volume. A baker scaling the recipe up finds she needs 9 more cups of flour than of sugar. How many cups of flour and sugar does she use in total?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["18", "21", "24", "27", "30"],
+    answer: "B",
+    solution:
+      "Write the amounts as 5x cups of flour and 2x cups of sugar. The difference is 5x - 2x = 3x = 9, so x = 3. That gives 15 cups of flour and 6 of sugar, a total of 21 cups.",
+    hints: [
+      "A ratio of 5:2 means the two amounts are 5x and 2x for some x.",
+      "The difference between them is 3x, and you are told that difference.",
+    ],
+    difficulty: 3,
+    topicSlug: "ratios-proportions",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-208",
+    question:
+      "A right-angled garden bed has a diagonal brace 13 feet long running between the ends of its two perpendicular sides, and one of those sides is 7 feet longer than the other. What is the area of the garden bed, in square feet?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["20", "26", "30", "36", "42"],
+    answer: "C",
+    solution:
+      "Let the legs be a and b with a - b = 7 and a^2 + b^2 = 13^2 = 169. Squaring the first gives a^2 - 2ab + b^2 = 49, so 169 - 2ab = 49 and ab = 60. The area is ab/2 = 30 square feet. (The legs are 12 and 5.)",
+    hints: [
+      "You are not asked for the sides themselves — the area needs only their product.",
+      "Square the difference of the legs and compare it with the Pythagorean relation.",
+    ],
+    difficulty: 4,
+    topicSlug: "triangles",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-209",
+    question:
+      "A library assigns each new member a four-character code: the first two characters are letters from the 26-letter alphabet, and the last two are digits that must differ from each other. Letters may repeat. How many different codes are possible?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["46800", "52000", "58500", "60840", "67600"],
+    answer: "D",
+    solution:
+      "The two letters can each be chosen in 26 ways, giving 26 x 26 = 676. The first digit has 10 choices and the second must differ from it, leaving 9. So the count is 676 x 10 x 9 = 676 x 90 = 60,840.",
+    hints: [
+      "Count each position separately and multiply.",
+      "The distinctness condition only affects the last digit, which has 9 choices rather than 10.",
+    ],
+    difficulty: 4,
+    topicSlug: "counting-principles",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-210",
+    question:
+      "A courier covers a 50-kilometre route, cycling part of the way at 15 kilometres per hour and pushing the bicycle on foot for the rest at 5 kilometres per hour. The whole trip takes 6 hours. How many kilometres did she cycle?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["12", "18", "22", "26", "30"],
+    answer: "E",
+    solution:
+      "Let d be the distance cycled, so 50 - d is walked. The times add to 6 hours: d/15 + (50 - d)/5 = 6. Multiplying through by 15 gives d + 3(50 - d) = 90, so 150 - 2d = 90 and d = 30. Checking: 30 km at 15 km/h is 2 hours, and 20 km at 5 km/h is 4 hours.",
+    hints: [
+      "Time is distance divided by speed; the two times must add to 6 hours.",
+      "Clear the fractions by multiplying through by 15.",
+    ],
+    difficulty: 3,
+    topicSlug: "rates",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-211",
+    question:
+      "A drawer contains 5 red socks and 3 blue socks, all identical apart from colour. Two socks are pulled out at random without looking. What is the probability that they match in colour?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["13/28", "1/2", "15/28", "4/7", "5/8"],
+    answer: "A",
+    solution:
+      "There are C(8, 2) = 28 equally likely pairs. Matching pairs are C(5, 2) = 10 red pairs and C(3, 2) = 3 blue pairs, so 13 of the 28 pairs match, giving a probability of 13/28.",
+    hints: [
+      "Count unordered pairs: there are C(8, 2) of them in total.",
+      "A matching pair is either two reds or two blues — count each case and add.",
+    ],
+    difficulty: 4,
+    topicSlug: "basic-probability",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-212",
+    question:
+      "A rectangular vegetable garden is 4 metres longer than it is wide, and it covers 96 square metres. How many metres of edging are needed to go once around its perimeter?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["36", "40", "44", "48", "52"],
+    answer: "B",
+    solution:
+      "Let the width be w, so the length is w + 4 and w(w + 4) = 96. Then w^2 + 4w - 96 = 0, which factors as (w + 12)(w - 8) = 0, so w = 8 and the length is 12. The perimeter is 2(8 + 12) = 40 metres.",
+    hints: [
+      "Write the length in terms of the width and use the area to form a quadratic.",
+      "The quadratic factors over the integers; discard the negative root.",
+    ],
+    difficulty: 3,
+    topicSlug: "quadratics",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-213",
+    question:
+      "A wall clock with a standard 12-hour face reads exactly 3 o'clock. A technician leaves it running untouched for 1,000 hours. What hour will the clock read when he returns?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["3", "5", "7", "9", "11"],
+    answer: "C",
+    solution:
+      "The face repeats every 12 hours, so only the remainder of 1000 on division by 12 matters. Since 12 x 83 = 996, the remainder is 4. Advancing 4 hours from 3 o'clock gives 7 o'clock.",
+    hints: [
+      "The clock face repeats every 12 hours, so reduce 1000 modulo 12.",
+      "Add the remainder to the starting hour, wrapping past 12 if needed.",
+    ],
+    difficulty: 3,
+    topicSlug: "modular-arithmetic",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-214",
+    question:
+      "A cylindrical rainwater tank has a base of radius 3 feet and a height of 10 feet. After a dry spell it is 40% full. The volume of water in the tank is k times pi cubic feet. What is k?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["18", "27", "30", "36", "45"],
+    answer: "D",
+    solution:
+      "The full tank holds pi r^2 h = pi(3^2)(10) = 90pi cubic feet. Forty percent of that is 0.4 x 90pi = 36pi, so k = 36.",
+    hints: [
+      "Find the full volume first, using pi r^2 h.",
+      "The tank being 40% full scales that volume by 0.4 — the pi comes along unchanged.",
+    ],
+    difficulty: 3,
+    topicSlug: "three-d-geometry",
+    competitionSlug: "amc12",
+  },
+  {
+    slug: "amc12-215",
+    question:
+      "A mason builds a triangular brick wall in rows. The top row is a single brick, and each row below it holds exactly 2 more bricks than the row above, so the second row holds 3 bricks and the third holds 5. How many bricks are in the wall once 30 rows are finished?",
+    format: "MULTIPLE_CHOICE",
+    choices: ["465", "600", "780", "870", "900"],
+    answer: "E",
+    solution:
+      "The rows hold 1, 3, 5, ... bricks — the odd numbers. The sum of the first n odd numbers is n^2, so 30 rows hold 30^2 = 900 bricks. (The thirtieth row alone holds 2 x 30 - 1 = 59.)",
+    hints: [
+      "Write out the first few row sizes: they are the odd numbers.",
+      "The sum of the first n odd numbers has a well-known closed form — try small cases to spot it.",
+    ],
+    difficulty: 4,
+    topicSlug: "number-patterns",
     competitionSlug: "amc12",
   },
 ];
