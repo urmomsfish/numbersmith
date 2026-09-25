@@ -1,8 +1,11 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
+import { clampRating, ratingDelta } from "@/lib/rating-model";
 
-const MIN_RATING = 600;
-const MAX_RATING = 2400;
+// The Elo arithmetic lives in src/lib/rating-model.ts so the contest-score
+// predictor builds on the same definition rather than a second copy of it.
+// Re-exported here because every existing caller imports it from this module.
+export { clampRating, ratingDelta };
 
 /** The admin account shows a fixed rating instead of one earned through
  * practice. Its numbers are demo and support surface, where a value that
@@ -33,22 +36,6 @@ async function writePinned(userId: string, category: string, value: number) {
     update: { value },
     create: { userId, category, value },
   });
-}
-
-export function clampRating(value: number): number {
-  return Math.max(MIN_RATING, Math.min(MAX_RATING, Math.round(value)));
-}
-
-/** Elo-inspired delta: harder problems solved correctly earn more, and
- * missing an easy problem (relative to current rating) costs more. This
- * keeps the rating anchored to "difficulty the student can reliably solve"
- * without requiring an opponent model. */
-export function ratingDelta(currentRating: number, problemDifficulty: number, correct: boolean): number {
-  const problemRating = 900 + problemDifficulty * 120; // difficulty 1 -> 1020, 10 -> 2100
-  const expected = 1 / (1 + Math.pow(10, (problemRating - currentRating) / 400));
-  const K = 24;
-  const actual = correct ? 1 : 0;
-  return Math.round(K * (actual - expected));
 }
 
 export async function setRating(userId: string, category: string, value: number, reason: string) {

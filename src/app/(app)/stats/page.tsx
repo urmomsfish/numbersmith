@@ -10,6 +10,7 @@ import { levelForXp, xpIntoLevel } from "@/lib/engine/xp";
 import { topicProgress, evidenceLabel } from "@/lib/engine/progress";
 import { RatingChart } from "./rating-chart";
 import { effectiveStreak } from "@/lib/streak";
+import { predictionsFor } from "@/lib/engine/score-predictor";
 
 export default async function StatsPage() {
   const user = await getCurrentUser();
@@ -125,6 +126,8 @@ export default async function StatsPage() {
     rating: h.value,
   }));
 
+  const predictions = await predictionsFor(user.id);
+
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
       <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Statistics</h1>
@@ -142,6 +145,58 @@ export default async function StatsPage() {
           hint={`longest ${stats?.longestStreak ?? 0}d`}
         />
       </div>
+
+
+      {predictions.length > 0 && (
+        <Card className="mt-5">
+          <CardBody>
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-50">
+              Projected contest scores
+            </h2>
+            <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">
+              What your rating implies on the contests you are training for, against the marks
+              people aim at.
+            </p>
+
+            <div className="mt-4 space-y-4">
+              {predictions.map((p) => (
+                <div key={p.slug} className="rounded-xl border border-slate-200 p-4 dark:border-slate-700">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                    <span className="font-semibold text-slate-900 dark:text-slate-50">{p.name}</span>
+                    <span className="text-lg font-bold tabular-nums text-slate-900 dark:text-slate-50">
+                      {p.display}
+                    </span>
+                  </div>
+                  <ul className="mt-3 space-y-1.5">
+                    {p.targets.map((t) => {
+                      const cleared = t.gap <= 0;
+                      const away = Math.ceil(t.gap);
+                      return (
+                        <li key={t.label} className="flex flex-wrap items-baseline gap-x-2 text-sm">
+                          <span className={cleared ? "font-medium text-success-600 dark:text-success-500" : "text-slate-700 dark:text-slate-300"}>
+                            {cleared ? "On track for" : `${away} more question${away === 1 ? "" : "s"} to`}
+                          </span>
+                          <span className="font-medium text-slate-900 dark:text-slate-50">{t.label}</span>
+                          <span className="text-slate-600 dark:text-slate-400">({t.raw}/{p.questions} or so)</span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              ))}
+            </div>
+
+            {/* Said plainly rather than buried: the number is a projection off a
+                rating, and the cutoffs genuinely move year to year. Overstating
+                it would be the fastest way to lose a student's trust. */}
+            <p className="mt-4 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
+              Projected from your rating and the difficulty of a full paper — it measures what you
+              know, not exam day, so it does not account for the clock or for slips. Cutoffs are
+              approximate and change every year.
+            </p>
+          </CardBody>
+        </Card>
+      )}
 
       <div className="mt-5 grid gap-5 lg:grid-cols-3">
         <Card className="lg:col-span-2">
