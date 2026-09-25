@@ -26,7 +26,8 @@ export default async function AiAssistantPage() {
       <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
         Explain a concept, walk through a problem step by step, or dig into a mistake — ask a follow-up any
         time. You can attach a screenshot of a problem instead of typing it out, or a PDF of a past paper
-        and ask about a problem in it.
+        and ask about a problem in it. Smith is AI and can make mistakes, so check its working
+        rather than taking an answer on trust.
       </p>
 
       <div className="mt-6 flex-1 overflow-hidden">

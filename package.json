@@ -20,7 +20,6 @@
     "verify:grading": "tsx scripts/check-answer-grading.ts",
     "verify:progress": "tsx scripts/check-progress-model.ts",
     "verify:ownership": "tsx scripts/check-action-ownership.ts",
-    "verify:predictor": "tsx scripts/check-score-predictor.ts",
     "db:backfill-mastery": "tsx scripts/backfill-mastery-counts.ts"
   },
   "prisma": {

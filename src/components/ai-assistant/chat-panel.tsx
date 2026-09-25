@@ -283,6 +283,7 @@ export function ChatPanel({
             </p>
             <p className="mt-1 max-w-sm text-sm text-slate-600 dark:text-slate-400">
               Smith AI walks you through the reasoning step by step instead of handing over answers.
+              It is AI, so it can be wrong — treat its steps as a second opinion, not an answer key.
             </p>
             <div className="mt-5 grid w-full max-w-lg gap-2 sm:grid-cols-2">
               {SUGGESTIONS.map((s) => (
@@ -503,7 +504,16 @@ export function ChatPanel({
           </Button>
         </form>
 
-        <div className="mt-2 flex items-center justify-end gap-3 px-1">
+        {/* Always visible, on every screen size, and not folded into the
+            keyboard hint below — that one is hidden on phones, and a disclosure
+            a student never sees is not a disclosure. Smith AI answers maths
+            confidently whether or not it is right, and a student checking their
+            own work against it has no other signal that it can be wrong. */}
+        <p className="mt-2 px-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-500">
+          Smith is AI and can make mistakes — check its working before you rely on it.
+        </p>
+
+        <div className="mt-1.5 flex items-center justify-end gap-3 px-1">
           {/* Hidden on phones, where the on-screen keyboard has its own return
               key and the hint would only crowd the composer. */}
           <p className="mr-auto hidden text-[11px] text-slate-500 sm:block dark:text-slate-500">
