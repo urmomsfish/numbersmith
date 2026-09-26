@@ -231,6 +231,13 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
     answer: "E",
     solution:
       "There are C(8,3) = 56 committees in total. The ones with no girl are the committees of 3 boys chosen from 5, of which there are C(5,3) = 10. So 56 - 10 = 46 committees include at least one girl.",
+    altSolutions: [
+      {
+        label: "Count the committees with a girl directly",
+        body:
+          "Split on the number of girls. One girl: choose her from 3 and the other two seats from the 5 boys, 3 x C(5,2) = 3 x 10 = 30. Two girls: C(3,2) x 5 = 3 x 5 = 15. Three girls: C(3,3) = 1. That totals 30 + 15 + 1 = 46, matching the subtraction. Three cases instead of one subtraction — a good illustration of why counting the forbidden side is usually less work.",
+      },
+    ],
     hints: [
       "Counting the committees with NO girls is easier than counting those with at least one.",
       "Subtract the all-boy committees from the total C(8,3).",
@@ -1043,6 +1050,13 @@ export const AMC8_PROBLEMS: ProblemSeed[] = [
     answer: "C",
     solution:
       "The perimeter gives length plus width equal to 7, and the area gives their product as 12, so the sides are 3 and 4. By the Pythagorean theorem the diagonal is the square root of 3^2 + 4^2 = 25, which is 5 metres.",
+    altSolutions: [
+      {
+        label: "Get the diagonal without finding the sides",
+        body:
+          "The diagonal is the square root of l^2 + w^2, so only that sum is needed. Squaring the half-perimeter gives (l + w)^2 = 7^2 = 49, and expanding, l^2 + 2lw + w^2 = 49. Since lw = 12, that is l^2 + w^2 + 24 = 49, so l^2 + w^2 = 25 and the diagonal is 5. The sides are never worked out at all, which is what makes this route quicker and what makes it keep working when the sides are not whole numbers.",
+      },
+    ],
     hints: [
       "The perimeter tells you the sum of the two sides; the area tells you their product.",
       "Find the two side lengths, then use the Pythagorean theorem.",

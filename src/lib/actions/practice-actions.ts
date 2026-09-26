@@ -125,6 +125,7 @@ export async function submitPracticeAnswerAction(input: {
     capped: false as const,
     correct,
     solution: problem.solution,
+    altSolutions: JSON.parse(problem.altSolutions || "[]") as { label: string; body: string }[],
     correctAnswer: problem.answer,
     ratingDelta: ratingResult.delta,
     newRating: ratingResult.value,

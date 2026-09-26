@@ -45,6 +45,7 @@ export type ProblemRow = {
   choices: string | null;
   answer: string;
   solution: string;
+  altSolutions: string;
   hints: string;
   difficulty: number;
   topicId: string;
@@ -75,6 +76,7 @@ export function toProblemRow(
     choices: p.choices ? JSON.stringify(p.choices) : null,
     answer: p.answer,
     solution: p.solution,
+    altSolutions: JSON.stringify(p.altSolutions ?? []),
     hints: JSON.stringify(p.hints),
     difficulty: p.difficulty,
     topicId: opts.topicId,

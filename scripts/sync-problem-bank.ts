@@ -66,6 +66,7 @@ async function main() {
       choices: true,
       answer: true,
       solution: true,
+      altSolutions: true,
       hints: true,
       difficulty: true,
       gradeMin: true,
@@ -139,6 +140,7 @@ async function main() {
       current.choices !== row.choices ||
       current.answer !== row.answer ||
       current.solution !== row.solution ||
+      current.altSolutions !== row.altSolutions ||
       current.hints !== row.hints ||
       current.difficulty !== row.difficulty;
     if (!changed) continue;
@@ -199,6 +201,7 @@ async function main() {
             choices: u.row.choices,
             answer: u.row.answer,
             solution: u.row.solution,
+            altSolutions: u.row.altSolutions,
             hints: u.row.hints,
             difficulty: u.row.difficulty,
             // Must stay in step with the `changed` comparison above. These

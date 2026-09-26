@@ -8,6 +8,7 @@ import { submitPracticeAnswerAction } from "@/lib/actions/practice-actions";
 import { difficultyLabel, type AttemptMode } from "@/lib/types";
 import { LEGAL } from "@/lib/legal";
 import { AnswerInput } from "@/components/practice/answer-input";
+import { ScratchCanvas } from "@/components/practice/scratch-canvas";
 import { ProblemStatement } from "@/components/practice/problem-figure";
 
 const CHOICE_LETTERS = ["A", "B", "C", "D", "E", "F"];
@@ -45,11 +46,14 @@ export function ProblemSolver({
   mode = "PRACTICE",
   onContinue,
   continueLabel = "Next Problem →",
+  scratchData,
 }: {
   problem: SolverProblem;
   mode?: AttemptMode;
   onContinue?: (result: SubmitResult) => void;
   continueLabel?: string;
+  /** Working saved for this problem on a previous visit, if any. */
+  scratchData?: string | null;
 }) {
   const [selected, setSelected] = useState("");
   const [textAnswer, setTextAnswer] = useState("");
@@ -160,6 +164,11 @@ export function ProblemSolver({
               disabled={pending || !!result}
               integerOnly={problem.format === "INTEGER"}
             />
+
+      {/* Somewhere to do the working. Competition maths is done with
+          scribbles, and until now the product had nowhere to put them — the
+          reasoning behind a wrong answer was never captured. */}
+      <ScratchCanvas problemId={problem.id} initialData={scratchData} className="mt-5" />
             {result && !result.capped && (
               <p className="mt-2 text-sm text-slate-700 dark:text-slate-400">
                 Correct answer: <span className="font-semibold text-slate-800 dark:text-slate-100">{result.correctAnswer}</span>
@@ -228,6 +237,29 @@ export function ProblemSolver({
               {result.solution}
             </p>
           </div>
+          {/* A second route matters more than the first once the answer is
+              known — it is where the transferable idea lives. Shown below the
+              main solution rather than beside it, so the student reads one
+              method through before meeting another. */}
+          {result.altSolutions?.length > 0 && (
+            <div className="rounded-md border border-slate-200 p-4 dark:border-slate-700">
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-50">
+                Another way to see it
+              </p>
+              <div className="mt-2 space-y-3">
+                {result.altSolutions.map((alt, i) => (
+                  <div key={i}>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-400">
+                      {alt.label}
+                    </p>
+                    <p className="mt-1 text-sm leading-relaxed text-slate-700 dark:text-slate-200">
+                      {alt.body}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           {result.newlyUnlocked.length > 0 && (
             <div className="rounded-md border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950 p-4">
               {result.newlyUnlocked.map((a, i) => (

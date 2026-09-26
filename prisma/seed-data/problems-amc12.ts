@@ -625,6 +625,13 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
     answer: "A",
     solution:
       "Count all groups and remove the forbidden ones. There are C(8,3) = (8 × 7 × 6)/6 = 56 groups in total. A group is forbidden exactly when it contains both Priya and Marcus, and such a group is determined by its one remaining member, chosen from the other 6 people — so there are 6 of them. That leaves 56 − 6 = 50 acceptable groups.",
+    altSolutions: [
+      {
+        label: "Count the allowed groups directly",
+        body:
+          "Instead of subtracting, split on how many of the two feuding members attend. Neither of them: choose all 3 from the other 6, C(6,3) = 20. Exactly one of them: pick which one (2 ways) and fill the other 2 seats from the remaining 6, 2 x C(6,2) = 2 x 15 = 30. Both is forbidden. Total 20 + 30 = 50, agreeing with the subtraction. Worth doing once to see why subtracting is quicker — the direct count needs two cases and the complement needs none.",
+      },
+    ],
     hints: [
       "Counting the groups that break the rule is far easier than counting the ones that satisfy it.",
       "If a group contains both of them, only one seat is left to fill — from how many people?",
@@ -1167,6 +1174,13 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
     answer: "B",
     solution:
       "Place the non-A tiles first: B, N, N can be ordered in 3!/2! = 3 distinct ways, since the two N tiles are identical. Those three tiles create 4 gaps — before, between, between, and after. Choosing 3 of those 4 gaps for the three A tiles guarantees no two A tiles touch, and the A tiles are identical so the choice of gaps is all that matters: C(4,3) = 4. The total is 3 × 4 = 12.",
+    altSolutions: [
+      {
+        label: "Choose the positions rather than the gaps",
+        body:
+          "Number the six places 1 to 6 and choose which three hold an A, with no two chosen numbers consecutive. Choosing 3 non-consecutive places from 6 can be counted by C(6 - 3 + 1, 3) = C(4,3) = 4. The remaining three places take B, N, N in 3!/2! = 3 orders. That is 4 x 3 = 12 again. The gap method and the position method are the same count seen from opposite sides: gaps first, or slots first.",
+      },
+    ],
     hints: [
       "Seat the letters that are allowed to touch first, and let the A tiles fill the gaps between them.",
       "B, N, N has fewer than 3! orderings because the two N tiles are identical.",
@@ -2652,6 +2666,13 @@ export const AMC12_PROBLEMS: ProblemSeed[] = [
     answer: "C",
     solution:
       "Let the legs be a and b with a - b = 7 and a^2 + b^2 = 13^2 = 169. Squaring the first gives a^2 - 2ab + b^2 = 49, so 169 - 2ab = 49 and ab = 60. The area is ab/2 = 30 square feet. (The legs are 12 and 5.)",
+    altSolutions: [
+      {
+        label: "Recognise the triple",
+        body:
+          "The legs differ by 7 and the hypotenuse is 13, which is the 5-12-13 right triangle: 12 - 5 = 7 and 5^2 + 12^2 = 169. The area is (1/2)(5)(12) = 30. Spotting a known triple is faster than the algebra, though only the algebra tells you the legs are forced — the identity route proves the product ab = 60 without ever naming 5 and 12.",
+      },
+    ],
     hints: [
       "You are not asked for the sides themselves — the area needs only their product.",
       "Square the difference of the legs and compare it with the Pythagorean relation.",

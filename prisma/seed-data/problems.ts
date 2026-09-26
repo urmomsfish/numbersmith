@@ -20,6 +20,16 @@ export type ProblemSeed = {
   choices?: string[];
   answer: string;
   solution: string;
+  /**
+   * Further approaches to the same problem.
+   *
+   * Competition maths is largely about seeing that a problem yields to
+   * counting *or* symmetry *or* a complementary count. One solution teaches
+   * the answer; a second teaches the choice of method, which is the part that
+   * transfers to the next problem. Optional — most problems have one natural
+   * route and a forced second would be noise.
+   */
+  altSolutions?: { label: string; body: string }[];
   hints: string[];
   difficulty: number; // 1-10
   topicSlug: string;

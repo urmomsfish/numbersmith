@@ -26,16 +26,16 @@ datasource db {
 
 /// role: STUDENT | PARENT | TEACHER | ADMIN
 model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
+  id           String  @id @default(cuid())
+  email        String  @unique
   /// Null for accounts created via Google sign-in that have never set a
   /// password — login must check this before attempting bcrypt.compare.
   passwordHash String?
   /// Google's stable per-account subject id ("sub" claim), not their email —
   /// emails can change on the Google side, this can't.
-  googleId     String?  @unique
+  googleId     String? @unique
   name         String
-  role         String   @default("STUDENT")
+  role         String  @default("STUDENT")
 
   /// Recorded at signup so consent to the Terms/Privacy Policy is evidenced by
   /// a server-side timestamp and version, not just a checkbox that leaves no
@@ -44,16 +44,19 @@ model User {
   termsAcceptedAt      DateTime?
   termsAcceptedVersion String?
 
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   profile          Profile?
   subscription     Subscription?
   stats            UserStats?
-  parentLinks      ParentLink[]      @relation("ParentToChild")
-  childLinks       ParentLink[]      @relation("ChildToParent")
-  taughtClasses    ClassRoom[]       @relation("TeacherClasses")
+  parentLinks      ParentLink[]           @relation("ParentToChild")
+  childLinks       ParentLink[]           @relation("ChildToParent")
+  taughtClasses    ClassRoom[]            @relation("TeacherClasses")
   classMemberships ClassMembership[]
+  scratchWork      ScratchWork[]
+  uploadedPapers   UploadedPaper[]
+  paperAttempts    UploadedPaperAttempt[]
 
   userCompetitions       UserCompetition[]
   attempts               Attempt[]
@@ -272,6 +275,15 @@ model Problem {
   choices              String? // JSON string array, only for MULTIPLE_CHOICE
   answer               String // canonical answer, e.g. "C" or "13" or "042"
   solution             String
+  /// Additional approaches to the same problem, as a JSON array of
+  /// {label, body}. Empty for most problems.
+  ///
+  /// Competition maths is largely about seeing that a problem yields to
+  /// counting *or* symmetry *or* a complementary count. One solution teaches
+  /// the answer; a second teaches the choice. Kept as JSON on the row rather
+  /// than a table because they are read only alongside their problem, never
+  /// queried across problems.
+  altSolutions         String       @default("[]")
   hints                String // JSON string array
   difficulty           Int
   topicId              String
@@ -298,6 +310,7 @@ model Problem {
   competitionAttemptItems CompetitionAttemptItem[]
   dailyChallenges         DailyChallenge[]
   lessonPractice          LessonProblem[]
+  scratchWork             ScratchWork[]
 
   @@index([topicId])
   @@index([difficulty])
@@ -403,12 +416,12 @@ model VideoLessonProgress {
 // ---------------------------------------------------------------------------
 
 model AiChatMessage {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   /// role: user | assistant
-  role      String
-  content   String
+  role           String
+  content        String
   /// Base64 of a file the student attached (user messages only) — a screenshot
   /// or a PDF worksheet. Stored in the row rather than in blob storage: the app
   /// has no object store, the client downscales images before upload and PDFs
@@ -420,12 +433,12 @@ model AiChatMessage {
   /// support, and renaming the column would mean another migration against the
   /// production database for zero behavioural gain. The field name is what the
   /// code reads, so only this mapping remembers the older, narrower name.
-  attachmentData String? @map("imageData")
+  attachmentData String?  @map("imageData")
   /// MIME type of attachmentData, e.g. "image/jpeg" or "application/pdf".
   /// Needed both to render it back and to tell the model what it's looking at —
   /// images and PDFs go to the API as different block types.
-  attachmentType String? @map("imageType")
-  createdAt DateTime @default(now())
+  attachmentType String?  @map("imageType")
+  createdAt      DateTime @default(now())
 
   @@index([userId, createdAt])
 }
@@ -734,21 +747,21 @@ model StudyPlanDay {
 /// plan: MONTHLY | YEARLY | null
 /// paymentProvider: STRIPE | null (no live provider wired up in the MVP)
 model Subscription {
-  id                 String    @id @default(cuid())
-  userId             String    @unique
-  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  status             String    @default("FREE")
-  plan               String?
-  startDate          DateTime?
-  renewalDate        DateTime?
-  trialEndsAt        DateTime?
-  paymentProvider    String?
-  externalCustomerId String? // Stripe customer id (cus_...)
+  id                     String    @id @default(cuid())
+  userId                 String    @unique
+  user                   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status                 String    @default("FREE")
+  plan                   String?
+  startDate              DateTime?
+  renewalDate            DateTime?
+  trialEndsAt            DateTime?
+  paymentProvider        String?
+  externalCustomerId     String? // Stripe customer id (cus_...)
   /// Stripe subscription id (sub_...). Needed to correlate incoming
   /// customer.subscription.* webhook events back to this row.
-  externalSubscriptionId String? @unique
-  canceledAt         DateTime?
-  updatedAt          DateTime  @updatedAt
+  externalSubscriptionId String?   @unique
+  canceledAt             DateTime?
+  updatedAt              DateTime  @updatedAt
 
   @@index([externalCustomerId])
 }
@@ -762,4 +775,76 @@ model WebhookEvent {
   processedAt DateTime @default(now())
 
   @@index([processedAt])
+}
+
+// ---------------------------------------------------------------------------
+// Scratch work and student-supplied papers
+// ---------------------------------------------------------------------------
+
+/// A student's working for one problem, as a PNG data URL.
+///
+/// Competition maths is done with scribbles, and the product had nowhere to
+/// put them: a student worked on paper beside the screen, so the reasoning
+/// behind a wrong answer was never captured. Keeping it means a mistake can be
+/// reviewed with the working that produced it — and Smith AI can read it,
+/// since it already accepts images.
+///
+/// Stored as a raster data URL rather than vector strokes because every
+/// consumer wants an image, and one blob avoids a row per stroke. Callers cap
+/// the size before writing; see saveScratchAction.
+model ScratchWork {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problemId String
+  problem   Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  data      String
+  updatedAt DateTime @updatedAt
+
+  /// One canvas per student per problem — revisiting a problem continues the
+  /// same working rather than starting a second sheet.
+  @@unique([userId, problemId])
+}
+
+/// A real past paper a student uploaded, with the answer key they typed in.
+///
+/// The bank can never contain the official papers, which is exactly what a
+/// student sitting a contest most wants to practise on. Rather than trying to
+/// parse a PDF into problems — unreliable, and a misread question is worse
+/// than none — the student supplies the answer key once, then sits the paper
+/// against a clock with the PDF on screen and gets scored. No extraction, no
+/// guessing at the mathematics.
+model UploadedPaper {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title            String
+  /// Base64 of the PDF, no data: prefix — the same convention AiChatMessage
+  /// uses for attachments.
+  fileData         String
+  questionCount    Int
+  timeLimitMinutes Int
+  /// JSON array of the student's answer key, one entry per question.
+  answerKey        String
+  createdAt        DateTime @default(now())
+
+  attempts UploadedPaperAttempt[]
+
+  @@index([userId])
+}
+
+model UploadedPaperAttempt {
+  id           String        @id @default(cuid())
+  paperId      String
+  paper        UploadedPaper @relation(fields: [paperId], references: [id], onDelete: Cascade)
+  userId       String
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// JSON array of what the student answered, one entry per question.
+  answers      String        @default("[]")
+  correctCount Int           @default(0)
+  status       String        @default("IN_PROGRESS")
+  startedAt    DateTime      @default(now())
+  submittedAt  DateTime?
+
+  @@index([userId])
 }
