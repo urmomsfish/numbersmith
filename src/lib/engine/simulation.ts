@@ -197,11 +197,24 @@ function shuffle<T>(arr: T[]): T[] {
   return out;
 }
 
-export async function startOfficialSimulation(
+/** A paper: the problems, plus the shape of the contest they were drawn for.
+ *
+ * Separated from starting a simulation because the same paper is now wanted in
+ * two places — sat on screen against a clock, and printed for a desk. Building
+ * it once means the printed paper and the on-screen one cannot drift into
+ * being different tests. */
+export type BuiltPaper = {
+  competition: Awaited<ReturnType<typeof prisma.competition.findUniqueOrThrow>>;
+  level: ReturnType<typeof levelById>;
+  problems: Awaited<ReturnType<typeof prisma.problem.findMany>>;
+  timeLimitMinutes: number;
+};
+
+export async function buildPaper(
   userId: string,
   competitionSlug: string,
   levelId?: string | null
-) {
+): Promise<BuiltPaper> {
   const competition = await prisma.competition.findUniqueOrThrow({ where: { slug: competitionSlug } });
   if (competition.format === "PROOF") {
     throw new Error("Proof-based competitions do not support timed simulations");
@@ -242,6 +255,20 @@ export async function startOfficialSimulation(
     gradeMax,
     ramp: difficultyRamp(difficultyMin, difficultyMax, count),
   });
+
+  return { competition, level, problems, timeLimitMinutes };
+}
+
+export async function startOfficialSimulation(
+  userId: string,
+  competitionSlug: string,
+  levelId?: string | null
+) {
+  const { competition, level, problems, timeLimitMinutes } = await buildPaper(
+    userId,
+    competitionSlug,
+    levelId
+  );
 
   const attempt = await prisma.competitionAttempt.create({
     data: {

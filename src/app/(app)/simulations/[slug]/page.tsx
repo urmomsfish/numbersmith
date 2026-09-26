@@ -101,6 +101,18 @@ export default async function StartSimulationPage({
             {gate.allowed ? "Begin Simulation" : "Upgrade to Continue"}
           </Button>
         </form>
+
+        {/* The same paper, laid out for a printer. Competition maths is sat
+            with a pencil, and practising only on screen trains a different
+            skill from the one the contest tests. */}
+        {gate.allowed && (
+          <a
+            href={`/paper/${competition.slug}${defaultLevel ? `?level=${defaultLevel.id}` : ""}`}
+            className="mt-3 inline-block text-sm font-medium text-slate-600 underline underline-offset-2 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+          >
+            Print this paper instead
+          </a>
+        )}
       </div>
     </div>
   );
