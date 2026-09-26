@@ -38,11 +38,14 @@ export type AttemptMode =
   /** Re-attempting a problem already in the mistake queue. Scored and recorded
    * like any other attempt, but awards no XP and no rating — see
    * submitPracticeAnswerAction. */
-  | "MISTAKE_REVIEW";
+  | "MISTAKE_REVIEW"
+  /** One question at a time against a per-question clock — the Countdown
+   * format. Scored and rated like practice; see engine/countdown.ts. */
+  | "COUNTDOWN";
 
 export type MistakeReason = "INCORRECT" | "SKIPPED" | "SLOW" | "MULTI_HINT";
 
-export type CompetitionAttemptMode = "OFFICIAL" | "CUSTOM";
+export type CompetitionAttemptMode = "OFFICIAL" | "CUSTOM" | "COUNTDOWN";
 export type CompetitionAttemptStatus = "IN_PROGRESS" | "SUBMITTED";
 
 export type RatingCategory = "OVERALL" | "AMC" | "MATHCOUNTS" | "OLYMPIAD" | string;

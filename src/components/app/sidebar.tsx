@@ -48,6 +48,7 @@ export const NAV_GROUPS: Array<{ label: string; items: NavItem[] }> = [
     items: [
       { href: "/competitions", label: "Competitions", icon: IconTrophy },
       { href: "/simulations", label: "Simulations", icon: IconTimer },
+      { href: "/countdown", label: "Countdown", icon: IconTimer, pro: true },
       { href: "/daily-challenge", label: "Daily Challenge", icon: IconCalendar },
       { href: "/schedule", label: "Schedule", icon: IconCalendar },
     ],
