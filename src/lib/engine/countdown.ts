@@ -91,39 +91,55 @@ export async function startCountdown(userId: string, competitionSlug?: string | 
   const floor = Math.max(1, centre - 1);
   const ceiling = Math.min(10, Math.max(floor + 1, centre + 1));
 
-  // Widen in stages rather than failing.
+  // Widen in stages rather than failing, and rank speed above everything else.
   //
-  // The first version hard-required MULTIPLE_CHOICE, which is right for a
-  // 45-second clock but wrong as a filter: MATHCOUNTS and AIME are
-  // short-answer contests and have no multiple-choice problems at all, so
-  // picking MATHCOUNTS produced an empty pool and a crash. Each stage below
-  // relaxes one constraint, most valuable first, so a thin corner of the bank
-  // costs a student some specificity instead of the whole round.
+  // `estimatedTimeSeconds` is the constraint that actually matters here, and it
+  // comes before the contest filter deliberately. A round of problems written
+  // for this format but tagged to no contest is a real countdown round; a round
+  // of correctly-tagged AMC 10 problems that each need two and a half minutes
+  // is a stopwatch on failure. Before the countdown bank existed every stage
+  // below was a compromise, because the quickest thing in the bank was
+  // estimated at 60 seconds — over the clock already.
+  //
+  // Multiple choice ranks below speed for the same reason, and is no longer a
+  // hard filter at all: MATHCOUNTS and AIME are short-answer contests with no
+  // multiple-choice problems, so requiring it produced an empty pool and a
+  // crash. Each stage relaxes one constraint, most valuable first, so a thin
+  // corner of the bank costs some specificity instead of the whole round.
   const base = { isPublished: true, isPlacement: false };
   const band = { gte: floor, lte: ceiling };
   const wide = { gte: Math.max(1, floor - 2), lte: Math.min(10, ceiling + 2) };
+  const fast = { lte: SECONDS_PER_QUESTION };
 
   const stages: { where: Record<string, unknown>; note: string }[] = [];
   if (competition) {
     stages.push({
-      where: { ...base, difficulty: band, format: "MULTIPLE_CHOICE", competitionId: competition.id },
-      note: "this contest, multiple choice, at level",
-    });
-    stages.push({
-      where: { ...base, difficulty: band, competitionId: competition.id },
-      note: "this contest, any format, at level",
-    });
-    stages.push({
-      where: { ...base, difficulty: wide, competitionId: competition.id },
-      note: "this contest, any format, wider band",
+      where: { ...base, difficulty: band, estimatedTimeSeconds: fast, competitionId: competition.id },
+      note: "this contest, fits the clock, at level",
     });
   }
   stages.push({
-    where: { ...base, difficulty: band, format: "MULTIPLE_CHOICE" },
-    note: "any contest, multiple choice, at level",
+    where: { ...base, difficulty: band, estimatedTimeSeconds: fast },
+    note: "fits the clock, at level",
   });
-  stages.push({ where: { ...base, difficulty: band }, note: "any contest, any format, at level" });
-  stages.push({ where: { ...base, difficulty: wide }, note: "any contest, any format, wider band" });
+  stages.push({
+    where: { ...base, difficulty: wide, estimatedTimeSeconds: fast },
+    note: "fits the clock, wider band",
+  });
+  stages.push({
+    where: { ...base, estimatedTimeSeconds: fast },
+    note: "fits the clock, any difficulty",
+  });
+  // Past here nothing in the pool fits 45 seconds, so the round is imperfect
+  // whatever we pick. Prefer staying on the student's contest and level.
+  if (competition) {
+    stages.push({
+      where: { ...base, difficulty: band, competitionId: competition.id },
+      note: "this contest, at level, over the clock",
+    });
+  }
+  stages.push({ where: { ...base, difficulty: band }, note: "at level, over the clock" });
+  stages.push({ where: { ...base, difficulty: wide }, note: "wider band, over the clock" });
   stages.push({ where: base, note: "anything published" });
 
   let pool: { id: string }[] = [];

@@ -32,6 +32,7 @@ import { AIME_PROBLEMS } from "../prisma/seed-data/problems-aime";
 import { HMMT_PROBLEMS } from "../prisma/seed-data/problems-hmmt";
 import { MATH_KANGAROO_PROBLEMS } from "../prisma/seed-data/problems-kangaroo";
 import { OLYMPIAD_TIER_PROBLEMS } from "../prisma/seed-data/problems-olympiad-tier";
+import { COUNTDOWN_PROBLEMS } from "../prisma/seed-data/problems-countdown";
 import { GENERATED_PROBLEMS, GENERATION_ISSUES } from "../prisma/seed-data/generators";
 import { toProblemRow } from "../prisma/seed-data/problem-rows";
 
@@ -97,6 +98,7 @@ async function main() {
     ...HMMT_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
     ...MATH_KANGAROO_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
     ...OLYMPIAD_TIER_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
+    ...COUNTDOWN_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
   ];
   console.log(`Seed data defines ${candidates.length} problems.`);
 

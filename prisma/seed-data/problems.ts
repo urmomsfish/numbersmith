@@ -48,6 +48,21 @@ export type ProblemSeed = {
    */
   gradeMin?: number;
   gradeMax?: number;
+  /**
+   * How long this problem should take, when difficulty alone cannot say.
+   *
+   * Normally derived from difficulty (see `secondsForDifficulty`), which
+   * bottoms out at 60 seconds — so the bank could not describe a problem meant
+   * to be answered in twenty, whatever its content. Difficulty and speed are
+   * genuinely different axes: "units digit of 3^2026" needs a real idea and is
+   * over in fifteen seconds, while an easy multi-part word problem is neither
+   * hard nor quick.
+   *
+   * Countdown selects on this field, so anything written for that format must
+   * set it. Leave it off everywhere else, so difficulty stays the single rule
+   * for the rest of the bank.
+   */
+  estimatedTimeSeconds?: number;
 };
 
 // All problems are original NumberSmith content, written and verified for this

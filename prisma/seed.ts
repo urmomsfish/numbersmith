@@ -19,6 +19,7 @@ import { AIME_PROBLEMS } from "./seed-data/problems-aime";
 import { HMMT_PROBLEMS } from "./seed-data/problems-hmmt";
 import { MATH_KANGAROO_PROBLEMS } from "./seed-data/problems-kangaroo";
 import { OLYMPIAD_TIER_PROBLEMS } from "./seed-data/problems-olympiad-tier";
+import { COUNTDOWN_PROBLEMS } from "./seed-data/problems-countdown";
 import { LESSONS } from "./seed-data/lessons";
 import { ACHIEVEMENTS } from "./seed-data/achievements";
 
@@ -196,6 +197,7 @@ async function main() {
     ...HMMT_PROBLEMS,
     ...MATH_KANGAROO_PROBLEMS,
     ...OLYMPIAD_TIER_PROBLEMS,
+    ...COUNTDOWN_PROBLEMS,
   ];
 
   const generatedRows = [...GENERATED_PROBLEMS, ...OLYMPIAD_PROBLEMS, ...HAND_WRITTEN_COMPETITION_PROBLEMS].map((p) => {

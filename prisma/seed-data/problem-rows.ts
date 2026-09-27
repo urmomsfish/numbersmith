@@ -83,7 +83,7 @@ export function toProblemRow(
     competitionId: opts.competitionId,
     gradeMin,
     gradeMax,
-    estimatedTimeSeconds: secondsForDifficulty(p.difficulty),
+    estimatedTimeSeconds: p.estimatedTimeSeconds ?? secondsForDifficulty(p.difficulty),
     tags: JSON.stringify([p.topicSlug, ...(p.competitionSlug ? [p.competitionSlug] : [])]),
     isPlacement: opts.isPlacement,
   };
