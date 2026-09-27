@@ -91,22 +91,56 @@ export async function startCountdown(userId: string, competitionSlug?: string | 
   const floor = Math.max(1, centre - 1);
   const ceiling = Math.min(10, Math.max(floor + 1, centre + 1));
 
-  const pool = await prisma.problem.findMany({
-    where: {
-      isPublished: true,
-      isPlacement: false,
-      difficulty: { gte: floor, lte: ceiling },
-      // Multiple choice only. Typing a free-form answer against a 45-second
-      // clock measures keyboard speed, not mathematics.
-      format: "MULTIPLE_CHOICE",
-      ...(competition ? { competitionId: competition.id } : {}),
-    },
-    select: { id: true },
-    take: 400,
-  });
+  // Widen in stages rather than failing.
+  //
+  // The first version hard-required MULTIPLE_CHOICE, which is right for a
+  // 45-second clock but wrong as a filter: MATHCOUNTS and AIME are
+  // short-answer contests and have no multiple-choice problems at all, so
+  // picking MATHCOUNTS produced an empty pool and a crash. Each stage below
+  // relaxes one constraint, most valuable first, so a thin corner of the bank
+  // costs a student some specificity instead of the whole round.
+  const base = { isPublished: true, isPlacement: false };
+  const band = { gte: floor, lte: ceiling };
+  const wide = { gte: Math.max(1, floor - 2), lte: Math.min(10, ceiling + 2) };
 
+  const stages: { where: Record<string, unknown>; note: string }[] = [];
+  if (competition) {
+    stages.push({
+      where: { ...base, difficulty: band, format: "MULTIPLE_CHOICE", competitionId: competition.id },
+      note: "this contest, multiple choice, at level",
+    });
+    stages.push({
+      where: { ...base, difficulty: band, competitionId: competition.id },
+      note: "this contest, any format, at level",
+    });
+    stages.push({
+      where: { ...base, difficulty: wide, competitionId: competition.id },
+      note: "this contest, any format, wider band",
+    });
+  }
+  stages.push({
+    where: { ...base, difficulty: band, format: "MULTIPLE_CHOICE" },
+    note: "any contest, multiple choice, at level",
+  });
+  stages.push({ where: { ...base, difficulty: band }, note: "any contest, any format, at level" });
+  stages.push({ where: { ...base, difficulty: wide }, note: "any contest, any format, wider band" });
+  stages.push({ where: base, note: "anything published" });
+
+  let pool: { id: string }[] = [];
+  for (const stage of stages) {
+    pool = await prisma.problem.findMany({
+      where: stage.where,
+      select: { id: true },
+      take: 400,
+    });
+    if (pool.length >= COUNTDOWN_QUESTIONS) break;
+  }
+
+  // Only reachable if the bank itself is empty.
   if (pool.length === 0) throw new Error("No problems available for a countdown round.");
 
+  // Sample without replacement. A short round repeating a question would be
+  // obvious and would also double-count its mastery update.
   const picked: string[] = [];
   const seen = new Set<number>();
   while (picked.length < Math.min(COUNTDOWN_QUESTIONS, pool.length)) {

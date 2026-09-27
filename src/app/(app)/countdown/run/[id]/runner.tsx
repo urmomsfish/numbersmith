@@ -32,6 +32,8 @@ export function CountdownRunner({
   const [index, setIndex] = useState(0);
   const [remaining, setRemaining] = useState(secondsPerQuestion);
   const [outcome, setOutcome] = useState<Outcome | null>(null);
+  // Short-answer contests (MATHCOUNTS, AIME) have no choices to click.
+  const [typed, setTyped] = useState("");
   const [results, setResults] = useState<Outcome[]>([]);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -82,6 +84,7 @@ export function CountdownRunner({
         } else {
           setIndex((i) => i + 1);
           setOutcome(null);
+          setTyped("");
           setRemaining(secondsPerQuestion);
           startedAt.current = Date.now();
           settled.current = false;
@@ -118,6 +121,8 @@ export function CountdownRunner({
   useEffect(() => {
     if (done || outcome || !question) return;
     const onKey = (e: KeyboardEvent) => {
+      // Letter shortcuts would swallow typing on a short-answer question.
+      if (question.choices.length === 0) return;
       const i = LETTERS.indexOf(e.key.toUpperCase());
       if (i >= 0 && i < question.choices.length) void submit(LETTERS[i]);
     };
@@ -203,6 +208,28 @@ export function CountdownRunner({
       <div className="mt-6 rounded-2xl border border-slate-200 bg-card p-6 dark:border-slate-700">
         <ProblemStatement question={question.question} diagram={question.diagram} />
 
+        {question.choices.length === 0 ? (
+          <form
+            className="mt-5 flex gap-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (typed.trim()) void submit(typed.trim());
+            }}
+          >
+            <input
+              value={typed}
+              onChange={(e) => setTyped(e.target.value)}
+              disabled={!!outcome}
+              autoFocus
+              inputMode="numeric"
+              placeholder="Your answer"
+              className="flex-1 rounded-xl border border-slate-200 bg-background px-3.5 py-2.5 text-sm text-slate-900 outline-none focus:border-foreground focus:ring-2 focus:ring-ember-600/30 dark:border-slate-700 dark:text-slate-50"
+            />
+            <Button type="submit" disabled={!!outcome || !typed.trim()}>
+              Answer
+            </Button>
+          </form>
+        ) : (
         <div className="mt-5 grid gap-2">
           {question.choices.map((choice, i) => {
             const letter = LETTERS[i];
@@ -229,6 +256,7 @@ export function CountdownRunner({
             );
           })}
         </div>
+        )}
 
         {outcome && (
           <p
@@ -256,8 +284,17 @@ export function CountdownRunner({
 
       <div className="mt-4 flex items-center justify-between gap-4 px-1">
         <p className="hidden text-[11px] text-slate-500 sm:block dark:text-slate-500">
-          Press <kbd className="font-sans font-medium">A</kbd>–
-          <kbd className="font-sans font-medium">{LETTERS[question.choices.length - 1]}</kbd> to answer
+          {question.choices.length > 0 ? (
+            <>
+              Press <kbd className="font-sans font-medium">A</kbd>–
+              <kbd className="font-sans font-medium">{LETTERS[question.choices.length - 1]}</kbd> to
+              answer
+            </>
+          ) : (
+            <>
+              Type your answer and press <kbd className="font-sans font-medium">Enter</kbd>
+            </>
+          )}
         </p>
         <Button
           variant="ghost"
