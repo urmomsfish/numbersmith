@@ -124,3 +124,13 @@ export function IconShield({ className }: IconProps) {
     </svg>
   );
 }
+export function IconUsers({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={className ?? base}>
+      <circle cx="9" cy="8" r="3.2" />
+      <path d="M3.5 19.5a5.5 5.5 0 0 1 11 0" strokeLinecap="round" />
+      <path d="M16 5.2a3.2 3.2 0 0 1 0 5.6" strokeLinecap="round" />
+      <path d="M17.5 14.4a5.5 5.5 0 0 1 3 5.1" strokeLinecap="round" />
+    </svg>
+  );
+}

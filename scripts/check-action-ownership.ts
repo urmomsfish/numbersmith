@@ -21,6 +21,7 @@
 //   - calls requireAdmin()
 //   - scopes a query by the caller: `userId: user.id` inside a `where`
 //   - compares owners explicitly: `something.userId !== user.id`
+//   - calls a helper in the same module that does one of the above
 //   - carries a waiver comment saying why the id is not user-scoped
 //
 // Waivers are deliberate: some ids name globally readable rows (a problem, a
@@ -42,9 +43,21 @@ type Finding = { file: string; fn: string; line: number; ids: string[] };
 
 const isIdName = (name: string) => /(^id$|Id$)/.test(name);
 
+/**
+ * Columns that record who owns a row, and so can scope a query to the caller.
+ *
+ * `userId` covers almost the whole schema. `teacherId` is ClassRoom's owner
+ * column: coach mode's guard is `where: { id, teacherId: user.id }`, which is
+ * the identical shape of check and was reported as missing until this list
+ * existed. Naming them explicitly rather than accepting any `*Id: user.id`
+ * keeps the meaning — these are the columns that confer ownership in *this*
+ * schema, and adding one should require saying so.
+ */
+const OWNER_COLUMNS = ["userId", "teacherId"];
+
 /** Ids the action reads from its own input — either a destructured/typed
  * parameter member ending in `Id`, or a `formData.get("...Id")` call. */
-function idInputsOf(fn: ts.FunctionDeclaration): string[] {
+function idInputsOf(fn: ts.FunctionLikeDeclaration): string[] {
   const found = new Set<string>();
 
   for (const param of fn.parameters) {
@@ -99,16 +112,42 @@ function idInputsOf(fn: ts.FunctionDeclaration): string[] {
  * because it happens to load the caller's own profile by `userId`. Loading your
  * own profile authorises nothing about someone else's placement test.
  *
+ * Calls to module-local helpers are followed, one name at a time with a
+ * visited set against recursion. This matters because extracting a repeated
+ * guard into `requireOwnedClass(classId, userId)` is *better* code than copying
+ * it into six actions, and a checker that only understood inline guards would
+ * mark the better version as unguarded — training authors to inline, or worse,
+ * to stop trusting the check. Only same-module helpers count: following imports
+ * would mean type-resolving the whole program, and a guard worth relying on
+ * should be visible next to the action anyway.
+ *
  * Still deliberately shallow beyond that: proving a guard governs the right
  * code path is beyond a lint. A false pass is no worse than the review this
  * replaces, whereas a false failure would train people to ignore it. Known
  * limitation: the check is per function, not per id, so an action taking two
  * ids passes once either is guarded. */
-function hasGuard(fn: ts.FunctionDeclaration): boolean {
+function hasGuard(
+  fn: ts.FunctionLikeDeclaration,
+  localFns: Map<string, ts.FunctionLikeDeclaration>,
+  seen: Set<string> = new Set()
+): boolean {
   let guarded = false;
 
   const visit = (node: ts.Node, inWhere: boolean) => {
     if (guarded) return;
+
+    // A call to a helper declared in this same module — recurse into it.
+    if (ts.isCallExpression(node) && ts.isIdentifier(node.expression)) {
+      const name = node.expression.text;
+      const helper = localFns.get(name);
+      if (helper && !seen.has(name)) {
+        seen.add(name);
+        if (hasGuard(helper, localFns, seen)) {
+          guarded = true;
+          return;
+        }
+      }
+    }
 
     // requireAdmin()
     if (
@@ -128,7 +167,7 @@ function hasGuard(fn: ts.FunctionDeclaration): boolean {
       (node.operatorToken.kind === ts.SyntaxKind.ExclamationEqualsEqualsToken ||
         node.operatorToken.kind === ts.SyntaxKind.EqualsEqualsEqualsToken) &&
       ts.isPropertyAccessExpression(node.left) &&
-      node.left.name.text === "userId" &&
+      OWNER_COLUMNS.includes(node.left.name.text) &&
       ts.isPropertyAccessExpression(node.right) &&
       node.right.name.text === "id" &&
       ts.isIdentifier(node.right.expression) &&
@@ -170,7 +209,7 @@ function hasGuard(fn: ts.FunctionDeclaration): boolean {
   return guarded;
 }
 
-/** `userId: user.id` anywhere inside the given node. */
+/** An owner column set to `user.id` anywhere inside the given node. */
 function scopesToCaller(node: ts.Node): boolean {
   let found = false;
   const walk = (n: ts.Node) => {
@@ -178,7 +217,7 @@ function scopesToCaller(node: ts.Node): boolean {
     if (
       ts.isPropertyAssignment(n) &&
       ts.isIdentifier(n.name) &&
-      n.name.text === "userId" &&
+      OWNER_COLUMNS.includes(n.name.text) &&
       ts.isPropertyAccessExpression(n.initializer) &&
       n.initializer.name.text === "id" &&
       ts.isIdentifier(n.initializer.expression) &&
@@ -205,7 +244,7 @@ function scopesToCaller(node: ts.Node): boolean {
  * particular id.
  *
  * A composite key such as `userId_dailyChallengeId` counts, since its own name
- * is not `userId`. */
+ * is not an owner column. */
 function narrowsBeyondUser(node: ts.Node): boolean {
   let found = false;
   const walk = (n: ts.Node) => {
@@ -213,7 +252,7 @@ function narrowsBeyondUser(node: ts.Node): boolean {
     if (
       (ts.isPropertyAssignment(n) || ts.isShorthandPropertyAssignment(n)) &&
       ts.isIdentifier(n.name) &&
-      n.name.text !== "userId"
+      !OWNER_COLUMNS.includes(n.name.text)
     ) {
       found = true;
       return;
@@ -265,6 +304,26 @@ function main() {
 
     const src = ts.createSourceFile(file, text, ts.ScriptTarget.ES2022, true);
 
+    // Every function declared at module scope, so a guard extracted into a
+    // helper can be followed from the action that calls it. Includes
+    // `const f = () => {}` as well as `function f() {}`, since either spelling
+    // is an ordinary way to write one.
+    const localFns = new Map<string, ts.FunctionLikeDeclaration>();
+    for (const stmt of src.statements) {
+      if (ts.isFunctionDeclaration(stmt) && stmt.name) localFns.set(stmt.name.text, stmt);
+      if (ts.isVariableStatement(stmt)) {
+        for (const decl of stmt.declarationList.declarations) {
+          if (
+            ts.isIdentifier(decl.name) &&
+            decl.initializer &&
+            (ts.isArrowFunction(decl.initializer) || ts.isFunctionExpression(decl.initializer))
+          ) {
+            localFns.set(decl.name.text, decl.initializer);
+          }
+        }
+      }
+    }
+
     for (const stmt of src.statements) {
       if (!ts.isFunctionDeclaration(stmt)) continue;
       const exported = stmt.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword);
@@ -274,7 +333,7 @@ function main() {
       if (ids.length === 0) continue;
       scannedFns++;
 
-      if (hasGuard(stmt)) {
+      if (hasGuard(stmt, localFns)) {
         guarded++;
         continue;
       }

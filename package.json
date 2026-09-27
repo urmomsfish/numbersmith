@@ -21,6 +21,7 @@
     "verify:progress": "tsx scripts/check-progress-model.ts",
     "verify:ownership": "tsx scripts/check-action-ownership.ts",
     "verify:countdown": "tsx scripts/check-countdown-bank.ts",
+    "verify:coach-privacy": "tsx scripts/check-coach-privacy.ts",
     "db:backfill-mastery": "tsx scripts/backfill-mastery-counts.ts"
   },
   "prisma": {

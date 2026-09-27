@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { parseDateOnly } from "@/lib/date-only";
 import { generateStudyPlan } from "@/lib/engine/study-plan";
 
 /** The student's competition schedule.
@@ -17,16 +18,7 @@ import { generateStudyPlan } from "@/lib/engine/study-plan";
  * read it as UTC midnight and then render as the previous day for anyone west
  * of Greenwich, so the parts are assembled explicitly — the same UTC-midnight
  * convention used for DailyChallenge.date. */
-function parseContestDate(value: string): Date | null {
-  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value.trim());
-  if (!m) return null;
-  const [, y, mo, d] = m;
-  const date = new Date(Date.UTC(Number(y), Number(mo) - 1, Number(d)));
-  if (Number.isNaN(date.getTime())) return null;
-  // Guard against "2027-02-31" silently rolling into March.
-  if (date.getUTCMonth() !== Number(mo) - 1 || date.getUTCDate() !== Number(d)) return null;
-  return date;
-}
+const parseContestDate = parseDateOnly;
 
 const addSchema = z.object({
   competitionId: z.string().min(1),
