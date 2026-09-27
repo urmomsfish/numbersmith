@@ -13,12 +13,19 @@ export function SessionRunner({
   focusMessage,
   isPro,
   mode,
+  kind = "Adaptive Session",
 }: {
   problems: SolverProblem[];
   topicName: string;
   focusMessage: string;
   isPro: boolean;
   mode?: AttemptMode;
+  /** What kind of set this is, shown in the badge. Defaults to the adaptive
+   * practice session this runner was built for. A coach's assignment is the
+   * opposite of adaptive — a fixed set, identical for every student — so
+   * labelling it "Adaptive Session" told the student something untrue about
+   * why they were seeing these particular problems. */
+  kind?: string;
 }) {
   const [index, setIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
@@ -81,7 +88,7 @@ export function SessionRunner({
     <div className="mx-auto max-w-2xl px-4 py-10 sm:px-6">
       <div className="mb-5">
         <div className="mb-2 flex items-center justify-between">
-          <Badge tone="brand">Adaptive Session · {topicName}</Badge>
+          <Badge tone="brand">{kind} · {topicName}</Badge>
           <span className="text-xs font-medium text-slate-700 dark:text-slate-500">
             {index + 1} of {total}
           </span>

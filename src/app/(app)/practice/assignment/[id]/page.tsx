@@ -76,6 +76,7 @@ export default async function AssignmentPage({ params }: PageProps<"/practice/as
 
   return (
     <SessionRunner
+      kind="Assignment"
       topicName={assignment.title}
       focusMessage={`Set by your coach in ${assignment.classRoom.name}.`}
       isPro={isPro}

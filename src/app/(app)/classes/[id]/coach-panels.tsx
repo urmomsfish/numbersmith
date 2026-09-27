@@ -196,10 +196,14 @@ export function CreateAssignmentForm({
   classId,
   topics,
   maxProblems,
+  heading,
 }: {
   classId: string;
   topics: { id: string; name: string; group: string }[];
   maxProblems: number;
+  /** The section heading. Owned by this component so the trigger can sit
+   * beside it while the form it opens spans the full width. */
+  heading: React.ReactNode;
 }) {
   const router = useRouter();
   const [pending, start] = useTransition();
@@ -209,16 +213,23 @@ export function CreateAssignmentForm({
   // Grouped by domain, because a flat list of ~50 subtopics is not scannable.
   const groups = [...new Set(topics.map((t) => t.group))];
 
-  if (!open) {
-    return (
-      <Button variant="secondary" onClick={() => setOpen(true)}>
-        Set an assignment
-      </Button>
-    );
-  }
+  const headerRow = (
+    <div className="flex flex-wrap items-center justify-between gap-3">
+      {heading}
+      {!open && (
+        <Button variant="secondary" onClick={() => setOpen(true)}>
+          Set an assignment
+        </Button>
+      )}
+    </div>
+  );
+
+  if (!open) return headerRow;
 
   return (
-    <form
+    <>
+      {headerRow}
+      <form
       action={(formData) =>
         start(async () => {
           setError(null);
@@ -231,7 +242,7 @@ export function CreateAssignmentForm({
           }
         })
       }
-      className="rounded-xl border border-slate-200 p-4 dark:border-slate-700"
+      className="mt-3 rounded-xl border border-slate-200 p-4 dark:border-slate-700"
     >
       <input type="hidden" name="classId" value={classId} />
       <div className="grid gap-3 sm:grid-cols-2">
@@ -317,6 +328,7 @@ export function CreateAssignmentForm({
         </Button>
       </div>
       {error && <ErrorNote>{error}</ErrorNote>}
-    </form>
+      </form>
+    </>
   );
 }

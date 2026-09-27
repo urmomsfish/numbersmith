@@ -186,18 +186,23 @@ export default async function ClassDetailPage({ params }: PageProps<"/classes/[i
 
       {/* ---------------------------- assignments ---------------------------- */}
       <section className="mt-8">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-50">Assignments</h2>
-          <CreateAssignmentForm
-            classId={classRoom.id}
-            maxProblems={MAX_ASSIGNMENT_PROBLEMS}
-            topics={topics.map((t) => ({
-              id: t.id,
-              name: t.name,
-              group: t.parent?.name ?? "Other",
-            }))}
-          />
-        </div>
+        {/* The heading is passed in rather than rendered here, because the
+            component has to own the row: the trigger sits on the right of the
+            heading, but the form it opens needs the full width. Rendered as a
+            sibling inside a `justify-between` row, the open form was squeezed
+            into the right-hand half. */}
+        <CreateAssignmentForm
+          heading={
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-50">Assignments</h2>
+          }
+          classId={classRoom.id}
+          maxProblems={MAX_ASSIGNMENT_PROBLEMS}
+          topics={topics.map((t) => ({
+            id: t.id,
+            name: t.name,
+            group: t.parent?.name ?? "Other",
+          }))}
+        />
 
         {assignments.length === 0 ? (
           <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
