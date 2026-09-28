@@ -25,6 +25,7 @@
  */
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { canCreateClasses } from "../src/lib/types";
 
 const ROOT = path.join(__dirname, "..");
 
@@ -94,8 +95,16 @@ function main() {
       const at = `${rel}:${i + 1}`;
       // Strip comments: this file's own prose names the fields it forbids, and
       // so does the engine's documentation.
-      const code = line.replace(/\/\/.*$/, "").replace(/\/\*.*?\*\//g, "");
+      let code = line.replace(/\/\/.*$/, "").replace(/\/\*.*?\*\//g, "");
       if (!code.trim() || code.trim().startsWith("*")) return;
+
+      // Reads off the bare `user` identifier are the *caller's own* record —
+      // `const user = await requireUser()` — and coach privacy is about other
+      // people's data, not the signed-in account's own. Without this, adding a
+      // legitimate `canCreateClasses(user.role)` gate tripped the check twice.
+      // Only the bare identifier is exempt: `m.user.email` on a roster row is
+      // still caught, because the `.` before `user` excludes it here.
+      code = code.replace(/(^|[^.\w])user\.(\w+)/g, "$1session_$2");
 
       for (const field of forbidden) {
         // Matched only where the name is actually reading or selecting a
@@ -155,9 +164,38 @@ function main() {
     }
   }
 
+  // ---- who may start a class ----------------------------------------------
+  // Creating a class is the step that lets one account see other people's
+  // progress, so it is restricted to teachers and admins. Checked here because
+  // the failure is silent in both directions: a gate that is too loose lets any
+  // student mint join codes, and one that is too tight makes the whole feature
+  // unreachable with no error anywhere.
+  for (const [role, allowed] of [
+    ["TEACHER", true],
+    ["ADMIN", true],
+    ["STUDENT", false],
+    ["PARENT", false],
+    ["", false],
+    ["teacher", false], // case matters; the column stores upper case
+  ] as const) {
+    if (canCreateClasses(role) !== allowed) {
+      problems.push(`canCreateClasses("${role}") should be ${allowed}`);
+    }
+  }
+
+  // The gate must live in the action, not only in the page. A Server Action is
+  // a public endpoint, so a hidden button is decoration.
+  const actions = fs.readFileSync(path.join(ROOT, "src/lib/actions/coach-actions.ts"), "utf8");
+  const create = actions.slice(actions.indexOf("export async function createClassAction"));
+  const body = create.slice(0, create.indexOf("\n}"));
+  if (!/canCreateClasses\(\s*user\.role\s*\)/.test(body)) {
+    problems.push("createClassAction does not check canCreateClasses(user.role)");
+  }
+
   console.log(`\nScanned ${scanned} coach-surface files.`);
   if (problems.length === 0) {
-    console.log("✓ coach mode reads nothing about a student beyond id and name");
+    console.log("✓ coach mode reads nothing about a student beyond id and name,");
+    console.log("  and only teachers and admins can start a class");
     return;
   }
   console.log(`✗ ${problems.length} privacy problem(s):\n`);

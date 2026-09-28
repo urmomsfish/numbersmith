@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { requireUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { parseDateOnly } from "@/lib/date-only";
+import { canCreateClasses } from "@/lib/types";
 import {
   createClassRoom,
   joinClassByCode,
@@ -39,17 +40,25 @@ function asValue(err: unknown, message: string) {
 
 export type CoachActionResult = { ok: true } | { ok: false; error: string };
 
-/** Anyone may start a class.
+/**
+ * Starts a class. Teachers and admins only.
  *
- * There is deliberately no TEACHER role gate. `role` exists and defaults to
- * STUDENT, but gating on it would mean an admin has to promote every coach by
- * hand before the feature does anything, and the club coach who wants to try
- * NumberSmith on a Tuesday evening is exactly the person it is for. Being a
- * coach confers nothing except over students who chose to join, so there is no
- * privilege here worth defending with a role. */
+ * The role check is here, on the server, not merely in the page that decides
+ * whether to render the form. A Server Action is a public HTTP endpoint: a
+ * student who never sees the "Start a class" card can still POST to this one,
+ * and hiding the button is decoration, not a control.
+ *
+ * Only *creating* is gated. Joining, leaving and sitting assignments stay open
+ * to everyone, because a coach is the account that gets to see other people's
+ * progress — becoming one is the step worth gating, and everything a student
+ * does affects only themselves.
+ */
 export async function createClassAction(formData: FormData): Promise<CoachActionResult> {
   try {
     const user = await requireUser();
+    if (!canCreateClasses(user.role)) {
+      return { ok: false, error: "Only teachers can start a class. Ask an admin to set up your account." };
+    }
     const name = String(formData.get("name") ?? "").trim();
     if (!name) return { ok: false, error: "Give the class a name." };
     if (name.length > MAX_CLASS_NAME) {

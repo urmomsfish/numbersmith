@@ -3,6 +3,23 @@
 
 export type Role = "STUDENT" | "PARENT" | "TEACHER" | "ADMIN";
 
+/**
+ * Who may start a class.
+ *
+ * Creating one is restricted to teachers and admins; joining, leaving and
+ * sitting assignments are not. The asymmetry is the point — a coach is the
+ * account that gets to see other people's progress, so becoming one is the
+ * step that needs a gate, while everything a student does affects only
+ * themselves.
+ *
+ * Lives here, beside `Role`, rather than in the coach engine: the engine is
+ * `server-only`, and a predicate the UI needs to decide what to render must be
+ * importable from a client component too.
+ */
+export function canCreateClasses(role: Role | string): boolean {
+  return role === "TEACHER" || role === "ADMIN";
+}
+
 export type PriorExperience = "NONE" | "SOME" | "EXPERIENCED" | "ADVANCED";
 export type ApproxLevel = "BEGINNER" | "INTERMEDIATE" | "ADVANCED" | "NOT_SURE";
 export type OnboardingStep =
