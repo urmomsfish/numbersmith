@@ -246,7 +246,7 @@ export function UploadPaperForm({ canScan }: { canScan: boolean }) {
         <span className="mt-1 block text-xs text-slate-600 dark:text-slate-400">
           Stays private to your account.
           {canScan
-            ? " Scanning reads the questions so you can be quizzed on them — you check what it read before anything is saved."
+            ? " NumberSmith reads the questions and works out the answers — you check both before anything is saved."
             : " You'll type the answer key and sit the paper with the PDF on screen."}
         </span>
       </label>
