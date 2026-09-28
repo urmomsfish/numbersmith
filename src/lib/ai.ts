@@ -13,6 +13,13 @@ function getClient(): Anthropic {
   return client;
 }
 
+/** The same lazily-built client, for other server-side features that call the
+ * API — past-paper extraction, currently. Shared rather than re-constructed so
+ * there is one place the key is read and one connection pool. */
+export function getAiClient(): Anthropic {
+  return getClient();
+}
+
 const MODEL = process.env.ANTHROPIC_MODEL || "claude-sonnet-4-5";
 
 const SYSTEM_PROMPT = `You are Smith AI, the AI math assistant built into NumberSmith, a competition-math training app for students roughly grades 4-12.

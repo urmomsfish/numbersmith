@@ -826,6 +826,16 @@ model UploadedPaper {
   timeLimitMinutes Int
   /// JSON array of the student's answer key, one entry per question.
   answerKey        String
+  /// JSON array of the questions read out of the PDF, one entry per question:
+  /// `{ text, choices[], confidence, note }`. Empty array when the paper was
+  /// entered by hand rather than scanned — that path still works, and a paper
+  /// with no questions here is sat with the PDF on screen instead of quizzed
+  /// one question at a time.
+  ///
+  /// Stored rather than re-derived because extraction is non-deterministic and
+  /// costs an API call: a second sitting of the same paper must ask the same
+  /// questions as the first, or two attempts are not comparable.
+  questions        String   @default("[]")
   createdAt        DateTime @default(now())
 
   attempts UploadedPaperAttempt[]

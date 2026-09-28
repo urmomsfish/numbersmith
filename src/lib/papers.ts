@@ -13,12 +13,24 @@ import { answersMatch } from "@/lib/engine/answer-format";
  * database half stays in the engine module; the rules live here, where both
  * sides can reach them.
  *
- * Past papers work the way they do because NumberSmith never reads the PDF.
- * Pulling questions out of a scanned contest paper is unreliable, and a misread
- * question is worse than no question — a student who loses ten minutes to a
- * mangled problem learns nothing and stops trusting the rest of the paper. So
- * the app displays the file, runs the clock, and marks against a key the
- * student supplies. Everything below follows from that.
+ * A paper can be sat two ways, and both are supported:
+ *
+ *   - **Scanned** — the PDF is read on upload (see `engine/paper-extract.ts`),
+ *     and the student is quizzed one question at a time.
+ *   - **By hand** — the student types a key and sits the paper with the PDF on
+ *     screen. This was the original and only mode; it remains the fallback for
+ *     a file that cannot be read, and the normal path for a question-only paper
+ *     whose answers the student has to supply anyway.
+ *
+ * Reading the PDF was deliberately avoided at first: a misread question is
+ * worse than no question, because a student who loses ten minutes to a mangled
+ * problem learns nothing and stops trusting the rest of the paper. That risk is
+ * now managed rather than dodged — nothing extracted reaches a sitting until
+ * the student has reviewed it, and low-confidence questions are flagged all the
+ * way through to the answer screen.
+ *
+ * Marking is identical either way, so a paper sat as a quiz and the same paper
+ * sat with the PDF on screen produce comparable scores.
  */
 
 /** Ceiling on the stored PDF, in base64 characters.
@@ -48,6 +60,48 @@ export type PaperInput = {
 };
 
 export type PaperValidation = { ok: true; value: PaperInput } | { ok: false; error: string };
+
+/**
+ * One question read out of the PDF.
+ *
+ * `confidence` and `note` survive into storage rather than being dropped after
+ * the review screen: a student who accepted a flagged question in a hurry
+ * should still see the flag when they meet it in a sitting, and when the mark
+ * looks wrong afterwards the flag is the explanation.
+ */
+export type PaperQuestion = {
+  text: string;
+  choices: string[];
+  confidence: "high" | "low";
+  note: string;
+};
+
+export function parseQuestions(json: string): PaperQuestion[] {
+  try {
+    const v = JSON.parse(json);
+    if (!Array.isArray(v)) return [];
+    return v
+      .filter((q): q is Record<string, unknown> => !!q && typeof q === "object")
+      .map((q) => ({
+        text: typeof q.text === "string" ? q.text : "",
+        choices: Array.isArray(q.choices)
+          ? q.choices.filter((c): c is string => typeof c === "string")
+          : [],
+        confidence: q.confidence === "low" ? ("low" as const) : ("high" as const),
+        note: typeof q.note === "string" ? q.note : "",
+      }))
+      .filter((q) => q.text.length > 0);
+  } catch {
+    return [];
+  }
+}
+
+/** Whether this paper can be sat as a quiz rather than with the PDF on screen.
+ * A paper is quizzable only when there is a question for every slot in the key
+ * — a partial scan would silently ask fewer questions than it marks. */
+export function isQuizzable(questions: PaperQuestion[], questionCount: number): boolean {
+  return questions.length > 0 && questions.length === questionCount;
+}
 
 export type PaperResult = {
   correctCount: number;

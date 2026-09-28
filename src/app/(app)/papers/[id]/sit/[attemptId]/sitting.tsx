@@ -3,9 +3,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { submitPaperAction, abandonAttemptAction } from "@/lib/actions/paper-actions";
 import type { PaperResult } from "@/lib/papers";
+import { PaperResults } from "./results";
 
 function clock(seconds: number): string {
   const s = Math.max(0, seconds);
@@ -101,56 +101,17 @@ export function PaperSitting({
   const low = seconds <= 300;
 
   if (result) {
-    const pct = Math.round((result.correctCount / result.questionCount) * 100);
+    // Hand-entered papers have no question text, so the shared view falls back
+    // to its compact grid — same marks, same layout rules, one component.
     return (
-      <div className="mx-auto max-w-2xl px-4 py-10 sm:px-6">
-        <Badge tone="brand" className="mb-3">
-          {title}
-        </Badge>
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50">
-          {result.correctCount}/{result.questionCount}
-        </h1>
-        <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-          {pct}% · marked against the key you entered
-          {result.timedOut && " · submitted after the clock ran out"}
-        </p>
-
-        <div className="mt-6 grid grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-2">
-          {result.correct.map((ok, i) => (
-            <div
-              key={i}
-              className={
-                ok
-                  ? "rounded-lg border border-emerald-200 bg-emerald-50 px-2 py-1.5 dark:border-emerald-900 dark:bg-emerald-950"
-                  : "rounded-lg border border-red-200 bg-red-50 px-2 py-1.5 dark:border-red-900 dark:bg-red-950"
-              }
-            >
-              <p className="text-[11px] text-slate-700 dark:text-slate-400">Q{i + 1}</p>
-              <p
-                className={
-                  ok
-                    ? "truncate text-sm font-semibold text-success-600 dark:text-emerald-400"
-                    : "truncate text-sm font-semibold text-danger-600 dark:text-red-400"
-                }
-              >
-                {result.answers[i] || "—"}
-              </p>
-              {!ok && (
-                <p className="truncate text-[11px] text-slate-700 dark:text-slate-400">
-                  key: {result.key[i]}
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-6 flex gap-2">
-          <Button onClick={() => router.push(`/papers/${paperId}`)}>Back to the paper</Button>
-          <Button variant="ghost" onClick={() => router.push("/papers")}>
-            All papers
-          </Button>
-        </div>
-      </div>
+      <PaperResults
+        result={result}
+        title={title}
+        paperId={paperId}
+        questions={[]}
+        onBack={() => router.push(`/papers/${paperId}`)}
+        onAll={() => router.push("/papers")}
+      />
     );
   }
 

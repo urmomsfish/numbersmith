@@ -23,6 +23,8 @@ import {
   secondsRemaining,
   isPastDeadline,
   parseJsonArray,
+  parseQuestions,
+  isQuizzable,
   MAX_PAPER_BASE64,
   MAX_QUESTIONS,
   MAX_TIME_LIMIT_MINUTES,
@@ -100,6 +102,41 @@ console.log("\n--- the clock ---");
   ok(!isPastDeadline(started, 75, at("2026-09-27T11:14:59Z")), "not late a second before the limit");
   ok(!isPastDeadline(started, 75, at("2026-09-27T11:15:05Z")), "the grace window covers a slow round trip");
   ok(isPastDeadline(started, 75, at("2026-09-27T11:16:00Z")), "a minute over the limit is late");
+}
+
+console.log("\n--- scanned questions ---");
+{
+  // Extraction output is model-generated and reaches this parser as stored
+  // JSON, so it is untrusted twice over: malformed shapes must degrade to a
+  // hand-entered paper, never crash a sitting or half-populate one.
+  const good = JSON.stringify([
+    { text: "What is 2+2?", choices: ["3", "4"], confidence: "high", note: "" },
+    { text: "Name a prime.", choices: [], confidence: "low", note: "blurry" },
+  ]);
+  const parsed = parseQuestions(good);
+  ok(parsed.length === 2, "a well-formed question array round-trips");
+  ok(parsed[0].choices.length === 2 && parsed[1].choices.length === 0, "choices survive per question");
+  ok(parsed[1].confidence === "low" && parsed[1].note === "blurry", "the low-confidence flag and note survive");
+
+  ok(parseQuestions("not json").length === 0, "malformed JSON yields no questions");
+  ok(parseQuestions('{"a":1}').length === 0, "a non-array yields no questions");
+  ok(parseQuestions("[]").length === 0, "an empty array yields no questions");
+  ok(parseQuestions('[null, 3, "x"]').length === 0, "non-objects are dropped, not crashed on");
+  ok(parseQuestions('[{"text":""}]').length === 0, "a question with no text is dropped");
+  {
+    const loose = parseQuestions('[{"text":"Q","choices":"nope","confidence":"bogus"}]');
+    ok(loose.length === 1 && loose[0].choices.length === 0, "a non-array choices field becomes empty");
+    ok(loose[0].confidence === "high", "an unrecognised confidence defaults to high, not low");
+  }
+
+  // The gate that decides quiz vs PDF-on-screen. A partial scan must fall back.
+  const q = (n: number) =>
+    Array.from({ length: n }, () => ({ text: "Q", choices: [], confidence: "high" as const, note: "" }));
+  ok(isQuizzable(q(5), 5), "5 questions and 5 answers is quizzable");
+  ok(!isQuizzable(q(4), 5), "a scan short by one falls back to the PDF");
+  ok(!isQuizzable(q(6), 5), "a scan long by one falls back to the PDF");
+  ok(!isQuizzable([], 5), "a hand-entered paper is not quizzable");
+  ok(!isQuizzable(q(0), 0), "a paper with no questions at all is not quizzable");
 }
 
 console.log("\n--- days vs instants ---");

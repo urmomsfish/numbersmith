@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { isProUser } from "@/lib/subscription";
 import { Card, CardBody } from "@/components/ui/card";
 import { UploadPaperForm } from "./upload-form";
 
@@ -78,7 +79,9 @@ export default async function PapersPage() {
         </h2>
         <Card className="mt-3">
           <CardBody>
-            <UploadPaperForm />
+            {/* Decides which upload path to offer, not whether scanning is
+                allowed — `scanPaperAction` checks the role itself. */}
+            <UploadPaperForm canScan={await isProUser(user.id)} />
           </CardBody>
         </Card>
       </section>

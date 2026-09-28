@@ -1,8 +1,15 @@
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { secondsRemaining, scoreAnswers, parseJsonArray } from "@/lib/papers";
+import {
+  secondsRemaining,
+  scoreAnswers,
+  parseJsonArray,
+  parseQuestions,
+  isQuizzable,
+} from "@/lib/papers";
 import { PaperSitting } from "./sitting";
+import { PaperQuiz } from "./quiz";
 
 /**
  * One sitting of a past paper — and, once it is submitted, its result.
@@ -31,7 +38,14 @@ export default async function SitPaperPage({
     where: { id: attemptId, userId: user.id },
     include: {
       paper: {
-        select: { id: true, title: true, questionCount: true, timeLimitMinutes: true, answerKey: true },
+        select: {
+          id: true,
+          title: true,
+          questionCount: true,
+          timeLimitMinutes: true,
+          answerKey: true,
+          questions: true,
+        },
       },
     },
   });
@@ -45,6 +59,34 @@ export default async function SitPaperPage({
   const key = parseJsonArray(attempt.paper.answerKey);
   const done = attempt.status === "SUBMITTED";
   const stored = done ? parseJsonArray(attempt.answers) : [];
+  const questions = parseQuestions(attempt.paper.questions);
+
+  const result = done
+    ? {
+        ...scoreAnswers(key, stored),
+        questionCount: attempt.paper.questionCount,
+        key,
+        answers: stored,
+        timedOut: false,
+      }
+    : null;
+
+  // A scanned paper is quizzed; anything else is sat with the PDF on screen.
+  // `isQuizzable` requires a question per key slot, so a partial scan falls
+  // back rather than quietly asking fewer questions than it marks.
+  if (isQuizzable(questions, attempt.paper.questionCount)) {
+    return (
+      <PaperQuiz
+        attemptId={attempt.id}
+        paperId={attempt.paper.id}
+        title={attempt.paper.title}
+        fileUrl={`/api/papers/${attempt.paper.id}/file`}
+        questions={questions}
+        initialSeconds={secondsRemaining(attempt.startedAt, attempt.paper.timeLimitMinutes)}
+        initialResult={result}
+      />
+    );
+  }
 
   return (
     <PaperSitting
@@ -54,17 +96,7 @@ export default async function SitPaperPage({
       fileUrl={`/api/papers/${attempt.paper.id}/file`}
       questionCount={attempt.paper.questionCount}
       initialSeconds={secondsRemaining(attempt.startedAt, attempt.paper.timeLimitMinutes)}
-      initialResult={
-        done
-          ? {
-              ...scoreAnswers(key, stored),
-              questionCount: attempt.paper.questionCount,
-              key,
-              answers: stored,
-              timedOut: false,
-            }
-          : null
-      }
+      initialResult={result}
     />
   );
 }
