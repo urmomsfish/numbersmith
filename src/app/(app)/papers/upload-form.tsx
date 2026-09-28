@@ -44,6 +44,100 @@ const SOURCE_HEADING: Record<AnswerSource, string> = {
   MANUAL: "Answer key",
 };
 
+/**
+ * The answer for one question on the review screen.
+ *
+ * Multiple choice and free response are genuinely different inputs and were
+ * previously the same 7rem box. That box was also `uppercase`, which is right
+ * for a letter and wrong for everything else: it rendered a solved answer of
+ * `R(x) = x²/(x+1)` as `R(X) = X²/(X+1)`, changing what the maths says. Case is
+ * meaningful in algebra, so the transform now applies only where the answer
+ * really is a single letter.
+ */
+function AnswerField({
+  row,
+  index,
+  source,
+  onChange,
+}: {
+  row: Row;
+  index: number;
+  source: AnswerSource;
+  onChange: (value: string) => void;
+}) {
+  const unsure = source === "SOLVED" && row.answerConfidence === "low";
+  const blank = row.answer.trim() === "";
+
+  // Multiple choice: pick the letter. Typing "C" into a box was never the
+  // natural gesture when the options are right there, and it let a student
+  // enter a letter the paper never offered.
+  if (row.choices.length > 0) {
+    const picked = row.answer.trim().toUpperCase();
+    return (
+      <div className="space-y-1.5">
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="mr-1 text-xs text-slate-600 dark:text-slate-400">Answer</span>
+          {row.choices.map((_, k) => {
+            const letter = String.fromCharCode(65 + k);
+            const on = picked === letter;
+            return (
+              <button
+                key={k}
+                type="button"
+                onClick={() => onChange(on ? "" : letter)}
+                aria-pressed={on}
+                aria-label={`Question ${index + 1}, answer ${letter}`}
+                className={[
+                  "h-7 w-7 rounded-md text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground",
+                  on
+                    ? "bg-brand-600 text-white"
+                    : "bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700",
+                  unsure && on ? "ring-2 ring-amber-400" : "",
+                ].join(" ")}
+              >
+                {letter}
+              </button>
+            );
+          })}
+          {blank && <span className="text-xs text-amber-800 dark:text-amber-300">Pick one</span>}
+        </div>
+        {unsure && (
+          <p className="text-xs text-amber-800 dark:text-amber-300">
+            {row.answerNote || "Worth checking this one."}
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  // Free response: a rational function or an exact form needs room, reads
+  // better monospaced, and must not be case-folded.
+  return (
+    <div className="space-y-1.5">
+      <label className="block">
+        <span className="mb-1 block text-xs text-slate-600 dark:text-slate-400">Answer</span>
+        <input
+          value={row.answer}
+          onChange={(e) => onChange(e.target.value)}
+          aria-label={`Answer to question ${index + 1}`}
+          placeholder={blank ? "Type the answer" : undefined}
+          className={[
+            "w-full max-w-md rounded-md bg-background px-2.5 py-1.5 font-mono text-sm text-slate-900 focus:border-foreground focus:outline-none focus:ring-2 focus:ring-ember-600/30 dark:text-slate-50",
+            unsure || blank
+              ? "border-2 border-amber-400 dark:border-amber-600"
+              : "border border-slate-300 dark:border-slate-600",
+          ].join(" ")}
+        />
+      </label>
+      {(unsure || blank) && (
+        <p className="text-xs text-amber-800 dark:text-amber-300">
+          {row.answerNote || (blank ? "NumberSmith couldn't work this one out — fill it in." : "Worth checking this one.")}
+        </p>
+      )}
+    </div>
+  );
+}
+
 function ErrorNote({ children }: { children: React.ReactNode }) {
   return (
     <p
@@ -87,6 +181,7 @@ export function UploadPaperForm({ canScan }: { canScan: boolean }) {
   const [scanned, setScanned] = useState(false);
   const [answerSource, setAnswerSource] = useState<AnswerSource>("MANUAL");
   const [notice, setNotice] = useState<string | null>(null);
+  const [showPaper, setShowPaper] = useState(false);
 
   async function withFileData(): Promise<string | null> {
     if (fileData) return fileData;
@@ -153,16 +248,20 @@ export function UploadPaperForm({ canScan }: { canScan: boolean }) {
           `Read ${total} questions, but couldn't work out the answers. Fill the key in below and everything else is ready.`
         );
       } else {
-        const parts = [
+        // One sentence on what happened, then what it needs from you — the
+        // counts already live in the stats line above the questions, so
+        // repeating all of them here just made a paragraph nobody read.
+        const headline =
           result.answerSource === "PRINTED"
             ? `Read ${total} questions and took the answers off the paper's own key.`
-            : `Read ${total} questions and worked out the answers.`,
-        ];
-        if (lowConfidence > 0) parts.push(`${lowConfidence} question${lowConfidence === 1 ? "" : "s"} need a look.`);
-        if (unsureAnswers > 0) parts.push(`${unsureAnswers} answer${unsureAnswers === 1 ? "" : "s"} worth checking.`);
-        if (blanks > 0) parts.push(`${blanks} still blank.`);
-        if (lowConfidence === 0 && unsureAnswers === 0 && blanks === 0) parts.push("Nothing flagged — you're ready to sit it.");
-        setNotice(parts.join(" "));
+            : `Read ${total} questions and worked out the answers.`;
+        setNotice(
+          blanks > 0
+            ? `${headline} ${blanks} couldn't be answered — they're marked below and need you.`
+            : lowConfidence + unsureAnswers > 0
+              ? `${headline} The flagged ones below are worth a look before you sit it.`
+              : `${headline} Nothing flagged — you're ready to sit it.`
+        );
       }
     });
   }
@@ -324,12 +423,40 @@ export function UploadPaperForm({ canScan }: { canScan: boolean }) {
               <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                 {scanned ? SOURCE_HEADING[answerSource] : "Answer key"}
               </span>
-              <span className="text-xs text-slate-600 dark:text-slate-400">
-                {filled}/{rows.length} answered
-                {flagged > 0 && ` · ${flagged} flagged`}
-                {uncertainAnswers > 0 && ` · ${uncertainAnswers} to check`}
+              <span className="flex flex-wrap items-baseline gap-2 text-xs text-slate-600 dark:text-slate-400">
+                <span>
+                  {filled}/{rows.length} answered
+                  {flagged > 0 && ` · ${flagged} flagged`}
+                  {uncertainAnswers > 0 && ` · ${uncertainAnswers} to check`}
+                </span>
+                {scanned && fileData && (
+                  <button
+                    type="button"
+                    onClick={() => setShowPaper((v) => !v)}
+                    className="rounded-md px-1.5 py-0.5 font-semibold text-brand-700 underline hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground dark:text-brand-300 dark:hover:bg-slate-800"
+                  >
+                    {showPaper ? "Hide the original" : "Show the original"}
+                  </button>
+                )}
               </span>
             </div>
+
+            {/* The PDF, beside the questions being checked. A question flagged
+                "depends on a graph" is unresolvable without it — the student
+                would otherwise have to open the file separately to answer the
+                exact thing the review screen is asking them about. */}
+            {scanned && showPaper && fileData && (
+              <object
+                data={`data:application/pdf;base64,${fileData}`}
+                type="application/pdf"
+                className="mb-3 h-[60vh] w-full rounded-lg border border-slate-200 dark:border-slate-700"
+                aria-label="The uploaded paper"
+              >
+                <p className="p-4 text-sm text-slate-700 dark:text-slate-300">
+                  Your browser can&rsquo;t show the PDF inline.
+                </p>
+              </object>
+            )}
 
             <ul className="space-y-2">
               {rows.map((row, i) => (
@@ -365,9 +492,13 @@ export function UploadPaperForm({ canScan }: { canScan: boolean }) {
                                 prev!.map((r, j) => (j === i ? { ...r, text: e.target.value } : r))
                               )
                             }
-                            rows={2}
+                            // Sized to the question rather than fixed at 2. A
+                            // clipped box scrolled the first line out of view,
+                            // so the thing the student is being asked to check
+                            // was the thing they could not see.
+                            rows={Math.min(8, Math.max(2, Math.ceil(row.text.length / 72)))}
                             aria-label={`Question ${i + 1} text`}
-                            className={`${inputClass} resize-y`}
+                            className={`${inputClass} resize-y leading-relaxed`}
                           />
                           {row.choices.length > 0 && (
                             <p className="text-xs text-slate-600 dark:text-slate-400">
@@ -383,37 +514,28 @@ export function UploadPaperForm({ canScan }: { canScan: boolean }) {
                           )}
                         </>
                       )}
-                      <div className="flex flex-wrap items-center gap-2">
-                        <label className="flex items-center gap-2">
-                          <span className="text-xs text-slate-600 dark:text-slate-400">Answer</span>
-                          <input
-                            value={row.answer}
-                            onChange={(e) =>
-                              setRows((prev) =>
-                                prev!.map((r, j) =>
-                                  j === i
-                                    ? // Editing an answer makes it the student's,
-                                      // so it stops claiming a confidence that
-                                      // was never about their value.
-                                      { ...r, answer: e.target.value, answerConfidence: undefined, answerNote: undefined }
-                                    : r
-                                )
-                              )
-                            }
-                            aria-label={`Answer to question ${i + 1}`}
-                            className={
-                              row.answerConfidence === "low" && answerSource === "SOLVED"
-                                ? "w-28 rounded-md border-2 border-amber-400 bg-background px-2 py-1 text-center text-sm uppercase text-slate-900 focus:border-foreground focus:outline-none focus:ring-2 focus:ring-ember-600/30 dark:border-amber-600 dark:text-slate-50"
-                                : "w-28 rounded-md border border-slate-300 bg-background px-2 py-1 text-center text-sm uppercase text-slate-900 focus:border-foreground focus:outline-none focus:ring-2 focus:ring-ember-600/30 dark:border-slate-600 dark:text-slate-50"
-                            }
-                          />
-                        </label>
-                        {answerSource === "SOLVED" && row.answerConfidence === "low" && (
-                          <span className="text-xs text-amber-800 dark:text-amber-300">
-                            {row.answerNote || "Worth checking this one."}
-                          </span>
-                        )}
-                      </div>
+                      <AnswerField
+                        row={row}
+                        index={i}
+                        source={answerSource}
+                        onChange={(value) =>
+                          setRows((prev) =>
+                            prev!.map((r, j) =>
+                              j === i
+                                ? // Editing an answer makes it the student's, so
+                                  // it stops claiming a confidence that was never
+                                  // about their value.
+                                  {
+                                    ...r,
+                                    answer: value,
+                                    answerConfidence: undefined,
+                                    answerNote: undefined,
+                                  }
+                                : r
+                            )
+                          )
+                        }
+                      />
                     </div>
                   </div>
                 </li>
