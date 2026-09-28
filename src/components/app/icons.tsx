@@ -134,3 +134,12 @@ export function IconUsers({ className }: IconProps) {
     </svg>
   );
 }
+export function IconFile({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={className ?? base}>
+      <path d="M14 3H7a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7z" strokeLinejoin="round" />
+      <path d="M14 3v4h4" strokeLinejoin="round" />
+      <path d="M9 13h6M9 16.5h4" strokeLinecap="round" />
+    </svg>
+  );
+}

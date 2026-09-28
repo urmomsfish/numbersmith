@@ -19,8 +19,11 @@
  *
  * This is a different thing from `streakDayKey()`, which answers "what day is
  * it *for this user*" and is deliberately anchored to US Pacific. Here the day
- * is already known; only its storage and display are in question.
+ * is already known; only its storage and display are in question. For the
+ * other direction — turning a timestamp into the day it happened — see
+ * `formatInstantDay` below.
  */
+import { STREAK_TIME_ZONE } from "@/lib/streak";
 
 /** Parses a `<input type="date">` value into that day's UTC midnight.
  * Returns null for anything that is not a real calendar day. */
@@ -42,6 +45,27 @@ export function formatDateOnly(
   opts: Intl.DateTimeFormatOptions = { month: "short", day: "numeric", year: "numeric" }
 ): string {
   return date.toLocaleDateString("en-US", { ...opts, timeZone: "UTC" });
+}
+
+/**
+ * Renders an *instant* — `createdAt`, `submittedAt` — as the day it happened.
+ *
+ * Not the same function as `formatDateOnly`, and using that one here is a real
+ * bug I shipped for about ten minutes: a paper uploaded on the evening of
+ * 27 September Pacific displayed as "added Sep 28", because `formatDateOnly`
+ * forces UTC and by then UTC had already rolled over. Forcing UTC is right for
+ * a value that *is* a day and was stored at UTC midnight; it is wrong for a
+ * timestamp, which names a moment and has to be read in somebody's zone.
+ *
+ * That somebody is the user, so this uses the same zone the streak does. A bare
+ * `toLocaleDateString()` would use the *server's* zone, which is UTC on Vercel
+ * and reintroduces the same off-by-one for anyone west of Greenwich.
+ */
+export function formatInstantDay(
+  at: Date,
+  opts: Intl.DateTimeFormatOptions = { month: "short", day: "numeric", year: "numeric" }
+): string {
+  return at.toLocaleDateString("en-US", { ...opts, timeZone: STREAK_TIME_ZONE });
 }
 
 /** Whether a deadline stored as a day has passed.
