@@ -11,6 +11,7 @@ import {
   MAX_QUESTIONS,
   MAX_TIME_LIMIT_MINUTES,
   type PaperQuestion,
+  type AnswerSource,
 } from "@/lib/papers";
 
 const inputClass =
@@ -33,6 +34,15 @@ function readAsBase64(file: File): Promise<string> {
 
 /** A question plus its answer, as the review screen edits them. */
 type Row = PaperQuestion & { answer: string };
+
+/** What the review screen says above the key, per source. The point is that a
+ * student can tell at a glance whether they are confirming something the paper
+ * said or something NumberSmith concluded. */
+const SOURCE_HEADING: Record<AnswerSource, string> = {
+  PRINTED: "Answers from the paper's key",
+  SOLVED: "Answers NumberSmith worked out",
+  MANUAL: "Answer key",
+};
 
 function ErrorNote({ children }: { children: React.ReactNode }) {
   return (
@@ -75,6 +85,7 @@ export function UploadPaperForm({ canScan }: { canScan: boolean }) {
   // Null until a scan succeeds or the student chooses to enter by hand.
   const [rows, setRows] = useState<Row[] | null>(null);
   const [scanned, setScanned] = useState(false);
+  const [answerSource, setAnswerSource] = useState<AnswerSource>("MANUAL");
   const [notice, setNotice] = useState<string | null>(null);
 
   async function withFileData(): Promise<string | null> {
@@ -118,25 +129,41 @@ export function UploadPaperForm({ canScan }: { canScan: boolean }) {
       }
 
       setRows(
-        result.paper.questions.map((q) => ({
+        result.paper.questions.map((q, i) => ({
           text: q.question,
           choices: q.choices,
           confidence: q.confidence,
           note: q.note,
-          answer: q.answer,
+          answer: result.answers[i]?.answer ?? "",
+          answerConfidence: result.answers[i]?.confidence ?? "high",
+          answerNote: result.answers[i]?.note ?? "",
         }))
       );
       setScanned(true);
+      setAnswerSource(result.answerSource);
       if (!title && result.paper.title) setTitle(result.paper.title);
       if (result.paper.timeLimitMinutes > 0) setTimeLimit(result.paper.timeLimitMinutes);
 
-      const { total, withAnswers, lowConfidence, needsManualKey } = result.summary;
-      setNotice(
-        needsManualKey
-          ? `Read ${total} questions. This paper doesn't include an answer key, so fill the answers in below.`
-          : `Read ${total} questions and ${withAnswers} answers.` +
-              (lowConfidence > 0 ? ` ${lowConfidence} need a look — they're marked below.` : "")
-      );
+      const { total, lowConfidence } = result.summary;
+      const unsureAnswers = result.answers.filter((a) => a.confidence === "low").length;
+      const blanks = result.answers.filter((a) => !a.answer.trim()).length;
+
+      if (result.answerSource === "MANUAL") {
+        setNotice(
+          `Read ${total} questions, but couldn't work out the answers. Fill the key in below and everything else is ready.`
+        );
+      } else {
+        const parts = [
+          result.answerSource === "PRINTED"
+            ? `Read ${total} questions and took the answers off the paper's own key.`
+            : `Read ${total} questions and worked out the answers.`,
+        ];
+        if (lowConfidence > 0) parts.push(`${lowConfidence} question${lowConfidence === 1 ? "" : "s"} need a look.`);
+        if (unsureAnswers > 0) parts.push(`${unsureAnswers} answer${unsureAnswers === 1 ? "" : "s"} worth checking.`);
+        if (blanks > 0) parts.push(`${blanks} still blank.`);
+        if (lowConfidence === 0 && unsureAnswers === 0 && blanks === 0) parts.push("Nothing flagged — you're ready to sit it.");
+        setNotice(parts.join(" "));
+      }
     });
   }
 
@@ -153,6 +180,7 @@ export function UploadPaperForm({ canScan }: { canScan: boolean }) {
       }))
     );
     setScanned(false);
+    setAnswerSource("MANUAL");
     setNotice(null);
   }
 
@@ -176,8 +204,11 @@ export function UploadPaperForm({ canScan }: { canScan: boolean }) {
               choices: r.choices,
               confidence: r.confidence,
               note: r.note,
+              answerConfidence: r.answerConfidence,
+              answerNote: r.answerNote,
             }))
           : [],
+        answerSource: scanned ? answerSource : "MANUAL",
       });
       if (result.ok) router.push(`/papers/${result.paperId}`);
       else setError(result.error);
@@ -186,6 +217,12 @@ export function UploadPaperForm({ canScan }: { canScan: boolean }) {
 
   const filled = rows?.filter((r) => r.answer.trim()).length ?? 0;
   const flagged = rows?.filter((r) => r.confidence === "low").length ?? 0;
+  // Only meaningful for a solved key: a printed one carries the paper's own
+  // authority, and a hand-typed one is the student's own.
+  const uncertainAnswers =
+    answerSource === "SOLVED"
+      ? (rows?.filter((r) => r.answerConfidence === "low").length ?? 0)
+      : 0;
 
   return (
     <div className="space-y-4">
@@ -219,7 +256,7 @@ export function UploadPaperForm({ canScan }: { canScan: boolean }) {
           <div className="flex flex-wrap items-center gap-2">
             {canScan && (
               <Button onClick={scan} disabled={pending}>
-                {pending ? "Reading the paper…" : "Scan this paper"}
+                {pending ? "Reading and solving…" : "Read this paper"}
               </Button>
             )}
             <Button
@@ -285,11 +322,12 @@ export function UploadPaperForm({ canScan }: { canScan: boolean }) {
           <div>
             <div className="mb-2 flex flex-wrap items-baseline justify-between gap-2">
               <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                {scanned ? "Check what was read" : "Answer key"}
+                {scanned ? SOURCE_HEADING[answerSource] : "Answer key"}
               </span>
               <span className="text-xs text-slate-600 dark:text-slate-400">
                 {filled}/{rows.length} answered
                 {flagged > 0 && ` · ${flagged} flagged`}
+                {uncertainAnswers > 0 && ` · ${uncertainAnswers} to check`}
               </span>
             </div>
 
@@ -345,19 +383,37 @@ export function UploadPaperForm({ canScan }: { canScan: boolean }) {
                           )}
                         </>
                       )}
-                      <label className="flex items-center gap-2">
-                        <span className="text-xs text-slate-600 dark:text-slate-400">Answer</span>
-                        <input
-                          value={row.answer}
-                          onChange={(e) =>
-                            setRows((prev) =>
-                              prev!.map((r, j) => (j === i ? { ...r, answer: e.target.value } : r))
-                            )
-                          }
-                          aria-label={`Answer to question ${i + 1}`}
-                          className="w-28 rounded-md border border-slate-300 bg-background px-2 py-1 text-center text-sm uppercase text-slate-900 focus:border-foreground focus:outline-none focus:ring-2 focus:ring-ember-600/30 dark:border-slate-600 dark:text-slate-50"
-                        />
-                      </label>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <label className="flex items-center gap-2">
+                          <span className="text-xs text-slate-600 dark:text-slate-400">Answer</span>
+                          <input
+                            value={row.answer}
+                            onChange={(e) =>
+                              setRows((prev) =>
+                                prev!.map((r, j) =>
+                                  j === i
+                                    ? // Editing an answer makes it the student's,
+                                      // so it stops claiming a confidence that
+                                      // was never about their value.
+                                      { ...r, answer: e.target.value, answerConfidence: undefined, answerNote: undefined }
+                                    : r
+                                )
+                              )
+                            }
+                            aria-label={`Answer to question ${i + 1}`}
+                            className={
+                              row.answerConfidence === "low" && answerSource === "SOLVED"
+                                ? "w-28 rounded-md border-2 border-amber-400 bg-background px-2 py-1 text-center text-sm uppercase text-slate-900 focus:border-foreground focus:outline-none focus:ring-2 focus:ring-ember-600/30 dark:border-amber-600 dark:text-slate-50"
+                                : "w-28 rounded-md border border-slate-300 bg-background px-2 py-1 text-center text-sm uppercase text-slate-900 focus:border-foreground focus:outline-none focus:ring-2 focus:ring-ember-600/30 dark:border-slate-600 dark:text-slate-50"
+                            }
+                          />
+                        </label>
+                        {answerSource === "SOLVED" && row.answerConfidence === "low" && (
+                          <span className="text-xs text-amber-800 dark:text-amber-300">
+                            {row.answerNote || "Worth checking this one."}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </li>
@@ -365,6 +421,9 @@ export function UploadPaperForm({ canScan }: { canScan: boolean }) {
             </ul>
 
             <p className="mt-2 text-xs text-slate-600 dark:text-slate-400">
+              {answerSource === "SOLVED"
+                ? "Change any answer you disagree with — yours wins. "
+                : ""}
               Letters for multiple choice, numbers otherwise. Marked by value, so{" "}
               <code>1/2</code> and <code>0.5</code> both count.
             </p>

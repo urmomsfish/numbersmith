@@ -7,6 +7,7 @@ import {
   parseJsonArray,
   parseQuestions,
   isQuizzable,
+  parseAnswerSource,
 } from "@/lib/papers";
 import { PaperSitting } from "./sitting";
 import { PaperQuiz } from "./quiz";
@@ -44,6 +45,7 @@ export default async function SitPaperPage({
           questionCount: true,
           timeLimitMinutes: true,
           answerKey: true,
+          answerSource: true,
           questions: true,
         },
       },
@@ -82,6 +84,7 @@ export default async function SitPaperPage({
         title={attempt.paper.title}
         fileUrl={`/api/papers/${attempt.paper.id}/file`}
         questions={questions}
+        answerSource={parseAnswerSource(attempt.paper.answerSource)}
         initialSeconds={secondsRemaining(attempt.startedAt, attempt.paper.timeLimitMinutes)}
         initialResult={result}
       />

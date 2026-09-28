@@ -109,6 +109,7 @@ export function PaperSitting({
         title={title}
         paperId={paperId}
         questions={[]}
+        answerSource="MANUAL"
         onBack={() => router.push(`/papers/${paperId}`)}
         onAll={() => router.push("/papers")}
       />

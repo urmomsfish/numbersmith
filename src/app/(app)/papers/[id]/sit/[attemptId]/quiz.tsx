@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { submitPaperAction, abandonAttemptAction } from "@/lib/actions/paper-actions";
-import type { PaperResult, PaperQuestion } from "@/lib/papers";
+import type { PaperResult, PaperQuestion, AnswerSource } from "@/lib/papers";
 import { PaperResults } from "./results";
 
 function clock(seconds: number): string {
@@ -37,6 +37,7 @@ export function PaperQuiz({
   title,
   fileUrl,
   questions,
+  answerSource,
   initialSeconds,
   initialResult,
 }: {
@@ -45,6 +46,7 @@ export function PaperQuiz({
   title: string;
   fileUrl: string;
   questions: PaperQuestion[];
+  answerSource: AnswerSource;
   initialSeconds: number;
   initialResult: PaperResult | null;
 }) {
@@ -102,6 +104,7 @@ export function PaperQuiz({
         title={title}
         paperId={paperId}
         questions={questions}
+        answerSource={answerSource}
         onBack={() => router.push(`/papers/${paperId}`)}
         onAll={() => router.push("/papers")}
       />

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import type { PaperResult, PaperQuestion } from "@/lib/papers";
+import { describeAnswerSource, type PaperResult, type PaperQuestion, type AnswerSource } from "@/lib/papers";
 
 /**
  * What you got, and what you missed.
@@ -21,6 +21,7 @@ export function PaperResults({
   result,
   title,
   questions,
+  answerSource,
   onBack,
   onAll,
 }: {
@@ -28,6 +29,7 @@ export function PaperResults({
   title: string;
   /** Empty for a hand-entered paper; the compact grid is used then. */
   questions: PaperQuestion[];
+  answerSource: AnswerSource;
   paperId: string;
   onBack: () => void;
   onAll: () => void;
@@ -37,6 +39,14 @@ export function PaperResults({
   const missedFlagged = hasText
     ? result.correct.filter((ok, i) => !ok && questions[i].confidence === "low").length
     : 0;
+  // Questions marked wrong against an answer NumberSmith worked out and was
+  // itself unsure of. These are the marks most likely to be the app's fault
+  // rather than the student's, and saying so is the difference between a
+  // student fixing a real gap and a student losing faith in the scoring.
+  const missedUncertain =
+    hasText && answerSource === "SOLVED"
+      ? result.correct.filter((ok, i) => !ok && questions[i].answerConfidence === "low").length
+      : 0;
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10 sm:px-6">
@@ -47,9 +57,18 @@ export function PaperResults({
         {result.correctCount}/{result.questionCount}
       </h1>
       <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-        {pct}% · marked against the key you entered
+        {pct}% · {describeAnswerSource(answerSource)}
         {result.timedOut && " · submitted after the clock ran out"}
       </p>
+
+      {missedUncertain > 0 && (
+        <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800 dark:bg-amber-950 dark:text-amber-400">
+          {missedUncertain} of the ones marked wrong {missedUncertain === 1 ? "was" : "were"} graded
+          against an answer NumberSmith wasn&rsquo;t sure of. If you worked{" "}
+          {missedUncertain === 1 ? "it" : "them"} out and disagree, you may well be right — check
+          against the original before treating {missedUncertain === 1 ? "it" : "them"} as a gap.
+        </p>
+      )}
 
       {missedFlagged > 0 && (
         <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800 dark:bg-amber-950 dark:text-amber-400">

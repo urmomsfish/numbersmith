@@ -26,6 +26,8 @@ import {
   parseQuestions,
   isQuizzable,
   hasHitScanCap,
+  parseAnswerSource,
+  describeAnswerSource,
   MAX_PAPER_BASE64,
   MAX_QUESTIONS,
   MAX_TIME_LIMIT_MINUTES,
@@ -164,6 +166,44 @@ ok(parseJsonArray('["A","B"]').join("") === "AB", "a stored array round-trips");
 ok(parseJsonArray("not json").length === 0, "malformed JSON yields an empty array, not a crash");
 ok(parseJsonArray('{"a":1}').length === 0, "a non-array yields an empty array");
 ok(parseJsonArray('["A",3,null]').join("|") === "A||", "non-strings become blanks rather than breaking marking");
+
+console.log("\n--- where the key came from ---");
+{
+  ok(parseAnswerSource("PRINTED") === "PRINTED", "a printed key round-trips");
+  ok(parseAnswerSource("SOLVED") === "SOLVED", "a solved key round-trips");
+  ok(parseAnswerSource("MANUAL") === "MANUAL", "a manual key round-trips");
+  // Anything unrecognised must fall back to MANUAL, never SOLVED: claiming
+  // NumberSmith produced a key it did not produce would attach a doubt warning
+  // to the student's own answers, or worse, excuse a wrong mark as ours.
+  ok(parseAnswerSource("nonsense") === "MANUAL", "an unknown source reads as manual, not solved");
+  ok(parseAnswerSource(undefined) === "MANUAL", "a missing source reads as manual");
+  ok(parseAnswerSource(null) === "MANUAL", "a null source reads as manual");
+
+  // The results line is the only place a student learns a mark may not be
+  // their fault, so each source must actually say something different.
+  const printed = describeAnswerSource("PRINTED");
+  const solved = describeAnswerSource("SOLVED");
+  const manual = describeAnswerSource("MANUAL");
+  ok(new Set([printed, solved, manual]).size === 3, "each source is described differently");
+  ok(/NumberSmith/.test(solved), "a solved key admits NumberSmith produced it");
+  ok(!/NumberSmith/.test(printed), "a printed key does not claim NumberSmith's authorship");
+}
+
+console.log("\n--- answer confidence survives storage ---");
+{
+  // The flag that tells a student a wrong mark might be ours has to survive the
+  // round trip, and must not be invented for papers that never had one.
+  const stored = JSON.stringify([
+    { text: "Q1", choices: [], confidence: "high", note: "", answerConfidence: "low", answerNote: "Figure missing." },
+    { text: "Q2", choices: [], confidence: "high", note: "" },
+  ]);
+  const parsed = parseQuestions(stored);
+  ok(parsed[0].answerConfidence === "low", "a low answer confidence survives storage");
+  ok(parsed[0].answerNote === "Figure missing.", "the note explaining the doubt survives");
+  ok(parsed[1].answerConfidence === undefined, "a question stored without one does not gain a confidence");
+  ok(parseQuestions('[{"text":"Q","choices":[],"confidence":"high","note":"","answerConfidence":"bogus"}]')[0].answerConfidence === undefined,
+    "an unrecognised answer confidence is dropped rather than trusted");
+}
 
 console.log("\n--- daily scan cap ---");
 {

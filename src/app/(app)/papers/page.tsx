@@ -17,6 +17,8 @@ export default async function PapersPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
 
+  const mayScan = await isProUser(user.id);
+
   const papers = await prisma.uploadedPaper.findMany({
     where: { userId: user.id },
     orderBy: { createdAt: "desc" },
@@ -38,8 +40,9 @@ export default async function PapersPage() {
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
       <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Past Papers</h1>
       <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-        Upload a paper you already have, type in its answer key once, then sit it
-        against the clock and get scored.
+        {mayScan
+          ? "Upload a paper you already have. NumberSmith reads the questions, works out the answers, and quizzes you on them against the clock."
+          : "Upload a paper you already have, type in its answer key once, then sit it against the clock and get scored."}
       </p>
 
       {papers.length > 0 && (
@@ -81,7 +84,7 @@ export default async function PapersPage() {
           <CardBody>
             {/* Decides which upload path to offer, not whether scanning is
                 allowed — `scanPaperAction` checks the role itself. */}
-            <UploadPaperForm canScan={await isProUser(user.id)} />
+            <UploadPaperForm canScan={mayScan} />
           </CardBody>
         </Card>
       </section>

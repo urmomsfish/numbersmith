@@ -6,12 +6,15 @@ import { prisma } from "@/lib/prisma";
 import {
   validatePaper,
   hasHitScanCap,
+  parseAnswerSource,
   MAX_PAPER_BASE64,
   MAX_QUESTIONS,
   MAX_SCANS_PER_DAY,
   type PaperResult,
   type PaperQuestion,
+  type AnswerSource,
 } from "@/lib/papers";
+import { solvePaper } from "@/lib/engine/paper-solve";
 import {
   startOrResumeAttempt,
   submitAttempt,
@@ -44,12 +47,29 @@ function asValue(err: unknown, message: string) {
 
 export type PaperActionResult = { ok: true } | { ok: false; error: string };
 
+/** One answer per question, aligned by position, whatever produced it. */
+export type ScannedAnswer = { answer: string; confidence: "high" | "low"; note: string };
+
 export type ScanResult =
-  | { ok: true; paper: ExtractedPaper; summary: ReturnType<typeof extractionSummary> }
+  | {
+      ok: true;
+      paper: ExtractedPaper;
+      summary: ReturnType<typeof extractionSummary>;
+      answers: ScannedAnswer[];
+      answerSource: AnswerSource;
+    }
   | { ok: false; error: string };
 
 /**
- * Reads an uploaded PDF and returns what it found, without saving anything.
+ * Reads an uploaded PDF and returns the questions and a marking key, without
+ * saving anything.
+ *
+ * Two passes, and the split matters. Extraction transcribes and copies only an
+ * answer the paper itself prints; if the paper prints no key — the normal case
+ * for official papers — a second call solves the transcribed questions. Asking
+ * one call to do both would put "copy what is written" and "work out what is
+ * true" in conflict on every question, and the first of those is the rule that
+ * stops a printed key being silently "corrected".
  *
  * Deliberately does not write to the database. The student reviews and corrects
  * the extraction first, and only the reviewed version is saved — so a bad scan
@@ -119,7 +139,44 @@ export async function scanPaperAction(input: {
       };
     }
 
-    return { ok: true, paper: result.paper, summary: extractionSummary(result.paper) };
+    const summary = extractionSummary(result.paper);
+
+    // The paper printed its own key. Nothing to work out — a printed key beats
+    // anything we could derive, including where it disagrees with the maths.
+    if (!summary.needsManualKey) {
+      return {
+        ok: true,
+        paper: result.paper,
+        summary,
+        answers: result.paper.questions.map((q) => ({
+          answer: q.answer,
+          confidence: q.confidence,
+          note: "",
+        })),
+        answerSource: "PRINTED",
+      };
+    }
+
+    // No key on the paper, which is the normal case. Work them out.
+    const solved = await solvePaper(result.paper.questions);
+    if (!solved.ok) {
+      // Falling back rather than failing: the transcription is still good, and
+      // a student with 25 real questions and a blank key is far better off than
+      // one staring at an error. They fill the key in, as before.
+      return {
+        ok: true,
+        paper: result.paper,
+        summary,
+        answers: result.paper.questions.map(() => ({
+          answer: "",
+          confidence: "low" as const,
+          note: "",
+        })),
+        answerSource: "MANUAL",
+      };
+    }
+
+    return { ok: true, paper: result.paper, summary, answers: solved.answers, answerSource: "SOLVED" };
   } catch (err) {
     return asValue(err, "Couldn't scan that paper");
   }
@@ -133,6 +190,8 @@ export async function uploadPaperAction(input: {
   answerKey: string[];
   /** The reviewed extraction, or an empty array for a hand-entered paper. */
   questions?: PaperQuestion[];
+  /** Where the key came from, before the student edited it. */
+  answerSource?: AnswerSource;
 }): Promise<{ ok: true; paperId: string } | { ok: false; error: string }> {
   try {
     const user = await requireUser();
@@ -162,12 +221,17 @@ export async function uploadPaperAction(input: {
         questionCount: checked.value.questionCount,
         timeLimitMinutes: checked.value.timeLimitMinutes,
         answerKey: JSON.stringify(checked.value.answerKey),
+        // A hand-entered paper is MANUAL whatever the caller claims, since
+        // there is no scan behind it to have produced anything else.
+        answerSource: questions.length > 0 ? parseAnswerSource(input.answerSource) : "MANUAL",
         questions: JSON.stringify(
           questions.map((q) => ({
             text: q.text.trim(),
             choices: q.choices.map((c) => c.trim()).filter(Boolean),
             confidence: q.confidence === "low" ? "low" : "high",
             note: q.note.trim(),
+            ...(q.answerConfidence ? { answerConfidence: q.answerConfidence } : {}),
+            ...(q.answerNote ? { answerNote: q.answerNote.trim() } : {}),
           }))
         ),
       },

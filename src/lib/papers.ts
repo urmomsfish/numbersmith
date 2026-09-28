@@ -90,11 +90,51 @@ export type PaperValidation = { ok: true; value: PaperInput } | { ok: false; err
  * should still see the flag when they meet it in a sitting, and when the mark
  * looks wrong afterwards the flag is the explanation.
  */
+/**
+ * Where a paper's marking key came from. This is load-bearing rather than
+ * decorative: the three carry genuinely different authority, and a student
+ * deserves to know which one just told them they were wrong.
+ *
+ *  - `PRINTED` — read off the paper's own key. Ground truth.
+ *  - `SOLVED`  — NumberSmith worked the questions out, because the PDF had no
+ *                key. Usually right, occasionally not, and a disagreement is a
+ *                real possibility rather than a certainty about the student.
+ *  - `MANUAL`  — the student typed it. Their paper, their key.
+ */
+export type AnswerSource = "PRINTED" | "SOLVED" | "MANUAL";
+
+export function parseAnswerSource(value: unknown): AnswerSource {
+  return value === "PRINTED" || value === "SOLVED" ? value : "MANUAL";
+}
+
+/** One line for the results screen, saying what the score was measured against.
+ * Phrased so a wrong mark from a solved key reads as "check this" rather than
+ * "you failed". */
+export function describeAnswerSource(source: AnswerSource): string {
+  switch (source) {
+    case "PRINTED":
+      return "marked against the answer key printed on the paper";
+    case "SOLVED":
+      return "marked against answers NumberSmith worked out — check any you disagree with";
+    case "MANUAL":
+      return "marked against the key you entered";
+  }
+}
+
 export type PaperQuestion = {
   text: string;
   choices: string[];
+  /** Confidence in the *transcription* — whether the text above is what the
+   * page actually says. */
   confidence: "high" | "low";
   note: string;
+  /** Confidence in the *answer*, when NumberSmith worked it out rather than
+   * reading it off the paper. Separate from `confidence` because the two fail
+   * independently: a perfectly transcribed question can still be solved wrong,
+   * and that is the case most likely to cost a student a mark they earned.
+   * Absent on papers stored before solving existed, and on hand-entered ones. */
+  answerConfidence?: "high" | "low";
+  answerNote?: string;
 };
 
 export function parseQuestions(json: string): PaperQuestion[] {
@@ -103,14 +143,24 @@ export function parseQuestions(json: string): PaperQuestion[] {
     if (!Array.isArray(v)) return [];
     return v
       .filter((q): q is Record<string, unknown> => !!q && typeof q === "object")
-      .map((q) => ({
-        text: typeof q.text === "string" ? q.text : "",
-        choices: Array.isArray(q.choices)
-          ? q.choices.filter((c): c is string => typeof c === "string")
-          : [],
-        confidence: q.confidence === "low" ? ("low" as const) : ("high" as const),
-        note: typeof q.note === "string" ? q.note : "",
-      }))
+      .map((q) => {
+        const base: PaperQuestion = {
+          text: typeof q.text === "string" ? q.text : "",
+          choices: Array.isArray(q.choices)
+            ? q.choices.filter((c): c is string => typeof c === "string")
+            : [],
+          confidence: q.confidence === "low" ? ("low" as const) : ("high" as const),
+          note: typeof q.note === "string" ? q.note : "",
+        };
+        // Only carried when present, so a paper stored before solving existed
+        // does not gain a bogus "high" and start claiming a confidence it was
+        // never given.
+        if (q.answerConfidence === "low" || q.answerConfidence === "high") {
+          base.answerConfidence = q.answerConfidence;
+        }
+        if (typeof q.answerNote === "string" && q.answerNote) base.answerNote = q.answerNote;
+        return base;
+      })
       .filter((q) => q.text.length > 0);
   } catch {
     return [];

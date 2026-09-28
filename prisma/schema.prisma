@@ -825,8 +825,18 @@ model UploadedPaper {
   fileData         String
   questionCount    Int
   timeLimitMinutes Int
-  /// JSON array of the student's answer key, one entry per question.
+  /// JSON array of the marking key, one entry per question.
   answerKey        String
+  /// Where that key came from: PRINTED (read off the paper's own key), SOLVED
+  /// (NumberSmith worked the questions out, because the PDF had no key), or
+  /// MANUAL (the student typed it).
+  ///
+  /// Stored rather than inferred because the three carry different authority
+  /// and the results screen has to say which one produced a mark. A student
+  /// told they got a question wrong is owed the difference between "the paper
+  /// says so" and "we worked it out and could be wrong". Defaults to MANUAL so
+  /// papers uploaded before this existed keep describing themselves honestly.
+  answerSource     String   @default("MANUAL")
   /// JSON array of the questions read out of the PDF, one entry per question:
   /// `{ text, choices[], confidence, note }`. Empty array when the paper was
   /// entered by hand rather than scanned — that path still works, and a paper
