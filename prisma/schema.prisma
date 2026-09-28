@@ -56,6 +56,7 @@ model User {
   classMemberships ClassMembership[]
   scratchWork      ScratchWork[]
   uploadedPapers   UploadedPaper[]
+  paperScans       PaperScan[]
   paperAttempts    UploadedPaperAttempt[]
 
   userCompetitions       UserCompetition[]
@@ -841,6 +842,29 @@ model UploadedPaper {
   attempts UploadedPaperAttempt[]
 
   @@index([userId])
+}
+
+/// One row per attempt to scan a PDF, for the daily cap.
+///
+/// A scan is the most expensive thing a student can do — an entire PDF through
+/// Opus — and it stores nothing on its own: a student can scan, dislike the
+/// result, and scan again forever. Counting saved papers instead would miss
+/// exactly that case, so the attempt itself is what gets recorded.
+///
+/// Written *before* the API call, not after, because a scan that fails still
+/// spent the tokens. A cap that only counted successes would let a malformed
+/// PDF be retried without limit.
+///
+/// Deliberately holds no file data. It exists to be counted and then to age
+/// out; keeping a copy of every PDF anyone ever pointed at the scanner would
+/// be a second, unasked-for store of student files.
+model PaperScan {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
 }
 
 model UploadedPaperAttempt {

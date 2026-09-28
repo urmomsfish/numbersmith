@@ -1,12 +1,35 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
 import { parseJsonArray, scoreAnswers, isPastDeadline, type PaperResult } from "@/lib/papers";
+import { streakDayStart } from "@/lib/streak";
 
 /**
  * The database half of past papers. The rules — validation, marking, the clock
  * — live in `@/lib/papers`, which is pure and importable from the browser;
  * only what touches Prisma is here, behind `server-only`.
  */
+
+/** How many scans this account has run since the day boundary.
+ *
+ * `streakDayStart()` rather than "midnight" or a 24-hour window: the cap resets
+ * at the same midnight-Pacific moment as streaks, the daily challenge and the
+ * free practice limit, so a student never has to hold two different ideas of
+ * when "today" ends. It is also DST-correct, which subtracting a fixed offset
+ * from a date key would not be. */
+export async function countScansToday(userId: string): Promise<number> {
+  return prisma.paperScan.count({
+    where: { userId, createdAt: { gte: streakDayStart() } },
+  });
+}
+
+/** Records a scan attempt against the cap.
+ *
+ * Called before the API request, so a scan that errors still counts — it spent
+ * the tokens either way, and a cap that only counted successes would let a
+ * paper the model chokes on be retried without limit. */
+export async function recordScan(userId: string): Promise<void> {
+  await prisma.paperScan.create({ data: { userId } });
+}
 
 /** Starts a sitting, or resumes the one already open.
  *

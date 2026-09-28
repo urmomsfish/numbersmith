@@ -5,12 +5,19 @@ import { requireUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
   validatePaper,
+  hasHitScanCap,
   MAX_PAPER_BASE64,
   MAX_QUESTIONS,
+  MAX_SCANS_PER_DAY,
   type PaperResult,
   type PaperQuestion,
 } from "@/lib/papers";
-import { startOrResumeAttempt, submitAttempt } from "@/lib/engine/papers";
+import {
+  startOrResumeAttempt,
+  submitAttempt,
+  countScansToday,
+  recordScan,
+} from "@/lib/engine/papers";
 import { extractPaper, extractionSummary, type ExtractedPaper } from "@/lib/engine/paper-extract";
 import { aiIsConfigured } from "@/lib/ai";
 import { isProUser } from "@/lib/subscription";
@@ -60,6 +67,10 @@ export type ScanResult =
  *
  * The check is here, not only in the page that decides whether to render the
  * button, because a Server Action is a public HTTP endpoint.
+ *
+ * The Pro gate does nothing while payments are off — `isProUser` short-circuits
+ * to true — so it is not the cost control it looks like. `MAX_SCANS_PER_DAY` is:
+ * it applies to every account and works today.
  */
 export async function scanPaperAction(input: {
   fileData: string;
@@ -79,6 +90,18 @@ export async function scanPaperAction(input: {
     if (input.fileData.length > MAX_PAPER_BASE64) {
       return { ok: false, error: "That PDF is too large — 3 MB is the limit." };
     }
+
+    // Checked last, after the cheap rejections, so a student never burns a
+    // scan on a file that was never going to be sent.
+    if (hasHitScanCap(await countScansToday(user.id))) {
+      return {
+        ok: false,
+        error: `That's ${MAX_SCANS_PER_DAY} scans today — the limit resets at midnight Pacific. You can still enter this paper by hand.`,
+      };
+    }
+    // Before the call, not after: the tokens are spent whether or not the scan
+    // comes back usable.
+    await recordScan(user.id);
 
     const result = await extractPaper(input.fileData);
     if (!result.ok) return result;

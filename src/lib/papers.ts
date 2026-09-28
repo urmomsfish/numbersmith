@@ -46,6 +46,27 @@ export const MAX_QUESTIONS = 60;
 export const MAX_TIME_LIMIT_MINUTES = 300;
 export const MAX_PAPER_TITLE = 100;
 
+/** Scans one account may run per day.
+ *
+ * This is an abuse backstop, not a product tier. A scan sends a whole PDF to
+ * Opus, so it costs orders of magnitude more than anything else a student can
+ * click, and `scanPaperAction` stores nothing — without a cap the same file can
+ * be re-scanned forever. Ten is well clear of real use (a student works through
+ * one or two papers in a sitting) while bounding what a single account can
+ * spend in a day.
+ *
+ * It applies to every account, Pro included, deliberately: the Pro gate is
+ * inert while payments are off (`isProUser` short-circuits to true), so a cap
+ * keyed to Pro status would be inert too — and this is the control that has to
+ * work today. */
+export const MAX_SCANS_PER_DAY = 10;
+
+/** Whether today's scans have used the cap up. Takes the count rather than a
+ * user id so the rule stays testable without a database. */
+export function hasHitScanCap(scansToday: number): boolean {
+  return scansToday >= MAX_SCANS_PER_DAY;
+}
+
 /** Base64 only — no `data:` prefix, matching how AiChatMessage stores
  * attachments. Validated rather than trusted because this string is later
  * served back with a PDF content type. */

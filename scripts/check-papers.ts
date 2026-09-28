@@ -25,9 +25,11 @@ import {
   parseJsonArray,
   parseQuestions,
   isQuizzable,
+  hasHitScanCap,
   MAX_PAPER_BASE64,
   MAX_QUESTIONS,
   MAX_TIME_LIMIT_MINUTES,
+  MAX_SCANS_PER_DAY,
 } from "../src/lib/papers";
 import { formatDateOnly, formatInstantDay, parseDateOnly } from "../src/lib/date-only";
 
@@ -162,6 +164,21 @@ ok(parseJsonArray('["A","B"]').join("") === "AB", "a stored array round-trips");
 ok(parseJsonArray("not json").length === 0, "malformed JSON yields an empty array, not a crash");
 ok(parseJsonArray('{"a":1}').length === 0, "a non-array yields an empty array");
 ok(parseJsonArray('["A",3,null]').join("|") === "A||", "non-strings become blanks rather than breaking marking");
+
+console.log("\n--- daily scan cap ---");
+{
+  // Off-by-one here is the whole rule: `>` instead of `>=` gives away one free
+  // scan a day per account, and a `>` on the wrong side gives away the cap.
+  ok(!hasHitScanCap(0), "a fresh day allows a scan");
+  ok(!hasHitScanCap(MAX_SCANS_PER_DAY - 1), `${MAX_SCANS_PER_DAY - 1} scans still allows one more`);
+  ok(hasHitScanCap(MAX_SCANS_PER_DAY), `the ${MAX_SCANS_PER_DAY}th scan is the last one`);
+  ok(hasHitScanCap(MAX_SCANS_PER_DAY + 5), "a count past the cap stays capped");
+
+  // The cap has to bound spend, so it must be a real number, not 0 (nobody can
+  // scan) and not something that makes the backstop meaningless.
+  ok(MAX_SCANS_PER_DAY > 0, "the cap allows at least one scan");
+  ok(MAX_SCANS_PER_DAY <= 50, "the cap is low enough to actually bound a day's spend");
+}
 
 console.log(fails === 0 ? "\n✓ past-paper rules hold" : `\n✗ ${fails} failure(s)`);
 process.exitCode = fails === 0 ? 0 : 1;
