@@ -18,6 +18,7 @@
  *     ask the student to simplify, so the radicand is compared as written and
  *     never reduced. This is the one place where being lenient would defeat
  *     the question.
+ *   - A different unit. "12 cm" does not match "12 m". See `splitUnit`.
  */
 
 export type CanonicalAnswer =
@@ -163,10 +164,85 @@ export function canonicalizeAnswer(raw: string): CanonicalAnswer {
   return { kind: "text", value: s };
 }
 
-/** True when two answers denote the same value in the same simplified form. */
+/**
+ * Splits a trailing unit off an answer: "115°" -> { value: "115", unit: "deg" }.
+ *
+ * Every alias of a unit collapses to one token, so "115°", "115 degrees" and
+ * "115 deg" are the same thing. An answer with no recognised unit gets `""`,
+ * which is not the same as having one — see `answersMatch`.
+ *
+ * Only an explicit list is recognised, deliberately. Treating any trailing
+ * letters as a unit would eat the answer itself: "12x" and "3n" are values, not
+ * quantities, and "n" is not a unit of anything.
+ *
+ * Squared and cubed forms stay distinct from their base ("cm^2" is not "cm"),
+ * because an area answered as a length is wrong and a grader that shrugged at
+ * that would be worse than one that ignores units entirely.
+ */
+export function splitUnit(raw: string): { value: string; unit: string } {
+  const s = raw.trim().toLowerCase().replace(/\s+/g, " ");
+
+  // Longest aliases first, so "centimetres" is not matched as "m".
+  const units: Array<[string, string[]]> = [
+    ["deg", ["degrees", "degree", "deg", "°"]],
+    ["%", ["percent", "%"]],
+    ["cm", ["centimetres", "centimeters", "centimetre", "centimeter", "cm"]],
+    ["mm", ["millimetres", "millimeters", "millimetre", "millimeter", "mm"]],
+    ["km", ["kilometres", "kilometers", "kilometre", "kilometer", "km"]],
+    ["m", ["metres", "meters", "metre", "meter", "m"]],
+    ["in", ["inches", "inch", "in"]],
+    ["ft", ["feet", "foot", "ft"]],
+    ["yd", ["yards", "yard", "yd"]],
+    ["mi", ["miles", "mile", "mi"]],
+    ["s", ["seconds", "second", "secs", "sec", "s"]],
+    ["min", ["minutes", "minute", "mins", "min"]],
+    ["hr", ["hours", "hour", "hrs", "hr", "h"]],
+    ["unit", ["units", "unit"]],
+  ];
+
+  for (const [canonical, aliases] of units) {
+    for (const alias of aliases) {
+      // Optional squared/cubed marker, written any of the usual ways.
+      const pattern = new RegExp(
+        `^(.*?)\\s*(?:sq(?:uare)?\\s+)?${escapeRegExp(alias)}\\s*(\\^?[23]|²|³)?$`
+      );
+      const m = pattern.exec(s);
+      if (!m) continue;
+      const value = m[1].trim();
+      // "cm" alone is a unit with no value; that is text, not a quantity.
+      if (value === "") continue;
+      // A letter immediately before the unit means this was never a unit —
+      // "xm" is an expression, not metres.
+      if (/[a-z]$/.test(value)) continue;
+      const squared = m[2] ? (m[2] === "³" || m[2].includes("3") ? "^3" : "^2") : "";
+      const prefixSquare = /\bsq(?:uare)?\s+\w+$/.test(s) && !squared ? "^2" : "";
+      return { value, unit: canonical + (squared || prefixSquare) };
+    }
+  }
+  return { value: s, unit: "" };
+}
+
+function escapeRegExp(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/**
+ * True when two answers denote the same value in the same simplified form.
+ *
+ * Units are compared, not discarded. Where both sides name one they must
+ * agree, so "12 cm" never matches "12 m". Where only one side names one it is
+ * ignored: the question already established what is being measured, so a
+ * student who writes "115°" against a key of "115" has answered it, and marking
+ * that wrong — as this did until a student wrote in about exactly that — is
+ * punishing them for being more precise than the key.
+ */
 export function answersMatch(given: string, expected: string): boolean {
-  const a = canonicalizeAnswer(given);
-  const b = canonicalizeAnswer(expected);
+  const g = splitUnit(given);
+  const e = splitUnit(expected);
+  if (g.unit !== "" && e.unit !== "" && g.unit !== e.unit) return false;
+
+  const a = canonicalizeAnswer(g.value);
+  const b = canonicalizeAnswer(e.value);
   if (a.kind !== b.kind) return false;
   if (a.kind === "text" || b.kind === "text") {
     return a.kind === "text" && b.kind === "text" && a.value === b.value;

@@ -67,6 +67,21 @@ const SAME: [string, string][] = [
   ["(3, 2)", "(3, 2)"],
   ["2:3", "2:3"],
   ["2:3 ", "2:3"],
+
+  // A unit the key omits. Reported by a student who answered a supplementary
+  // angle as "115°" against a key of "115" and was marked wrong — the question
+  // already said the answer was an angle, so writing the unit is being more
+  // precise than the key, not giving a different answer.
+  ["115°", "115"],
+  ["115 degrees", "115"],
+  ["115 deg", "115"],
+  ["115", "115°"],
+  ["50%", "50"],
+  ["12 cm", "12"],
+  ["30 minutes", "30"],
+  // Aliases of one unit collapse together.
+  ["12 cm2", "12 cm²"],
+  ["12 centimeters", "12 cm"],
 ];
 
 const DIFFERENT: [string, string][] = [
@@ -91,6 +106,20 @@ const DIFFERENT: [string, string][] = [
   ["(2, 3)", "(3, 2)"],
   ["3:2", "2:3"],
   ["", "5"],
+
+  // Accepting a unit the key omits must not become ignoring units. Where both
+  // sides name one they have to agree — 12 metres is not 12 centimetres, and
+  // an area is not a length.
+  ["12 cm", "12 m"],
+  ["12 m", "12 cm"],
+  ["12 cm^2", "12 cm"],
+  ["12 sq cm", "12 cm"],
+  ["30 minutes", "30 seconds"],
+  // A trailing letter that is not a unit must stay part of the answer.
+  ["12x", "12"],
+  ["3n", "3"],
+  // And the value still has to be right, unit or no unit.
+  ["65°", "115"],
 ];
 
 console.log("1. equivalence table");
