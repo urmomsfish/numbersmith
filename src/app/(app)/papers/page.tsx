@@ -13,6 +13,23 @@ import { UploadPaperForm } from "./upload-form";
  * the list is scoped by `userId` and there is no browse or share surface at
  * all — deliberately, since these are files the student owns and we do not.
  */
+
+/**
+ * Scanning is a Server Action, not a route, so its timeout is inherited from
+ * this page — per the route-segment-config docs, `maxDuration` set on a page
+ * covers every Server Action called from it.
+ *
+ * 300s because reading a *scanned* PDF is slow in a way no setting fixes:
+ * every page is processed as an image. Measured around 60-90s on a real
+ * worksheet, against a platform default of 60s on Pro and 10s on Hobby — so
+ * without this the feature works locally and fails in production, which is the
+ * worst way for it to fail.
+ *
+ * This is a ceiling, not a reservation: a scan that finishes in 8s still costs
+ * 8s. Requires a plan that permits it — on Hobby the platform caps below this
+ * regardless of what is written here.
+ */
+export const maxDuration = 300;
 export default async function PapersPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
