@@ -19,7 +19,6 @@ import {
   IconVideo,
   IconSparkles,
   IconUsers,
-  IconFile,
 } from "@/components/app/icons";
 
 type NavItem = {
@@ -61,7 +60,6 @@ export const NAV_GROUPS: Array<{ label: string; items: NavItem[] }> = [
       { href: "/mistakes", label: "Mistakes", icon: IconRefresh },
       { href: "/stats", label: "Statistics", icon: IconChart },
       { href: "/study-plan", label: "Study Plan", icon: IconMap },
-      { href: "/papers", label: "Past Papers", icon: IconFile },
     ],
   },
   {

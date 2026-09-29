@@ -815,6 +815,15 @@ model ScratchWork {
 /// than none — the student supplies the answer key once, then sits the paper
 /// against a clock with the PDF on screen and gets scored. No extraction, no
 /// guessing at the mathematics.
+/// RETIRED: the Past Papers feature was removed. No code reads or writes these
+/// three models (UploadedPaper, UploadedPaperAttempt, PaperScan) any more.
+///
+/// They are kept in the schema on purpose. Deleting a model here makes the next
+/// `prisma migrate` generate a DROP TABLE, which would destroy uploaded PDFs
+/// and sittings that students still own. Keeping them costs nothing — no code
+/// paths, no queries — and keeps that data recoverable. Drop them deliberately,
+/// with a migration written for the purpose, if and when the data is genuinely
+/// not wanted.
 model UploadedPaper {
   id               String   @id @default(cuid())
   userId           String
