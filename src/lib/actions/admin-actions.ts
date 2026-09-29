@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { setRating, MIN_RATING, MAX_RATING } from "@/lib/engine/rating";
 
 async function requireAdmin() {
   const user = await requireUser();
@@ -229,6 +230,45 @@ export async function updateUserAction(formData: FormData) {
     create: { userId, status: status.data, ...dates },
   });
 
+  revalidatePath("/admin/users");
+}
+
+const ratingSchema = z.coerce.number().int().min(MIN_RATING).max(MAX_RATING);
+
+/**
+ * Sets a student's overall rating by hand.
+ *
+ * Goes through `setRating` rather than writing the row directly, which buys
+ * three things that a direct update would quietly skip: the value is clamped
+ * to the same bounds practice uses, a RatingHistory entry is written, and the
+ * admin-pinning rule is respected.
+ *
+ * The history entry is the reason this is worth doing properly. A rating that
+ * changes with no record looks, on the student's own progress chart, exactly
+ * like a bug — and support has no way to answer "why did my rating drop 300
+ * overnight?" without one. The reason names the admin who made the change.
+ *
+ * Note that setting the rating of an ADMIN account does nothing: `setRating`
+ * writes the pinned 2200 for any admin regardless of the value asked for. The
+ * table disables the field for those rows and says so, rather than accepting a
+ * number and silently discarding it.
+ */
+export async function setUserRatingAction(formData: FormData) {
+  const admin = await requireAdmin();
+  const userId = String(formData.get("userId") ?? "");
+  const rating = ratingSchema.safeParse(formData.get("rating"));
+
+  if (!userId) redirect("/admin/users");
+  if (!rating.success) redirect("/admin/users?error=rating-out-of-range");
+
+  const target = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { id: true, role: true },
+  });
+  if (!target) redirect("/admin/users");
+  if (target.role === "ADMIN") redirect("/admin/users?error=rating-pinned");
+
+  await setRating(userId, "OVERALL", rating.data, `Set by admin (${admin.email})`);
   revalidatePath("/admin/users");
 }
 

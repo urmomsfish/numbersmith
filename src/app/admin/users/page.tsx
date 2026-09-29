@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { updateUserAction } from "@/lib/actions/admin-actions";
+import { updateUserAction, setUserRatingAction } from "@/lib/actions/admin-actions";
+import { MIN_RATING, MAX_RATING } from "@/lib/engine/rating";
 import { DeleteUserForm } from "@/components/admin/delete-user-form";
 import { requireUser } from "@/lib/auth";
 import { effectiveStreak } from "@/lib/streak";
@@ -41,6 +42,16 @@ export default async function AdminUsersPage({
           You cannot delete your own account.
         </p>
       )}
+      {params.error === "rating-out-of-range" && (
+        <p className="mt-4 rounded-lg bg-red-50 dark:bg-red-950 px-4 py-2 text-sm text-danger-600 dark:text-red-400">
+          A rating must be a whole number between {MIN_RATING} and {MAX_RATING}. Nothing was changed.
+        </p>
+      )}
+      {params.error === "rating-pinned" && (
+        <p className="mt-4 rounded-lg bg-red-50 dark:bg-red-950 px-4 py-2 text-sm text-danger-600 dark:text-red-400">
+          Admin accounts have a pinned rating that cannot be set by hand. Nothing was changed.
+        </p>
+      )}
       {params.deleted && (
         <p className="mt-4 rounded-lg bg-emerald-50 dark:bg-emerald-950 px-4 py-2 text-sm text-success-600 dark:text-emerald-400">
           Account deleted.
@@ -69,7 +80,38 @@ export default async function AdminUsersPage({
                   <p className="text-[11px] text-slate-700 dark:text-slate-500">{u.email}</p>
                 </td>
                 <td className="px-3 py-2.5 text-slate-600 dark:text-slate-300">{u.profile?.grade ?? "—"}</td>
-                <td className="px-3 py-2.5 text-slate-600 dark:text-slate-300">{u.ratings[0]?.value ?? "—"}</td>
+                <td className="px-3 py-2.5">
+                  {u.role === "ADMIN" ? (
+                    // Any ADMIN account's rating is pinned by the engine, so an
+                    // editable box here would accept a number and discard it.
+                    <span
+                      className="text-slate-600 dark:text-slate-300"
+                      title="Admin ratings are pinned and cannot be set by hand"
+                    >
+                      {u.ratings[0]?.value ?? "—"} <span className="text-[11px]">(pinned)</span>
+                    </span>
+                  ) : (
+                    <form action={setUserRatingAction} className="flex items-center gap-1.5">
+                      <input type="hidden" name="userId" value={u.id} />
+                      <input
+                        type="number"
+                        name="rating"
+                        min={MIN_RATING}
+                        max={MAX_RATING}
+                        step={1}
+                        defaultValue={u.ratings[0]?.value ?? 1000}
+                        aria-label={`Rating for ${u.name}`}
+                        className="w-20 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-xs tabular-nums dark:border-slate-700 dark:bg-slate-800"
+                      />
+                      <button
+                        type="submit"
+                        className="rounded-lg border border-slate-200 px-2 py-1 text-xs font-medium text-slate-700 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                      >
+                        Set
+                      </button>
+                    </form>
+                  )}
+                </td>
                 <td className="px-3 py-2.5 text-slate-600 dark:text-slate-300">{u._count.attempts}</td>
                 <td className="px-3 py-2.5 text-slate-600 dark:text-slate-300">{effectiveStreak(u.stats?.currentStreak ?? 0, u.stats?.lastActiveDate)}d</td>
                 <td className="px-3 py-2.5">

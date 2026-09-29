@@ -1,8 +1,10 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
 
-const MIN_RATING = 600;
-const MAX_RATING = 2400;
+/** Exported so the admin editor validates against the same bounds the engine
+ * clamps to, rather than a second copy that can drift out of step. */
+export const MIN_RATING = 600;
+export const MAX_RATING = 2400;
 
 /** The admin account shows a fixed rating instead of one earned through
  * practice. Its numbers are demo and support surface, where a value that
