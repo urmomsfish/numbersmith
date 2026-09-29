@@ -42,6 +42,9 @@ const SOURCE_HEADING: Record<AnswerSource, string> = {
   PRINTED: "Answers from the paper's key",
   SOLVED: "Answers NumberSmith worked out",
   MANUAL: "Answer key",
+  // No answers to show — this is the questions-only review, which is the
+  // normal case now that marking happens after the paper is sat.
+  NONE: "Check the questions",
 };
 
 /**
@@ -538,6 +541,11 @@ export function UploadPaperForm({ canScan }: { canScan: boolean }) {
                           )}
                         </>
                       )}
+                      {/* No answer input when there is nothing to confirm.
+                          The whole point of marking later is that the student
+                          does not see the answers to the questions they are
+                          about to be tested on. */}
+                      {answerSource !== "NONE" && (
                       <AnswerField
                         row={row}
                         index={i}
@@ -560,6 +568,7 @@ export function UploadPaperForm({ canScan }: { canScan: boolean }) {
                           )
                         }
                       />
+                      )}
                     </div>
                   </div>
                 </li>

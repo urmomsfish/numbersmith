@@ -70,6 +70,10 @@ export default async function SitPaperPage({
         key,
         answers: stored,
         timedOut: false,
+        // Read back rather than regenerated: explanations are the expensive
+        // half of marking, and a student reopening their results must see the
+        // same words they read the first time.
+        explanations: parseJsonArray(attempt.explanations),
       }
     : null;
 

@@ -14,7 +14,6 @@ import {
   type PaperQuestion,
   type AnswerSource,
 } from "@/lib/papers";
-import { solvePaper } from "@/lib/engine/paper-solve";
 import {
   startOrResumeAttempt,
   submitAttempt,
@@ -61,15 +60,17 @@ export type ScanResult =
   | { ok: false; error: string };
 
 /**
- * Reads an uploaded PDF and returns the questions and a marking key, without
- * saving anything.
+ * Reads an uploaded PDF and returns its questions, without saving anything.
  *
- * Two passes, and the split matters. Extraction transcribes and copies only an
- * answer the paper itself prints; if the paper prints no key — the normal case
- * for official papers — a second call solves the transcribed questions. Asking
- * one call to do both would put "copy what is written" and "work out what is
- * true" in conflict on every question, and the first of those is the rule that
- * stops a printed key being silently "corrected".
+ * Transcription only. An answer comes back only where the paper itself prints
+ * one; otherwise the questions arrive with no answers at all and the paper is
+ * worked out later, when it is marked.
+ *
+ * That ordering is the feature, not an optimisation. Solving up front spent
+ * money on papers nobody sat, made uploading slow, and — worst — handed the
+ * student the answers to the questions they were about to be tested on.
+ * Marking at submission sees their actual attempt, which is what lets it say
+ * which step went wrong instead of just stating the result.
  *
  * Deliberately does not write to the database. The student reviews and corrects
  * the extraction first, and only the reviewed version is saved — so a bad scan
@@ -157,26 +158,23 @@ export async function scanPaperAction(input: {
       };
     }
 
-    // No key on the paper, which is the normal case. Work them out.
-    const solved = await solvePaper(result.paper.questions);
-    if (!solved.ok) {
-      // Falling back rather than failing: the transcription is still good, and
-      // a student with 25 real questions and a blank key is far better off than
-      // one staring at an error. They fill the key in, as before.
-      return {
-        ok: true,
-        paper: result.paper,
-        summary,
-        answers: result.paper.questions.map(() => ({
-          answer: "",
-          confidence: "low" as const,
-          note: "",
-        })),
-        answerSource: "MANUAL",
-      };
-    }
-
-    return { ok: true, paper: result.paper, summary, answers: solved.answers, answerSource: "SOLVED" };
+    // No key on the paper, which is the normal case — and nothing more happens
+    // here. The answers are worked out when the paper is marked, not now:
+    // producing them up front spent money on papers that were never sat, made
+    // uploading slow, and gave the student a screen full of answers to the
+    // questions they were about to be tested on. Marking instead happens with
+    // their own attempt in hand, which is what makes an explanation possible.
+    return {
+      ok: true,
+      paper: result.paper,
+      summary,
+      answers: result.paper.questions.map(() => ({
+        answer: "",
+        confidence: "high" as const,
+        note: "",
+      })),
+      answerSource: "NONE",
+    };
   } catch (err) {
     return asValue(err, "Couldn't scan that paper");
   }

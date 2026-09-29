@@ -885,6 +885,15 @@ model UploadedPaperAttempt {
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   /// JSON array of what the student answered, one entry per question.
   answers      String        @default("[]")
+  /// JSON array of worked explanations, one entry per question, `""` where
+  /// there is nothing to explain (right answer, or left blank).
+  ///
+  /// Stored rather than produced on demand because it is the expensive half of
+  /// marking and it must not change: a student who reloads their results, or
+  /// comes back to them a week later, has to see the same explanation they
+  /// read the first time. Re-deriving would also re-bill a paper every time it
+  /// was opened.
+  explanations String        @default("[]")
   correctCount Int           @default(0)
   status       String        @default("IN_PROGRESS")
   startedAt    DateTime      @default(now())

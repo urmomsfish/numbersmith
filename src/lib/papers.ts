@@ -100,11 +100,16 @@ export type PaperValidation = { ok: true; value: PaperInput } | { ok: false; err
  *                key. Usually right, occasionally not, and a disagreement is a
  *                real possibility rather than a certainty about the student.
  *  - `MANUAL`  — the student typed it. Their paper, their key.
+ *  - `NONE`    — not worked out yet. A scanned paper with no printed key sits
+ *                here until it is first marked, at which point the answers are
+ *                produced against the student's own attempt and cached as
+ *                `SOLVED`. This is the normal state of a freshly uploaded
+ *                paper, and the reason uploading is fast.
  */
-export type AnswerSource = "PRINTED" | "SOLVED" | "MANUAL";
+export type AnswerSource = "PRINTED" | "SOLVED" | "MANUAL" | "NONE";
 
 export function parseAnswerSource(value: unknown): AnswerSource {
-  return value === "PRINTED" || value === "SOLVED" ? value : "MANUAL";
+  return value === "PRINTED" || value === "SOLVED" || value === "NONE" ? value : "MANUAL";
 }
 
 /** One line for the results screen, saying what the score was measured against.
@@ -118,6 +123,8 @@ export function describeAnswerSource(source: AnswerSource): string {
       return "marked against answers NumberSmith worked out — check any you disagree with";
     case "MANUAL":
       return "marked against the key you entered";
+    case "NONE":
+      return "marked against answers NumberSmith worked out — check any you disagree with";
   }
 }
 
@@ -181,6 +188,9 @@ export type PaperResult = {
   key: string[];
   answers: string[];
   timedOut: boolean;
+  /** Worked explanation per question, `""` where there is nothing to explain.
+   * Empty array on a paper marked before explanations existed. */
+  explanations: string[];
 };
 
 /**

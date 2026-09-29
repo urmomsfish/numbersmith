@@ -112,6 +112,21 @@ export function PaperResults({
                   <span className="text-slate-700 dark:text-slate-400"> · key: {result.key[i]}</span>
                 )}
               </p>
+
+              {/* Why it was wrong and how the question is done. This is the
+                  reason for sitting a past paper rather than reading the
+                  solutions: it is written against the answer this student
+                  actually gave, so it can name the step that went wrong. */}
+              {!ok && result.explanations[i] && (
+                <div className="mt-2 rounded-lg bg-white/70 p-3 dark:bg-slate-900/50">
+                  <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-400">
+                    How to do it
+                  </p>
+                  <p className="whitespace-pre-wrap text-sm leading-relaxed text-slate-800 dark:text-slate-200">
+                    {result.explanations[i]}
+                  </p>
+                </div>
+              )}
             </li>
           ))}
         </ul>
