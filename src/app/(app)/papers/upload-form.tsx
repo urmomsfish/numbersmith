@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -182,6 +182,18 @@ export function UploadPaperForm({ canScan }: { canScan: boolean }) {
   const [answerSource, setAnswerSource] = useState<AnswerSource>("MANUAL");
   const [notice, setNotice] = useState<string | null>(null);
   const [showPaper, setShowPaper] = useState(false);
+  // Seconds since the scan started. A scanned PDF can take a minute or more —
+  // every page is read as an image — and a button that just says "Reading…"
+  // for that long is indistinguishable from one that has hung.
+  const [elapsed, setElapsed] = useState(0);
+  // Ticks only; the reset lives in `scan()`, because setting state in an
+  // effect body is a render-phase write and `react-hooks/set-state-in-effect`
+  // rightly rejects it.
+  useEffect(() => {
+    if (!pending) return;
+    const id = setInterval(() => setElapsed((s) => s + 1), 1000);
+    return () => clearInterval(id);
+  }, [pending]);
 
   async function withFileData(): Promise<string | null> {
     if (fileData) return fileData;
@@ -213,6 +225,7 @@ export function UploadPaperForm({ canScan }: { canScan: boolean }) {
   function scan() {
     setError(null);
     setNotice(null);
+    setElapsed(0);
     start(async () => {
       const data = await withFileData();
       if (!data) return;
@@ -355,7 +368,7 @@ export function UploadPaperForm({ canScan }: { canScan: boolean }) {
           <div className="flex flex-wrap items-center gap-2">
             {canScan && (
               <Button onClick={scan} disabled={pending}>
-                {pending ? "Reading and solving…" : "Read this paper"}
+                {pending ? `Reading… ${elapsed}s` : "Read this paper"}
               </Button>
             )}
             <Button
@@ -366,6 +379,17 @@ export function UploadPaperForm({ canScan }: { canScan: boolean }) {
               {canScan ? "Enter by hand instead" : "Enter the answer key"}
             </Button>
           </div>
+          {/* Says what is happening, and only once the wait is long enough to
+              be worrying. A scanned paper is read page by page as an image,
+              which genuinely takes about a minute — silence for that long is
+              indistinguishable from a hang. */}
+          {pending && elapsed >= 10 && (
+            <p role="status" className="text-xs text-slate-600 dark:text-slate-400">
+              {elapsed < 30
+                ? "Reading the questions off the page, then working out the answers."
+                : "Still going — a scanned paper is read one page at a time as an image, which takes longer than a text PDF. About a minute is normal."}
+            </p>
+          )}
           {!canScan && (
             <p className="text-xs text-slate-600 dark:text-slate-400">
               Type the answer key and sit the paper with the PDF on screen.{" "}

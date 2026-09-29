@@ -38,6 +38,16 @@ const SOLVE_MODEL = process.env.ANTHROPIC_SOLVE_MODEL || "claude-opus-5";
  * paper that ends early. */
 const MAX_TOKENS = 64_000;
 
+/** How hard to think per question. Left at the model's own default.
+ *
+ * Measured: dropping to `low` saves about 15% of solve time on a 25-question
+ * paper. That is not worth anything at all here — these answers become the key
+ * every student attempt is marked against, and a wrong one is invisible to the
+ * person it penalises. Splitting the work up (below) bought 3x with no such
+ * tradeoff. Tunable by env for experiments, unset in normal use. */
+const SOLVE_EFFORT = process.env.ANTHROPIC_SOLVE_EFFORT as
+  | "low" | "medium" | "high" | "xhigh" | "max" | undefined;
+
 const SolvedAnswer = z.object({
   number: z.number().describe("The question number being answered."),
   answer: z
@@ -90,8 +100,57 @@ export type SolvedAnswerOut = {
  * a paper against the wrong answers. Anything the model fails to return becomes
  * an explicit blank flagged `low` rather than a shifted neighbour.
  */
-export async function solvePaper(questions: ExtractedQuestion[]): Promise<SolveResult> {
+export async function solvePaper(
+  questions: ExtractedQuestion[],
+  opts: { effort?: "low" | "medium" | "high" | "xhigh" | "max" } = {}
+): Promise<SolveResult> {
   if (questions.length === 0) return { ok: true, answers: [] };
+  if (questions.length <= BATCH_SIZE) return solveBatch(questions, opts);
+
+  // Split and solve concurrently. Questions on a paper are independent, so
+  // there is nothing to gain from making the model hold all 25 at once — and
+  // measured on a 25-question paper this took the wait from 17s to 9s at the
+  // same effort. Chunks stay in order and are concatenated in order, so the
+  // positional alignment the whole key depends on is preserved.
+  const batches: ExtractedQuestion[][] = [];
+  for (let i = 0; i < questions.length; i += BATCH_SIZE) {
+    batches.push(questions.slice(i, i + BATCH_SIZE));
+  }
+
+  const results = await Promise.all(batches.map((b) => solveBatch(b, opts)));
+
+  // One failed batch must not discard the rest: a paper with 18 good answers
+  // and 7 blanks flagged for the student beats an error and nothing.
+  const answers: SolvedAnswerOut[] = [];
+  let anyOk = false;
+  results.forEach((r, i) => {
+    if (r.ok) {
+      anyOk = true;
+      answers.push(...r.answers);
+    } else {
+      answers.push(
+        ...batches[i].map(() => ({
+          answer: "",
+          confidence: "low" as const,
+          note: "This part of the paper couldn't be worked out — fill it in yourself.",
+        }))
+      );
+    }
+  });
+
+  if (!anyOk) return { ok: false, error: "Couldn't work out the answers for that paper." };
+  return { ok: true, answers };
+}
+
+/** Questions per concurrent request. Small enough that a 25-question paper
+ * fans out to four, large enough that per-call overhead does not dominate. */
+const BATCH_SIZE = 7;
+
+async function solveBatch(
+  questions: ExtractedQuestion[],
+  opts: { effort?: "low" | "medium" | "high" | "xhigh" | "max" }
+): Promise<SolveResult> {
+  const effort = opts.effort ?? SOLVE_EFFORT;
 
   const prompt = questions
     .map((q) => {
@@ -107,7 +166,7 @@ export async function solvePaper(questions: ExtractedQuestion[]): Promise<SolveR
       model: SOLVE_MODEL,
       max_tokens: MAX_TOKENS,
       system: SYSTEM,
-      output_config: { format: zodOutputFormat(SolvedPaper) },
+      output_config: { ...(effort ? { effort } : {}), format: zodOutputFormat(SolvedPaper) },
       messages: [
         {
           role: "user",

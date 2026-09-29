@@ -41,6 +41,14 @@ const EXTRACT_MODEL = process.env.ANTHROPIC_EXTRACT_MODEL || "claude-opus-5";
  * Paired with streaming below, so the request cannot hit an HTTP timeout. */
 const MAX_TOKENS = 32_000;
 
+/** Left at the model's own default. Measured across low/medium/high on a real
+ * paper, transcription time barely moved (5.7s / 7.0s / 6.1s) and all three
+ * read every question correctly — so there is nothing to win here and a
+ * misread question to lose. On an image-based PDF the cost is reading the
+ * pages, which effort does not reduce. Tunable by env for experiments. */
+const EXTRACT_EFFORT = process.env.ANTHROPIC_EXTRACT_EFFORT as
+  | "low" | "medium" | "high" | "xhigh" | "max" | undefined;
+
 const ExtractedQuestion = z.object({
   number: z.number().describe("The question number as printed on the paper."),
   question: z.string().describe("The full question text, verbatim."),
@@ -101,13 +109,19 @@ export type ExtractionResult =
  * request at this `max_tokens` risks an HTTP timeout — the failure would look
  * like a broken upload rather than a slow one.
  */
-export async function extractPaper(fileDataBase64: string): Promise<ExtractionResult> {
+export async function extractPaper(
+  fileDataBase64: string,
+  opts: { effort?: "low" | "medium" | "high" | "xhigh" | "max" } = {}
+): Promise<ExtractionResult> {
   try {
     const stream = getAiClient().messages.stream({
       model: EXTRACT_MODEL,
       max_tokens: MAX_TOKENS,
       system: SYSTEM,
-      output_config: { format: zodOutputFormat(ExtractedPaper) },
+      output_config: {
+        ...(opts.effort ?? EXTRACT_EFFORT ? { effort: opts.effort ?? EXTRACT_EFFORT } : {}),
+        format: zodOutputFormat(ExtractedPaper),
+      },
       messages: [
         {
           role: "user",
