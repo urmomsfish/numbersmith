@@ -4,6 +4,7 @@ import { Suspense, useActionState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { signupAction } from "@/lib/actions/auth-actions";
+import { SIGNUP_ROLES } from "@/lib/types";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { GoogleButton, googleErrorMessage } from "@/components/auth/google-button";
@@ -60,6 +61,41 @@ export default function SignupPage() {
           </div>
 
           <form action={formAction} className="space-y-4">
+            {/* Asked first because it decides the whole shape of the account:
+                a student is sent to the placement test, a teacher or coach
+                straight to their classes. Radios rather than a select so all
+                three are visible without a click — the choice is the point of
+                the screen, not a detail buried in a dropdown. */}
+            <fieldset>
+              <legend className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-200">
+                How will you use NumberSmith?
+              </legend>
+              <div className="space-y-2">
+                {SIGNUP_ROLES.map((option, i) => (
+                  <label
+                    key={option.role}
+                    className="flex cursor-pointer items-start gap-3 rounded-lg border border-slate-300 px-3 py-2.5 hover:bg-slate-50 has-[:checked]:border-foreground has-[:checked]:bg-slate-50 dark:border-slate-600 dark:hover:bg-slate-800 dark:has-[:checked]:bg-slate-800"
+                  >
+                    <input
+                      type="radio"
+                      name="role"
+                      value={option.role}
+                      defaultChecked={i === 0}
+                      className="mt-0.5 accent-brand-600"
+                    />
+                    <span className="min-w-0">
+                      <span className="block text-sm font-medium text-slate-800 dark:text-slate-100">
+                        {option.label}
+                      </span>
+                      <span className="block text-xs text-slate-600 dark:text-slate-400">
+                        {option.blurb}
+                      </span>
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+
             <div>
               <label htmlFor="name" className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-200">
                 Full name

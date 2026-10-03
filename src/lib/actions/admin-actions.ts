@@ -185,7 +185,7 @@ export async function togglePublishAction(formData: FormData) {
   revalidatePath("/admin/problems");
 }
 
-const roleSchema = z.enum(["STUDENT", "PARENT", "TEACHER", "ADMIN"]);
+const roleSchema = z.enum(["STUDENT", "PARENT", "TEACHER", "COACH", "ADMIN"]);
 const subStatusSchema = z.enum(["FREE", "PRO", "CANCELED"]);
 
 /** The date fields that have to move with a status when an admin sets one by

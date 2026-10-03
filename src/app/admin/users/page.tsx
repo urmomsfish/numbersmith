@@ -133,7 +133,7 @@ export default async function AdminUsersPage({
                       defaultValue={u.role}
                       className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-2 py-1 text-xs"
                     >
-                      {["STUDENT", "PARENT", "TEACHER", "ADMIN"].map((r) => (
+                      {["STUDENT", "PARENT", "TEACHER", "COACH", "ADMIN"].map((r) => (
                         <option key={r} value={r}>
                           {r}
                         </option>

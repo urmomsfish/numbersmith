@@ -1,7 +1,53 @@
 // Central TypeScript union types mirroring the string-based "enum" fields
 // documented in prisma/schema.prisma (SQLite has no native enum type).
 
-export type Role = "STUDENT" | "PARENT" | "TEACHER" | "ADMIN";
+/**
+ * `TEACHER` and `COACH` carry identical permissions and are deliberately kept
+ * apart anyway: a school teacher and a club coach reach this product for
+ * different reasons, and collapsing them at signup would throw away the only
+ * moment anyone tells us which they are. Nothing branches on the difference
+ * today — `canCreateClasses` treats them the same — so anything that cares
+ * about *permission* must ask that predicate rather than testing for a role.
+ */
+export type Role = "STUDENT" | "PARENT" | "TEACHER" | "COACH" | "ADMIN";
+
+/** The roles someone may choose for themselves when signing up.
+ *
+ * `ADMIN` and `PARENT` are deliberately absent: admin is granted, never
+ * claimed, and there is no parent experience to land in yet. */
+export const SIGNUP_ROLES = [
+  {
+    role: "STUDENT" as const,
+    label: "I'm a student",
+    blurb: "Practise, sit timed papers, and track your own progress.",
+  },
+  {
+    role: "TEACHER" as const,
+    label: "I'm a teacher",
+    blurb: "Set work for a class and see how everyone is doing.",
+  },
+  {
+    role: "COACH" as const,
+    label: "I'm a coach",
+    blurb: "Run a math team or club, and track your students' progress.",
+  },
+];
+
+/** True for the roles that run classes rather than sit in them. */
+export function isCoachRole(role: Role | string): boolean {
+  return role === "TEACHER" || role === "COACH";
+}
+
+/** Roles that never see the student onboarding.
+ *
+ * Onboarding collects a grade, a placement result and a study plan — a Profile
+ * row whose `grade` is required and which has no sensible value for someone
+ * who is not the one practising. Rather than storing a fake grade, these roles
+ * simply have no profile, and this predicate is what keeps the app layout from
+ * sending them to fill one in. */
+export function isExemptFromOnboarding(role: Role | string): boolean {
+  return role === "ADMIN" || isCoachRole(role);
+}
 
 /**
  * Who may start a class.
@@ -17,7 +63,7 @@ export type Role = "STUDENT" | "PARENT" | "TEACHER" | "ADMIN";
  * importable from a client component too.
  */
 export function canCreateClasses(role: Role | string): boolean {
-  return role === "TEACHER" || role === "ADMIN";
+  return isCoachRole(role) || role === "ADMIN";
 }
 
 export type PriorExperience = "NONE" | "SOME" | "EXPERIENCED" | "ADVANCED";

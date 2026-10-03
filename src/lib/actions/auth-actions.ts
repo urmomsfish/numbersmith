@@ -6,6 +6,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { createSession, destroySession, hashPassword, verifyPassword } from "@/lib/auth";
 import { LEGAL } from "@/lib/legal";
+import { isCoachRole } from "@/lib/types";
 import { sendPasswordResetCodeEmail } from "@/lib/email";
 
 const RESET_CODE_TTL_MS = 15 * 60 * 1000;
@@ -23,6 +24,12 @@ const signupSchema = z.object({
   termsAccepted: z.literal("on", {
     message: "You must agree to the Terms of Service and Privacy Policy to create an account.",
   }),
+  // Only the three self-selectable roles. ADMIN is granted, never claimed —
+  // this is a public endpoint, so a crafted POST asking for it must fail
+  // validation rather than be quietly downgraded.
+  role: z.enum(["STUDENT", "TEACHER", "COACH"], {
+    message: "Choose whether you're a student, a teacher, or a coach.",
+  }),
 });
 
 export async function signupAction(
@@ -34,11 +41,12 @@ export async function signupAction(
     email: formData.get("email"),
     password: formData.get("password"),
     termsAccepted: formData.get("termsAccepted"),
+    role: formData.get("role"),
   });
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   }
-  const { name, email, password } = parsed.data;
+  const { name, email, password, role } = parsed.data;
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
@@ -52,7 +60,7 @@ export async function signupAction(
       name,
       email,
       passwordHash,
-      role: "STUDENT",
+      role,
       termsAcceptedAt: new Date(),
       termsAcceptedVersion: LEGAL.lastUpdated,
       stats: { create: {} },
@@ -62,6 +70,13 @@ export async function signupAction(
   });
 
   await createSession(user.id);
+  // A teacher or coach has no grade, no placement test and no study plan, so
+  // the student onboarding has nothing to ask them.
+  //
+  // No Profile row is created: `grade` is required there and a coach has no
+  // grade, so the honest answer is to have no profile rather than a fabricated
+  // one. `isExemptFromOnboarding` is what lets them past the layout guard.
+  if (isCoachRole(role)) redirect("/classes");
   redirect("/onboarding");
 }
 
@@ -97,6 +112,10 @@ export async function loginAction(
   await createSession(user.id);
 
   if (user.role === "ADMIN") redirect("/admin");
+  // Checked before the profile test, not after: a coach has no Profile row at
+  // all, so `onboardingCompletedAt` is undefined for them and they would be
+  // bounced into the student onboarding on every login.
+  if (isCoachRole(user.role)) redirect("/classes");
   if (!user.profile?.onboardingCompletedAt) redirect("/onboarding");
   redirect("/dashboard");
 }

@@ -6,11 +6,18 @@ import { Topbar } from "@/components/app/topbar";
 import { isProUser } from "@/lib/subscription";
 import { paymentsAreLive } from "@/lib/stripe";
 import { effectiveStreak } from "@/lib/streak";
+import { isExemptFromOnboarding } from "@/lib/types";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
-  if (user.role !== "ADMIN" && user.onboardingStep !== "DONE") redirect("/onboarding");
+  // Onboarding asks for a grade, sits a placement test and builds a study
+  // plan — none of which mean anything for someone here to run a class. So
+  // coaches are exempt alongside admins rather than being walked through a
+  // questionnaire about their own maths level.
+  if (!isExemptFromOnboarding(user.role) && user.onboardingStep !== "DONE") {
+    redirect("/onboarding");
+  }
 
   const [stats, rating, isPro] = await Promise.all([
     prisma.userStats.findUnique({ where: { userId: user.id } }),

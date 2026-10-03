@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createSession } from "@/lib/auth";
+import { isCoachRole } from "@/lib/types";
 import { LEGAL } from "@/lib/legal";
 import { exchangeGoogleCode, fetchGoogleProfile } from "@/lib/google-oauth";
 import { STATE_COOKIE } from "@/app/api/auth/google/route";
@@ -75,6 +76,13 @@ export async function GET(request: NextRequest) {
 
   const userProfile = await prisma.profile.findUnique({ where: { userId: user.id } });
   if (user.role === "ADMIN") redirect("/admin");
+  // Same ordering as password login: a coach has no Profile, so testing
+  // onboardingCompletedAt first would loop them into student onboarding.
+  //
+  // Note Google sign-up always creates a STUDENT — this screen has no role
+  // picker, and inferring one from an email domain would be a guess. A teacher
+  // who signs up with Google is changed to the right role from /admin/users.
+  if (isCoachRole(user.role)) redirect("/classes");
   if (!userProfile?.onboardingCompletedAt) redirect("/onboarding");
   redirect("/dashboard");
 }
