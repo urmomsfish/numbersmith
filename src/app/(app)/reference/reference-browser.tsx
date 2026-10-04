@@ -109,8 +109,21 @@ function EntryCard({ entry }: { entry: ReferenceEntry }) {
       <p className="text-sm font-semibold text-slate-900 dark:text-slate-50">{entry.name}</p>
 
       {/* The formula gets its own line and a tinted panel: this is what a
-          student is scanning for, and burying it in prose defeats the page. */}
-      <p className="mt-1.5 overflow-x-auto rounded-md bg-slate-50 px-2.5 py-2 font-mono text-sm leading-relaxed text-slate-900 dark:bg-slate-800 dark:text-slate-50">
+          student is scanning for, and burying it in prose defeats the page.
+
+          The two arbitrary variants enlarge fraction parts only. MathText
+          renders an inline fraction as sup⁄sub at 0.72em, which is right in
+          prose — a fraction inside a sentence should not disturb the line —
+          but wrong here, where the fraction IS the formula: Vieta's measured
+          out at 10px against a 14px panel, so the answer was smaller than the
+          operators around it. Exponents are left alone, since 0.72em is
+          correct for b².
+
+          This targets the renderer's own markup (a frac is the only thing that
+          emits sup and sub inside one nowrap span), so it is coupled to that
+          implementation. A display mode on MathText would be the better fix if
+          a second surface ever needs this. */}
+      <p className="mt-1.5 overflow-x-auto rounded-md bg-slate-50 px-2.5 py-2 font-mono text-base leading-relaxed text-slate-900 [&_.whitespace-nowrap>sub]:text-[0.85em] [&_.whitespace-nowrap>sup]:text-[0.85em] dark:bg-slate-800 dark:text-slate-50">
         <MathText>{entry.statement}</MathText>
       </p>
 
