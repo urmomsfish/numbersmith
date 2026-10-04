@@ -8,6 +8,7 @@ import { Button, LinkButton } from "@/components/ui/button";
 import { activateProAction } from "@/lib/actions/subscription-actions";
 import { PRO_PRICING, yearlySavingsPercent } from "@/lib/pricing";
 import { paymentsAreLive } from "@/lib/stripe";
+import { limitsAreEnforced } from "@/lib/subscription";
 import { PaymentsNotice } from "@/components/marketing/payments-notice";
 
 const COMPARISON: { feature: string; free: string; pro: string }[] = [
@@ -135,7 +136,7 @@ export default async function PricingPage({
 
           {!canBuy && (
             <div className="mx-auto mt-8 max-w-2xl">
-              <PaymentsNotice />
+              <PaymentsNotice limited={limitsAreEnforced()} />
             </div>
           )}
 

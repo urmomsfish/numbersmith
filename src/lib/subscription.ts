@@ -67,8 +67,31 @@ export async function getSubscription(userId: string) {
  *
  * Note this is deliberately separate from the *subscription status* shown in
  * Settings, which keeps reporting the real stored plan. */
+/**
+ * Whether free-tier limits and Pro gates actually bite.
+ *
+ * This used to be `paymentsAreLive()` — one switch meaning both "you can buy
+ * Pro" and "the free tier is capped". Tying them together was reasonable while
+ * neither was wanted, but it made enforcing a limit impossible without also
+ * opening checkout, which is a different decision entirely.
+ *
+ * They are separate now. Enforcement is on by default; set
+ * `ENFORCE_FREE_LIMITS=false` to lift every cap again (useful for a demo, or
+ * to go back to open early access). Live Stripe keys force it on regardless,
+ * so a launched product can never accidentally be running with no limits.
+ *
+ * With payments in test mode and enforcement on, a capped student cannot buy
+ * their way out — the pricing page says so plainly, and an admin can grant Pro
+ * from /admin/users in the meantime. That is a deliberate state, not an
+ * oversight: see PaymentsNotice, whose wording tracks this switch.
+ */
+export function limitsAreEnforced(): boolean {
+  if (paymentsAreLive()) return true;
+  return process.env.ENFORCE_FREE_LIMITS !== "false";
+}
+
 export async function isProUser(userId: string): Promise<boolean> {
-  if (!paymentsAreLive()) return true;
+  if (!limitsAreEnforced()) return true;
   return grantsProAccess(await getSubscription(userId));
 }
 
