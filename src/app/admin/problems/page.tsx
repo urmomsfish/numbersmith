@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button, LinkButton } from "@/components/ui/button";
 import { togglePublishAction } from "@/lib/actions/admin-actions";
 import { difficultyLabel } from "@/lib/types";
+import { MathText } from "@/components/math-text";
 
 const PAGE_SIZE = 25;
 
@@ -93,7 +94,7 @@ export default async function AdminProblemsPage({
                     href={`/admin/problems/${p.id}`}
                     className="line-clamp-1 font-medium text-slate-800 dark:text-slate-100 hover:text-brand-700 dark:hover:text-brand-300"
                   >
-                    {p.question}
+                    <MathText>{p.question}</MathText>
                   </Link>
                   <p className="text-[11px] text-slate-700 dark:text-slate-500">{p.slug}</p>
                 </td>

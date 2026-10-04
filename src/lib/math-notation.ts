@@ -89,8 +89,11 @@ const SYMBOLS: Array<[RegExp, string]> = [
   // marker or bullet is left alone.
   [/(?<=[0-9A-Za-z)\]])\s*\*\s*(?=[0-9A-Za-z(\[])/g, " × "],
   // A hyphen flanked by spaces inside math reads as a minus sign. Restricted
-  // to digit-space-hyphen-space-digit so ordinary dashes in prose survive.
-  [/(?<=[0-9A-Za-z)\]]) - (?=[0-9A-Za-z(\[])/g, " − "],
+  // to operand-space-hyphen-space-operand so ordinary dashes in prose survive.
+  // Braces count as operand edges: "a_{n+2} - 1" is the same subtraction as
+  // "a_n - 1", and leaving them out set one as a minus and the other as a
+  // hyphen purely according to how the author spelled the subscript.
+  [/(?<=[0-9A-Za-z)\]}]) - (?=[0-9A-Za-z(\[{])/g, " − "],
   // "pi" only as a standalone word.
   [/\bpi\b/g, "π"],
   // "30 degrees" -> "30°", but "degrees of freedom" is untouched.
@@ -104,9 +107,34 @@ export function applySymbols(text: string): string {
   return out;
 }
 
-/** Characters that may form the body of an un-parenthesised sup/subscript. */
+/** Characters that may form the body of an un-parenthesised sup/subscript.
+ *
+ * Greek is here because exponents like "3^φ" are ordinary in number theory,
+ * and a letter this predicate rejects is worse than one it mis-groups: the "^"
+ * then has nothing to attach to and reaches the student as punctuation. */
 function isScriptChar(c: string): boolean {
-  return /[0-9A-Za-z]/.test(c);
+  return /[0-9A-Za-zͰ-Ͽ]/.test(c);
+}
+
+/** Whether an un-parenthesised script run continues from `prev` into `c`.
+ *
+ * The run has to stop somewhere and the source does not say where: "2^10" is a
+ * single exponent while "r^2h" is r² times h, and only convention separates
+ * them. Two transitions end a run, both chosen by scanning the whole problem
+ * bank rather than by taste:
+ *
+ *   digit → letter   "(1/3)πr^2h" is the cone volume, never r^(2h). The same
+ *                    break splits "O_1O_2" into two labelled points.
+ *   lower → UPPER    "|P_iP_j|" is a distance between two points, not a
+ *                    subscript "iP".
+ *
+ * Everything else stays greedy, and that is the load-bearing half: "2^10",
+ * "2^x1", "3^odd" and "p_HH" all read correctly today and every one of them
+ * would break under a blanket one-character rule. */
+function continuesScript(prev: string, c: string): boolean {
+  if (/[0-9]/.test(prev) && !/[0-9]/.test(c)) return false;
+  if (/[a-z]/.test(prev) && /[A-Z]/.test(c)) return false;
+  return true;
 }
 
 /** Reads a balanced (...) or {...} group starting at `i`, which must point at
@@ -137,7 +165,10 @@ function readScript(src: string, i: number): { body: string; next: number } | nu
   // An optional leading sign, e.g. a^-1.
   if (src[j] === "-" || src[j] === "−" || src[j] === "+") j++;
   const start = j;
-  while (j < src.length && isScriptChar(src[j])) j++;
+  while (j < src.length && isScriptChar(src[j])) {
+    if (j > start && !continuesScript(src[j - 1], src[j])) break;
+    j++;
+  }
   if (j === start) return null; // bare "^" with nothing after it
   return { body: src.slice(i, j), next: j };
 }
@@ -149,8 +180,20 @@ function readScript(src: string, i: number): { body: string; next: number } | nu
 // whole string, so the lookaround still sees the real neighbours. Matching on
 // isolated buffers instead would read "1/a^n" as (1/a)^n, because the "^"
 // that disqualifies the match would have already been split off.
-const FRACTION = /(\d{1,3}|[a-zA-Z])\/(\d{1,3}|[a-zA-Z])(?![\w.^_/])/y;
+// The trailing guard rejects a fraction glued to more expression, but a period
+// is only disqualifying when a digit follows it: "968/1.2" is a decimal, while
+// "so the sum is 5/6." is a sentence ending. Lumping the two together left
+// 2,050 fractions set as plain text purely for sitting at the end of a
+// sentence, which is where most of a worked solution's fractions live.
+const FRACTION = /(\d{1,3}|[a-zA-Z])\/(\d{1,3}|[a-zA-Z])(?![\w^_/])(?!\.\d)/y;
 const FRACTION_LEFT = /[\w.^_/]/;
+
+// "5 m/s" is a quantity and its unit, not five m-over-s. A bare number
+// immediately before a single-letter pair marks that idiom; a genuine ratio is
+// introduced by prose or an operator instead ("written as m/n", "tan θ = q/p").
+// Deliberately limited to letter-over-letter, because the same shape with
+// digits is a mixed number — "5 1/2" is five and a half and must stay stacked.
+const UNIT_QUANTITY = /\d\s$/;
 
 function pushText(nodes: MathNode[], text: string) {
   if (!text) return;
@@ -228,7 +271,12 @@ function parseInner(src: string): MathNode[] {
     if (i === 0 || !FRACTION_LEFT.test(src[i - 1])) {
       FRACTION.lastIndex = i;
       const m = FRACTION.exec(src);
-      if (m) {
+      const unit =
+        m !== null &&
+        /^[a-zA-Z]$/.test(m[1]) &&
+        /^[a-zA-Z]$/.test(m[2]) &&
+        UNIT_QUANTITY.test(src.slice(Math.max(0, i - 2), i));
+      if (m && !unit) {
         flush();
         nodes.push({ t: "frac", num: m[1], den: m[2] });
         i = FRACTION.lastIndex;

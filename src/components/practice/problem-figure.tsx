@@ -1,4 +1,5 @@
 import { cn } from "@/lib/cn";
+import { MathText } from "@/components/math-text";
 
 /**
  * Renders a problem's inline SVG figure.
@@ -45,8 +46,15 @@ export function ProblemFigure({ svg, className }: { svg: string | null | undefin
 
 /**
  * Question text plus its figure, in the order a contest paper would print them.
- * Used everywhere a student reads a full problem statement, so a figure cannot
- * be present in one surface and missing in another.
+ * Used everywhere a student reads a full problem statement, so neither a figure
+ * nor the math typesetting can be present on one surface and missing on
+ * another — the whole reason this component exists rather than each runner
+ * laying out its own <p>.
+ *
+ * The text goes through MathText because the bank is authored in ASCII math:
+ * roughly a third of all problems carry a "^" or a short "a/b", and "x^2"
+ * printed literally is something a student has to decode before they can start
+ * on the actual question.
  */
 export function ProblemStatement({
   question,
@@ -65,7 +73,7 @@ export function ProblemStatement({
           className
         )}
       >
-        {question}
+        <MathText>{question}</MathText>
       </p>
       <ProblemFigure svg={diagram} />
     </div>

@@ -7,6 +7,7 @@ import { Card, CardBody } from "@/components/ui/card";
 import { isProUser, FREE_MISTAKE_REVIEWS_PER_WEEK } from "@/lib/subscription";
 import { canReviewMistakes } from "@/lib/actions/mistake-actions";
 import { difficultyLabel } from "@/lib/types";
+import { MathText } from "@/components/math-text";
 
 const REASON_LABEL: Record<string, { label: string; tone: "danger" | "warning" | "slate" | "brand" }> = {
   INCORRECT: { label: "Incorrect", tone: "danger" },
@@ -99,7 +100,9 @@ export default async function MistakesPage() {
                     </span>
                   )}
                 </div>
-                <p className="mt-2.5 line-clamp-2 text-sm text-slate-600 dark:text-slate-300">{m.problem.question}</p>
+                <p className="mt-2.5 line-clamp-2 text-sm text-slate-600 dark:text-slate-300">
+                  <MathText>{m.problem.question}</MathText>
+                </p>
                 <p className="mt-2 text-xs link font-semibold">Retry this problem →</p>
               </Link>
             );

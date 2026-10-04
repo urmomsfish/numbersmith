@@ -7,6 +7,7 @@ import { AnswerInput } from "@/components/practice/answer-input";
 import { Button } from "@/components/ui/button";
 import { submitSimulationAction } from "@/lib/actions/simulation-actions";
 import { ProblemStatement } from "@/components/practice/problem-figure";
+import { MathText } from "@/components/math-text";
 
 const CHOICE_LETTERS = ["A", "B", "C", "D", "E", "F"];
 
@@ -158,7 +159,7 @@ export function TestRunner({
                         >
                           {letter}
                         </span>
-                        {choice}
+                        <MathText>{choice}</MathText>
                       </button>
                     );
                   })}

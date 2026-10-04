@@ -8,6 +8,7 @@ import { ProgressBar } from "@/components/ui/progress";
 import { LinkButton } from "@/components/ui/button";
 import { parseChoices } from "@/lib/engine/scoring";
 import { difficultyLabel } from "@/lib/types";
+import { MathText } from "@/components/math-text";
 import { pickPriorityTopic } from "@/lib/engine/practice";
 import { ProblemFigure } from "@/components/practice/problem-figure";
 
@@ -190,22 +191,28 @@ export default async function SimulationResultsPage({
                     <div className="flex items-start justify-between gap-3">
                       <p className="text-sm text-slate-700 dark:text-slate-200">
                         <span className="font-bold text-slate-700 dark:text-slate-500">Q{item.order + 1}.</span>{" "}
-                        {item.problem.question}
+                        <MathText>{item.problem.question}</MathText>
                       </p>
                       <Badge tone="slate">{difficultyLabel(item.problem.difficulty)}</Badge>
                     </div>
                     <ProblemFigure svg={item.problem.diagram} className="mt-3" />
                     <div className="mt-2 flex flex-wrap gap-3 text-xs">
                       <span className="text-danger-600 dark:text-red-400">
-                        Your answer: {item.answerGiven || "(blank)"}
+                        Your answer:{" "}
+                        {item.answerGiven ? <MathText>{item.answerGiven}</MathText> : "(blank)"}
                       </span>
                       <span className="text-success-600 dark:text-emerald-400">
-                        Correct: {item.problem.answer}
-                        {choices[correctIndex] ? ` — ${choices[correctIndex]}` : ""}
+                        Correct: <MathText>{item.problem.answer}</MathText>
+                        {choices[correctIndex] ? (
+                          <>
+                            {" — "}
+                            <MathText>{choices[correctIndex]}</MathText>
+                          </>
+                        ) : null}
                       </span>
                     </div>
                     <p className="mt-2 rounded-lg bg-slate-50 dark:bg-slate-800 px-3 py-2 text-xs leading-relaxed text-slate-600 dark:text-slate-300">
-                      {item.problem.solution}
+                      <MathText>{item.problem.solution}</MathText>
                     </p>
                   </div>
                 );

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/cn";
 import { Button, LinkButton } from "@/components/ui/button";
 import { ProblemStatement } from "@/components/practice/problem-figure";
+import { MathText } from "@/components/math-text";
 import {
   answerCountdownItemAction,
   finishCountdownAction,
@@ -251,7 +252,9 @@ export function CountdownRunner({
                 <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-slate-100 text-xs font-bold text-slate-700 dark:bg-slate-800 dark:text-slate-300">
                   {letter}
                 </span>
-                <span className="text-slate-900 dark:text-slate-50">{choice}</span>
+                <span className="text-slate-900 dark:text-slate-50">
+                  <MathText>{choice}</MathText>
+                </span>
               </button>
             );
           })}
@@ -267,11 +270,14 @@ export function CountdownRunner({
                 : "text-danger-600 dark:text-danger-500"
             )}
           >
-            {outcome.correct
-              ? "Correct"
-              : outcome.timedOut
-                ? `Out of time — the answer was ${outcome.correctAnswer}`
-                : `Not quite — the answer was ${outcome.correctAnswer}`}
+            {outcome.correct ? (
+              "Correct"
+            ) : (
+              <>
+                {outcome.timedOut ? "Out of time" : "Not quite"} — the answer was{" "}
+                <MathText>{outcome.correctAnswer}</MathText>
+              </>
+            )}
           </p>
         )}
 

@@ -15,6 +15,7 @@ import {
   difficultyRangeLabel,
 } from "@/lib/competition-meta";
 import { difficultyLabel } from "@/lib/types";
+import { MathText } from "@/components/math-text";
 
 export default async function CompetitionDetailPage({
   params,
@@ -179,7 +180,9 @@ export default async function CompetitionDetailPage({
                       href={`/practice/${p.slug}`}
                       className="flex items-start justify-between gap-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800"
                     >
-                      <span className="line-clamp-2 text-sm text-slate-600 dark:text-slate-300">{p.question}</span>
+                      <span className="line-clamp-2 text-sm text-slate-600 dark:text-slate-300">
+                        <MathText>{p.question}</MathText>
+                      </span>
                       <Badge tone="slate">{difficultyLabel(p.difficulty)}</Badge>
                     </Link>
                   ))}

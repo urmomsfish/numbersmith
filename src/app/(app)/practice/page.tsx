@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { LinkButton } from "@/components/ui/button";
 import { isProUser } from "@/lib/subscription";
 import { difficultyLabel } from "@/lib/types";
+import { MathText } from "@/components/math-text";
 import { PracticeFilters } from "./filters";
 
 const PAGE_SIZE = 20;
@@ -97,7 +98,9 @@ export default async function PracticePage({
                   {p.competition && <Badge tone="ember">{p.competition.shortName}</Badge>}
                   {locked && <Badge tone="warning">Pro</Badge>}
                 </div>
-                <p className="mt-3 line-clamp-3 text-sm text-slate-600 dark:text-slate-300">{p.question}</p>
+                <p className="mt-3 line-clamp-3 text-sm text-slate-600 dark:text-slate-300">
+                  <MathText>{p.question}</MathText>
+                </p>
               </div>
               <div className="mt-4">
                 {locked ? (

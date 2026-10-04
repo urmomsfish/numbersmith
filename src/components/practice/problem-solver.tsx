@@ -10,6 +10,7 @@ import { LEGAL } from "@/lib/legal";
 import { AnswerInput } from "@/components/practice/answer-input";
 import { ScratchCanvas } from "@/components/practice/scratch-canvas";
 import { ProblemStatement } from "@/components/practice/problem-figure";
+import { MathText } from "@/components/math-text";
 
 const CHOICE_LETTERS = ["A", "B", "C", "D", "E", "F"];
 
@@ -150,7 +151,7 @@ export function ProblemSolver({
                   >
                     {letter}
                   </span>
-                  {choice}
+                  <MathText>{choice}</MathText>
                 </button>
               );
             })}
@@ -171,7 +172,10 @@ export function ProblemSolver({
       <ScratchCanvas problemId={problem.id} initialData={scratchData} className="mt-5" />
             {result && !result.capped && (
               <p className="mt-2 text-sm text-slate-700 dark:text-slate-400">
-                Correct answer: <span className="font-semibold text-slate-800 dark:text-slate-100">{result.correctAnswer}</span>
+                Correct answer:{" "}
+                <span className="font-semibold text-slate-800 dark:text-slate-100">
+                  <MathText>{result.correctAnswer}</MathText>
+                </span>
               </p>
             )}
           </div>
@@ -199,7 +203,7 @@ export function ProblemSolver({
             <ul className="mt-3 space-y-2 border-l-2 border-slate-300 pl-3 dark:border-slate-600">
               {problem.hints.slice(0, hintsShown).map((hint, i) => (
                 <li key={i} className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-                  {hint}
+                  <MathText>{hint}</MathText>
                 </li>
               ))}
             </ul>
@@ -234,7 +238,7 @@ export function ProblemSolver({
           <div className="rounded-md border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800">
             <p className="text-sm font-semibold text-slate-900 dark:text-slate-50">Solution</p>
             <p className="mt-1.5 text-sm leading-relaxed text-slate-700 dark:text-slate-200">
-              {result.solution}
+              <MathText>{result.solution}</MathText>
             </p>
           </div>
           {/* A second route matters more than the first once the answer is
@@ -253,7 +257,7 @@ export function ProblemSolver({
                       {alt.label}
                     </p>
                     <p className="mt-1 text-sm leading-relaxed text-slate-700 dark:text-slate-200">
-                      {alt.body}
+                      <MathText>{alt.body}</MathText>
                     </p>
                   </div>
                 ))}

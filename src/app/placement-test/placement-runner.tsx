@@ -10,6 +10,7 @@ import { ProgressBar } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import { ProblemStatement } from "@/components/practice/problem-figure";
+import { MathText } from "@/components/math-text";
 import {
   submitPlacementAnswerAction,
   type PlacementQuestionPayload,
@@ -160,7 +161,7 @@ function QuestionCard({
                       >
                         {letter}
                       </span>
-                      {choice}
+                      <MathText>{choice}</MathText>
                     </button>
                   );
                 })}

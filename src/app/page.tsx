@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { PRO_PRICING } from "@/lib/pricing";
 import { RATING_TIERS, difficultyLabel } from "@/lib/types";
 import { parseChoices } from "@/lib/engine/scoring";
+import { MathText } from "@/components/math-text";
 
 const HOW_IT_WORKS = [
   {
@@ -194,7 +195,7 @@ export default async function LandingPage() {
                   <Badge tone="slate">{difficultyLabel(sampleProblem.difficulty)}</Badge>
                 </div>
                 <p className="mt-4 text-base font-medium leading-relaxed text-slate-900 dark:text-slate-50">
-                  {sampleProblem.question}
+                  <MathText>{sampleProblem.question}</MathText>
                 </p>
                 <div className="mt-5 space-y-2">
                   {parseChoices(sampleProblem.choices).map((choice, i) => (
@@ -205,7 +206,7 @@ export default async function LandingPage() {
                       <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-400">
                         {["A", "B", "C", "D", "E"][i]}
                       </span>
-                      {choice}
+                      <MathText>{choice}</MathText>
                     </div>
                   ))}
                 </div>

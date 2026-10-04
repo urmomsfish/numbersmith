@@ -9,6 +9,7 @@ import { Button, LinkButton } from "@/components/ui/button";
 import { submitDailyChallengeAction } from "@/lib/actions/daily-challenge-actions";
 import { difficultyLabel } from "@/lib/types";
 import { ProblemStatement } from "@/components/practice/problem-figure";
+import { MathText } from "@/components/math-text";
 
 const CHOICE_LETTERS = ["A", "B", "C", "D", "E", "F"];
 
@@ -136,7 +137,7 @@ export function DailyChallengeRunner({
                   >
                     {letter}
                   </span>
-                  {choice}
+                  <MathText>{choice}</MathText>
                 </button>
               );
             })}
@@ -152,7 +153,10 @@ export function DailyChallengeRunner({
             />
             {done && (
               <p className="mt-2 text-sm text-slate-700 dark:text-slate-400">
-                Correct answer: <span className="font-semibold text-slate-800 dark:text-slate-100">{result!.correctAnswer}</span>
+                Correct answer:{" "}
+                <span className="font-semibold text-slate-800 dark:text-slate-100">
+                  <MathText>{result!.correctAnswer}</MathText>
+                </span>
               </p>
             )}
           </div>
@@ -197,7 +201,9 @@ export function DailyChallengeRunner({
           </div>
           <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4">
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-500">Solution</p>
-            <p className="mt-1.5 text-sm leading-relaxed text-slate-700 dark:text-slate-200">{result!.solution}</p>
+            <p className="mt-1.5 text-sm leading-relaxed text-slate-700 dark:text-slate-200">
+              <MathText>{result!.solution}</MathText>
+            </p>
           </div>
           {unlocked.map((a, i) => (
             <p key={i} className="rounded-xl bg-amber-50 dark:bg-amber-950 px-4 py-2.5 text-sm font-semibold text-amber-800 dark:text-amber-400">
