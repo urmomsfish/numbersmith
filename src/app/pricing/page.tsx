@@ -112,7 +112,9 @@ export default async function PricingPage({
           ? "Video Lessons are a Pro feature."
           : params.from === "ai-assistant"
             ? "Smith AI is a Pro feature."
-            : null;
+            : params.from === "reference"
+              ? "The reference sheet is a Pro feature."
+              : null;
 
   return (
     <div className="flex min-h-screen flex-col">
