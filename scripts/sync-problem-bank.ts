@@ -16,24 +16,8 @@
  * Run with: npm run db:sync-problems   (add --dry-run to preview)
  */
 import { PrismaClient } from "../src/generated/prisma";
-import { PROBLEMS } from "../prisma/seed-data/problems";
-import { OLYMPIAD_PROBLEMS } from "../prisma/seed-data/problems-olympiad";
-import { MOEMS_PROBLEMS } from "../prisma/seed-data/problems-moems";
-import { PURPLE_COMET_PROBLEMS } from "../prisma/seed-data/problems-purple-comet";
-import { MATH_LEAGUE_EM_PROBLEMS, MATH_LEAGUE_HS_PROBLEMS } from "../prisma/seed-data/problems-math-league";
-import { ARML_PROBLEMS } from "../prisma/seed-data/problems-arml";
-import { PUMAC_PROBLEMS, SMT_PROBLEMS } from "../prisma/seed-data/problems-pumac-smt";
-import { MATH_PRIZE_FOR_GIRLS_PROBLEMS } from "../prisma/seed-data/problems-math-prize-girls";
-import { AMC8_PROBLEMS } from "../prisma/seed-data/problems-amc8";
-import { AMC10_PROBLEMS } from "../prisma/seed-data/problems-amc10";
-import { AMC12_PROBLEMS } from "../prisma/seed-data/problems-amc12";
-import { MATHCOUNTS_PROBLEMS } from "../prisma/seed-data/problems-mathcounts";
-import { AIME_PROBLEMS } from "../prisma/seed-data/problems-aime";
-import { HMMT_PROBLEMS } from "../prisma/seed-data/problems-hmmt";
-import { MATH_KANGAROO_PROBLEMS } from "../prisma/seed-data/problems-kangaroo";
-import { OLYMPIAD_TIER_PROBLEMS } from "../prisma/seed-data/problems-olympiad-tier";
-import { COUNTDOWN_PROBLEMS } from "../prisma/seed-data/problems-countdown";
-import { GENERATED_PROBLEMS, GENERATION_ISSUES } from "../prisma/seed-data/generators";
+import { GENERATION_ISSUES } from "../prisma/seed-data/generators";
+import { ALL_PROBLEMS } from "../prisma/seed-data/all-problems";
 import { toProblemRow } from "../prisma/seed-data/problem-rows";
 
 const prisma = new PrismaClient();
@@ -78,28 +62,9 @@ async function main() {
   const existingBySlug = new Map(existing.map((p) => [p.slug, p]));
   console.log(`Database currently holds ${existing.length} problems.`);
 
-  const candidates = [
-    ...PROBLEMS.map((p) => ({ seed: p, isPlacement: true })),
-    ...GENERATED_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
-    ...OLYMPIAD_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
-    ...MOEMS_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
-    ...PURPLE_COMET_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
-    ...MATH_LEAGUE_EM_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
-    ...MATH_LEAGUE_HS_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
-    ...ARML_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
-    ...PUMAC_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
-    ...SMT_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
-    ...MATH_PRIZE_FOR_GIRLS_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
-    ...AMC8_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
-    ...AMC10_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
-    ...AMC12_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
-    ...MATHCOUNTS_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
-    ...AIME_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
-    ...HMMT_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
-    ...MATH_KANGAROO_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
-    ...OLYMPIAD_TIER_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
-    ...COUNTDOWN_PROBLEMS.map((p) => ({ seed: p, isPlacement: false })),
-  ];
+  // Sourced from the shared aggregator so this list cannot drift from the
+  // one the seed and the quality checker read.
+  const candidates = ALL_PROBLEMS;
   console.log(`Seed data defines ${candidates.length} problems.`);
 
   const rows = [];

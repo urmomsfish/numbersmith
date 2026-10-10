@@ -14,6 +14,7 @@
     "db:sync-video-lessons": "tsx scripts/sync-video-lessons.ts",
     "db:sync-lessons": "tsx scripts/sync-lessons.ts",
     "verify:answers": "tsx scripts/verify-answers.ts",
+    "verify:quality": "tsx scripts/check-problem-quality.ts",
     "verify:palette": "node scripts/check-palette-contrast.mjs",
     "verify:streak": "tsx scripts/check-streak-boundary.ts",
     "verify:reward": "tsx scripts/check-reward-rule.ts",
