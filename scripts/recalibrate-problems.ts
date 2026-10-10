@@ -28,10 +28,34 @@ const OUT = "scratch/recalibration.json";
 const MODEL = "claude-opus-5";
 const BATCH = 6;
 
+/**
+ * How many points to add back to every raw score.
+ *
+ * The scorer is harsh in absolute terms. Run over 40 problems the quality
+ * checker did NOT flag — difficulty 5-7, solutions comfortably past the band
+ * floor — it still marked every one of them down, by 2.48 points on average.
+ * Those problems are the best available anchor for "correctly labelled", so
+ * that 2.48 is instrument error rather than anything about the bank.
+ *
+ * It matters enormously which of the two you believe. Raw, the scorer says the
+ * flagged problems are overstated by 4.99 points and that the bank contains
+ * three problems above difficulty 7 in total. Corrected, it says they are
+ * overstated by 2.99 — still severe, a "9" that is really a 6 — while leaving
+ * a believable spread: the IMO set lands between 3 and 10, with the
+ * golden-ratio potential-function problem at 10 and ∑φ(d)=n at 3.
+ *
+ * Applying raw scores would have deflated the entire bank by two and a half
+ * points and emptied every hard tail on the strength of a measurement error.
+ */
+const SCORER_BIAS = 2.48;
+
 type Verdict = {
   slug: string;
   currentDifficulty: number;
+  /** The model's raw score, kept so the bias correction stays auditable. */
   rubricDifficulty: number;
+  /** rubricDifficulty + SCORER_BIAS, clamped — the number to actually apply. */
+  calibratedDifficulty: number;
   steps: number;
   isLookup: boolean;
   isStock: boolean;
@@ -87,6 +111,16 @@ async function main() {
     ? JSON.parse(readFileSync(OUT, "utf8"))
     : {};
 
+  // Verdicts scored before the action rule changed carry a stale `action`.
+  // Recomputing it from the stored scores costs nothing and avoids re-running
+  // the model over problems whose difficulty score was never in question.
+  for (const v of Object.values(done)) {
+    v.calibratedDifficulty =
+      v.calibratedDifficulty ??
+      Math.max(1, Math.min(10, Math.round(v.rubricDifficulty + SCORER_BIAS)));
+    v.action = v.currentDifficulty - v.calibratedDifficulty >= 1 ? "relabel" : "keep";
+  }
+
   // Only problems that could plausibly be mislabelled: anything whose solution
   // is thinner than its band allows, plus everything claiming 8+. Scoring the
   // easy end would cost as much and change nothing — a difficulty-2 arithmetic
@@ -136,25 +170,39 @@ async function main() {
           const raw = text?.type === "text" ? text.text : "";
           const json = JSON.parse(raw.slice(raw.indexOf("{"), raw.lastIndexOf("}") + 1));
           const rubricDifficulty = Number(json.rubricDifficulty);
-          const drop = p.difficulty - rubricDifficulty;
+          const calibratedDifficulty = Math.max(
+            1,
+            Math.min(10, Math.round(rubricDifficulty + SCORER_BIAS))
+          );
+          const drop = p.difficulty - calibratedDifficulty;
           const v: Verdict = {
             slug: p.slug,
             currentDifficulty: p.difficulty,
             rubricDifficulty,
+            calibratedDifficulty,
             steps: Number(json.steps),
             isLookup: Boolean(json.isLookup),
             isStock: Boolean(json.isStock),
             reason: String(json.reason ?? ""),
-            // A formula lookup is not a bad problem — "how many diagonals does
-            // a decagon have" is a perfectly good difficulty-1 question. It is
-            // only bad at difficulty 9, where a simulation puts it at the end
-            // of the paper. So the default remedy is to relabel it down, not
-            // to delete it; the bank keeps a legitimate easy problem.
+            // Relabelling is the only remedy this pass prescribes, and that is
+            // on purpose.
             //
-            // Rewriting is reserved for stock exercises, which are the wrong
-            // question at ANY label: a famous problem tests whether the student
-            // has met it before, which is not a thing worth measuring.
-            action: json.isStock ? "rewrite" : drop >= 1 ? "relabel" : "keep",
+            // A formula lookup is not a bad problem — "how many diagonals does
+            // a decagon have" is a fine difficulty-1 question. It is only bad
+            // at difficulty 9, where a simulation puts it at the end of the
+            // paper. Scoring it down fixes it; deleting it would throw away a
+            // legitimate easy problem.
+            //
+            // Deciding what to REWRITE is deliberately not left to the model.
+            // Asked whether a problem was a famous stock exercise it answered
+            // yes for 403 of the first 412, which is not credible — it was
+            // reading "uses a standard technique" as "is a famous problem",
+            // and nearly every competition problem uses a standard technique.
+            // Rewrite candidates come from the deterministic signals in
+            // check-problem-quality instead: verbatim duplicates, shared
+            // skeletons, and the explicit STOCK_SETUPS patterns. Those are
+            // auditable and they do not cost a token.
+            action: drop >= 1 ? "relabel" : "keep",
           };
           return v;
         } catch (e) {
@@ -178,11 +226,11 @@ async function main() {
   for (const v of all) counts[v.action]++;
   console.log(`keep ${counts.keep}   relabel ${counts.relabel}   rewrite ${counts.rewrite}`);
   const bigDrops = all
-    .filter((v) => v.currentDifficulty - v.rubricDifficulty >= 4)
-    .sort((a, b) => b.currentDifficulty - b.rubricDifficulty - (a.currentDifficulty - a.rubricDifficulty));
+    .filter((v) => v.currentDifficulty - v.calibratedDifficulty >= 4)
+    .sort((a, b) => b.currentDifficulty - b.calibratedDifficulty - (a.currentDifficulty - a.calibratedDifficulty));
   console.log(`\n${bigDrops.length} problems overstated by 4+ difficulty points:`);
   for (const v of bigDrops.slice(0, 20)) {
-    console.log(`  ${v.slug}: ${v.currentDifficulty} → ${v.rubricDifficulty}  (${v.steps} steps) ${v.reason.slice(0, 80)}`);
+    console.log(`  ${v.slug}: ${v.currentDifficulty} → ${v.calibratedDifficulty}  (${v.steps} steps) ${v.reason.slice(0, 80)}`);
   }
   // Relabelling shrinks the hard tail — that is the point, but it makes the
   // simulation-repetition problem worse before it makes it better, so the
@@ -191,7 +239,7 @@ async function main() {
   for (const { seed } of ALL_PROBLEMS) {
     if (!seed.competitionSlug) continue;
     const v = done[seed.slug];
-    const now = v ? v.rubricDifficulty : seed.difficulty;
+    const now = v ? v.calibratedDifficulty : seed.difficulty;
     const t = tail.get(seed.competitionSlug) ?? { before: 0, after: 0 };
     if (seed.difficulty >= 9) t.before++;
     if (now >= 9) t.after++;
