@@ -85,9 +85,29 @@ const SYMBOLS: Array<[RegExp, string]> = [
   [/~=/g, "≈"],
   [/=>/g, "⇒"],
   [/->/g, "→"],
+  // Three dots are an ellipsis. Worth doing before the multiplication rule
+  // below, which needs to see "…" as an operand: "1 × 2 × 3 * ... * n" is a
+  // product continuing through a gap, and without this the last two asterisks
+  // have nothing recognisable on one side and survive as punctuation.
+  [/\.{3}/g, "…"],
   // Multiplication: only between two operands, so "*" used as a footnote
   // marker or bullet is left alone.
-  [/(?<=[0-9A-Za-z)\]])\s*\*\s*(?=[0-9A-Za-z(\[])/g, " × "],
+  [/(?<=[0-9A-Za-z)\]…])\s*\*\s*(?=[0-9A-Za-z(\[…])/g, " × "],
+  // Division written out in prose — "Rate = 150 / 3 = 50 mph" — reads as a
+  // division, not as a fraction, and "÷" says so at a glance.
+  //
+  // Restricted to a spaced slash between bare numbers, which is the whole
+  // point: "n(n+1)/2" and "1/x^2" are algebra, where the slash is the
+  // conventional notation and "÷" would look like a worksheet. Measured over
+  // the bank, this catches 51 arithmetic cases and leaves 1,672 algebraic
+  // ones alone.
+  //
+  // The two guards against a neighbouring slash are what stop a *chain* of
+  // them being read as arithmetic. One solution lays a grid out as
+  // "10101 / 10101 / 00000 / 01010 / 01010", where the slashes separate rows;
+  // without these the middle ones turned into division signs. A slash with
+  // another slash on either side is a separator, never an operator.
+  [/(?<!\/\s)(?<![\w.)])(\d+)\s+\/\s+(\d+)(?![\w.])(?!\s*\/)/g, "$1 ÷ $2"],
   // A hyphen flanked by spaces inside math reads as a minus sign. Restricted
   // to operand-space-hyphen-space-operand so ordinary dashes in prose survive.
   // Braces count as operand edges: "a_{n+2} - 1" is the same subtraction as

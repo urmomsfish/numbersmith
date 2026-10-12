@@ -115,6 +115,29 @@ const FRACTION_CASES: Array<[source: string, fracs: number]> = [
   // Prose and compound units are not fractions at all.
   ["and/or", 0],
   ["km/h", 0],
+  // Spaced numeric division becomes ÷ before the fraction rule ever sees it.
+  ["Rate = 150 / 3 = 50 mph", 0],
+];
+
+/** Operator cases: how multiplication and division reach the page. */
+const OPERATOR_CASES: Array<[source: string, flattened: string]> = [
+  // "*" between operands is a product...
+  ["3*4", "3 × 4"],
+  ["2 * (n+1)", "2 × (n+1)"],
+  // ...including across an ellipsis, which is itself normalised.
+  ["1 * 2 * 3 * ... * n", "1 × 2 × 3 × … × n"],
+  ["1, 2, 3, ..., n", "1, 2, 3, …, n"],
+  // Arithmetic division in prose reads as a division.
+  ["Each part is 24 / 8 = 3 students.", "Each part is 24 ÷ 8 = 3 students."],
+  ["360 / 30 = 12", "360 ÷ 30 = 12"],
+  // Algebra keeps the slash: ÷ would look like a worksheet here.
+  ["n(n+1)/2", "n(n+1)/2"],
+  ["1/x^2", "1/x^2"],
+  ["(20 ± 6)/2", "(20 ± 6)/2"],
+  // A bare fraction is still a fraction, not a division.
+  ["3/4", "3/4"],
+  // A chain of slashes is a separator (a grid of rows), never arithmetic.
+  ["10101 / 10101 / 00000 / 01010", "10101 / 10101 / 00000 / 01010"],
 ];
 
 function checkCases(): boolean {
@@ -130,6 +153,16 @@ function checkCases(): boolean {
     }
   }
 
+  for (const [src, want] of OPERATOR_CASES) {
+    const got = mathToPlainText(parseMath(src));
+    if (got !== want) {
+      ok = false;
+      console.log(`  FAIL (operator) ${JSON.stringify(src)}`);
+      console.log(`    want ${JSON.stringify(want)}`);
+      console.log(`    got  ${JSON.stringify(got)}`);
+    }
+  }
+
   for (const [src, want] of FRACTION_CASES) {
     const got = collect(parseMath(src), "frac").length;
     if (got !== want) {
@@ -138,7 +171,7 @@ function checkCases(): boolean {
     }
   }
 
-  const n = SCRIPT_CASES.length + FRACTION_CASES.length;
+  const n = SCRIPT_CASES.length + FRACTION_CASES.length + OPERATOR_CASES.length;
   console.log(ok ? `OK — all ${n} grouping cases hold.` : `FAIL — grouping cases broken.`);
   return ok;
 }
