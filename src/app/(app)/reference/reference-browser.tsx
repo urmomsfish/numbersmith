@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { MathText } from "@/components/math-text";
-import { REFERENCE, matchesQuery, type ReferenceEntry } from "@/lib/reference";
+import { REFERENCE, matchesQuery, statementLines, type ReferenceEntry } from "@/lib/reference";
 
 /**
  * The cheat sheet, filtered in the browser.
@@ -123,9 +123,19 @@ function EntryCard({ entry }: { entry: ReferenceEntry }) {
           emits sup and sub inside one nowrap span), so it is coupled to that
           implementation. A display mode on MathText would be the better fix if
           a second surface ever needs this. */}
-      <p className="mt-1.5 overflow-x-auto rounded-md bg-slate-50 px-2.5 py-2 font-mono text-base leading-relaxed text-slate-900 [&_.whitespace-nowrap>sub]:text-[0.85em] [&_.whitespace-nowrap>sup]:text-[0.85em] dark:bg-slate-800 dark:text-slate-50">
-        <MathText>{entry.statement}</MathText>
-      </p>
+      {/* Not font-mono, despite formulas being the one place a mono face is
+          the obvious choice. DM Mono has no U+2044 FRACTION SLASH, so the
+          browser substituted a 2.7px glyph into a 9.6px monospace cell and
+          the result rendered as a near-horizontal dash: "(4⁄3)π r³" read as
+          "(4−3)π r³", which is a different and wrong expression. A formula
+          sheet cannot ship a fraction that looks like a subtraction. */}
+      <div className="mt-1.5 space-y-1 overflow-x-auto rounded-md bg-slate-50 px-2.5 py-2 text-base leading-relaxed text-slate-900 [&_.whitespace-nowrap>sub]:text-[0.85em] [&_.whitespace-nowrap>sup]:text-[0.85em] dark:bg-slate-800 dark:text-slate-50">
+        {statementLines(entry).map((s) => (
+          <p key={s}>
+            <MathText>{s}</MathText>
+          </p>
+        ))}
+      </div>
 
       {entry.conditions && (
         <p className="mt-1.5 text-xs text-slate-700 dark:text-slate-300">

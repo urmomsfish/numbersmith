@@ -21,8 +21,16 @@
 
 export type ReferenceEntry = {
   name: string;
-  /** The result itself, as authored math. */
-  statement: string;
+  /**
+   * The result itself, as authored math.
+   *
+   * An array when the entry holds several related results — the four volume
+   * formulas, the exponent rules — and each one gets its own line. Running
+   * them together with commas is what this page is for *avoiding*: a student
+   * reaching for the volume of a cone mid-problem should find one line, not
+   * read through three other solids to reach it.
+   */
+  statement: string | string[];
   /** Conditions under which it holds. Omitted only when genuinely universal. */
   conditions?: string;
   /** What it is for — the recognition cue. */
@@ -54,13 +62,20 @@ export const REFERENCE: ReferenceSection[] = [
       },
       {
         name: "Vieta's formulas (quadratic)",
-        statement: "r + s = -b/a,  rs = c/a",
+        statement: [
+          "r + s = -b/a",
+          "rs = c/a",
+        ],
         conditions: "r and s the roots of ax^2 + bx + c = 0.",
         when: "The problem asks for the sum or product of roots but not the roots themselves.",
       },
       {
         name: "Vieta's formulas (cubic)",
-        statement: "r + s + t = -b/a,  rs + rt + st = c/a,  rst = -d/a",
+        statement: [
+          "r + s + t = -b/a",
+          "rs + rt + st = c/a",
+          "rst = -d/a",
+        ],
         conditions: "For ax^3 + bx^2 + cx + d = 0.",
       },
       {
@@ -69,11 +84,17 @@ export const REFERENCE: ReferenceSection[] = [
       },
       {
         name: "Sum and difference of cubes",
-        statement: "a^3 + b^3 = (a + b)(a^2 - ab + b^2),  a^3 - b^3 = (a - b)(a^2 + ab + b^2)",
+        statement: [
+          "a^3 + b^3 = (a + b)(a^2 - ab + b^2)",
+          "a^3 - b^3 = (a - b)(a^2 + ab + b^2)",
+        ],
       },
       {
         name: "Square of a sum",
-        statement: "(a + b)^2 = a^2 + 2ab + b^2,  (a - b)^2 = a^2 - 2ab + b^2",
+        statement: [
+          "(a + b)^2 = a^2 + 2ab + b^2",
+          "(a - b)^2 = a^2 - 2ab + b^2",
+        ],
       },
       {
         name: "Useful rearrangement",
@@ -82,12 +103,21 @@ export const REFERENCE: ReferenceSection[] = [
       },
       {
         name: "Exponent rules",
-        statement: "a^m · a^n = a^(m+n),  (a^m)^n = a^(mn),  a^(-n) = 1/a^n,  a^0 = 1",
+        statement: [
+          "a^m · a^n = a^(m+n)",
+          "(a^m)^n = a^(mn)",
+          "a^(-n) = 1/a^n",
+          "a^0 = 1",
+        ],
         conditions: "a ≠ 0 for the last two.",
       },
       {
         name: "Logarithm rules",
-        statement: "log(xy) = log x + log y,  log(x/y) = log x - log y,  log(x^n) = n log x",
+        statement: [
+          "log(xy) = log x + log y",
+          "log(x/y) = log x - log y",
+          "log(x^n) = n log x",
+        ],
         conditions: "x, y > 0.",
       },
       {
@@ -166,7 +196,10 @@ export const REFERENCE: ReferenceSection[] = [
       },
       {
         name: "Heron's formula",
-        statement: "A = sqrt(s(s-a)(s-b)(s-c)),  where s = (a+b+c)/2",
+        statement: [
+          "A = sqrt(s(s-a)(s-b)(s-c))",
+          "where s = (a+b+c)/2",
+        ],
         when: "All three sides known, no height given.",
       },
       {
@@ -187,11 +220,17 @@ export const REFERENCE: ReferenceSection[] = [
       },
       {
         name: "Circle area and circumference",
-        statement: "A = π r^2,  C = 2π r",
+        statement: [
+          "A = π r^2",
+          "C = 2π r",
+        ],
       },
       {
         name: "Arc length and sector area",
-        statement: "arc = (θ/360) · 2π r,  sector = (θ/360) · π r^2",
+        statement: [
+          "arc = (θ/360) · 2π r",
+          "sector = (θ/360) · π r^2",
+        ],
         conditions: "θ in degrees.",
       },
       {
@@ -210,7 +249,10 @@ export const REFERENCE: ReferenceSection[] = [
       },
       {
         name: "Polygon angle sums",
-        statement: "interior sum = (n - 2) · 180°,  each interior angle (regular) = (n-2)·180°/n",
+        statement: [
+          "interior sum = (n - 2) · 180°",
+          "each interior angle (regular) = (n-2)·180°/n",
+        ],
         when: "Exterior angles of any convex polygon always sum to 360°.",
       },
       {
@@ -224,7 +266,10 @@ export const REFERENCE: ReferenceSection[] = [
       },
       {
         name: "Distance and midpoint",
-        statement: "d = sqrt((x_2 - x_1)^2 + (y_2 - y_1)^2),  M = ((x_1+x_2)/2, (y_1+y_2)/2)",
+        statement: [
+          "d = sqrt((x_2 - x_1)^2 + (y_2 - y_1)^2)",
+          "M = ((x_1+x_2)/2, (y_1+y_2)/2)",
+        ],
       },
       {
         name: "Equation of a circle",
@@ -237,11 +282,20 @@ export const REFERENCE: ReferenceSection[] = [
       },
       {
         name: "Volumes",
-        statement: "sphere = (4/3)π r^3,  cylinder = π r^2 h,  cone = (1/3)π r^2 h,  pyramid = (1/3) B h",
+        statement: [
+          "sphere = (4/3)π r^3",
+          "cylinder = π r^2 h",
+          "cone = (1/3)π r^2 h",
+          "pyramid = (1/3) B h",
+        ],
       },
       {
         name: "Surface areas",
-        statement: "sphere = 4π r^2,  cylinder = 2π r^2 + 2π r h,  cone = π r^2 + π r l",
+        statement: [
+          "sphere = 4π r^2",
+          "cylinder = 2π r^2 + 2π r h",
+          "cone = π r^2 + π r l",
+        ],
         conditions: "l the slant height of the cone.",
       },
     ],
@@ -253,8 +307,19 @@ export const REFERENCE: ReferenceSection[] = [
     entries: [
       {
         name: "Divisibility rules",
-        statement:
-          "2: even.  3: digit sum divisible by 3.  4: last two digits.  5: ends 0 or 5.  6: by 2 and 3.  8: last three digits.  9: digit sum divisible by 9.  11: alternating digit sum divisible by 11.",
+        // One divisor per line. As a single run of eight rules this was the
+        // longest statement on the page by a factor of two, and the one a
+        // student is most likely to be scanning for a specific entry in.
+        statement: [
+          "2:  even",
+          "3:  digit sum divisible by 3",
+          "4:  last two digits divisible by 4",
+          "5:  ends in 0 or 5",
+          "6:  divisible by both 2 and 3",
+          "8:  last three digits divisible by 8",
+          "9:  digit sum divisible by 9",
+          "11:  alternating digit sum divisible by 11",
+        ],
       },
       {
         name: "GCD and LCM",
@@ -400,7 +465,11 @@ export const REFERENCE: ReferenceSection[] = [
     entries: [
       {
         name: "Definitions",
-        statement: "sin = opposite/hypotenuse,  cos = adjacent/hypotenuse,  tan = opposite/adjacent",
+        statement: [
+          "sin = opposite/hypotenuse",
+          "cos = adjacent/hypotenuse",
+          "tan = opposite/adjacent",
+        ],
         conditions: "Right triangle.",
       },
       {
@@ -413,7 +482,10 @@ export const REFERENCE: ReferenceSection[] = [
       },
       {
         name: "Double angle",
-        statement: "sin 2θ = 2 sin θ cos θ,  cos 2θ = cos^2 θ - sin^2 θ",
+        statement: [
+          "sin 2θ = 2 sin θ cos θ",
+          "cos 2θ = cos^2 θ - sin^2 θ",
+        ],
       },
       {
         name: "Common values",
@@ -444,7 +516,16 @@ export function matchesQuery(
 ): boolean {
   const q = query.trim().toLowerCase();
   if (q === "") return true;
-  return [entry.name, entry.statement, entry.conditions, entry.when, entry.section]
-    .filter(Boolean)
-    .some((field) => (field as string).toLowerCase().includes(q));
+  // Flattened rather than cast. `statement` became string | string[] when
+  // multi-formula entries were split onto separate lines, and the old
+  // `field as string` silently told the compiler otherwise — so the first
+  // keystroke in the search box threw "toLowerCase is not a function".
+  return [entry.name, ...statementLines(entry), entry.conditions, entry.when, entry.section]
+    .filter((field): field is string => typeof field === "string")
+    .some((field) => field.toLowerCase().includes(q));
+}
+
+/** A statement as the lines it renders on, whichever form it was authored in. */
+export function statementLines(entry: ReferenceEntry): string[] {
+  return Array.isArray(entry.statement) ? entry.statement : [entry.statement];
 }
