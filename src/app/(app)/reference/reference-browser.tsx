@@ -111,25 +111,20 @@ function EntryCard({ entry }: { entry: ReferenceEntry }) {
       {/* The formula gets its own line and a tinted panel: this is what a
           student is scanning for, and burying it in prose defeats the page.
 
-          The two arbitrary variants enlarge fraction parts only. MathText
-          renders an inline fraction as sup⁄sub at 0.72em, which is right in
-          prose — a fraction inside a sentence should not disturb the line —
-          but wrong here, where the fraction IS the formula: Vieta's measured
-          out at 10px against a 14px panel, so the answer was smaller than the
-          operators around it. Exponents are left alone, since 0.72em is
-          correct for b².
+          There were two arbitrary variants here enlarging the parts of a
+          fraction, because the renderer drew one as sup⁄sub at 0.72em and
+          Vieta's answer came out at 10px against a 14px panel — smaller than
+          the operators around it. MathText now stacks fractions over a
+          vinculum at 0.78em, so both the override and the problem it solved
+          are gone.
 
-          This targets the renderer's own markup (a frac is the only thing that
-          emits sup and sub inside one nowrap span), so it is coupled to that
-          implementation. A display mode on MathText would be the better fix if
-          a second surface ever needs this. */}
-      {/* Not font-mono, despite formulas being the one place a mono face is
-          the obvious choice. DM Mono has no U+2044 FRACTION SLASH, so the
-          browser substituted a 2.7px glyph into a 9.6px monospace cell and
-          the result rendered as a near-horizontal dash: "(4⁄3)π r³" read as
-          "(4−3)π r³", which is a different and wrong expression. A formula
-          sheet cannot ship a fraction that looks like a subtraction. */}
-      <div className="mt-1.5 space-y-1 overflow-x-auto rounded-md bg-slate-50 px-2.5 py-2 text-base leading-relaxed text-slate-900 [&_.whitespace-nowrap>sub]:text-[0.85em] [&_.whitespace-nowrap>sup]:text-[0.85em] dark:bg-slate-800 dark:text-slate-50">
+          Not font-mono either, despite formulas being the one place a mono
+          face is the obvious choice: DM Mono had no U+2044 FRACTION SLASH, so
+          the browser substituted a 2.7px glyph into a 9.6px cell and "(4⁄3)π r³"
+          rendered as something reading like "(4−3)π r³". The stacked form no
+          longer depends on that character, but the proportional face is still
+          the better setting for mixed prose and symbols. */}
+      <div className="mt-1.5 space-y-1 overflow-x-auto rounded-md bg-slate-50 px-2.5 py-2 text-base leading-relaxed text-slate-900 dark:bg-slate-800 dark:text-slate-50">
         {statementLines(entry).map((s) => (
           <p key={s}>
             <MathText>{s}</MathText>

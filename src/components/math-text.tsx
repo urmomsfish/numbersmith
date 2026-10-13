@@ -25,14 +25,28 @@ function renderNodes(nodes: MathNode[], keyPrefix = ""): React.ReactNode {
           </sub>
         );
       case "frac":
-        // A typographic inline fraction: raised numerator, fraction slash,
-        // lowered denominator. Keeps the line height of surrounding prose,
-        // unlike a stacked (vertical) fraction.
+        // A stacked fraction: numerator over denominator, separated by a
+        // vinculum, the way it is written by hand and printed on a contest.
+        //
+        // This was a raised-numerator/fraction-slash form, which costs no line
+        // height — but it is read as division rather than seen as one object,
+        // and at small sizes the U+2044 slash flattens until "(4⁄3)" starts to
+        // look like "(4−3)".
+        //
+        // The height is bought back rather than ignored: 0.78em type on a
+        // 1.08 leading keeps the whole stack near a single line box, so prose
+        // containing a fraction does not open up a visible gap above it. The
+        // border is the vinculum, so it inherits the surrounding colour for
+        // free and needs no separate dark-mode rule.
         return (
-          <span key={key} className="whitespace-nowrap">
-            <sup className="text-[0.72em] leading-none">{node.num}</sup>
-            <span aria-hidden>⁄</span>
-            <sub className="text-[0.72em] leading-none">{node.den}</sub>
+          <span
+            key={key}
+            className="inline-flex flex-col items-center whitespace-nowrap align-middle text-[0.78em] leading-[1.08]"
+          >
+            <span className="px-[0.18em]">{node.num}</span>
+            <span className="w-full border-t border-current px-[0.18em] text-center">
+              {node.den}
+            </span>
           </span>
         );
       case "sqrt":
