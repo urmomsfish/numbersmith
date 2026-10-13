@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { canStartSimulation, startOfficialSimulationAction } from "@/lib/actions/simulation-actions";
 import { FORMAT_LABEL } from "@/lib/competition-meta";
 import { levelsFor, levelForGrade } from "@/lib/competition-levels";
+import { simulationIsOffered } from "@/lib/engine/simulation";
 
 export default async function StartSimulationPage({
   params,
@@ -17,7 +18,12 @@ export default async function StartSimulationPage({
 
   const { slug } = await params;
   const competition = await prisma.competition.findUnique({ where: { slug } });
-  if (!competition || competition.format === "PROOF") redirect("/simulations");
+  // A contest not offered as a simulation sends the student back to the menu
+  // rather than to an error: the common way to land here is a bookmark from
+  // before the list was narrowed.
+  if (!competition || competition.format === "PROOF" || !simulationIsOffered(slug)) {
+    redirect("/simulations");
+  }
 
   const gate = await canStartSimulation(user.id);
 

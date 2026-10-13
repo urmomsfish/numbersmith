@@ -210,6 +210,35 @@ export type BuiltPaper = {
   timeLimitMinutes: number;
 };
 
+/**
+ * The contests that can be sat as a full-length simulation.
+ *
+ * Deliberately a short list rather than "every competition we know about".
+ * A simulation is only worth sitting when the bank behind it is deep enough
+ * that two attempts are two different papers, and most contests here are not:
+ * the pool runs three to seven problems per question, so the back of the paper
+ * repeats almost immediately. These six have the depth and the audience.
+ *
+ * MOEMS appears twice because Elementary and Middle are genuinely separate
+ * papers with different grade bands, not one contest with a setting.
+ *
+ * Enforced in buildPaper rather than only in the page that lists them, so a
+ * stale link or a crafted POST cannot start a contest that was removed from
+ * the menu.
+ */
+export const SIMULATION_COMPETITION_SLUGS = [
+  "math-kangaroo",
+  "moems-e",
+  "moems-m",
+  "amc8",
+  "amc10",
+  "aime",
+] as const;
+
+export function simulationIsOffered(slug: string): boolean {
+  return (SIMULATION_COMPETITION_SLUGS as readonly string[]).includes(slug);
+}
+
 export async function buildPaper(
   userId: string,
   competitionSlug: string,
@@ -218,6 +247,9 @@ export async function buildPaper(
   const competition = await prisma.competition.findUniqueOrThrow({ where: { slug: competitionSlug } });
   if (competition.format === "PROOF") {
     throw new Error("Proof-based competitions do not support timed simulations");
+  }
+  if (!simulationIsOffered(competitionSlug)) {
+    throw new Error(`${competition.shortName} is not offered as a simulation`);
   }
 
   // A level, where the contest has them, overrides length, clock, and

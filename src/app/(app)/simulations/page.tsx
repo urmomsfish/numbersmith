@@ -6,6 +6,7 @@ import { Card, CardBody } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { isProUser } from "@/lib/subscription";
 import { canStartSimulation, startOfficialSimulationAction } from "@/lib/actions/simulation-actions";
+import { SIMULATION_COMPETITION_SLUGS } from "@/lib/engine/simulation";
 import { CustomSimulationForm } from "./custom-form";
 
 export default async function SimulationsPage() {
@@ -14,7 +15,7 @@ export default async function SimulationsPage() {
 
   const [competitions, topics, recent, isPro, gate] = await Promise.all([
     prisma.competition.findMany({
-      where: { format: { not: "PROOF" } },
+      where: { slug: { in: [...SIMULATION_COMPETITION_SLUGS] } },
       orderBy: { order: "asc" },
     }),
     prisma.topic.findMany({ where: { parentId: null }, orderBy: { order: "asc" } }),
@@ -70,12 +71,26 @@ export default async function SimulationsPage() {
         ))}
       </div>
 
-      <h2 className="mt-10 text-base font-bold text-slate-900 dark:text-slate-50">Custom Competition</h2>
-      <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-        Build your own timed set of competition-style problems: choose the number of problems, topics, difficulty, and time limit.
-      </p>
-      <div className="mt-3">
-        <CustomSimulationForm topics={topics} isPro={isPro} canStart={gate.allowed} />
+      {/* Set apart from the official formats above rather than continuing the
+          same column of cards. This is the one thing on the page a student
+          builds instead of picks, and sitting in identical chrome under a
+          grid of contest tiles it read as a sixth contest. */}
+      <div className="mt-10 rounded-2xl border border-ember-600/35 bg-ember-50/60 p-5 dark:border-ember-500/30 dark:bg-ember-950/25 sm:p-6">
+        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">
+            Build your own
+          </h2>
+          <span className="text-xs font-semibold uppercase tracking-wide text-ember-700 dark:text-ember-500">
+            Custom competition
+          </span>
+        </div>
+        <p className="mt-1 text-sm text-slate-700 dark:text-slate-300">
+          Not sitting a listed contest? Pick the length, topics, difficulty and clock, and
+          get a timed paper built from them.
+        </p>
+        <div className="mt-4">
+          <CustomSimulationForm topics={topics} isPro={isPro} canStart={gate.allowed} />
+        </div>
       </div>
 
       {recent.length > 0 && (
