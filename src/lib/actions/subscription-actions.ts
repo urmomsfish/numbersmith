@@ -6,7 +6,13 @@ import { z } from "zod";
 import { requireUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { PLAN_DURATION_DAYS } from "@/lib/pricing";
-import { stripe, isStripeConfigured, priceIdForPlan, appBaseUrl } from "@/lib/stripe";
+import {
+  stripe,
+  isStripeConfigured,
+  paymentsAreDisabled,
+  priceIdForPlan,
+  appBaseUrl,
+} from "@/lib/stripe";
 
 /** Elapsed time, deliberately — a subscription period is a duration, so a DST
  * transition inside one must not lengthen or shorten it. Do not reuse this for
@@ -24,6 +30,15 @@ const activateSchema = z.object({ plan: z.enum(["MONTHLY", "YEARLY"]) });
  * the tab mid-flow or reach the success URL without having paid. */
 export async function activateProAction(formData: FormData) {
   const user = await requireUser();
+
+  // Checked before anything else, including the development fallback below.
+  // Hiding the upgrade button is not the same as closing checkout: the button
+  // is driven by paymentsAreLive(), but this action is reachable from a page
+  // rendered before the switch flipped, or by a POST made directly. Putting
+  // the guard after the fallback would be worse than useless — it would hand
+  // out Pro for free in any non-production environment while payments are
+  // supposedly off.
+  if (paymentsAreDisabled()) redirect("/pricing?checkout=disabled");
 
   const parsed = activateSchema.safeParse({ plan: formData.get("plan") });
   if (!parsed.success) redirect("/pricing");

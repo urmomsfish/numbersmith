@@ -12,11 +12,25 @@ export function isStripeConfigured(): boolean {
   return stripe !== null;
 }
 
+/**
+ * Deliberately switched off, as opposed to not set up yet.
+ *
+ * Those are different states and the difference matters: "no keys" is a
+ * half-built integration, while this is a working one that is closed on
+ * purpose. Keeping it a separate flag means turning payments back on is one
+ * env var rather than re-fetching secrets from the Stripe dashboard, and it
+ * cannot be confused with a key that merely went missing.
+ */
+export function paymentsAreDisabled(): boolean {
+  return process.env.PAYMENTS_DISABLED === "true";
+}
+
 /** True only when a live-mode key is configured. A test key means Checkout
  * would decline a real card, so the UI must not offer paid plans as if they
  * were purchasable. Derived from the key itself rather than a manual flag, so
  * it flips on its own the moment live keys are set — nothing to remember. */
 export function paymentsAreLive(): boolean {
+  if (paymentsAreDisabled()) return false;
   return (process.env.STRIPE_SECRET_KEY ?? "").startsWith("sk_live_");
 }
 
