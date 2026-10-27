@@ -8,6 +8,7 @@ import { createSession, destroySession, hashPassword, verifyPassword } from "@/l
 import { LEGAL } from "@/lib/legal";
 import { isCoachRole } from "@/lib/types";
 import { sendPasswordResetCodeEmail } from "@/lib/email";
+import { signupSubscription } from "@/lib/launch-promo";
 
 const RESET_CODE_TTL_MS = 15 * 60 * 1000;
 const MAX_RESET_ATTEMPTS = 5;
@@ -64,7 +65,10 @@ export async function signupAction(
       termsAcceptedAt: new Date(),
       termsAcceptedVersion: LEGAL.lastUpdated,
       stats: { create: {} },
-      subscription: { create: { status: "FREE" } },
+      // A year of Pro while the launch offer is open; plain Free after it
+      // closes. Shared with the Google callback so the two signup routes
+      // cannot disagree about what a new account gets.
+      subscription: { create: signupSubscription() },
       ratings: { create: { category: "OVERALL", value: 1000 } },
     },
   });

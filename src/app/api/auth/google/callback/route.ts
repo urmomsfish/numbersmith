@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { createSession } from "@/lib/auth";
 import { isCoachRole } from "@/lib/types";
 import { LEGAL } from "@/lib/legal";
+import { signupSubscription } from "@/lib/launch-promo";
 import { exchangeGoogleCode, fetchGoogleProfile } from "@/lib/google-oauth";
 import { STATE_COOKIE } from "@/app/api/auth/google/route";
 
@@ -65,7 +66,9 @@ export async function GET(request: NextRequest) {
           termsAcceptedAt: new Date(),
           termsAcceptedVersion: LEGAL.lastUpdated,
           stats: { create: {} },
-          subscription: { create: { status: "FREE" } },
+          // Same launch offer as the email signup; both read one helper so
+          // a new account gets the same thing however it was created.
+          subscription: { create: signupSubscription() },
           ratings: { create: { category: "OVERALL", value: 1000 } },
         },
       });

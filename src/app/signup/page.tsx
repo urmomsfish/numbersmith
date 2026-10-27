@@ -6,6 +6,7 @@ import Link from "next/link";
 import { signupAction } from "@/lib/actions/auth-actions";
 import { SIGNUP_ROLES } from "@/lib/types";
 import { Logo } from "@/components/logo";
+import { launchPromoIsOpen, LAUNCH_PROMO_DEADLINE_LABEL, LAUNCH_PROMO_MONTHS } from "@/lib/launch-promo";
 import { Button } from "@/components/ui/button";
 import { GoogleButton, googleErrorMessage } from "@/components/auth/google-button";
 
@@ -34,6 +35,22 @@ export default function SignupPage() {
           <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
             Start with a free placement test — no credit card required.
           </p>
+
+          {/* The offer is stated on the form itself, not only on /pricing.
+              Most people reaching this page came to sign up and will never
+              look at pricing, and an entitlement nobody knows they received
+              buys nothing. */}
+          {launchPromoIsOpen() && (
+            <div className="mt-4 rounded-lg border border-ember-600/35 bg-ember-50/70 px-3.5 py-3 text-sm dark:border-ember-500/30 dark:bg-ember-950/30">
+              <p className="font-semibold text-slate-900 dark:text-slate-50">
+                Sign up today and Pro is free for a year.
+              </p>
+              <p className="mt-0.5 leading-relaxed text-slate-700 dark:text-slate-300">
+                Accounts created by {LAUNCH_PROMO_DEADLINE_LABEL} get {LAUNCH_PROMO_MONTHS} months
+                of Pro automatically — no card, nothing to cancel.
+              </p>
+            </div>
+          )}
 
           <Suspense fallback={null}>
             <GoogleErrorBanner />
