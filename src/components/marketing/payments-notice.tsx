@@ -3,7 +3,7 @@ import {
   launchPromoIsOpen,
   launchPromoDaysLeft,
   LAUNCH_PROMO_DEADLINE_LABEL,
-  LAUNCH_PROMO_MONTHS,
+  LAUNCH_PROMO_DEADLINE_EXACT,
 } from "@/lib/launch-promo";
 
 /**
@@ -40,16 +40,17 @@ export function PaymentsNotice({
         // free for a year if they sign up this week.
         <>
           <p className="font-semibold">
-            Free for a year — create an account by {LAUNCH_PROMO_DEADLINE_LABEL}.
+            Free forever — create an account by {LAUNCH_PROMO_DEADLINE_LABEL}.
           </p>
           <p className="mt-1 leading-relaxed text-amber-800 dark:text-amber-400">
-            Every account created before the end of October gets {LAUNCH_PROMO_MONTHS} months of
-            NumberSmith Pro at no cost: unlimited problems and simulations, the full lesson
-            library, Smith AI, and complete mistake review. No card needed, nothing to cancel.{" "}
+            Every account that exists by {LAUNCH_PROMO_DEADLINE_EXACT} keeps NumberSmith Pro for
+            life, at no cost: unlimited problems and simulations, the full lesson library, Smith
+            AI, and complete mistake review. No card needed, nothing to cancel, and it never
+            expires.{" "}
             {launchPromoDaysLeft() === 1
               ? "Today is the last day."
               : `${launchPromoDaysLeft()} days left.`}{" "}
-            The pricing below is what Pro costs after that.
+            The pricing below is what Pro costs for anyone who joins after that.
           </p>
         </>
       ) : limited ? (

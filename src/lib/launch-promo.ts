@@ -1,9 +1,13 @@
-import { PLAN_DURATION_DAYS } from "@/lib/pricing";
 import { streakDayStart } from "@/lib/streak";
 
 /**
- * The launch offer: create an account before the end of October 2026 and the
- * first year of Pro is free.
+ * The launch offer: have an account before Halloween 2026 and Pro is free for
+ * good — unlimited everything, permanently, for every user.
+ *
+ * Worth being clear-eyed that this is a one-way door. A lifetime grant can be
+ * revoked in the database in seconds, but not in good faith: the signup form
+ * and the pricing page both promise it in those words, so taking it back later
+ * is a broken promise rather than a config change.
  *
  * It lives in one module because it is a promise made to a user, and a promise
  * that two code paths disagree about is worse than no promise. Both signup
@@ -30,10 +34,10 @@ import { streakDayStart } from "@/lib/streak";
 export const LAUNCH_PROMO_ENDS: Date = streakDayStart(new Date(Date.UTC(2026, 10, 1, 12)));
 
 /** How the deadline is written in UI copy. */
-export const LAUNCH_PROMO_DEADLINE_LABEL = "31 October 2026";
+export const LAUNCH_PROMO_DEADLINE_LABEL = "Halloween";
 
-/** What the offer grants, for copy that needs to name it. */
-export const LAUNCH_PROMO_MONTHS = 12;
+/** The deadline spelled out, where the copy needs to be unambiguous. */
+export const LAUNCH_PROMO_DEADLINE_EXACT = "31 October 2026";
 
 export function launchPromoIsOpen(now: Date = new Date()): boolean {
   return now.getTime() < LAUNCH_PROMO_ENDS.getTime();
@@ -46,24 +50,31 @@ export function launchPromoDaysLeft(now: Date = new Date()): number {
 }
 
 /**
- * The subscription row a brand-new account starts with.
+ * The subscription row granted by the offer: Pro, for good.
  *
- * During the offer this is a year of Pro with no Stripe ids attached, which is
- * what makes it safe: nothing renews, nothing charges, and when `renewalDate`
- * passes `getSubscription` lapses the row to Free on its own. It behaves
- * exactly like an admin comp, because that is what it is.
+ * `renewalDate: null` is the whole mechanism. `grantsProAccess` reads a null
+ * valid-through as an open-ended grant and `getSubscription` never lapses it,
+ * which is how seeded and admin-comped accounts have always worked — so a
+ * lifetime grant needed no new code path, only the absence of an end date.
+ *
+ * `plan` stays null on purpose. MONTHLY and YEARLY describe something that was
+ * bought and recurs; this is neither, and labelling it YEARLY would make the
+ * settings page tell a user their free lifetime access renews annually.
+ *
+ * No Stripe ids are attached, so nothing renews and nothing charges.
  */
+export const LAUNCH_PROMO_GRANT = {
+  status: "PRO",
+  plan: null,
+  renewalDate: null,
+} as const;
+
 export function signupSubscription(now: Date = new Date()): {
   status: "PRO" | "FREE";
-  plan?: "YEARLY";
+  plan?: null;
   startDate?: Date;
-  renewalDate?: Date;
+  renewalDate?: null;
 } {
   if (!launchPromoIsOpen(now)) return { status: "FREE" };
-  return {
-    status: "PRO",
-    plan: "YEARLY",
-    startDate: now,
-    renewalDate: new Date(now.getTime() + PLAN_DURATION_DAYS.YEARLY * 24 * 60 * 60 * 1000),
-  };
+  return { ...LAUNCH_PROMO_GRANT, startDate: now };
 }
