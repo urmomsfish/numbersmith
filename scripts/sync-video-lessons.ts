@@ -12,7 +12,12 @@
  * Run with: npm run db:sync-video-lessons   (add --dry-run to preview)
  */
 import { PrismaClient } from "../src/generated/prisma";
-import { VIDEO_LESSONS } from "../prisma/seed-data/video-lessons";
+import { VIDEO_LESSONS as CORE_VIDEO_LESSONS } from "../prisma/seed-data/video-lessons";
+import { ADVANCED_VIDEO_LESSONS } from "../prisma/seed-data/video-lessons-advanced";
+
+/** The introductions first, then the second-pass lessons, so the list reads as
+ * a curriculum rather than interleaving a d8 lesson among the d1s. */
+const VIDEO_LESSONS = [...CORE_VIDEO_LESSONS, ...ADVANCED_VIDEO_LESSONS];
 
 const prisma = new PrismaClient();
 const DRY_RUN = process.argv.includes("--dry-run");

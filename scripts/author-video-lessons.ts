@@ -54,7 +54,7 @@ const TARGETS: Array<{ topicSlug: string; title: string; focus: string }> = [
       "Complementary counting, symmetry arguments, conditional probability, and why 'at least one' almost always means subtract from 1.",
   },
   {
-    topicSlug: "games-strategies",
+    topicSlug: "games-and-strategies",
     title: "Games II: Invariants and Winning Positions",
     focus:
       "P-positions and N-positions, invariants and monovariants, parity arguments, and working backwards from terminal states.",
