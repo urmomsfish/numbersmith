@@ -22,6 +22,10 @@
     "verify:progress": "tsx scripts/check-progress-model.ts",
     "verify:ownership": "tsx scripts/check-action-ownership.ts",
     "verify:countdown": "tsx scripts/check-countdown-bank.ts",
+    "verify:quest": "tsx scripts/check-quest-rules.ts",
+    "verify:games": "tsx scripts/check-games.ts",
+    "verify:free-access": "tsx scripts/check-free-access.ts",
+    "probe:quest": "NODE_OPTIONS=--conditions=react-server tsx scripts/probe-quest.ts",
     "verify:coach-privacy": "tsx scripts/check-coach-privacy.ts",
     "db:backfill-mastery": "tsx scripts/backfill-mastery-counts.ts"
   },

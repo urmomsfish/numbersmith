@@ -1,10 +1,5 @@
 import { FREE_DAILY_PROBLEM_LIMIT, FREE_MISTAKE_REVIEWS_PER_WEEK } from "@/lib/subscription";
-import {
-  launchPromoIsOpen,
-  launchPromoDaysLeft,
-  LAUNCH_PROMO_DEADLINE_LABEL,
-  LAUNCH_PROMO_DEADLINE_EXACT,
-} from "@/lib/launch-promo";
+import { freeAccessIsOpen, freeAccessDaysLeft, FREE_UNTIL_EXACT } from "@/lib/free-access";
 
 /**
  * Shown while NumberSmith Pro cannot actually be purchased — i.e. whenever a
@@ -33,24 +28,22 @@ export function PaymentsNotice({
     <div
       className={`rounded-xl border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950 px-4 py-3 text-sm text-amber-900 dark:text-amber-200 ${className ?? ""}`}
     >
-      {launchPromoIsOpen() ? (
-        // While the offer is open it outranks everything else this component
-        // has to say: a visitor reading "Pro isn't on sale yet" would take
-        // that as a reason to leave, when the actual situation is that Pro is
-        // free for a year if they sign up this week.
+      {freeAccessIsOpen() ? (
+        // While access is free it outranks everything else this component has
+        // to say: a visitor reading "Pro isn't on sale yet" would take that as
+        // a reason to leave, when the actual situation is that all of it is
+        // theirs today for nothing.
         <>
-          <p className="font-semibold">
-            Free forever — create an account by {LAUNCH_PROMO_DEADLINE_LABEL}.
-          </p>
+          <p className="font-semibold">NumberSmith is free until 2027.</p>
           <p className="mt-1 leading-relaxed text-amber-800 dark:text-amber-400">
-            Every account that exists by {LAUNCH_PROMO_DEADLINE_EXACT} keeps NumberSmith Pro for
-            life, at no cost: unlimited problems and simulations, the full lesson library, Smith
-            AI, and complete mistake review. No card needed, nothing to cancel, and it never
-            expires.{" "}
-            {launchPromoDaysLeft() === 1
+            Every account holds NumberSmith Pro at no cost until {FREE_UNTIL_EXACT}: unlimited
+            problems and simulations, the full lesson library, Smith AI, and complete mistake
+            review. No card needed and nothing to cancel — it simply ends on that date instead of
+            renewing.{" "}
+            {freeAccessDaysLeft() === 1
               ? "Today is the last day."
-              : `${launchPromoDaysLeft()} days left.`}{" "}
-            The pricing below is what Pro costs for anyone who joins after that.
+              : `${freeAccessDaysLeft()} days left.`}{" "}
+            The pricing below is what Pro costs from then on.
           </p>
         </>
       ) : limited ? (

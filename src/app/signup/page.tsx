@@ -6,11 +6,7 @@ import Link from "next/link";
 import { signupAction } from "@/lib/actions/auth-actions";
 import { SIGNUP_ROLES } from "@/lib/types";
 import { Logo } from "@/components/logo";
-import {
-  launchPromoIsOpen,
-  LAUNCH_PROMO_DEADLINE_LABEL,
-  LAUNCH_PROMO_DEADLINE_EXACT,
-} from "@/lib/launch-promo";
+import { freeAccessIsOpen, FREE_UNTIL_EXACT } from "@/lib/free-access";
 import { Button } from "@/components/ui/button";
 import { GoogleButton, googleErrorMessage } from "@/components/auth/google-button";
 
@@ -44,14 +40,14 @@ export default function SignupPage() {
               Most people reaching this page came to sign up and will never
               look at pricing, and an entitlement nobody knows they received
               buys nothing. */}
-          {launchPromoIsOpen() && (
+          {freeAccessIsOpen() && (
             <div className="mt-4 rounded-lg border border-ember-600/35 bg-ember-50/70 px-3.5 py-3 text-sm dark:border-ember-500/30 dark:bg-ember-950/30">
               <p className="font-semibold text-slate-900 dark:text-slate-50">
-                Sign up by {LAUNCH_PROMO_DEADLINE_LABEL} and Pro is free for life.
+                NumberSmith is free until 2027.
               </p>
               <p className="mt-0.5 leading-relaxed text-slate-700 dark:text-slate-300">
-                Accounts created by {LAUNCH_PROMO_DEADLINE_EXACT} keep unlimited Pro permanently —
-                no card, nothing to cancel, never expires.
+                Every account gets unlimited Pro until {FREE_UNTIL_EXACT} — no card, nothing to
+                cancel. It ends on that date rather than renewing.
               </p>
             </div>
           )}

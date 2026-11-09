@@ -101,6 +101,14 @@ export function IconBolt({ className }: IconProps) {
     </svg>
   );
 }
+export function IconGamepad({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={className ?? base}>
+      <path d="M8.5 7h7a5.5 5.5 0 0 1 5.5 5.5v1A3.5 3.5 0 0 1 15 15.9l-.6-.9h-4.8l-.6.9A3.5 3.5 0 0 1 3 13.5v-1A5.5 5.5 0 0 1 8.5 7Z" strokeLinejoin="round" />
+      <path d="M7.5 10v2.5M6.25 11.25h2.5M15.5 10.75h.01M17.5 12.5h.01" strokeLinecap="round" />
+    </svg>
+  );
+}
 export function IconVideo({ className }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={className ?? base}>

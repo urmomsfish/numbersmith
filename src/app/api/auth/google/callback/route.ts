@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { createSession } from "@/lib/auth";
 import { isCoachRole } from "@/lib/types";
 import { LEGAL } from "@/lib/legal";
-import { signupSubscription } from "@/lib/launch-promo";
+import { signupSubscription } from "@/lib/free-access";
 import { exchangeGoogleCode, fetchGoogleProfile } from "@/lib/google-oauth";
 import { STATE_COOKIE } from "@/app/api/auth/google/route";
 

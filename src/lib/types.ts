@@ -104,7 +104,12 @@ export type AttemptMode =
   | "MISTAKE_REVIEW"
   /** One question at a time against a per-question clock — the Countdown
    * format. Scored and rated like practice; see engine/countdown.ts. */
-  | "COUNTDOWN";
+  | "COUNTDOWN"
+  /** One question at a time in the endless arcade mode, against lives and a
+   * tightening clock. XP goes through the same per-problem payout rule as
+   * practice — the arcade score is the run's reward, not XP. See
+   * engine/gauntlet.ts. */
+  | "GAUNTLET";
 
 export type MistakeReason = "INCORRECT" | "SKIPPED" | "SLOW" | "MULTI_HINT";
 

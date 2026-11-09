@@ -20,6 +20,7 @@ import {
   IconSparkles,
   IconUsers,
   IconFile,
+  IconGamepad,
 } from "@/components/app/icons";
 
 type NavItem = {
@@ -44,6 +45,10 @@ export const NAV_GROUPS: Array<{ label: string; items: NavItem[] }> = [
       { href: "/video-lessons", label: "Video Lessons", icon: IconVideo, pro: true },
       { href: "/ai-assistant", label: "Smith AI", icon: IconSparkles, pro: true },
     ],
+  },
+  {
+    label: "Play",
+    items: [{ href: "/games", label: "Games", icon: IconGamepad }],
   },
   {
     label: "Compete",

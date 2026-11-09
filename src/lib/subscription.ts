@@ -1,41 +1,17 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
 import { paymentsAreLive } from "@/lib/stripe";
-import type { SubscriptionStatus } from "@/lib/types";
-import type { Subscription } from "@/generated/prisma";
 
-/** The date the current entitlement is paid through, or null when it has no
- * end date at all (a manually granted comp account, which never lapses). */
-function accessValidThrough(sub: Subscription): Date | null {
-  switch (sub.status as SubscriptionStatus) {
-    // Free trials were removed, and nothing in the product can write TRIAL any
-    // more — but the value is still in the database enum, so this stays as the
-    // correct reading of any row that predates the removal or is set by hand.
-    // Dropping it would silently fall through to `default` and hand that row
-    // permanent Free, which is a worse failure than a branch that never runs.
-    case "TRIAL":
-      return sub.trialEndsAt;
-    case "PRO":
-      return sub.renewalDate;
-    // CANCELED still carries access: the user paid for the period they are in
-    // and keeps Pro until it ends. Falling back to canceledAt means cancelling
-    // an open-ended comp account (no renewalDate) takes effect immediately,
-    // since there was no paid period to honour.
-    case "CANCELED":
-      return sub.renewalDate ?? sub.canceledAt;
-    default:
-      return null;
-  }
-}
-
-/** True while the subscription still grants Pro features. */
-export function grantsProAccess(sub: Subscription): boolean {
-  const status = sub.status as SubscriptionStatus;
-  if (status === "FREE") return false;
-  const validThrough = accessValidThrough(sub);
-  // No end date means an open-ended grant (seeded/admin comp account).
-  return validThrough === null || validThrough > new Date();
-}
+// The reading of *when an entitlement ends* lives in a pure module so that
+// code outside the server bundle can share it rather than reimplement it —
+// see the note there. Re-exported from here because this is where the rest of
+// the app already imports it from.
+export {
+  accessValidThrough,
+  grantsProAccess,
+  type EntitlementFacts,
+} from "@/lib/subscription-rules";
+import { grantsProAccess, type EntitlementFacts } from "@/lib/subscription-rules";
 
 /** Reads the subscription, lapsing it to Free first if its paid-through date
  * has passed. Normalizing on read (rather than in a scheduled job) keeps
@@ -96,7 +72,7 @@ export async function isProUser(userId: string): Promise<boolean> {
 }
 
 /** True when the user cancelled but is still inside the period they paid for. */
-export function isCancelPending(sub: Subscription): boolean {
+export function isCancelPending(sub: EntitlementFacts): boolean {
   return sub.status === "CANCELED" && grantsProAccess(sub);
 }
 

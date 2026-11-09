@@ -75,6 +75,8 @@ model User {
   passwordResetTokens    PasswordResetToken[]
   videoLessonProgress    VideoLessonProgress[]
   aiChatMessages         AiChatMessage[]
+  gameRuns               GameRun[]
+  gameScores             GameScore[]
 
   @@index([role])
 }
@@ -583,6 +585,100 @@ model CompetitionAttemptItem {
   @@unique([competitionAttemptId, order])
 }
 
+/// One play of the Gauntlet arcade mode. mode: GAUNTLET | status: IN_PROGRESS | OVER
+///
+/// Its own table rather than another `mode` on CompetitionAttempt, for two
+/// reasons. A gauntlet is endless, so there is no paper to pre-create and
+/// nothing for `totalQuestions` or `timeLimitSeconds` to mean; and `score`
+/// there is a percentage that stats pages average, which an arcade score in the
+/// tens of thousands would wreck.
+///
+/// Every field the game's rules read lives here, because the client is not
+/// trusted with any of them: the score, the lives and the clock are all decided
+/// server-side. The browser gets the question and nothing else.
+model GameRun {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mode      String    @default("GAUNTLET")
+  status    String    @default("IN_PROGRESS")
+  startedAt DateTime  @default(now())
+  endedAt   DateTime?
+
+  score     Int @default(0)
+  wave      Int @default(1)
+  lives     Int
+  /// Consecutive correct answers right now — drives the score multiplier.
+  streak    Int @default(0)
+  bestStreak Int @default(0)
+  answered  Int @default(0)
+  correct   Int @default(0)
+
+  // --- The quest -----------------------------------------------------------
+  //
+  // The run is a journey now, not an endless score attack. These columns carry
+  // the whole of it: where you are on the road, what you are carrying, and
+  // what you are currently fighting. They live on GameRun rather than in a new
+  // table because everything already here — the served-problem set, the
+  // pending question and its clock, the score and streak counters — means
+  // exactly the same thing in a quest as it did in the arcade.
+
+  /// MAP | BATTLE | REWARD | FORGE | WON — what screen the run is on.
+  phase String @default("BATTLE")
+  /// EMBERWASTES | GLASS_REACH | SUNKEN_VAULT
+  region String @default("EMBERWASTES")
+  /// JSON: QuestStep[], the generated road for the current region.
+  road String @default("[]")
+  /// How far along that road the hero has walked.
+  stepIndex Int @default(0)
+
+  hp    Int @default(60)
+  maxHp Int @default(60)
+  gold  Int @default(0)
+  /// JSON array of relic ids.
+  relics String @default("[]")
+
+  /// The thing currently in the way, and its health.
+  enemyKey   String?
+  enemyHp    Int     @default(0)
+  enemyMaxHp Int     @default(0)
+  /// Whether a Wardstone has already eaten a blow in this fight.
+  wardSpent  Boolean @default(false)
+
+  /// Forge charge, 0..CHARGE_MAX. Earned on kills, spent on abilities.
+  charge Int @default(0)
+  /// Misses so far in the current wave — a wave cleared with none pays a bonus.
+  waveMisses Int @default(0)
+  /// The wave whose boss has already been spawned, so a wave gets exactly one.
+  bossWave Int @default(0)
+
+  /// JSON array of problem ids already served in this run, so a run never
+  /// repeats a question. Kept on the row instead of a join table because it is
+  /// only ever read and written whole, alongside the run.
+  servedIds String @default("[]")
+
+  /// The question currently on screen, and when the server handed it over.
+  /// Elapsed time is measured from `pendingServedAt`, never from a timestamp
+  /// the client reports — otherwise the speed bonus is free points.
+  pendingProblemId String?
+  pendingServedAt  DateTime?
+  /// What is currently falling, and its total clock in milliseconds.
+  ///
+  /// The clock is stored rather than recomputed from the wave because two
+  /// things stretch it after the fact: a Freeze adds to `pendingClockMs`, and a
+  /// boss shares one clock across all of its layers. Recomputing would quietly
+  /// refund both.
+  pendingKind      String @default("STANDARD")
+  pendingClockMs   Int    @default(60000)
+  /// Layers left on the colossus currently in play; 0 when it is not a boss.
+  /// A boss layer re-serves a problem WITHOUT re-stamping `pendingServedAt`,
+  /// which is what makes the clock shared.
+  bossLayersLeft   Int    @default(0)
+
+  @@index([userId, status])
+  @@index([userId, score])
+}
+
 // ---------------------------------------------------------------------------
 // Ratings, mastery, XP, streaks
 // ---------------------------------------------------------------------------
@@ -909,4 +1005,45 @@ model UploadedPaperAttempt {
   submittedAt  DateTime?
 
   @@index([userId])
+}
+
+/// A player's standing in one arcade game.
+///
+/// One row per user per game per variant — "variant" is the mode within a
+/// game (Number Merge classic vs timed, a Codebreaker difficulty, the escape
+/// run). That shape is what keeps the whole arcade on a single table: a new
+/// game or a new mode is a new row, never a migration.
+///
+/// Deliberately not GameRun. A GameRun is one sitting of the quest, with a
+/// pending problem and a clock the server owns. These games are played
+/// entirely in the browser — the rules are pure and there is no answer key to
+/// protect — so what is worth storing is only the standing that survives the
+/// sitting: the best score, the totals, and the progress that carries over.
+model GameScore {
+  id      String @id @default(cuid())
+  userId  String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// MERGE | ESCAPE | CODEBREAKER
+  game    String
+  /// Mode within the game. "classic", "timed", "daily-medium", "run".
+  variant String @default("default")
+
+  bestScore Int @default(0)
+  plays     Int @default(0)
+  wins      Int @default(0)
+  totalXp   Int @default(0)
+
+  /// Game-specific JSON: Number Merge's peak tile, Codebreaker's streak and
+  /// attempt tallies, Equation Escape's solved puzzle ids. Kept as a blob
+  /// because none of it is ever queried across users — only read back for the
+  /// player it belongs to.
+  state String @default("{}")
+
+  lastPlayedAt DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([userId, game, variant])
+  @@index([userId])
+  @@index([game, bestScore])
 }

@@ -8,7 +8,7 @@ import { createSession, destroySession, hashPassword, verifyPassword } from "@/l
 import { LEGAL } from "@/lib/legal";
 import { isCoachRole } from "@/lib/types";
 import { sendPasswordResetCodeEmail } from "@/lib/email";
-import { signupSubscription } from "@/lib/launch-promo";
+import { signupSubscription } from "@/lib/free-access";
 
 const RESET_CODE_TTL_MS = 15 * 60 * 1000;
 const MAX_RESET_ATTEMPTS = 5;
