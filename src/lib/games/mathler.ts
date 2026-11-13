@@ -30,14 +30,73 @@ export type DifficultySpec = {
   /** Characters in the hidden calculation. */
   length: number;
   attempts: number;
+  /** The largest number the target may be. The smallest is always 1. */
+  targetMax: number;
+  /**
+   * Whether a right-character-wrong-place mark is shown.
+   *
+   * Expert turns this off, and it is the single thing that makes Expert
+   * Expert. With it off a character is either in the right place or it is
+   * grey — the grey no longer distinguishes "not in the calculation" from
+   * "in the calculation, but not there". You lose the yellow that normally
+   * does most of the deductive work, so the arithmetic has to carry it.
+   */
+  positionHints: boolean;
   blurb: string;
 };
 
+/**
+ * The four levels, pulled deliberately far apart.
+ *
+ * Length alone was not enough of a difference — five characters against six
+ * is barely felt, and the target was free to be anything up to 999 at every
+ * level, which is what made Medium so much harder than its name. The target
+ * ceiling is now the main dial: a number you can hold in your head is a
+ * different puzzle from one you cannot, regardless of how many characters it
+ * takes to write.
+ *
+ * Hard is the only level that goes big. Expert goes back down to 100 and
+ * takes the yellow marks away instead — eight characters that have to land
+ * on a small number is a tight constraint, and solving it blind is a
+ * different kind of hard from Hard's arithmetic.
+ */
 export const DIFFICULTY_SPECS: Record<Difficulty, DifficultySpec> = {
-  easy: { key: "easy", name: "Easy", length: 5, attempts: 6, blurb: "Five characters. Two numbers, one operation." },
-  medium: { key: "medium", name: "Medium", length: 6, attempts: 6, blurb: "Six characters. The classic." },
-  hard: { key: "hard", name: "Hard", length: 7, attempts: 6, blurb: "Seven characters. Usually three numbers." },
-  expert: { key: "expert", name: "Expert", length: 8, attempts: 6, blurb: "Eight characters. Bring a pen." },
+  easy: {
+    key: "easy",
+    name: "Easy",
+    length: 5,
+    attempts: 7,
+    targetMax: 30,
+    positionHints: true,
+    blurb: "Five characters, target under 30. Seven tries.",
+  },
+  medium: {
+    key: "medium",
+    name: "Medium",
+    length: 6,
+    attempts: 6,
+    targetMax: 100,
+    positionHints: true,
+    blurb: "Six characters, target under 100.",
+  },
+  hard: {
+    key: "hard",
+    name: "Hard",
+    length: 7,
+    attempts: 6,
+    targetMax: 500,
+    positionHints: true,
+    blurb: "Seven characters, target up to 500.",
+  },
+  expert: {
+    key: "expert",
+    name: "Expert",
+    length: 8,
+    attempts: 6,
+    targetMax: 100,
+    positionHints: false,
+    blurb: "Eight characters, target under 100 — and no yellow marks.",
+  },
 };
 
 export type Mode = "daily" | "endless" | "timed";
@@ -233,10 +292,14 @@ export type Puzzle = { expression: string; target: number };
  * scripts/check-games.ts generates thousands and asserts the fallback is
  * never needed.
  */
-export function makePuzzle(length: number, rand: () => number): Puzzle {
+export function makePuzzle(length: number, targetMax: number, rand: () => number): Puzzle {
   const shapes = shapesFor(length);
 
-  for (let attempt = 0; attempt < 4000; attempt++) {
+  // Generous, because the small ceilings are genuinely selective: eight
+  // characters that land under 100 need real cancellation, so most random
+  // candidates are thrown away. scripts/check-games.ts asserts the fallback
+  // below is never actually reached at any level.
+  for (let attempt = 0; attempt < 60000; attempt++) {
     const shape = shapes[Math.floor(rand() * shapes.length) % shapes.length];
     const parts: string[] = [];
     for (let i = 0; i < shape.length; i++) {
@@ -248,9 +311,10 @@ export function makePuzzle(length: number, rand: () => number): Puzzle {
 
     const result = evaluate(expression);
     if (!result.ok) continue;
-    // A target has to be worth aiming at: positive, and small enough to hold
-    // in the head while you search for another way to reach it.
-    if (result.value <= 0 || result.value > 999) continue;
+    // A target has to be worth aiming at: positive, and inside the ceiling
+    // this level promises. The ceiling is the main thing separating the four
+    // levels — see DIFFICULTY_SPECS.
+    if (result.value <= 0 || result.value > targetMax) continue;
     // A calculation that is only "n + 0" teaches nothing.
     if (/(^|[+\-*/])0([+\-*/]|$)/.test(expression) && length > 5) continue;
 
@@ -261,13 +325,18 @@ export function makePuzzle(length: number, rand: () => number): Puzzle {
   return { expression: fallback, target: (evaluate(fallback) as { ok: true; value: number }).value };
 }
 
-/** Last-resort calculations, one per supported length. Never reached in
- * practice; present so the generator has no failure mode at all. */
+/**
+ * Last-resort calculations, one per supported length.
+ *
+ * Never reached in practice; present so the generator has no failure mode at
+ * all. Each one is inside its level's target ceiling — a fallback that broke
+ * the promise the UI makes about the range would be worse than no fallback.
+ */
 const FALLBACKS: Record<number, string> = {
-  5: "12+34",
-  6: "123-45",
-  7: "12*34-8",
-  8: "123+456",
+  5: "9*3-5", // 22, under Easy's 30
+  6: "12*8-6", // 90, under Medium's 100
+  7: "12*34-8", // 400, under Hard's 500
+  8: "12*9-8*1", // 100, Expert's ceiling exactly
 };
 
 export function dailyKey(now = new Date()): string {
@@ -279,7 +348,11 @@ export function dailyKey(now = new Date()): string {
 
 export function dailyPuzzle(difficulty: Difficulty, key = dailyKey()): Puzzle {
   const spec = DIFFICULTY_SPECS[difficulty];
-  return makePuzzle(spec.length, mulberry32(hashString(`numbersmith:mathler:${key}:${difficulty}`)));
+  return makePuzzle(
+    spec.length,
+    spec.targetMax,
+    mulberry32(hashString(`numbersmith:mathler:${key}:${difficulty}`)),
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -309,7 +382,7 @@ export type Feedback = {
  * the leftovers checked against a tally of what actually remains.
  * scripts/check-games.ts brute-forces this against an independent reference.
  */
-export function score(guess: string, secret: string): Feedback {
+export function score(guess: string, secret: string, positionHints = true): Feedback {
   const n = secret.length;
   const marks: Mark[] = new Array(n).fill("absent");
   const remaining = new Map<string, number>();
@@ -322,6 +395,13 @@ export function score(guess: string, secret: string): Feedback {
     } else {
       remaining.set(secret[i], (remaining.get(secret[i]) ?? 0) + 1);
     }
+  }
+
+  // Expert stops here. Without the second pass every non-exact character
+  // stays grey, so the row says only "this one is in the right place" and
+  // nothing at all about the rest.
+  if (!positionHints) {
+    return { exact, misplaced: 0, absent: n - exact, marks };
   }
 
   let misplaced = 0;
@@ -388,7 +468,7 @@ export function newGame(opts: {
   const puzzle =
     opts.mode === "daily"
       ? dailyPuzzle(opts.difficulty, opts.dayKey ?? dailyKey())
-      : makePuzzle(spec.length, mulberry32(opts.seed ?? (Date.now() | 0)));
+      : makePuzzle(spec.length, spec.targetMax, mulberry32(opts.seed ?? (Date.now() | 0)));
 
   return {
     difficulty: opts.difficulty,
@@ -407,7 +487,7 @@ export function submit(game: Game, text: string): Game {
   const spec = DIFFICULTY_SPECS[game.difficulty];
   if (!checkGuess(text, spec.length, game.target).ok) return game;
 
-  const feedback = score(text, game.secret);
+  const feedback = score(text, game.secret, spec.positionHints);
   const guesses = [...game.guesses, { text, feedback }];
   const won = feedback.exact === spec.length;
   const lost = !won && guesses.length >= spec.attempts;

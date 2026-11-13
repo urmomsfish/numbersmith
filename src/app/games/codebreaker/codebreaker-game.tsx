@@ -332,6 +332,10 @@ export function CodebreakerGame({
         <p className="max-w-sm text-sm leading-relaxed text-slate-300">
           {spec.length} characters, using digits and <b className="text-slate-100">+ − × ÷</b>. Every
           guess has to equal {game.target} — that is what the marks are paid for.
+          <span className="mt-1 block text-xs text-slate-400">
+            {DIFFICULTY_SPECS[difficulty].name}: targets run 1–{spec.targetMax}
+            {spec.positionHints ? "." : ", and there are no yellow marks."}
+          </span>
         </p>
       </div>
 
@@ -547,12 +551,29 @@ export function CodebreakerGame({
                   ].join(" ")}
                 >
                   <div className="text-sm font-bold text-slate-100">{DIFFICULTY_SPECS[d].name}</div>
+                  {/* The target ceiling is the real difference between the
+                      levels, so it is on the card rather than buried in a
+                      blurb nobody reads. */}
                   <div className="font-mono text-[11px] text-slate-400">
+                    1–{DIFFICULTY_SPECS[d].targetMax}
+                  </div>
+                  <div className="font-mono text-[11px] text-slate-500">
                     {DIFFICULTY_SPECS[d].length} chars · {DIFFICULTY_SPECS[d].attempts} tries
                   </div>
+                  {!DIFFICULTY_SPECS[d].positionHints ? (
+                    <div className="mt-1 text-[10px] font-bold uppercase tracking-wide text-rose-300">
+                      No yellow
+                    </div>
+                  ) : null}
                 </button>
               ))}
             </div>
+            {!spec.positionHints ? (
+              <p className="mt-2 rounded-lg border border-rose-400/30 bg-rose-400/10 px-2.5 py-2 text-[11px] leading-relaxed text-rose-100">
+                <b>Expert:</b> a character is either in the right place or it is grey. You are not
+                told when a character is in the calculation but sitting somewhere else.
+              </p>
+            ) : null}
           </Panel>
 
           <Panel>
@@ -572,18 +593,27 @@ export function CodebreakerGame({
               <li>Normal order of operations: × and ÷ before + and −.</li>
               <li>Division has to come out exactly. No remainders, no dividing by zero.</li>
             </ul>
+            {/* The legend has to match the level being played. Showing a
+                yellow key on Expert, where yellow never appears, would be
+                worse than showing no legend at all. */}
             <div className="mt-3 space-y-2 border-t border-white/10 pt-3 text-sm text-slate-300">
               <div className="flex items-center gap-2">
                 <Pip kind="exact" />
                 <span>Right character, right place.</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Pip kind="misplaced" />
-                <span>Right character, wrong place.</span>
-              </div>
+              {spec.positionHints ? (
+                <div className="flex items-center gap-2">
+                  <Pip kind="misplaced" />
+                  <span>Right character, wrong place.</span>
+                </div>
+              ) : null}
               <div className="flex items-center gap-2">
                 <Pip kind="absent" />
-                <span>Not in the calculation.</span>
+                <span>
+                  {spec.positionHints
+                    ? "Not in the calculation."
+                    : "Anything else — including a character that is in the calculation but not there."}
+                </span>
               </div>
             </div>
           </Panel>

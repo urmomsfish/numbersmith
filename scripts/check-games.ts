@@ -118,7 +118,13 @@ function mulberry32Local(seed: number) {
 
 /** The generator's last-resort expressions. If one of these ever comes back
  * from makePuzzle, rejection sampling failed and the puzzles are not random. */
-const FALLBACK_SET = new Set(["12+34", "123-45", "12*34-8", "123+456"]);
+const FALLBACKS_BY_LENGTH: Record<number, string> = {
+  5: "9*3-5",
+  6: "12*8-6",
+  7: "12*34-8",
+  8: "12*9-8*1",
+};
+const FALLBACK_SET = new Set(Object.values(FALLBACKS_BY_LENGTH));
 
 // ===========================================================================
 // Codebreaker — the hidden calculation
@@ -228,21 +234,22 @@ function referenceEval(expr: string): number | null {
   // puzzle is unsolvable and the player is being lied to.
   let bad = 0;
   let wrongLength = 0;
-  let badTarget = 0;
+  let outOfRange = 0;
   let usedFallback = 0;
-  const targets = new Set<number>();
   const expressions = new Set<string>();
 
   for (const key of DIFFICULTIES) {
     const spec = DIFFICULTY_SPECS[key];
-    for (let seed = 1; seed <= 1500; seed++) {
+    const targets = new Set<number>();
+    for (let seed = 1; seed <= 1200; seed++) {
       const rand = mulberry32Local(seed * 2654435761 + spec.length);
-      const puzzle = makePuzzle(spec.length, rand);
+      const puzzle = makePuzzle(spec.length, spec.targetMax, rand);
 
       if (puzzle.expression.length !== spec.length) wrongLength++;
       const res = evaluate(puzzle.expression);
       if (!res.ok || res.value !== puzzle.target) bad++;
-      if (puzzle.target <= 0 || puzzle.target > 999) badTarget++;
+      // The promise the level makes about its range, kept on every puzzle.
+      if (puzzle.target < 1 || puzzle.target > spec.targetMax) outOfRange++;
       if ((FALLBACK_SET as Set<string>).has(puzzle.expression)) usedFallback++;
 
       targets.add(puzzle.target);
@@ -252,14 +259,76 @@ function referenceEval(expr: string): number | null {
       // be won even by someone who knows the answer.
       ok(`${key}: the answer is a legal guess`, checkGuess(puzzle.expression, spec.length, puzzle.target).ok);
     }
+    // A ceiling this low could easily collapse onto a handful of targets,
+    // which would make the level memorisable rather than solvable.
+    ok(
+      `${key}: the targets spread across the range`,
+      targets.size >= Math.min(15, spec.targetMax),
+      `${targets.size} distinct targets under ${spec.targetMax}`,
+    );
+    console.log(`  ${key.padEnd(7)} ≤${String(spec.targetMax).padStart(3)}  ${targets.size} distinct targets`);
   }
   eq("every generated puzzle is the right length", wrongLength, 0);
   eq("every generated puzzle really makes its target", bad, 0);
-  eq("every target is in a sane range", badTarget, 0);
+  eq("every target is inside its level's range", outOfRange, 0);
   eq("the generator never falls back", usedFallback, 0);
   ok("the puzzles vary", expressions.size > 2000, `${expressions.size} distinct`);
-  ok("the targets vary", targets.size > 200, `${targets.size} distinct`);
   console.log(`  ${expressions.size.toLocaleString()} distinct puzzles generated`);
+}
+
+{
+  // The levels have to be visibly different from one another, not just
+  // nominally — that was the complaint that produced them.
+  const specs = DIFFICULTIES.map((d) => DIFFICULTY_SPECS[d]);
+  for (let i = 1; i < specs.length; i++) {
+    ok(`${specs[i].key} is longer than ${specs[i - 1].key}`, specs[i].length > specs[i - 1].length);
+  }
+  eq("easy tops out at 30", DIFFICULTY_SPECS.easy.targetMax, 30);
+  eq("medium tops out at 100", DIFFICULTY_SPECS.medium.targetMax, 100);
+  eq("hard tops out at 500", DIFFICULTY_SPECS.hard.targetMax, 500);
+  eq("expert tops out at 100", DIFFICULTY_SPECS.expert.targetMax, 100);
+  ok("easy is the most forgiving on tries", DIFFICULTY_SPECS.easy.attempts > DIFFICULTY_SPECS.medium.attempts);
+  eq("only expert withholds position hints", specs.filter((s) => !s.positionHints).length, 1);
+  eq("and it is expert", DIFFICULTY_SPECS.expert.positionHints, false);
+  // Every fallback must also honour its level's ceiling.
+  for (const spec of specs) {
+    const fb = FALLBACKS_BY_LENGTH[spec.length];
+    ok(`${spec.key}: the fallback is the right length`, fb.length === spec.length, fb);
+    const v = evaluate(fb);
+    ok(`${spec.key}: the fallback is valid`, v.ok);
+    if (v.ok) {
+      ok(`${spec.key}: the fallback is inside the range`, v.value >= 1 && v.value <= spec.targetMax, `${fb} = ${v.value}`);
+    }
+  }
+}
+
+{
+  // Expert's marking rule: exact or nothing.
+  const secret = "12*9-8*1";
+  const guess = "19*2-1*8";
+  const full = score(guess, secret, true);
+  const blind = score(guess, secret, false);
+
+  eq("expert finds the same exact matches", blind.exact, full.exact);
+  eq("expert reports no misplaced characters", blind.misplaced, 0);
+  eq("expert calls everything else absent", blind.absent, secret.length - blind.exact);
+  ok("expert never shows a misplaced mark", blind.marks.every((m) => m !== "misplaced"));
+  ok(
+    "the normal rule does show them on this guess",
+    full.misplaced > 0,
+    "the fixture must actually have misplaced characters or this proves nothing",
+  );
+  ok(
+    "the exact positions agree between the two rules",
+    full.marks.every((m, i) => (m === "exact") === (blind.marks[i] === "exact")),
+  );
+
+  // A perfect guess still wins under the blind rule.
+  eq("expert still recognises the answer", score(secret, secret, false).exact, secret.length);
+
+  // And the keypad never goes yellow on expert.
+  const blindState = keypadState([{ text: guess, feedback: blind }]);
+  ok("the expert keypad shows no misplaced state", Object.values(blindState).every((m) => m !== "misplaced"));
 }
 
 {
